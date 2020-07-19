@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,8 @@
 		02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A924C4DD7D004D5C6D /* EpisodesView.swift */; };
 		02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */; };
 		02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */; };
+		02B568B124C4E3C9004D5C6D /* DummyPodcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */; };
+		02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568B224C4E413004D5C6D /* SearchBar.swift */; };
 		34E3FD100C39B9909F7E36BC /* Pods_LoquyAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */; };
 		5F80F7A04C631CDC2E0F879C /* Pods_LoquyApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 768EDA54066F14F767914D5C /* Pods_LoquyApp.framework */; };
 /* End PBXBuildFile section */
@@ -48,6 +50,8 @@
 		02B568A924C4DD7D004D5C6D /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
 		02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeView.swift; sourceTree = "<group>"; };
 		02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
+		02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyPodcast.swift; sourceTree = "<group>"; };
+		02B568B224C4E413004D5C6D /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		5A1FE38E8B88A97BC59B255E /* Pods-LoquyApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyApp.release.xcconfig"; path = "Target Support Files/Pods-LoquyApp/Pods-LoquyApp.release.xcconfig"; sourceTree = "<group>"; };
 		5DBCD5426E03BF62E24E2304 /* Pods-LoquyAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyAppTests.release.xcconfig"; path = "Target Support Files/Pods-LoquyAppTests/Pods-LoquyAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LoquyAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,7 +88,6 @@
 				B0A995753634E9575B9368FC /* Pods-LoquyAppTests.debug.xcconfig */,
 				5DBCD5426E03BF62E24E2304 /* Pods-LoquyAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -111,6 +114,7 @@
 		02B5687E24C4DBB6004D5C6D /* LoquyApp */ = {
 			isa = PBXGroup;
 			children = (
+				02B568AF24C4E29C004D5C6D /* Models */,
 				02B568A624C4DCA2004D5C6D /* Networking */,
 				02B568A524C4DC91004D5C6D /* Views */,
 				02B568A424C4DC6B004D5C6D /* Supporting Files */,
@@ -156,6 +160,7 @@
 				02B568A924C4DD7D004D5C6D /* EpisodesView.swift */,
 				02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */,
 				02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */,
+				02B568B224C4E413004D5C6D /* SearchBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -165,6 +170,14 @@
 			children = (
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		02B568AF24C4E29C004D5C6D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		7939BBF42833266CDF7C597D /* Frameworks */ = {
@@ -349,8 +362,10 @@
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
 				02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */,
 				02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */,
+				02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */,
 				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
+				02B568B124C4E3C9004D5C6D /* DummyPodcast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
