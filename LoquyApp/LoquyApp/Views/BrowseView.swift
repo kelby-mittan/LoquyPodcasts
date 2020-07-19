@@ -51,20 +51,34 @@ struct PodcastPosterView: View {
 
 struct TabOne: View {
     @State private var searchText = ""
+    @ObservedObject private var viewModel = PodcastListViewModel()
+    @State private var poddcasts = [Podcast]()
+//    var podcasts = ITunesAPI.shared.getPodcasts(searchText: "joerogan") { (podcasts) in
+//
+//        dump(podcasts)
+//    }
+    
     var body: some View {
+        
+//        loaded = fetchPodcasts(search: searchText)
+        
         NavigationView {
             VStack {
                 SearchBar(text: $searchText)
                     .padding(.top)
-                List(DummyPodcast.podcasts.filter({ searchText.isEmpty ? true : $0.title.contains(searchText)})) { podcast in
+                
+                List(viewModel.podcasts) { podcast in
                     
-                    NavigationLink(destination: EpisodeDetailView(podcast: podcast)) {
-                        PodcastPosterView(podcast: podcast)
-                        Text(podcast.title)
+                    NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
+                        PodcastPosterView(podcast: DummyPodcast.origins)
+                        Text(podcast.artistName ?? "not loading")
                             .font(.headline)
                             .fontWeight(.semibold)
                     }
                     .padding(.trailing)
+                }
+                .onAppear {
+                    self.viewModel.getThePodcasts(search: self.searchText)
                 }
                 .navigationBarTitle("Podcasts")
             }
@@ -76,6 +90,15 @@ struct TabOne: View {
                 .padding(.top, 16.0)
             Text("Menu")
         }
+    }
+    
+    func fetchPodcasts(search: String) -> [Podcast] {
+        var results = [Podcast]()
+        ITunesAPI.shared.getPodcasts(searchText: search) { (podcasts) in
+            dump(podcasts)
+            results = podcasts
+        }
+        return results
     }
 }
 

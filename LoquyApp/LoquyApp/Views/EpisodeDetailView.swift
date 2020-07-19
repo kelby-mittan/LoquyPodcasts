@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Alamofire
 
 struct EpisodeDetailView: View {
     
@@ -81,7 +82,7 @@ struct RatingsView: View {
                 Image(systemName: "star.fill")
             }
             Image(systemName: "star.lefthalf.fill")
-            Image("star")
+            Image(systemName: "star")
             
             Text("3.5")
                 .bold()
@@ -159,12 +160,16 @@ struct GuestView: View {
     
     func seeGuestInfoButton() {
         print("Guest Info")
+        ITunesAPI.shared.getPodcasts(searchText: "joe+rogan") { (podcasts) in
+            dump(podcasts)
+        }
     }
 }
 
 struct PurchaseView: View {
     var body: some View {
         NavigationLink(destination: Text("Add to Favorites")) {
+            
             Text("Add to Favorites")
                 .fontWeight(.heavy)
                 .padding()

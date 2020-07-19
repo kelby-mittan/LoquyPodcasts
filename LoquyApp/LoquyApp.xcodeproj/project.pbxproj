@@ -20,6 +20,9 @@
 		02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */; };
 		02B568B124C4E3C9004D5C6D /* DummyPodcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */; };
 		02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568B224C4E413004D5C6D /* SearchBar.swift */; };
+		02B568B524C4F02F004D5C6D /* ITunesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568B424C4F02F004D5C6D /* ITunesAPI.swift */; };
+		02B568B724C4F299004D5C6D /* Podcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568B624C4F299004D5C6D /* Podcast.swift */; };
+		02B568B924C4FA8D004D5C6D /* PodcastListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568B824C4FA8D004D5C6D /* PodcastListViewModel.swift */; };
 		34E3FD100C39B9909F7E36BC /* Pods_LoquyAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */; };
 		5F80F7A04C631CDC2E0F879C /* Pods_LoquyApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 768EDA54066F14F767914D5C /* Pods_LoquyApp.framework */; };
 /* End PBXBuildFile section */
@@ -52,6 +55,9 @@
 		02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
 		02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyPodcast.swift; sourceTree = "<group>"; };
 		02B568B224C4E413004D5C6D /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		02B568B424C4F02F004D5C6D /* ITunesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ITunesAPI.swift; sourceTree = "<group>"; };
+		02B568B624C4F299004D5C6D /* Podcast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Podcast.swift; sourceTree = "<group>"; };
+		02B568B824C4FA8D004D5C6D /* PodcastListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastListViewModel.swift; sourceTree = "<group>"; };
 		5A1FE38E8B88A97BC59B255E /* Pods-LoquyApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyApp.release.xcconfig"; path = "Target Support Files/Pods-LoquyApp/Pods-LoquyApp.release.xcconfig"; sourceTree = "<group>"; };
 		5DBCD5426E03BF62E24E2304 /* Pods-LoquyAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyAppTests.release.xcconfig"; path = "Target Support Files/Pods-LoquyAppTests/Pods-LoquyAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LoquyAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +174,7 @@
 		02B568A624C4DCA2004D5C6D /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				02B568B424C4F02F004D5C6D /* ITunesAPI.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -176,6 +183,8 @@
 			isa = PBXGroup;
 			children = (
 				02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */,
+				02B568B624C4F299004D5C6D /* Podcast.swift */,
+				02B568B824C4FA8D004D5C6D /* PodcastListViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -359,10 +368,13 @@
 			files = (
 				02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */,
 				02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */,
+				02B568B524C4F02F004D5C6D /* ITunesAPI.swift in Sources */,
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
 				02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */,
 				02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */,
 				02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */,
+				02B568B924C4FA8D004D5C6D /* PodcastListViewModel.swift in Sources */,
+				02B568B724C4F299004D5C6D /* Podcast.swift in Sources */,
 				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
 				02B568B124C4E3C9004D5C6D /* DummyPodcast.swift in Sources */,
