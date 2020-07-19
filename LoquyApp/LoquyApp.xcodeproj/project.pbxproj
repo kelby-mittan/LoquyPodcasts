@@ -10,11 +10,16 @@
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
 		02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */; };
 		02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688324C4DBB6004D5C6D /* LoquyApp.xcdatamodeld */; };
-		02B5688724C4DBB6004D5C6D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688624C4DBB6004D5C6D /* ContentView.swift */; };
 		02B5688924C4DBBA004D5C6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02B5688824C4DBBA004D5C6D /* Assets.xcassets */; };
 		02B5688C24C4DBBA004D5C6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02B5688B24C4DBBA004D5C6D /* Preview Assets.xcassets */; };
 		02B5688F24C4DBBA004D5C6D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02B5688D24C4DBBA004D5C6D /* LaunchScreen.storyboard */; };
 		02B5689A24C4DBBA004D5C6D /* LoquyAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5689924C4DBBA004D5C6D /* LoquyAppTests.swift */; };
+		02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A724C4DD11004D5C6D /* BrowseView.swift */; };
+		02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A924C4DD7D004D5C6D /* EpisodesView.swift */; };
+		02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */; };
+		02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */; };
+		34E3FD100C39B9909F7E36BC /* Pods_LoquyAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */; };
+		5F80F7A04C631CDC2E0F879C /* Pods_LoquyApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 768EDA54066F14F767914D5C /* Pods_LoquyApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +37,6 @@
 		02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		02B5688424C4DBB6004D5C6D /* LoquyApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LoquyApp.xcdatamodel; sourceTree = "<group>"; };
-		02B5688624C4DBB6004D5C6D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		02B5688824C4DBBA004D5C6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		02B5688B24C4DBBA004D5C6D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		02B5688E24C4DBBA004D5C6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -40,6 +44,16 @@
 		02B5689524C4DBBA004D5C6D /* LoquyAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoquyAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B5689924C4DBBA004D5C6D /* LoquyAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoquyAppTests.swift; sourceTree = "<group>"; };
 		02B5689B24C4DBBA004D5C6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		02B568A724C4DD11004D5C6D /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
+		02B568A924C4DD7D004D5C6D /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
+		02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeView.swift; sourceTree = "<group>"; };
+		02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
+		5A1FE38E8B88A97BC59B255E /* Pods-LoquyApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyApp.release.xcconfig"; path = "Target Support Files/Pods-LoquyApp/Pods-LoquyApp.release.xcconfig"; sourceTree = "<group>"; };
+		5DBCD5426E03BF62E24E2304 /* Pods-LoquyAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyAppTests.release.xcconfig"; path = "Target Support Files/Pods-LoquyAppTests/Pods-LoquyAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LoquyAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		768EDA54066F14F767914D5C /* Pods_LoquyApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LoquyApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0A995753634E9575B9368FC /* Pods-LoquyAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyAppTests.debug.xcconfig"; path = "Target Support Files/Pods-LoquyAppTests/Pods-LoquyAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D1229D105F70A75909EFB928 /* Pods-LoquyApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyApp.debug.xcconfig"; path = "Target Support Files/Pods-LoquyApp/Pods-LoquyApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F80F7A04C631CDC2E0F879C /* Pods_LoquyApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,18 +69,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34E3FD100C39B9909F7E36BC /* Pods_LoquyAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01A18247D4334D88D3433EE3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D1229D105F70A75909EFB928 /* Pods-LoquyApp.debug.xcconfig */,
+				5A1FE38E8B88A97BC59B255E /* Pods-LoquyApp.release.xcconfig */,
+				B0A995753634E9575B9368FC /* Pods-LoquyAppTests.debug.xcconfig */,
+				5DBCD5426E03BF62E24E2304 /* Pods-LoquyAppTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		02B5687324C4DBB6004D5C6D = {
 			isa = PBXGroup;
 			children = (
 				02B5687E24C4DBB6004D5C6D /* LoquyApp */,
 				02B5689824C4DBBA004D5C6D /* LoquyAppTests */,
 				02B5687D24C4DBB6004D5C6D /* Products */,
+				01A18247D4334D88D3433EE3 /* Pods */,
+				7939BBF42833266CDF7C597D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,11 +111,9 @@
 		02B5687E24C4DBB6004D5C6D /* LoquyApp */ = {
 			isa = PBXGroup;
 			children = (
-				02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */,
-				02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */,
-				02B5688624C4DBB6004D5C6D /* ContentView.swift */,
-				02B5688824C4DBBA004D5C6D /* Assets.xcassets */,
-				02B5688D24C4DBBA004D5C6D /* LaunchScreen.storyboard */,
+				02B568A624C4DCA2004D5C6D /* Networking */,
+				02B568A524C4DC91004D5C6D /* Views */,
+				02B568A424C4DC6B004D5C6D /* Supporting Files */,
 				02B5689024C4DBBA004D5C6D /* Info.plist */,
 				02B5688324C4DBB6004D5C6D /* LoquyApp.xcdatamodeld */,
 				02B5688A24C4DBBA004D5C6D /* Preview Content */,
@@ -110,6 +138,44 @@
 			path = LoquyAppTests;
 			sourceTree = "<group>";
 		};
+		02B568A424C4DC6B004D5C6D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */,
+				02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */,
+				02B5688824C4DBBA004D5C6D /* Assets.xcassets */,
+				02B5688D24C4DBBA004D5C6D /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		02B568A524C4DC91004D5C6D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				02B568A724C4DD11004D5C6D /* BrowseView.swift */,
+				02B568A924C4DD7D004D5C6D /* EpisodesView.swift */,
+				02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */,
+				02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		02B568A624C4DCA2004D5C6D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		7939BBF42833266CDF7C597D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				768EDA54066F14F767914D5C /* Pods_LoquyApp.framework */,
+				707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -117,9 +183,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02B5689E24C4DBBA004D5C6D /* Build configuration list for PBXNativeTarget "LoquyApp" */;
 			buildPhases = (
+				B79C6B3AF0B886BC94B97175 /* [CP] Check Pods Manifest.lock */,
 				02B5687824C4DBB6004D5C6D /* Sources */,
 				02B5687924C4DBB6004D5C6D /* Frameworks */,
 				02B5687A24C4DBB6004D5C6D /* Resources */,
+				A6F1EF30D48C6174607049A3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -134,6 +202,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02B568A124C4DBBA004D5C6D /* Build configuration list for PBXNativeTarget "LoquyAppTests" */;
 			buildPhases = (
+				AC9D57F2D06C338C8CB86AC5 /* [CP] Check Pods Manifest.lock */,
 				02B5689124C4DBBA004D5C6D /* Sources */,
 				02B5689224C4DBBA004D5C6D /* Frameworks */,
 				02B5689324C4DBBA004D5C6D /* Resources */,
@@ -206,14 +275,81 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A6F1EF30D48C6174607049A3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LoquyApp/Pods-LoquyApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LoquyApp/Pods-LoquyApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LoquyApp/Pods-LoquyApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC9D57F2D06C338C8CB86AC5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LoquyAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B79C6B3AF0B886BC94B97175 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LoquyApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		02B5687824C4DBB6004D5C6D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */,
 				02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */,
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
-				02B5688724C4DBB6004D5C6D /* ContentView.swift in Sources */,
+				02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */,
+				02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */,
+				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -364,6 +500,7 @@
 		};
 		02B5689F24C4DBBA004D5C6D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D1229D105F70A75909EFB928 /* Pods-LoquyApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -384,6 +521,7 @@
 		};
 		02B568A024C4DBBA004D5C6D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A1FE38E8B88A97BC59B255E /* Pods-LoquyApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -404,6 +542,7 @@
 		};
 		02B568A224C4DBBA004D5C6D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B0A995753634E9575B9368FC /* Pods-LoquyAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -426,6 +565,7 @@
 		};
 		02B568A324C4DBBA004D5C6D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DBCD5426E03BF62E24E2304 /* Pods-LoquyAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
