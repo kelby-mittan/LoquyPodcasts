@@ -17,6 +17,7 @@
 		02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A724C4DD11004D5C6D /* BrowseView.swift */; };
 		02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A924C4DD7D004D5C6D /* EpisodesView.swift */; };
 		02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */; };
+		02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		02B568A724C4DD11004D5C6D /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		02B568A924C4DD7D004D5C6D /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
 		02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeView.swift; sourceTree = "<group>"; };
+		02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 				02B568A724C4DD11004D5C6D /* BrowseView.swift */,
 				02B568A924C4DD7D004D5C6D /* EpisodesView.swift */,
 				02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */,
+				02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */,
 				02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */,
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
+				02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */,
 				02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */,
 				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
