@@ -10,11 +10,13 @@
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
 		02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */; };
 		02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688324C4DBB6004D5C6D /* LoquyApp.xcdatamodeld */; };
-		02B5688724C4DBB6004D5C6D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688624C4DBB6004D5C6D /* ContentView.swift */; };
 		02B5688924C4DBBA004D5C6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02B5688824C4DBBA004D5C6D /* Assets.xcassets */; };
 		02B5688C24C4DBBA004D5C6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02B5688B24C4DBBA004D5C6D /* Preview Assets.xcassets */; };
 		02B5688F24C4DBBA004D5C6D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02B5688D24C4DBBA004D5C6D /* LaunchScreen.storyboard */; };
 		02B5689A24C4DBBA004D5C6D /* LoquyAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5689924C4DBBA004D5C6D /* LoquyAppTests.swift */; };
+		02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A724C4DD11004D5C6D /* BrowseView.swift */; };
+		02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A924C4DD7D004D5C6D /* EpisodesView.swift */; };
+		02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +34,6 @@
 		02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		02B5688424C4DBB6004D5C6D /* LoquyApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LoquyApp.xcdatamodel; sourceTree = "<group>"; };
-		02B5688624C4DBB6004D5C6D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		02B5688824C4DBBA004D5C6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		02B5688B24C4DBBA004D5C6D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		02B5688E24C4DBBA004D5C6D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -40,6 +41,9 @@
 		02B5689524C4DBBA004D5C6D /* LoquyAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoquyAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B5689924C4DBBA004D5C6D /* LoquyAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoquyAppTests.swift; sourceTree = "<group>"; };
 		02B5689B24C4DBBA004D5C6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		02B568A724C4DD11004D5C6D /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
+		02B568A924C4DD7D004D5C6D /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
+		02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,11 +85,9 @@
 		02B5687E24C4DBB6004D5C6D /* LoquyApp */ = {
 			isa = PBXGroup;
 			children = (
-				02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */,
-				02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */,
-				02B5688624C4DBB6004D5C6D /* ContentView.swift */,
-				02B5688824C4DBBA004D5C6D /* Assets.xcassets */,
-				02B5688D24C4DBBA004D5C6D /* LaunchScreen.storyboard */,
+				02B568A624C4DCA2004D5C6D /* Networking */,
+				02B568A524C4DC91004D5C6D /* Views */,
+				02B568A424C4DC6B004D5C6D /* Supporting Files */,
 				02B5689024C4DBBA004D5C6D /* Info.plist */,
 				02B5688324C4DBB6004D5C6D /* LoquyApp.xcdatamodeld */,
 				02B5688A24C4DBBA004D5C6D /* Preview Content */,
@@ -108,6 +110,34 @@
 				02B5689B24C4DBBA004D5C6D /* Info.plist */,
 			);
 			path = LoquyAppTests;
+			sourceTree = "<group>";
+		};
+		02B568A424C4DC6B004D5C6D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */,
+				02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */,
+				02B5688824C4DBBA004D5C6D /* Assets.xcassets */,
+				02B5688D24C4DBBA004D5C6D /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		02B568A524C4DC91004D5C6D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				02B568A724C4DD11004D5C6D /* BrowseView.swift */,
+				02B568A924C4DD7D004D5C6D /* EpisodesView.swift */,
+				02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		02B568A624C4DCA2004D5C6D /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,9 +241,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */,
 				02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */,
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
-				02B5688724C4DBB6004D5C6D /* ContentView.swift in Sources */,
+				02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */,
+				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
