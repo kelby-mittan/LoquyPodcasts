@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-import Combine
+//import Combine
 
 class PodcastListViewModel: ObservableObject {
     
@@ -17,8 +17,7 @@ class PodcastListViewModel: ObservableObject {
     @Published var podcasts: [Podcast] = []
     
     func getThePodcasts(search: String) {
-        ITunesAPI.shared.getPodcasts(searchText: search) { (podcasts) in
-            
+        ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
             DispatchQueue.main.async {
                 self.podcasts = podcasts
             }
@@ -26,7 +25,7 @@ class PodcastListViewModel: ObservableObject {
     }
     
 //    init() {
-//        ITunesAPI.shared.getPodcasts(searchText: "joerogan", completionHandler: { (podcasts) in
+//        ITunesAPI.shared.getPodcasts(searchText: "startalk", completionHandler: { (podcasts) in
 //            self.podcasts = podcasts
 //        })
 //    }

@@ -34,16 +34,20 @@ struct BrowseView_Previews: PreviewProvider {
 
 struct PodcastPosterView: View {
     let podcast: DummyPodcast
+    let width: CGFloat
+    let height: CGFloat
     
-    init(podcast: DummyPodcast) {
+    init(podcast: DummyPodcast, width: CGFloat, height: CGFloat) {
         self.podcast = podcast
+        self.width = width
+        self.height = height
     }
     var body: some View {
         Image(podcast.image)
             .renderingMode(.original)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 200.0, height: 200.0)
+            .frame(width: width, height: height)
             .cornerRadius(12)
             .padding()
     }
@@ -105,22 +109,20 @@ struct PodcastPosterView: View {
 //}
 
 struct TabOne1: View {
-    @State private var searchText = ""
+    @State private var searchText = "startalk"
     @ObservedObject private var viewModel = PodcastListViewModel()
 //    @State private var poddcasts = [Podcast]()
     
     var body: some View {
-        
-        //        loaded = fetchPodcasts(search: searchText)
-        
+    
         NavigationView {
             VStack {
                 SearchBar(text: $searchText)
-                    .padding(.top)
+//                    .padding(.top)
                 
                 List(viewModel.podcasts) { podcast in
                     NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
-                        PodcastPosterView(podcast: DummyPodcast.origins)
+                        PodcastPosterView(podcast: DummyPodcast.origins, width: 100, height: 100)
                         Text(podcast.artistName ?? "not loading")
                             .font(.headline)
                             .fontWeight(.semibold)
@@ -129,7 +131,6 @@ struct TabOne1: View {
                 }
                 .onAppear {
                     self.viewModel.getThePodcasts(search: self.searchText)
-//                    self.poddcasts = self.fetchPodcasts(search: "startalk")
                     dump(self.fetchPodcasts(search: self.searchText))
                 }
                 .navigationBarTitle("Podcasts")
@@ -137,16 +138,16 @@ struct TabOne1: View {
             .navigationBarTitle("Podcasts", displayMode: .automatic)
         }
         .tabItem {
-            Image(systemName: "list.dash")
+            Image(systemName: "magnifyingglass")
                 .font(.largeTitle)
                 .padding(.top, 16.0)
-            Text("Menu")
+            Text("Browse")
         }
     }
     
     func fetchPodcasts(search: String) -> [Podcast] {
         var results = [Podcast]()
-        ITunesAPI.shared.getPodcasts(searchText: search) { (podcasts) in
+        ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
             dump(podcasts)
             results = podcasts
         }
@@ -161,7 +162,7 @@ struct TabTwo: View {
                 Image(systemName: "star.fill")
                     .font(.largeTitle)
                     .padding(.top, 16.0)
-                Text("Detail")
+                Text("Favorites")
         }
     }
 }
@@ -171,10 +172,10 @@ struct TabThree: View {
         EpisodeDetailView(podcast: DummyPodcast.origins)
             .tabItem {
                 
-                Image(systemName: "star.fill")
+                Image(systemName: "textbox")
                     .font(.largeTitle)
                     .padding(.top, 16.0)
-                Text("Detail")
+                Text("Transcribe")
         }
     }
 }
