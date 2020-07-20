@@ -20,6 +20,7 @@ struct EpisodeDetailView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
             PodcastPosterView(podcast: podcast)
+            ControlView()
             TitleView(podcast: podcast)
             PodcastInfoView()
             RatingsView()
@@ -54,7 +55,7 @@ struct TitleView: View {
             
             Spacer()
             
-            Image(systemName: "bookmark")
+            Image(systemName: "star")
                 .font(.largeTitle)
                 .padding(.top, 4)
                 .foregroundColor(.yellow)
@@ -179,5 +180,41 @@ struct PurchaseView: View {
                 .clipShape(Capsule())
                 .padding()
         }
+    }
+}
+
+struct ControlView: View {
+    
+    @State var playing = true
+    @State var paused = false
+    
+    var body: some View {
+        HStack(spacing: UIScreen.main.bounds.width / 5 - 30) {
+            
+            Button(action: {
+                
+            }) {
+                Image(systemName: "gobackward.15").font(.title)
+            }
+            
+            Button(action: {
+                self.paused.toggle()
+                self.playing.toggle()
+            }) {
+                Image(systemName: self.playing && !self.paused ? "pause.fill" : "play.fill").font(.title)
+            }
+            
+            Button(action: {
+                
+                
+            }) {
+                
+                Image(systemName: "goforward.15").font(.title)
+                
+            }
+            
+        }
+        .padding(.top,25)
+        .foregroundColor(.white)
     }
 }

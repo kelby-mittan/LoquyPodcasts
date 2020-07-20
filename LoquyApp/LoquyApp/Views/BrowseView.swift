@@ -105,18 +105,16 @@ struct PodcastPosterView: View {
 //}
 
 struct TabOne1: View {
-    @State private var searchText = ""
+    @State private var searchText = "startalk"
     @ObservedObject private var viewModel = PodcastListViewModel()
 //    @State private var poddcasts = [Podcast]()
     
     var body: some View {
-        
-        //        loaded = fetchPodcasts(search: searchText)
-        
+    
         NavigationView {
             VStack {
                 SearchBar(text: $searchText)
-                    .padding(.top)
+//                    .padding(.top)
                 
                 List(viewModel.podcasts) { podcast in
                     NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
@@ -129,7 +127,6 @@ struct TabOne1: View {
                 }
                 .onAppear {
                     self.viewModel.getThePodcasts(search: self.searchText)
-//                    self.poddcasts = self.fetchPodcasts(search: "startalk")
                     dump(self.fetchPodcasts(search: self.searchText))
                 }
                 .navigationBarTitle("Podcasts")
@@ -146,7 +143,7 @@ struct TabOne1: View {
     
     func fetchPodcasts(search: String) -> [Podcast] {
         var results = [Podcast]()
-        ITunesAPI.shared.getPodcasts(searchText: search) { (podcasts) in
+        ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
             dump(podcasts)
             results = podcasts
         }
