@@ -19,7 +19,10 @@ struct EpisodeDetailView: View {
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
-            PodcastPosterView(podcast: podcast)
+            PodcastPosterView(podcast: podcast, width: 250, height: 250)
+            
+            DurationView()
+            
             ControlView()
             TitleView(podcast: podcast)
             PodcastInfoView()
@@ -189,6 +192,7 @@ struct ControlView: View {
     @State var paused = false
     
     var body: some View {
+        
         HStack(spacing: UIScreen.main.bounds.width / 5 - 30) {
             
             Button(action: {
@@ -215,6 +219,37 @@ struct ControlView: View {
             
         }
         .padding(.top,25)
-        .foregroundColor(.white)
+//        .foregroundColor(.white)
+    }
+}
+
+struct DurationView: View {
+    
+    @State var width : CGFloat = 30
+    
+    var body: some View {
+        ZStack(alignment: .leading) {
+            
+            Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
+            
+            Capsule().fill(Color.blue).frame(width: self.width, height: 8)
+                .gesture(DragGesture()
+                    .onChanged({ (value) in
+                        
+                        let x = value.location.x
+                        
+                        self.width = x
+                        
+                    }).onEnded({ (value) in
+                        
+                        //                        let x = value.location.x
+                        //
+                        //                        let screen = UIScreen.main.bounds.width - 30
+                        //
+                        //                        let percent = x / screen
+                        
+                    }))
+        }
+        .padding(.top)
     }
 }

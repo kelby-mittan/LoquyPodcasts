@@ -34,16 +34,20 @@ struct BrowseView_Previews: PreviewProvider {
 
 struct PodcastPosterView: View {
     let podcast: DummyPodcast
+    let width: CGFloat
+    let height: CGFloat
     
-    init(podcast: DummyPodcast) {
+    init(podcast: DummyPodcast, width: CGFloat, height: CGFloat) {
         self.podcast = podcast
+        self.width = width
+        self.height = height
     }
     var body: some View {
         Image(podcast.image)
             .renderingMode(.original)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 200.0, height: 200.0)
+            .frame(width: width, height: height)
             .cornerRadius(12)
             .padding()
     }
@@ -118,7 +122,7 @@ struct TabOne1: View {
                 
                 List(viewModel.podcasts) { podcast in
                     NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
-                        PodcastPosterView(podcast: DummyPodcast.origins)
+                        PodcastPosterView(podcast: DummyPodcast.origins, width: 100, height: 100)
                         Text(podcast.artistName ?? "not loading")
                             .font(.headline)
                             .fontWeight(.semibold)
@@ -134,10 +138,10 @@ struct TabOne1: View {
             .navigationBarTitle("Podcasts", displayMode: .automatic)
         }
         .tabItem {
-            Image(systemName: "list.dash")
+            Image(systemName: "magnifyingglass")
                 .font(.largeTitle)
                 .padding(.top, 16.0)
-            Text("Menu")
+            Text("Browse")
         }
     }
     
@@ -158,7 +162,7 @@ struct TabTwo: View {
                 Image(systemName: "star.fill")
                     .font(.largeTitle)
                     .padding(.top, 16.0)
-                Text("Detail")
+                Text("Favorites")
         }
     }
 }
@@ -168,10 +172,10 @@ struct TabThree: View {
         EpisodeDetailView(podcast: DummyPodcast.origins)
             .tabItem {
                 
-                Image(systemName: "star.fill")
+                Image(systemName: "textbox")
                     .font(.largeTitle)
                     .padding(.top, 16.0)
-                Text("Detail")
+                Text("Transcribe")
         }
     }
 }
