@@ -8,25 +8,36 @@
 
 import Foundation
 import SwiftUI
-//import Combine
+import Combine
 
-class PodcastListViewModel: ObservableObject {
+class PodcastViewModel: ObservableObject {
     
-//    var didChange = PassthroughSubject<PodcastListViewModel,Never>()
-    
-    @Published var podcasts: [Podcast] = []
+    @Published var pcasts = [Podcast]()
     
     func getThePodcasts(search: String) {
         ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
             DispatchQueue.main.async {
-                self.podcasts = podcasts
+                self.pcasts = podcasts
             }
         }
     }
-    
-//    init() {
-//        ITunesAPI.shared.getPodcasts(searchText: "startalk", completionHandler: { (podcasts) in
-//            self.podcasts = podcasts
-//        })
-//    }
 }
+
+//class PodcastListViewModel: ObservableObject {
+//
+//    @Published var podcasts: [Podcast] = []
+//    @Published var searchTerm: String = ""
+//
+//    init() {
+//        getThePodcasts(search: searchTerm)
+//    }
+//
+//    func getThePodcasts(search: String) {
+//        ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
+//            DispatchQueue.main.async {
+//                self.podcasts = podcasts
+//            }
+//        }
+//    }
+//
+//}
