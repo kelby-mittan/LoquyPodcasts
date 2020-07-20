@@ -8,8 +8,10 @@
 
 import Foundation
 
-struct Podcast: Decodable, Hashable {
-        
+struct Podcast: Decodable, Identifiable {
+    
+    var id: UUID?
+    
     var trackName: String?
     var artistName: String?
     var artworkUrl600: String?
