@@ -11,8 +11,9 @@ import SwiftUI
 struct TranscribeView: View {
     
     @State var width : CGFloat = 30
-    @State var playing = true
-    @State var paused = false
+    @State var playing = false
+    @State var paused = true
+    @State var transcription: String = ""
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
@@ -57,6 +58,7 @@ struct TranscribeView: View {
                         .padding(.top)
             
             Button(action: {
+                self.transcription = "Donec ultricies massa dui, dapibus auctor nibh pharetra eu. Cras vestibulum nisl quis sem ullamcorper interdum. Quisque eget varius sem. Nunc vitae massa ac erat interdum fringilla vel quis nulla. Phasellus a pharetra orcidsalvaskvm."
                 
             }) {
                 Text("Transcribe")
@@ -69,9 +71,21 @@ struct TranscribeView: View {
                     .padding()
             }
             
-            Text("Donec ultricies massa dui, dapibus auctor nibh pharetra eu. Cras vestibulum nisl quis sem ullamcorper interdum. Quisque eget varius sem. Nunc vitae massa ac erat interdum fringilla vel quis nulla. Phasellus a pharetra orcidsalvaskvm.")
-                .padding()
+//            Text("Donec ultricies massa dui, dapibus auctor nibh pharetra eu. Cras vestibulum nisl quis sem ullamcorper interdum. Quisque eget varius sem. Nunc vitae massa ac erat interdum fringilla vel quis nulla. Phasellus a pharetra orcidsalvaskvm.")
+//                .padding()
             
+//            TextField("Click transcribe to get a Loquy...", text: $transcription, onEditingChanged: { (changed) in
+//                print("Username onEditingChanged - \(changed)")
+//            }) {
+//                print("Transcription onCommit: \(self.transcription)")
+//            }
+//            .frame(width: UIScreen.main.bounds.width - 40, height: UIScreen.main.bounds.height*0.25, alignment: .center)
+//            .padding()
+            
+            MultilineTextField("", text: $transcription, onCommit: {
+                print("Final text: \(self.transcription)")
+            })
+                        
             Button(action: {
                 
             }) {
