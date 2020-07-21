@@ -37,7 +37,9 @@ class ITunesAPI {
     
     func loadPodcasts(searchText: String, completionHandler: @escaping ([Podcast]) -> ())  {
         
-        guard let url = URL(string: "https://itunes.apple.com/search?term=\(searchText)&entity=podcast") else {
+        let text = searchText.replacingOccurrences(of: " ", with: "+")
+        
+        guard let url = URL(string: "https://itunes.apple.com/search?term=\(text)&entity=podcast") else {
             return
         }
         

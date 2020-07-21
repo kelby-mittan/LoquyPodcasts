@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Podcast: Decodable, Identifiable {
+struct Podcast: Decodable, Identifiable, Hashable {
     
     var id: UUID?
     

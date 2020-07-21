@@ -20,16 +20,20 @@ struct EpisodeDetailView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
             PodcastPosterView(podcast: podcast, width: 250, height: 250)
-            
-            DurationView()
-            
             ControlView()
-            TitleView(podcast: podcast)
-            PodcastInfoView()
-            RatingsView()
             DescriptionView(podcast: podcast)
             GuestView(podcast: podcast)
-            PurchaseView()
+            NavigationLink(destination: Text("Add to Favorites")) {
+                
+                Text("Add to Favorites")
+                    .fontWeight(.heavy)
+                    .padding()
+                    .frame(width: UIScreen.main.bounds.width - 44)
+                    .foregroundColor(.white)
+                    .background(Color.purple)
+                    .clipShape(Capsule())
+                    .padding()
+            }
         }
         .navigationBarTitle("", displayMode: .inline)
     }
@@ -41,60 +45,68 @@ struct EpisodeDetailView_Previews: PreviewProvider {
     }
 }
 
-struct TitleView: View {
+struct ControlView: View {
     
-    let podcast: DummyPodcast
-    
-    init(podcast: DummyPodcast) {
-        self.podcast = podcast
-    }
+    @State var width : CGFloat = 30
+    @State var playing = true
+    @State var paused = false
     
     var body: some View {
-        HStack {
-            Text(podcast.title)
-                //                .font(.title)
-                .fontWeight(.heavy)
-                .padding(.leading)
+        
+        VStack {
             
-            Spacer()
-            
-            Image(systemName: "star")
-                .font(.largeTitle)
-                .padding(.top, 4)
-                .foregroundColor(.yellow)
-                .padding(.trailing)
-        }
-        .padding(.vertical)
-    }
-}
-
-struct PodcastInfoView: View {
-    var body: some View {
-        HStack {
-            Text("2h 30m | Physics, Philosophy | 19 July 2020")
-                .foregroundColor(.secondary)
-                .padding(.leading)
-            Spacer()
-        }
-    }
-}
-
-struct RatingsView: View {
-    var body: some View {
-        HStack {
-            ForEach(0..<3) { item in
-                Image(systemName: "star.fill")
+            ZStack(alignment: .leading) {
+                
+                Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
+                
+                Capsule().fill(Color.blue).frame(width: self.width, height: 8)
+                    .gesture(DragGesture()
+                        .onChanged({ (value) in
+                            
+                            let x = value.location.x
+                            
+                            self.width = x
+                            
+                        }).onEnded({ (value) in
+//
+//                            let x = value.location.x
+//
+//                            let screen = UIScreen.main.bounds.width - 30
+//
+//                            let percent = x / screen
+                            
+                        }))
             }
-            Image(systemName: "star.lefthalf.fill")
-            Image(systemName: "star")
+            .padding(.top)
             
-            Text("3.5")
-                .bold()
-                .padding(.leading)
-            Spacer()
+            HStack(spacing: UIScreen.main.bounds.width / 5 - 30) {
+                
+                Button(action: {
+                    
+                }) {
+                    Image(systemName: "gobackward.15").font(.title)
+                }
+                
+                Button(action: {
+                    self.paused.toggle()
+                    self.playing.toggle()
+                }) {
+                    Image(systemName: self.playing && !self.paused ? "pause.fill" : "play.fill").font(.title)
+                }
+                
+                Button(action: {
+                    
+                    
+                }) {
+                    
+                    Image(systemName: "goforward.15").font(.title)
+                    
+                }
+                
+            }
+            .padding(.top,25)
+            //        .foregroundColor(.white)
         }
-        .padding(.leading)
-        .foregroundColor(.yellow)
     }
 }
 
@@ -108,12 +120,50 @@ struct DescriptionView: View {
     
     var body: some View {
         VStack {
+            
+            HStack {
+                Text(podcast.title)
+                    //                .font(.title)
+                    .fontWeight(.heavy)
+//                    .padding(.leading)
+                Spacer()
+                
+                Image(systemName: "star")
+                    .font(.largeTitle)
+                    .padding(.top, 4)
+                    .foregroundColor(.yellow)
+//                    .padding(.trailing)
+            }
+//            .padding(.vertical)
+            
+            Text("2h 30m | Physics, Philosophy | 19 July 2020")
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.leading)
+                .padding(.top, 8)
+                Spacer()
+            
+            HStack {
+                ForEach(0..<3) { item in
+                    Image(systemName: "star.fill")
+                }
+                Image(systemName: "star.lefthalf.fill")
+                Image(systemName: "star")
+                
+                Text("3.5")
+                    .bold()
+//                    .padding(.leading)
+                Spacer()
+            }
+            .padding(.top, 4)
+            .foregroundColor(.yellow)
+            
             HStack {
                 Text(podcast.description)
                     .fontWeight(.bold)
                 Spacer()
             }
-            .padding(.bottom)
+//            .padding(.bottom)
+            .padding(.top)
             
             Text("")
             
@@ -186,70 +236,4 @@ struct PurchaseView: View {
     }
 }
 
-struct ControlView: View {
-    
-    @State var playing = true
-    @State var paused = false
-    
-    var body: some View {
-        
-        HStack(spacing: UIScreen.main.bounds.width / 5 - 30) {
-            
-            Button(action: {
-                
-            }) {
-                Image(systemName: "gobackward.15").font(.title)
-            }
-            
-            Button(action: {
-                self.paused.toggle()
-                self.playing.toggle()
-            }) {
-                Image(systemName: self.playing && !self.paused ? "pause.fill" : "play.fill").font(.title)
-            }
-            
-            Button(action: {
-                
-                
-            }) {
-                
-                Image(systemName: "goforward.15").font(.title)
-                
-            }
-            
-        }
-        .padding(.top,25)
-//        .foregroundColor(.white)
-    }
-}
 
-struct DurationView: View {
-    
-    @State var width : CGFloat = 30
-    
-    var body: some View {
-        ZStack(alignment: .leading) {
-            
-            Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-            
-            Capsule().fill(Color.blue).frame(width: self.width, height: 8)
-                .gesture(DragGesture()
-                    .onChanged({ (value) in
-                        
-                        let x = value.location.x
-                        
-                        self.width = x
-                        
-                    }).onEnded({ (value) in
-                        
-                        //                        let x = value.location.x
-                        //
-                        //                        let screen = UIScreen.main.bounds.width - 30
-                        //
-                        //                        let percent = x / screen
-                        
-                    }))
-        }
-        .padding(.top)
-    }
-}
