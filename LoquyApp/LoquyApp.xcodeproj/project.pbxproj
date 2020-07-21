@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D7124C7A10A007548C3 /* MultilineTextField.swift */; };
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
 		02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */; };
 		02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688324C4DBB6004D5C6D /* LoquyApp.xcdatamodeld */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		02272D7124C7A10A007548C3 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		02B5687C24C4DBB6004D5C6D /* LoquyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoquyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */,
 				02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */,
 				02B568B224C4E413004D5C6D /* SearchBar.swift */,
+				02272D7124C7A10A007548C3 /* MultilineTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */,
 				02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */,
 				02B568B924C4FA8D004D5C6D /* PodcastListViewModel.swift in Sources */,
+				02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */,
 				02B568B724C4F299004D5C6D /* Podcast.swift in Sources */,
 				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
