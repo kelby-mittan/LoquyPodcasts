@@ -164,7 +164,7 @@ struct TabTwo: View {
 
 struct TabThree: View {
     var body: some View {
-        EpisodeDetailView(podcast: DummyPodcast.origins)
+        TranscribeView()
             .tabItem {
                 
                 Image(systemName: "textbox")
