@@ -28,7 +28,7 @@ struct SearchBar: UIViewRepresentable {
 
         // Show cancel button when the user begins editing the search text
         func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-            searchBar.showsCancelButton = true
+            searchBar.showsCancelButton = false
         }
 
         func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

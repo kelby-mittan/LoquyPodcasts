@@ -111,20 +111,30 @@ struct PodcastPosterView: View {
 struct TabOne1: View {
     @State private var searchText = ""
     @ObservedObject private var viewModel = PodcastViewModel()
+    @State private var isPodcastShowing = true
     
     var body: some View {
         
-        
         Group {
             if searchText.isEmpty {
-                
                 NavigationView {
                     VStack {
+                        
                         SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
-                        Spacer()
+                            .padding([.leading,.trailing])
+                        
+                        ScrollView(.vertical) {
+                            
+                            HeaderView(label: "Check Out")
+                            
+                            PodcastContentView(isPodcastShowing: $isPodcastShowing)
+                            
+                        }
                     }
                         
-                    .navigationBarTitle("Podcasts", displayMode: .automatic)
+                        
+                    .navigationBarTitle("Browse")
+                    .navigationBarHidden(true)
                 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
@@ -138,7 +148,7 @@ struct TabOne1: View {
                 NavigationView {
                     VStack {
                         SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
-                        //                    .padding(.top)
+                            .padding([.leading,.trailing])
                         
                         List(viewModel.pcasts) { podcast in
                             NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
@@ -150,10 +160,16 @@ struct TabOne1: View {
                                     .fontWeight(.semibold)
                             }
                             .padding(.trailing)
+                            
                         }
-                        .navigationBarTitle("Podcasts")
+                            //                        .background(Color.black)
+                            .listStyle(GroupedListStyle())
+                            .environment(\.horizontalSizeClass, .regular)
+                        //                        .navigationBarTitle("Podcasts")
                     }
-                    .navigationBarTitle("Podcasts", displayMode: .automatic)
+                        //                    .navigationBarTitle("Podcasts", displayMode: .automatic)
+                        .navigationBarTitle("Browse")
+                        .navigationBarHidden(true)
                 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
@@ -196,5 +212,68 @@ struct TabThree: View {
                     .padding(.top, 16.0)
                 Text("Transcribe")
         }
+    }
+}
+
+struct PodcastContentView: View {
+    
+    @Binding var isPodcastShowing: Bool
+    
+    
+    var body: some View {
+        HStack {
+            ZStack(alignment: .trailing) {
+                Image("mindscape")
+                    .resizable()
+                    .frame(width: 150, height: 150, alignment: .center)
+                    .cornerRadius(8)
+                    .aspectRatio(contentMode: .fit)
+                    .offset(x: 160, y: 0)
+                
+                VStack(alignment: .leading) {
+                    PCastHeaderLabelView(label: "Mindscape")
+                    //                    PCastHeaderLabelView(label: "Sean Carroll")
+                    PCastBodyLabelView(label: "Sean Carroll")
+                }
+                
+            }
+            Spacer()
+        }
+        .padding()
+        .frame(width: UIScreen.main.bounds.width - 32, height: 200, alignment: .center)
+        .background(LinearGradient(gradient: Gradient(colors: [Color(.systemIndigo), Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
+        .cornerRadius(14)
+        
+    }
+}
+
+struct PCastHeaderLabelView: View {
+    
+    let label: String
+    
+    var body: some View {
+        Text(label)
+            .font(.title)
+            .fontWeight(.heavy)
+            .foregroundColor(Color.white)
+    }
+}
+
+struct PCastBodyLabelView: View {
+    
+    let label: String
+    
+    var body: some View {
+        Text(label)
+            .foregroundColor(Color(.systemGray5))
+    }
+}
+
+struct HeaderView: View {
+    
+    let label: String
+    
+    var body: some View {
+        Text(label)
     }
 }
