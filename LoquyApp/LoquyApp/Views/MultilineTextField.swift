@@ -59,35 +59,42 @@ private struct UITextViewWrapper: UIViewRepresentable {
     var onDone: (() -> Void)?
 
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
+        
         let textField = UITextView()
         textField.delegate = context.coordinator
-
         textField.isEditable = true
         textField.font = UIFont.preferredFont(forTextStyle: .body)
         textField.isSelectable = true
         textField.isUserInteractionEnabled = true
         textField.isScrollEnabled = false
         textField.backgroundColor = UIColor.clear
+        
         if nil != onDone {
             textField.returnKeyType = .done
         }
 
         textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
         return textField
     }
 
     func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
+        
         if uiView.text != self.text {
             uiView.text = self.text
         }
+        
         if uiView.window != nil, !uiView.isFirstResponder {
             uiView.becomeFirstResponder()
         }
+        
         UITextViewWrapper.recalculateHeight(view: uiView, result: $calculatedHeight)
     }
 
     private static func recalculateHeight(view: UIView, result: Binding<CGFloat>) {
+        
         let newSize = view.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
+        
         if result.wrappedValue != newSize.height {
             DispatchQueue.main.async {
                 result.wrappedValue = newSize.height // call in next render cycle.
@@ -116,6 +123,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
 
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            
             if let onDone = self.onDone, text == "\n" {
                 textView.resignFirstResponder()
                 onDone()

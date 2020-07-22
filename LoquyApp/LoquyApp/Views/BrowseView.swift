@@ -113,34 +113,58 @@ struct TabOne1: View {
     @ObservedObject private var viewModel = PodcastViewModel()
     
     var body: some View {
-    
-        NavigationView {
-            VStack {
-                SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
-//                    .padding(.top)
+        
+        
+        Group {
+            if searchText.isEmpty {
                 
-                List(viewModel.pcasts) { podcast in
-                    NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
-                        
-                        PodcastPosterView(podcast: DummyPodcast.origins, width: 100, height: 100)
-                        
-                        Text(podcast.artistName ?? "not loading")
-                            .font(.headline)
-                            .fontWeight(.semibold)
+                NavigationView {
+                    VStack {
+                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
+                        Spacer()
                     }
-                    .padding(.trailing)
+                        
+                    .navigationBarTitle("Podcasts", displayMode: .automatic)
                 }
-                .navigationBarTitle("Podcasts")
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                        .font(.largeTitle)
+                        .padding(.top, 16.0)
+                    Text("Browse")
+                }
+                
+                
+            } else {
+                NavigationView {
+                    VStack {
+                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
+                        //                    .padding(.top)
+                        
+                        List(viewModel.pcasts) { podcast in
+                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
+                                
+                                PodcastPosterView(podcast: DummyPodcast.origins, width: 100, height: 100)
+                                
+                                Text(podcast.artistName ?? "not loading")
+                                    .font(.headline)
+                                    .fontWeight(.semibold)
+                            }
+                            .padding(.trailing)
+                        }
+                        .navigationBarTitle("Podcasts")
+                    }
+                    .navigationBarTitle("Podcasts", displayMode: .automatic)
+                }
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                        .font(.largeTitle)
+                        .padding(.top, 16.0)
+                    Text("Browse")
+                }
             }
-            .navigationBarTitle("Podcasts", displayMode: .automatic)
-        }
-        .tabItem {
-            Image(systemName: "magnifyingglass")
-                .font(.largeTitle)
-                .padding(.top, 16.0)
-            Text("Browse")
         }
     }
+    
     
     func loadPodcasts(search: String) {
         ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
@@ -164,7 +188,7 @@ struct TabTwo: View {
 
 struct TabThree: View {
     var body: some View {
-        TranscribeView()
+        TranscribeView(podcast: DummyPodcast.podcasts[4])
             .tabItem {
                 
                 Image(systemName: "textbox")
