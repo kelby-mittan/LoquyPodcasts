@@ -125,9 +125,14 @@ struct TabOne1: View {
                         
                         ScrollView(.vertical) {
                             
-                            HeaderView(label: "Check Out")
+                            HeaderView(label: "Listen To")
                             
-                            PodcastContentView(isPodcastShowing: $isPodcastShowing)
+                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.podcasts[4])) {
+                                PodcastContentView(isPodcastShowing: $isPodcastShowing)
+                            }
+                            
+                            PodcastScrollView()
+                            
                             
                         }
                     }
@@ -225,10 +230,12 @@ struct PodcastContentView: View {
             ZStack(alignment: .trailing) {
                 Image("mindscape")
                     .resizable()
+                    .renderingMode(.original)
                     .frame(width: 150, height: 150, alignment: .center)
                     .cornerRadius(8)
                     .aspectRatio(contentMode: .fit)
                     .offset(x: 160, y: 0)
+                    .background(Color.clear)
                 
                 VStack(alignment: .leading) {
                     PCastHeaderLabelView(label: "Mindscape")
@@ -274,6 +281,91 @@ struct HeaderView: View {
     let label: String
     
     var body: some View {
-        Text(label)
+        HStack {
+            Text(label)
+                .font(.title)
+                .fontWeight(.heavy)
+            Spacer()
+        }
+        .padding(.leading)
+    }
+}
+
+struct PodcastScrollView: View {
+    
+    var pCasts = DummyPodcast.podcasts
+    
+    var body: some View {
+        VStack {
+            HeaderView(label: "Top Podcasts")
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(0 ..< 5) { item in
+                        PodcastView()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct PodcastView: View {
+    
+    var pCasts = DummyPodcast.podcasts[0...1]
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            ForEach(pCasts, id: \.id) { pcast in
+                NavigationLink(destination: Text("Coming Soon")) {
+                    
+                    HStack(alignment: .top) {
+                        Image(pcast.image)
+                            .renderingMode(.original)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 72, height: 72)
+                            .background(Color.purple)
+                            .cornerRadius(8)
+                        
+                        VStack(alignment: .leading) {
+                            Text(pcast.title)
+                                .foregroundColor(.black)
+                                .font(.headline)
+                                .padding(.bottom, 4)
+                            Text(pcast.host)
+                                .foregroundColor(Color(.label))
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                                .padding(.bottom, 4)
+                            
+                            
+                            HStack {
+                                Text(pcast.category)
+                                    .foregroundColor(.secondary)
+                                    .font(.caption)
+                                    .fontWeight(.light)
+                                    .padding(.bottom, 4)
+                                Spacer()
+                                
+                                ZStack(alignment: .leading) {
+                                    Rectangle()
+                                        .frame(width: 100, height: 8)
+                                        .foregroundColor(Color(.systemGray4))
+                                    
+                                    Rectangle()
+                                        .frame(width: 40, height: 8)
+                                        .foregroundColor(Color(.orange))
+                                }
+                                .clipShape(Capsule())
+                            }
+                            
+                        }
+                    }
+                    
+                }
+            }
+        }
+        .padding(.horizontal)
     }
 }
