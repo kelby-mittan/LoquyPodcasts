@@ -23,6 +23,7 @@ struct SearchBar: UIViewRepresentable {
         init(text: Binding<String>, onTextChanged: @escaping (String) -> Void) {
             _text = text
             self.onTextChanged = onTextChanged
+            
         }
 
         // Show cancel button when the user begins editing the search text
@@ -54,7 +55,7 @@ struct SearchBar: UIViewRepresentable {
         searchBar.placeholder = "search for podcasts"
         searchBar.searchBarStyle = .minimal
         searchBar.autocapitalizationType = .none
-        searchBar.showsCancelButton = true
+        searchBar.showsCancelButton = false
         return searchBar
     }
 

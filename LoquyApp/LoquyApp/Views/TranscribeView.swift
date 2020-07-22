@@ -10,6 +10,12 @@ import SwiftUI
 
 struct TranscribeView: View {
     
+    let podcast: DummyPodcast
+    
+    init(podcast: DummyPodcast) {
+        self.podcast = podcast
+    }
+    
     @State var width : CGFloat = 30
     @State var playing = false
     @State var paused = true
@@ -19,7 +25,7 @@ struct TranscribeView: View {
         ScrollView(.vertical, showsIndicators: true) {
             
             HStack {
-                PodcastPosterView(podcast: DummyPodcast.podcasts[3], width: 50, height: 50)
+                PodcastPosterView(podcast: DummyPodcast.podcasts[4], width: 100, height: 100)
                 //                    .padding(.leading)
                 Spacer()
                 
@@ -34,28 +40,34 @@ struct TranscribeView: View {
             .padding()
             
             ZStack(alignment: .leading) {
+                
+                Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
+                
+                Capsule().fill(Color.blue).frame(width: self.width, height: 8)
+                    .gesture(DragGesture()
+                        .onChanged({ (value) in
                             
-                            Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
+                            let x = value.location.x
                             
-                            Capsule().fill(Color.blue).frame(width: self.width, height: 8)
-                                .gesture(DragGesture()
-                                    .onChanged({ (value) in
-                                        
-                                        let x = value.location.x
-                                        
-                                        self.width = x
-                                        
-                                    }).onEnded({ (value) in
-            //
-            //                            let x = value.location.x
-            //
-            //                            let screen = UIScreen.main.bounds.width - 30
-            //
-            //                            let percent = x / screen
-                                        
-                                    }))
-                        }
-                        .padding(.top)
+                            self.width = x
+                            
+                        }).onEnded({ (value) in
+                            
+                        }))
+            }
+            .padding(.top)
+            
+            HStack {
+                Text("0:00")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.leading, 4)
+                Spacer()
+                Text("2:30")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.trailing, 4)
+            }
             
             Button(action: {
                 self.transcription = "Donec ultricies massa dui, dapibus auctor nibh pharetra eu. Cras vestibulum nisl quis sem ullamcorper interdum. Quisque eget varius sem. Nunc vitae massa ac erat interdum fringilla vel quis nulla. Phasellus a pharetra orcidsalvaskvm."
@@ -71,21 +83,10 @@ struct TranscribeView: View {
                     .padding()
             }
             
-//            Text("Donec ultricies massa dui, dapibus auctor nibh pharetra eu. Cras vestibulum nisl quis sem ullamcorper interdum. Quisque eget varius sem. Nunc vitae massa ac erat interdum fringilla vel quis nulla. Phasellus a pharetra orcidsalvaskvm.")
-//                .padding()
-            
-//            TextField("Click transcribe to get a Loquy...", text: $transcription, onEditingChanged: { (changed) in
-//                print("Username onEditingChanged - \(changed)")
-//            }) {
-//                print("Transcription onCommit: \(self.transcription)")
-//            }
-//            .frame(width: UIScreen.main.bounds.width - 40, height: UIScreen.main.bounds.height*0.25, alignment: .center)
-//            .padding()
-            
             MultilineTextField("", text: $transcription, onCommit: {
                 print("Final text: \(self.transcription)")
             })
-                        
+            
             Button(action: {
                 
             }) {
@@ -96,6 +97,7 @@ struct TranscribeView: View {
                     .foregroundColor(.white)
                     .background(Color.purple)
                     .clipShape(Capsule())
+                    
                     .padding()
             }
         }
@@ -106,6 +108,6 @@ struct TranscribeView: View {
 
 struct TranscribeView_Previews: PreviewProvider {
     static var previews: some View {
-        TranscribeView()
+        TranscribeView(podcast: DummyPodcast.podcasts[4])
     }
 }
