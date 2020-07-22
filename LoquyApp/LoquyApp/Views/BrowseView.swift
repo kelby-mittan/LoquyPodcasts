@@ -111,20 +111,35 @@ struct PodcastPosterView: View {
 struct TabOne1: View {
     @State private var searchText = ""
     @ObservedObject private var viewModel = PodcastViewModel()
+    @State private var isPodcastShowing = true
     
     var body: some View {
         
-        
         Group {
             if searchText.isEmpty {
-                
                 NavigationView {
                     VStack {
+                        
                         SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
-                        Spacer()
+                            .padding([.leading,.trailing])
+                        
+                        ScrollView(.vertical) {
+                            
+                            HeaderView(label: "Listen To")
+                            
+                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.podcasts[4])) {
+                                PodcastContentView(isPodcastShowing: $isPodcastShowing)
+                            }
+                            
+                            PodcastScrollView()
+                            
+                            
+                        }
                     }
                         
-                    .navigationBarTitle("Podcasts", displayMode: .automatic)
+                        
+                    .navigationBarTitle("Browse")
+                    .navigationBarHidden(true)
                 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
@@ -138,7 +153,7 @@ struct TabOne1: View {
                 NavigationView {
                     VStack {
                         SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
-                        //                    .padding(.top)
+                            .padding([.leading,.trailing])
                         
                         List(viewModel.pcasts) { podcast in
                             NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
@@ -150,10 +165,16 @@ struct TabOne1: View {
                                     .fontWeight(.semibold)
                             }
                             .padding(.trailing)
+                            
                         }
-                        .navigationBarTitle("Podcasts")
+                            //                        .background(Color.black)
+                            .listStyle(GroupedListStyle())
+                            .environment(\.horizontalSizeClass, .regular)
+                        //                        .navigationBarTitle("Podcasts")
                     }
-                    .navigationBarTitle("Podcasts", displayMode: .automatic)
+                        //                    .navigationBarTitle("Podcasts", displayMode: .automatic)
+                        .navigationBarTitle("Browse")
+                        .navigationBarHidden(true)
                 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
@@ -196,5 +217,155 @@ struct TabThree: View {
                     .padding(.top, 16.0)
                 Text("Transcribe")
         }
+    }
+}
+
+struct PodcastContentView: View {
+    
+    @Binding var isPodcastShowing: Bool
+    
+    
+    var body: some View {
+        HStack {
+            ZStack(alignment: .trailing) {
+                Image("mindscape")
+                    .resizable()
+                    .renderingMode(.original)
+                    .frame(width: 150, height: 150, alignment: .center)
+                    .cornerRadius(8)
+                    .aspectRatio(contentMode: .fit)
+                    .offset(x: 160, y: 0)
+                    .background(Color.clear)
+                
+                VStack(alignment: .leading) {
+                    PCastHeaderLabelView(label: "Mindscape")
+                    //                    PCastHeaderLabelView(label: "Sean Carroll")
+                    PCastBodyLabelView(label: "Sean Carroll")
+                }
+                
+            }
+            Spacer()
+        }
+        .padding()
+        .frame(width: UIScreen.main.bounds.width - 32, height: 200, alignment: .center)
+        .background(LinearGradient(gradient: Gradient(colors: [Color(.systemIndigo), Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
+        .cornerRadius(14)
+        
+    }
+}
+
+struct PCastHeaderLabelView: View {
+    
+    let label: String
+    
+    var body: some View {
+        Text(label)
+            .font(.title)
+            .fontWeight(.heavy)
+            .foregroundColor(Color.white)
+    }
+}
+
+struct PCastBodyLabelView: View {
+    
+    let label: String
+    
+    var body: some View {
+        Text(label)
+            .foregroundColor(Color(.systemGray5))
+    }
+}
+
+struct HeaderView: View {
+    
+    let label: String
+    
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.title)
+                .fontWeight(.heavy)
+            Spacer()
+        }
+        .padding(.leading)
+    }
+}
+
+struct PodcastScrollView: View {
+    
+    var pCasts = DummyPodcast.podcasts
+    
+    var body: some View {
+        VStack {
+            HeaderView(label: "Top Podcasts")
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(0 ..< 5) { item in
+                        PodcastView()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct PodcastView: View {
+    
+    var pCasts = DummyPodcast.podcasts[0...1]
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            ForEach(pCasts, id: \.id) { pcast in
+                NavigationLink(destination: Text("Coming Soon")) {
+                    
+                    HStack(alignment: .top) {
+                        Image(pcast.image)
+                            .renderingMode(.original)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 72, height: 72)
+                            .background(Color.purple)
+                            .cornerRadius(8)
+                        
+                        VStack(alignment: .leading) {
+                            Text(pcast.title)
+                                .foregroundColor(.black)
+                                .font(.headline)
+                                .padding(.bottom, 4)
+                            Text(pcast.host)
+                                .foregroundColor(Color(.label))
+                                .font(.subheadline)
+                                .fontWeight(.light)
+                                .padding(.bottom, 4)
+                            
+                            
+                            HStack {
+                                Text(pcast.category)
+                                    .foregroundColor(.secondary)
+                                    .font(.caption)
+                                    .fontWeight(.light)
+                                    .padding(.bottom, 4)
+                                Spacer()
+                                
+                                ZStack(alignment: .leading) {
+                                    Rectangle()
+                                        .frame(width: 100, height: 8)
+                                        .foregroundColor(Color(.systemGray4))
+                                    
+                                    Rectangle()
+                                        .frame(width: 40, height: 8)
+                                        .foregroundColor(Color(.orange))
+                                }
+                                .clipShape(Capsule())
+                            }
+                            
+                        }
+                    }
+                    
+                }
+            }
+        }
+        .padding(.horizontal)
     }
 }
