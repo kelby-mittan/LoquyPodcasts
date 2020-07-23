@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D7124C7A10A007548C3 /* MultilineTextField.swift */; };
+		02272D7524C91E5F007548C3 /* LabelViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D7424C91E5F007548C3 /* LabelViews.swift */; };
+		02272D7724C91EF5007548C3 /* TopPodcastsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D7624C91EF5007548C3 /* TopPodcastsView.swift */; };
+		02272D7924C91FF7007548C3 /* ListenToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D7824C91FF7007548C3 /* ListenToView.swift */; };
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
 		02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */; };
 		02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688324C4DBB6004D5C6D /* LoquyApp.xcdatamodeld */; };
@@ -40,6 +43,9 @@
 
 /* Begin PBXFileReference section */
 		02272D7124C7A10A007548C3 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
+		02272D7424C91E5F007548C3 /* LabelViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelViews.swift; sourceTree = "<group>"; };
+		02272D7624C91EF5007548C3 /* TopPodcastsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopPodcastsView.swift; sourceTree = "<group>"; };
+		02272D7824C91FF7007548C3 /* ListenToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenToView.swift; sourceTree = "<group>"; };
 		02B5687C24C4DBB6004D5C6D /* LoquyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoquyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -97,6 +103,15 @@
 				5DBCD5426E03BF62E24E2304 /* Pods-LoquyAppTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		02272D7324C91E0E007548C3 /* Text Fields */ = {
+			isa = PBXGroup;
+			children = (
+				02B568B224C4E413004D5C6D /* SearchBar.swift */,
+				02272D7124C7A10A007548C3 /* MultilineTextField.swift */,
+			);
+			path = "Text Fields";
 			sourceTree = "<group>";
 		};
 		02B5687324C4DBB6004D5C6D = {
@@ -168,8 +183,10 @@
 				02B568A924C4DD7D004D5C6D /* EpisodesView.swift */,
 				02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */,
 				02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */,
-				02B568B224C4E413004D5C6D /* SearchBar.swift */,
-				02272D7124C7A10A007548C3 /* MultilineTextField.swift */,
+				02272D7824C91FF7007548C3 /* ListenToView.swift */,
+				02272D7624C91EF5007548C3 /* TopPodcastsView.swift */,
+				02272D7424C91E5F007548C3 /* LabelViews.swift */,
+				02272D7324C91E0E007548C3 /* Text Fields */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -371,6 +388,7 @@
 			files = (
 				02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */,
 				02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */,
+				02272D7724C91EF5007548C3 /* TopPodcastsView.swift in Sources */,
 				02B568B524C4F02F004D5C6D /* ITunesAPI.swift in Sources */,
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
 				02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */,
@@ -378,8 +396,10 @@
 				02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */,
 				02B568B924C4FA8D004D5C6D /* PodcastListViewModel.swift in Sources */,
 				02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */,
+				02272D7924C91FF7007548C3 /* ListenToView.swift in Sources */,
 				02B568B724C4F299004D5C6D /* Podcast.swift in Sources */,
 				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
+				02272D7524C91E5F007548C3 /* LabelViews.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
 				02B568B124C4E3C9004D5C6D /* DummyPodcast.swift in Sources */,
 			);

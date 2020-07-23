@@ -35,8 +35,10 @@ struct MultilineTextField: View {
         Group {
             if shouldShowPlaceholder {
                 Text(placeholder).foregroundColor(.gray)
-                    .padding(.leading, 4)
+                    .fontWeight(.heavy)
+                    .padding(.leading, 6)
                     .padding(.top, 8)
+                    
             }
         }
     }
@@ -63,7 +65,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         let textField = UITextView()
         textField.delegate = context.coordinator
         textField.isEditable = true
-        textField.font = UIFont.preferredFont(forTextStyle: .body)
+        textField.font = UIFont.preferredFont(forTextStyle: .headline)
         textField.isSelectable = true
         textField.isUserInteractionEnabled = true
         textField.isScrollEnabled = false
