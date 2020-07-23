@@ -1,0 +1,32 @@
+//
+//  ImageLoader.swift
+//  LoquyApp
+//
+//  Created by Kelby Mittan on 7/23/20.
+//  Copyright © 2020 Kelby Mittan. All rights reserved.
+//
+
+import Foundation
+import SwiftUI
+import Combine
+
+class ImageLoader: ObservableObject {
+    
+    @Published var downloadImage: UIImage?
+    
+    func fetchImage(url:String) {
+        guard let imageUrl = URL(string: url) else {
+            fatalError("url string is invalid")
+        }
+        
+        URLSession.shared.dataTask(with: imageUrl) { data, response, error in
+            guard let data = data, error == nil else {
+                fatalError("error reading the image")
+            }
+            
+            DispatchQueue.main.async {
+                self.downloadImage = UIImage(data: data)
+            }
+        }.resume()
+    }
+}

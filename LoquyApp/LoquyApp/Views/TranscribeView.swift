@@ -26,7 +26,7 @@ struct TranscribeView: View {
         ScrollView(.vertical, showsIndicators: true) {
             
             HStack {
-                PodcastPosterView(podcast: DummyPodcast.podcasts[4], width: 100, height: 100)
+                PodcastPosterView(podcast: DummyPodcast.podcasts[6], width: 100, height: 100)
                 //                    .padding(.leading)
                 Spacer()
                 
