@@ -1,2 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-LoquyApp/Pods-LoquyApp-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/FeedKit/FeedKit.framework

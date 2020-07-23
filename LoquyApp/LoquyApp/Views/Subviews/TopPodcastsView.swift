@@ -29,7 +29,7 @@ struct PodcastScrollView: View {
 
 struct TopPodcastsView: View {
     
-    var pCasts = DummyPodcast.podcasts[0...1]
+    var pCasts = DummyPodcast.podcasts[0...2]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -49,12 +49,12 @@ struct TopPodcastsView: View {
                             Text(pcast.title)
                                 .foregroundColor(.black)
                                 .font(.headline)
-                                .padding(.bottom, 4)
+                                .padding(.top, 4)
                             Text(pcast.host)
                                 .foregroundColor(Color(.label))
                                 .font(.subheadline)
                                 .fontWeight(.light)
-                                .padding(.bottom, 4)
+                                .padding(.bottom, 0)
                             
                             
                             HStack {
@@ -62,19 +62,19 @@ struct TopPodcastsView: View {
                                     .foregroundColor(.secondary)
                                     .font(.caption)
                                     .fontWeight(.light)
-                                    .padding(.bottom, 4)
+                                    .padding(.bottom, 0)
                                 Spacer()
                                 
-                                ZStack(alignment: .leading) {
-                                    Rectangle()
-                                        .frame(width: 100, height: 8)
-                                        .foregroundColor(Color(.systemGray4))
-                                    
-                                    Rectangle()
-                                        .frame(width: 40, height: 8)
-                                        .foregroundColor(Color(.orange))
-                                }
-                                .clipShape(Capsule())
+//                                ZStack(alignment: .leading) {
+//                                    Rectangle()
+//                                        .frame(width: 100, height: 8)
+//                                        .foregroundColor(Color(.systemGray4))
+//
+//                                    Rectangle()
+//                                        .frame(width: 40, height: 8)
+//                                        .foregroundColor(Color(.orange))
+//                                }
+//                                .clipShape(Capsule())
                             }
                             
                         }
@@ -84,5 +84,11 @@ struct TopPodcastsView: View {
             }
         }
         .padding(.horizontal)
+    }
+}
+
+struct TopPodcastsView_Previews: PreviewProvider {
+    static var previews: some View {
+        TopPodcastsView()
     }
 }

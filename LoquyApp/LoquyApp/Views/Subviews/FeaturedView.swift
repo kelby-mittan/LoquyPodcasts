@@ -19,7 +19,7 @@ struct FeaturedView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(pCasts, id: \.id) { pCast in
-                        ZStack {
+                        ZStack(alignment: .center) {
                             
                             NavigationLink(destination: Text("Coming Soon")) {
                                 
@@ -27,20 +27,25 @@ struct FeaturedView: View {
                                     .resizable()
                                     .renderingMode(.original)
                                     .cornerRadius(12)
-                                    .frame(width: UIScreen.main.bounds.width - 120, height: 200)
+                                    .frame(width: UIScreen.main.bounds.width - 80, height: 230)
                                 
-                                Rectangle()
-                                    .foregroundColor(.black)
-                                    .opacity(0.0)
+//                                Rectangle()
+//                                    .foregroundColor(.black)
+//                                    .opacity(0.0)
                             }
-//                            .cornerRadius(12)
                         }
-                        
+                                                
                     }
                     .padding(.leading)
                 }
             }
             .padding(.bottom)
         }
+    }
+}
+
+struct FeaturedView_Previews: PreviewProvider {
+    static var previews: some View {
+        FeaturedView()
     }
 }

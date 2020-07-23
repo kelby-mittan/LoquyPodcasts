@@ -6,7 +6,8 @@ target 'LoquyApp' do
   use_frameworks!
 
   # Pods for LoquyApp
-  pod 'Alamofire' 
+  pod 'Alamofire'
+  pod 'FeedKit', '7.0.1'
 
   target 'LoquyAppTests' do
     inherit! :search_paths
