@@ -32,9 +32,10 @@ struct ListenToView: View {
                     
                     PCastHeaderLabelView(label: "You'll Like")
                         .offset(x: -10, y: 0)
-                    //                    PCastHeaderLabelView(label: "Sean Carroll")
-//                    PCastBodyLabelView(label: "Sean Carroll")
-//                        .offset(x: -10, y: 0)
+                    PCastBodyLabelView(label: "Mindscape")
+                        .offset(x: -10, y: 0)
+                    PCastBodyLabelView(label: "Sean Carroll")
+                    .offset(x: -10, y: 0)
                 }
                 
             }

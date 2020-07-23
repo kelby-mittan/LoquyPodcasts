@@ -69,15 +69,13 @@ struct TabOne: View {
                             .padding([.leading,.trailing])
                         
                         ScrollView(.vertical) {
-                            
                             HeaderView(label: "Listen To")
-                            
                             NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.podcasts[4])) {
                                 ListenToView(isPodcastShowing: $isPodcastShowing)
                             }
-                            
                             PodcastScrollView()
                             
+                            FeaturedView()
                             
                         }
                     }
@@ -164,6 +162,8 @@ struct TabThree: View {
         }
     }
 }
+
+
 
 
 
