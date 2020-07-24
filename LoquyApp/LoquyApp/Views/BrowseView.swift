@@ -56,24 +56,29 @@ struct PodcastPosterView: View {
 
 struct TabOne: View {
     @State private var searchText = ""
-    //    @ObservedObject private var viewModel = PodcastViewModel()
+
     @State private var isPodcastShowing = true
+    
+    @State private var isEditing = false
     
     @ObservedObject private var networkManager = NetworkingManager()
     
+    let mindcast = DummyPodcast.podcasts[6]
+    
     var body: some View {
+        
         
         Group {
             if searchText.isEmpty {
                 NavigationView {
                     VStack {
                         
-                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
+                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
                             .padding([.leading,.trailing])
                         
                         ScrollView(.vertical) {
                             HeaderView(label: "Listen To")
-                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.podcasts[6])) {
+                            NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl)) {
                                 ListenToView(isPodcastShowing: $isPodcastShowing)
                             }
                             PodcastScrollView()
@@ -85,24 +90,23 @@ struct TabOne: View {
                             
                         }
                     }
-                    .navigationBarTitle("Browse")
+                    .navigationBarTitle("")
                     .navigationBarHidden(true)
                 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                         .font(.largeTitle)
-                    //                        .padding(.top, 16.0)
                     Text("Browse")
                 }                
                 
             } else {
                 NavigationView {
                     VStack {
-                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
+                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
                             .padding([.leading,.trailing])
                         List(networkManager.podcasts, id: \.self) { podcast in
                             
-                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
+                            NavigationLink(destination: EpisodesView(title: podcast.trackName ?? "", podcastFeed: podcast.feedUrl ?? "")) {
                                 
                                 RemoteImage(url: podcast.artworkUrl600 ?? "")
                                     .frame(width: 100, height: 100)
@@ -123,17 +127,17 @@ struct TabOne: View {
                             .padding(.trailing)
                             
                         }
-                        .listStyle(GroupedListStyle())
-                        .environment(\.horizontalSizeClass, .regular)
+//                        .listStyle(GroupedListStyle())
+//                        .environment(\.horizontalSizeClass, .regular)
                     }
-                    .navigationBarTitle("Browse")
+                    .navigationBarTitle("")
                     .navigationBarHidden(true)
                 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                         .font(.largeTitle)
                         .padding(.top, 16.0)
-                    Text("Browse")
+                    Text("")
                 }
             }
         }
@@ -142,6 +146,7 @@ struct TabOne: View {
     
     func loadPodcasts(search: String) {
         networkManager.updatePodcasts(forSearch: searchText)
+        print(isEditing)
     }
     
     func intToString(_ int: Int) -> String {
@@ -151,7 +156,7 @@ struct TabOne: View {
 
 struct TabTwo: View {
     var body: some View {
-        EpisodeDetailView(podcast: DummyPodcast.origins)
+        TabOne()
             .tabItem {
                 Image(systemName: "star.fill")
                     .font(.largeTitle)

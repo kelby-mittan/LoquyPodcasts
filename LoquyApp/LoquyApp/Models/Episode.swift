@@ -9,7 +9,7 @@
 import Foundation
 import FeedKit
 
-struct Episode: Codable, Identifiable {
+struct Episode: Codable, Identifiable, Hashable {
     
     var id: UUID?
     

@@ -11,18 +11,19 @@ import Alamofire
 
 struct EpisodeDetailView: View {
     
-    let podcast: DummyPodcast
-    
-    init(podcast: DummyPodcast) {
-        self.podcast = podcast
-    }
+    let episode: Episode
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
-            PodcastPosterView(podcast: podcast, width: 250, height: 250)
+            RemoteImage(url: episode.imageUrl ?? "")
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 250, height: 250)
+                .cornerRadius(12)
+                .padding()
+                
             ControlView()
-            DescriptionView(podcast: podcast)
-            GuestView(podcast: podcast)
+            DescriptionView(episode: episode)
+//            GuestView(podcast: podcast)
             NavigationLink(destination: Text("Add to Favorites")) {
                 
                 Text("Add to Favorites")
@@ -39,12 +40,6 @@ struct EpisodeDetailView: View {
     }
 }
 
-struct EpisodeDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        EpisodeDetailView(podcast: DummyPodcast.origins)
-    }
-}
-
 struct ControlView: View {
     
     @State var width : CGFloat = 30
@@ -58,14 +53,26 @@ struct ControlView: View {
             ZStack(alignment: .leading) {
                 
                 Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
+                    .padding([.top,.leading,.trailing])
                 
                 Capsule().fill(Color.blue).frame(width: self.width, height: 8)
                     .gesture(DragGesture()
                         .onChanged({ (value) in
                             
                             let x = value.location.x
+                            let maxVal = UIScreen.main.bounds.width - 10
+                            let minVal: CGFloat = 10
                             
-                            self.width = x
+                            if x < minVal {
+                                self.width = minVal
+                            } else if x > maxVal {
+                                self.width = maxVal
+                            } else {
+                               self.width = x
+                            }
+                            
+                            print("width val is : \(self.width)")
+                            
                             
                         }).onEnded({ (value) in
 //
@@ -76,22 +83,23 @@ struct ControlView: View {
 //                            let percent = x / screen
                             
                         }))
+                    .padding([.top,.leading,.trailing])
             }
-            .padding(.top)
             
-            HStack(spacing: UIScreen.main.bounds.width / 5 - 30) {
+            
+            HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
                 
                 Button(action: {
                     
                 }) {
-                    Image(systemName: "gobackward.15").font(.title)
+                    Image(systemName: "gobackward.15").font(.largeTitle)
                 }
                 
                 Button(action: {
                     self.paused.toggle()
                     self.playing.toggle()
                 }) {
-                    Image(systemName: self.playing && !self.paused ? "pause.fill" : "play.fill").font(.title)
+                    Image(systemName: self.playing && !self.paused ? "pause.fill" : "play.fill").font(.largeTitle)
                 }
                 
                 Button(action: {
@@ -99,7 +107,7 @@ struct ControlView: View {
                     
                 }) {
                     
-                    Image(systemName: "goforward.15").font(.title)
+                    Image(systemName: "goforward.15").font(.largeTitle)
                     
                 }
                 
@@ -112,26 +120,22 @@ struct ControlView: View {
 
 struct DescriptionView: View {
     
-    let podcast: DummyPodcast
-    
-    init(podcast: DummyPodcast) {
-        self.podcast = podcast
-    }
+    let episode: Episode
     
     var body: some View {
         VStack {
             
             HStack {
-                Text(podcast.title)
-                    //                .font(.title)
+                Text(episode.title)
+                    .font(.title)
                     .fontWeight(.heavy)
 //                    .padding(.leading)
                 Spacer()
                 
-                Image(systemName: "star")
-                    .font(.largeTitle)
-                    .padding(.top, 4)
-                    .foregroundColor(.yellow)
+//                Image(systemName: "star")
+//                    .font(.largeTitle)
+//                    .padding(.top, 4)
+//                    .foregroundColor(.yellow)
 //                    .padding(.trailing)
             }
 //            .padding(.vertical)
@@ -158,7 +162,7 @@ struct DescriptionView: View {
             .foregroundColor(.yellow)
             
             HStack {
-                Text(podcast.description)
+                Text(getOnlyDescription(episode.description))
                     .fontWeight(.bold)
                 Spacer()
             }
@@ -169,6 +173,20 @@ struct DescriptionView: View {
             
         }
         .padding()
+    }
+    
+    func getOnlyDescription(_ str: String) -> String {
+        let word = str
+        var string = String()
+        if let index = word.range(of: "\n")?.lowerBound {
+            let substring = word[..<index]
+
+            string = String(substring)
+            print(string)
+            return string
+        }
+        
+        return str
     }
 }
 

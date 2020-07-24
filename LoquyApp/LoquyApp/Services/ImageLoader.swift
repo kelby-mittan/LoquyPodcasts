@@ -21,7 +21,7 @@ class ImageLoader: ObservableObject {
         
         URLSession.shared.dataTask(with: imageUrl) { data, response, error in
             guard let data = data, error == nil else {
-                fatalError("error reading the image")
+                return
             }
             
             DispatchQueue.main.async {

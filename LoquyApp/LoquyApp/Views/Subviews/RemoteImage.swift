@@ -16,22 +16,12 @@ struct RemoteImage: View {
     
     
     
-    init(url: String, placeholder: Image = Image(systemName: "photo")) {
+    init(url: String, placeholder: Image = Image(systemName: "hourglass")) {
         self.placeholder = placeholder
         imageLoader.fetchImage(url: url)
     }
     
     var body: some View {
-        
-        /*
-         Image(podcast.image)
-         .renderingMode(.original)
-         .resizable()
-         .aspectRatio(contentMode: .fit)
-         .frame(width: width, height: height)
-         .cornerRadius(12)
-         .padding()
-         */
         
         
         if let image = self.imageLoader.downloadImage {
