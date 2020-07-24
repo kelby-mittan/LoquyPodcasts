@@ -32,16 +32,24 @@ class NetworkingManager: ObservableObject {
         }
     }
     
-//    var search = String() {
-//        didSet {
-//            didChange.send(self)
-//        }
-//    }
+    @Published var episodes = [Episode]() {
+        didSet {
+            didChange.send(self)
+        }
+    }
     
     func updatePodcasts(forSearch: String) {
         ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { (podcasts) in
             DispatchQueue.main.async {
                 self.podcasts = podcasts
+            }
+        }
+    }
+    
+    func loadEpisodes(feedUrl: String) {
+        ITunesAPI.shared.fetchEpisodes(feedUrl: feedUrl) { (episodes) in
+            DispatchQueue.main.async {
+                self.episodes = episodes
             }
         }
     }
