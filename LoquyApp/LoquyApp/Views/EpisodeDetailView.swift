@@ -214,7 +214,7 @@ struct GuestView: View {
     
     func seeGuestInfoButton() {
         print("Guest Info")
-        ITunesAPI.shared.getPodcasts(searchText: "joe+rogan") { (podcasts) in
+        ITunesAPI.shared.fetchPodcasts(searchText: "joe+rogan") { (podcasts) in
             dump(podcasts)
         }
     }

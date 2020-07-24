@@ -81,38 +81,7 @@ struct TabOne: View {
                             FeaturedView()
                             
                             HeaderView(label: "More Cool Casts")
-                            VStack(spacing: 0) {
-                                
-                                ZStack {
-                                    
-                                    HStack {
-                                        
-                                        
-                                        
-                                        
-                                        NavigationLink(destination: Text("Coming Soon")) {
-                                            
-                                            Image("jimmyDore")
-                                                .resizable()
-                                                .renderingMode(.original)
-                                                .frame(width: 160, height: 160)
-                                                .cornerRadius(8)
-                                        }
-                                        
-                                        
-                                        Spacer()
-                                        
-                                        NavigationLink(destination: Text("Coming Soon")) {
-                                            Image("jimmyDore")
-                                                .resizable()
-                                                .renderingMode(.original)
-                                                .frame(width: 160, height: 160)
-                                                .cornerRadius(8)
-                                        }
-                                    }
-                                }
-                                .padding()
-                            }
+                            MoreCastsView()
                             
                         }
                     }
@@ -172,23 +141,7 @@ struct TabOne: View {
     
     
     func loadPodcasts(search: String) {
-        //        ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
-        //            dump(podcasts)
-        //            self.viewModel.pcasts = podcasts
-        //            print(self.viewModel.pcasts.count)
-        //            self.networkManager.podcasts = podcasts
-        //        }
-        
-        //        ITunesAPI.shared.fetchPodcasts(searchText: search) { (podcasts) in
-        //            self.viewModel.pcasts = podcasts
-        //            dump(podcasts)
-        //        }
-        
         networkManager.updatePodcasts(forSearch: searchText)
-    }
-    
-    func getThePodcasts(search: String) {
-        
     }
     
     func intToString(_ int: Int) -> String {
@@ -221,40 +174,4 @@ struct TabThree: View {
     }
 }
 
-//struct LoadableImageView: View {
-//    @ObservedObject var imageFetcher: ImageFetcher
-//
-//    var stateContent: AnyView {
-//        if let image = UIImage(data: imageFetcher.data) {
-//            return AnyView(
-//                Image(uiImage: image).resizable()
-//            )
-//        } else {
-//            return AnyView(
-//                ActivityIndicator(style: .medium)
-//            )
-//        }
-//    }
-//
-//    init(with urlString: String) {
-//        imageFetcher = ImageFetcher(url: urlString)
-//    }
-//
-//    var body: some View {
-//        HStack {
-//            stateContent
-//        }
-//    }
-//}
 
-struct ActivityIndicator: UIViewRepresentable {
-    let style: UIActivityIndicatorView.Style
-    
-    func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
-        return UIActivityIndicatorView(style: style)
-    }
-    
-    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
-        uiView.startAnimating()
-    }
-}

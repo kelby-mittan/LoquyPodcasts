@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PodcastScrollView: View {
     
-    var pCasts = DummyPodcast.podcasts
+    var podcasts = DummyPodcast.podcasts
     
     var body: some View {
         VStack {
@@ -18,11 +18,11 @@ struct PodcastScrollView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    TopPodcastsView(podcasts: self.pCasts[0...1])
-                    TopPodcastsView(podcasts: self.pCasts[2...3])
-                    TopPodcastsView(podcasts: self.pCasts[4...5])
-                    TopPodcastsView(podcasts: self.pCasts[6...7])
-                    TopPodcastsView(podcasts: self.pCasts[8...9])
+                    TopPodcastsView(podcasts: self.podcasts[0...1])
+                    TopPodcastsView(podcasts: self.podcasts[2...3])
+                    TopPodcastsView(podcasts: self.podcasts[4...5])
+                    TopPodcastsView(podcasts: self.podcasts[6...7])
+                    TopPodcastsView(podcasts: self.podcasts[8...9])
                 }
             }
         }
@@ -30,9 +30,7 @@ struct PodcastScrollView: View {
 }
 
 struct TopPodcastsView: View {
-    
-    var pCasts = DummyPodcast.podcasts[0...2]
-    
+        
     var podcasts: Array<DummyPodcast>.SubSequence
     
     var body: some View {
