@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FeaturedView: View {
     
-    var pCasts = DummyPodcast.podcasts[2...6]
+    var pCasts = DummyPodcast.podcasts[10...18]
     
     var body: some View {
         VStack {
@@ -26,8 +26,8 @@ struct FeaturedView: View {
                                 Image(pCast.image)
                                     .resizable()
                                     .renderingMode(.original)
+                                    .frame(width: UIScreen.main.bounds.width - 80, height: 240)
                                     .cornerRadius(12)
-                                    .frame(width: UIScreen.main.bounds.width - 80, height: 230)
                                 
 //                                Rectangle()
 //                                    .foregroundColor(.black)
@@ -36,7 +36,7 @@ struct FeaturedView: View {
                         }
                                                 
                     }
-                    .padding(.leading)
+                    .padding([.leading,.trailing])
                 }
             }
             .padding(.bottom)

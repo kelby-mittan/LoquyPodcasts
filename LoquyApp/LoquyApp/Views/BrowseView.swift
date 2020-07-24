@@ -56,7 +56,7 @@ struct PodcastPosterView: View {
 
 struct TabOne: View {
     @State private var searchText = ""
-//    @ObservedObject private var viewModel = PodcastViewModel()
+    //    @ObservedObject private var viewModel = PodcastViewModel()
     @State private var isPodcastShowing = true
     
     @ObservedObject private var networkManager = NetworkingManager()
@@ -79,6 +79,40 @@ struct TabOne: View {
                             PodcastScrollView()
                             
                             FeaturedView()
+                            
+                            HeaderView(label: "More Cool Casts")
+                            VStack(spacing: 0) {
+                                
+                                ZStack {
+                                    
+                                    HStack {
+                                        
+                                        
+                                        
+                                        
+                                        NavigationLink(destination: Text("Coming Soon")) {
+                                            
+                                            Image("jimmyDore")
+                                                .resizable()
+                                                .renderingMode(.original)
+                                                .frame(width: 160, height: 160)
+                                                .cornerRadius(8)
+                                        }
+                                        
+                                        
+                                        Spacer()
+                                        
+                                        NavigationLink(destination: Text("Coming Soon")) {
+                                            Image("jimmyDore")
+                                                .resizable()
+                                                .renderingMode(.original)
+                                                .frame(width: 160, height: 160)
+                                                .cornerRadius(8)
+                                        }
+                                    }
+                                }
+                                .padding()
+                            }
                             
                         }
                     }
@@ -187,31 +221,31 @@ struct TabThree: View {
     }
 }
 
-struct LoadableImageView: View {
-    @ObservedObject var imageFetcher: ImageFetcher
-    
-    var stateContent: AnyView {
-        if let image = UIImage(data: imageFetcher.data) {
-            return AnyView(
-                Image(uiImage: image).resizable()
-            )
-        } else {
-            return AnyView(
-                ActivityIndicator(style: .medium)
-            )
-        }
-    }
-    
-    init(with urlString: String) {
-        imageFetcher = ImageFetcher(url: urlString)
-    }
-    
-    var body: some View {
-        HStack {
-            stateContent
-        }
-    }
-}
+//struct LoadableImageView: View {
+//    @ObservedObject var imageFetcher: ImageFetcher
+//
+//    var stateContent: AnyView {
+//        if let image = UIImage(data: imageFetcher.data) {
+//            return AnyView(
+//                Image(uiImage: image).resizable()
+//            )
+//        } else {
+//            return AnyView(
+//                ActivityIndicator(style: .medium)
+//            )
+//        }
+//    }
+//
+//    init(with urlString: String) {
+//        imageFetcher = ImageFetcher(url: urlString)
+//    }
+//
+//    var body: some View {
+//        HStack {
+//            stateContent
+//        }
+//    }
+//}
 
 struct ActivityIndicator: UIViewRepresentable {
     let style: UIActivityIndicatorView.Style

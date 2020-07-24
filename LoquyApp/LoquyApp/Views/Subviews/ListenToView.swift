@@ -11,8 +11,7 @@ import SwiftUI
 struct ListenToView: View {
     
     @Binding var isPodcastShowing: Bool
-    
-    
+
     var body: some View {
         HStack {
             ZStack(alignment: .trailing) {

@@ -18,9 +18,11 @@ struct PodcastScrollView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(0 ..< 5) { item in
-                        TopPodcastsView()
-                    }
+                    TopPodcastsView(podcasts: self.pCasts[0...1])
+                    TopPodcastsView(podcasts: self.pCasts[2...3])
+                    TopPodcastsView(podcasts: self.pCasts[4...5])
+                    TopPodcastsView(podcasts: self.pCasts[6...7])
+                    TopPodcastsView(podcasts: self.pCasts[8...9])
                 }
             }
         }
@@ -31,9 +33,11 @@ struct TopPodcastsView: View {
     
     var pCasts = DummyPodcast.podcasts[0...2]
     
+    var podcasts: Array<DummyPodcast>.SubSequence
+    
     var body: some View {
         VStack(alignment: .leading) {
-            ForEach(pCasts, id: \.id) { pcast in
+            ForEach(podcasts, id: \.id) { pcast in
                 NavigationLink(destination: Text("Coming Soon")) {
                     
                     HStack(alignment: .top) {
@@ -65,16 +69,16 @@ struct TopPodcastsView: View {
                                     .padding(.bottom, 0)
                                 Spacer()
                                 
-//                                ZStack(alignment: .leading) {
-//                                    Rectangle()
-//                                        .frame(width: 100, height: 8)
-//                                        .foregroundColor(Color(.systemGray4))
-//
-//                                    Rectangle()
-//                                        .frame(width: 40, height: 8)
-//                                        .foregroundColor(Color(.orange))
-//                                }
-//                                .clipShape(Capsule())
+                                //                                ZStack(alignment: .leading) {
+                                //                                    Rectangle()
+                                //                                        .frame(width: 100, height: 8)
+                                //                                        .foregroundColor(Color(.systemGray4))
+                                //
+                                //                                    Rectangle()
+                                //                                        .frame(width: 40, height: 8)
+                                //                                        .foregroundColor(Color(.orange))
+                                //                                }
+                                //                                .clipShape(Capsule())
                             }
                             
                         }
@@ -89,6 +93,6 @@ struct TopPodcastsView: View {
 
 struct TopPodcastsView_Previews: PreviewProvider {
     static var previews: some View {
-        TopPodcastsView()
+        TopPodcastsView(podcasts: DummyPodcast.podcasts[0...2])
     }
 }
