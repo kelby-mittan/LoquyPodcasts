@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FeaturedView: View {
     
-    var pCasts = DummyPodcast.podcasts[10...18]
+    var podcasts = DummyPodcast.podcasts[10...14]
     
     var body: some View {
         VStack {
@@ -18,7 +18,7 @@ struct FeaturedView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(pCasts, id: \.id) { pCast in
+                    ForEach(podcasts, id: \.id) { pCast in
                         ZStack(alignment: .center) {
                             
                             NavigationLink(destination: Text("Coming Soon")) {
