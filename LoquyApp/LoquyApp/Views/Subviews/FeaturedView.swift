@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FeaturedView: View {
     
-    var pCasts = DummyPodcast.podcasts[2...6]
+    var pCasts = DummyPodcast.podcasts[10...18]
     
     var body: some View {
         VStack {
@@ -19,28 +19,33 @@ struct FeaturedView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(pCasts, id: \.id) { pCast in
-                        ZStack {
+                        ZStack(alignment: .center) {
                             
                             NavigationLink(destination: Text("Coming Soon")) {
                                 
                                 Image(pCast.image)
                                     .resizable()
                                     .renderingMode(.original)
+                                    .frame(width: UIScreen.main.bounds.width - 80, height: 240)
                                     .cornerRadius(12)
-                                    .frame(width: UIScreen.main.bounds.width - 120, height: 200)
                                 
-                                Rectangle()
-                                    .foregroundColor(.black)
-                                    .opacity(0.0)
+//                                Rectangle()
+//                                    .foregroundColor(.black)
+//                                    .opacity(0.0)
                             }
-//                            .cornerRadius(12)
                         }
-                        
+                                                
                     }
-                    .padding(.leading)
+                    .padding([.leading,.trailing])
                 }
             }
             .padding(.bottom)
         }
+    }
+}
+
+struct FeaturedView_Previews: PreviewProvider {
+    static var previews: some View {
+        FeaturedView()
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct BrowseView: View {
     
@@ -55,8 +56,10 @@ struct PodcastPosterView: View {
 
 struct TabOne: View {
     @State private var searchText = ""
-    @ObservedObject private var viewModel = PodcastViewModel()
+    //    @ObservedObject private var viewModel = PodcastViewModel()
     @State private var isPodcastShowing = true
+    
+    @ObservedObject private var networkManager = NetworkingManager()
     
     var body: some View {
         
@@ -70,54 +73,92 @@ struct TabOne: View {
                         
                         ScrollView(.vertical) {
                             HeaderView(label: "Listen To")
-                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.podcasts[4])) {
+                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.podcasts[6])) {
                                 ListenToView(isPodcastShowing: $isPodcastShowing)
                             }
                             PodcastScrollView()
                             
                             FeaturedView()
                             
+                            HeaderView(label: "More Cool Casts")
+                            VStack(spacing: 0) {
+                                
+                                ZStack {
+                                    
+                                    HStack {
+                                        
+                                        
+                                        
+                                        
+                                        NavigationLink(destination: Text("Coming Soon")) {
+                                            
+                                            Image("jimmyDore")
+                                                .resizable()
+                                                .renderingMode(.original)
+                                                .frame(width: 160, height: 160)
+                                                .cornerRadius(8)
+                                        }
+                                        
+                                        
+                                        Spacer()
+                                        
+                                        NavigationLink(destination: Text("Coming Soon")) {
+                                            Image("jimmyDore")
+                                                .resizable()
+                                                .renderingMode(.original)
+                                                .frame(width: 160, height: 160)
+                                                .cornerRadius(8)
+                                        }
+                                    }
+                                }
+                                .padding()
+                            }
+                            
                         }
                     }
-                        
-                        
                     .navigationBarTitle("Browse")
                     .navigationBarHidden(true)
                 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
                         .font(.largeTitle)
-                        .padding(.top, 16.0)
+                    //                        .padding(.top, 16.0)
                     Text("Browse")
-                }
-                
+                }                
                 
             } else {
                 NavigationView {
                     VStack {
                         SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
                             .padding([.leading,.trailing])
-                        
-                        List(viewModel.pcasts) { podcast in
+                        List(networkManager.podcasts, id: \.self) { podcast in
+                            
                             NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
                                 
-                                PodcastPosterView(podcast: DummyPodcast.origins, width: 100, height: 100)
+                                RemoteImage(url: podcast.artworkUrl600 ?? "")
+                                    .frame(width: 100, height: 100)
+                                    .cornerRadius(8)
                                 
-                                Text(podcast.artistName ?? "not loading")
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
+                                VStack(alignment: .leading) {
+                                    Text(podcast.trackName ?? "not loading")
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                    Text(podcast.artistName ?? "not loading")
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+                                    Text("\(self.intToString(podcast.trackCount ?? 0)) episodes")
+                                        .font(.caption)
+                                        .fontWeight(.light)
+                                }
                             }
                             .padding(.trailing)
                             
                         }
-                            //                        .background(Color.black)
-                            .listStyle(GroupedListStyle())
-                            .environment(\.horizontalSizeClass, .regular)
-                        //                        .navigationBarTitle("Podcasts")
+                        .listStyle(GroupedListStyle())
+                        .environment(\.horizontalSizeClass, .regular)
                     }
-                        //                    .navigationBarTitle("Podcasts", displayMode: .automatic)
-                        .navigationBarTitle("Browse")
-                        .navigationBarHidden(true)
+                    .navigationBarTitle("Browse")
+                    .navigationBarHidden(true)
                 }
                 .tabItem {
                     Image(systemName: "magnifyingglass")
@@ -131,10 +172,27 @@ struct TabOne: View {
     
     
     func loadPodcasts(search: String) {
-        ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
-            dump(podcasts)
-            self.viewModel.pcasts = podcasts
-        }
+        //        ITunesAPI.shared.loadPodcasts(searchText: search) { (podcasts) in
+        //            dump(podcasts)
+        //            self.viewModel.pcasts = podcasts
+        //            print(self.viewModel.pcasts.count)
+        //            self.networkManager.podcasts = podcasts
+        //        }
+        
+        //        ITunesAPI.shared.fetchPodcasts(searchText: search) { (podcasts) in
+        //            self.viewModel.pcasts = podcasts
+        //            dump(podcasts)
+        //        }
+        
+        networkManager.updatePodcasts(forSearch: searchText)
+    }
+    
+    func getThePodcasts(search: String) {
+        
+    }
+    
+    func intToString(_ int: Int) -> String {
+        return String(int)
     }
 }
 
@@ -163,9 +221,40 @@ struct TabThree: View {
     }
 }
 
+//struct LoadableImageView: View {
+//    @ObservedObject var imageFetcher: ImageFetcher
+//
+//    var stateContent: AnyView {
+//        if let image = UIImage(data: imageFetcher.data) {
+//            return AnyView(
+//                Image(uiImage: image).resizable()
+//            )
+//        } else {
+//            return AnyView(
+//                ActivityIndicator(style: .medium)
+//            )
+//        }
+//    }
+//
+//    init(with urlString: String) {
+//        imageFetcher = ImageFetcher(url: urlString)
+//    }
+//
+//    var body: some View {
+//        HStack {
+//            stateContent
+//        }
+//    }
+//}
 
-
-
-
-
-
+struct ActivityIndicator: UIViewRepresentable {
+    let style: UIActivityIndicatorView.Style
+    
+    func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
+        return UIActivityIndicatorView(style: style)
+    }
+    
+    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
+        uiView.startAnimating()
+    }
+}
