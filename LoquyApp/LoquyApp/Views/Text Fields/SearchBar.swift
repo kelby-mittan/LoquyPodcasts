@@ -14,21 +14,26 @@ struct SearchBar: UIViewRepresentable {
 
     @Binding var text: String
     var onTextChanged: (String) -> Void
-
+    @Binding var isEditing: Bool
+    
+    
     class Coordinator: NSObject, UISearchBarDelegate {
 
         @Binding var text: String
         var onTextChanged: (String) -> Void
 
-        init(text: Binding<String>, onTextChanged: @escaping (String) -> Void) {
+        @Binding var isEditing: Bool
+        
+        init(text: Binding<String>, onTextChanged: @escaping (String) -> Void, isEditing: Binding<Bool>) {
             _text = text
             self.onTextChanged = onTextChanged
-            
+            _isEditing = isEditing
         }
 
         // Show cancel button when the user begins editing the search text
         func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
             searchBar.showsCancelButton = false
+            isEditing = true
         }
 
         func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -40,13 +45,14 @@ struct SearchBar: UIViewRepresentable {
             text = ""
             searchBar.showsCancelButton = false
             searchBar.endEditing(true)
+            isEditing = false
             // Send back empty string text to search view, trigger self.model.searchResults.removeAll()
             onTextChanged(text)
         }
     }
 
     func makeCoordinator() -> SearchBar.Coordinator {
-        return Coordinator(text: $text, onTextChanged: onTextChanged)
+        return Coordinator(text: $text, onTextChanged: onTextChanged, isEditing: $isEditing)
     }
 
     func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {

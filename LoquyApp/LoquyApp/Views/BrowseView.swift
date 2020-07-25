@@ -22,6 +22,7 @@ struct BrowseView: View {
             TabOne().tag(1)
             TabTwo().tag(2)
             TabThree().tag(3)
+            TabFour().tag(4)
         }
         .padding(.bottom, 0)
     }
@@ -56,24 +57,27 @@ struct PodcastPosterView: View {
 
 struct TabOne: View {
     @State private var searchText = ""
-    //    @ObservedObject private var viewModel = PodcastViewModel()
+    
     @State private var isPodcastShowing = true
+    
+    @State private var isEditing = false
     
     @ObservedObject private var networkManager = NetworkingManager()
     
+    let mindcast = DummyPodcast.podcasts[6]
+    
     var body: some View {
         
-        Group {
-            if searchText.isEmpty {
-                NavigationView {
-                    VStack {
-                        
-                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
-                            .padding([.leading,.trailing])
+        NavigationView {
+            VStack {
+                SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
+                    .padding([.leading,.trailing])
+                Group {
+                    if searchText.isEmpty {
                         
                         ScrollView(.vertical) {
                             HeaderView(label: "Listen To")
-                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.podcasts[6])) {
+                            NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl)) {
                                 ListenToView(isPodcastShowing: $isPodcastShowing)
                             }
                             PodcastScrollView()
@@ -84,35 +88,21 @@ struct TabOne: View {
                             MoreCastsView()
                             
                         }
-                    }
-                    .navigationBarTitle("Browse")
-                    .navigationBarHidden(true)
-                }
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                        .font(.largeTitle)
-                    //                        .padding(.top, 16.0)
-                    Text("Browse")
-                }                
-                
-            } else {
-                NavigationView {
-                    VStack {
-                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:))
-                            .padding([.leading,.trailing])
+                        
+                    } else {
                         List(networkManager.podcasts, id: \.self) { podcast in
                             
-                            NavigationLink(destination: EpisodeDetailView(podcast: DummyPodcast.origins)) {
+                            NavigationLink(destination: EpisodesView(title: podcast.trackName ?? "", podcastFeed: podcast.feedUrl ?? "")) {
                                 
                                 RemoteImage(url: podcast.artworkUrl600 ?? "")
                                     .frame(width: 100, height: 100)
                                     .cornerRadius(8)
                                 
                                 VStack(alignment: .leading) {
-                                    Text(podcast.trackName ?? "not loading")
+                                    Text(podcast.trackName ?? "")
                                         .font(.headline)
                                         .fontWeight(.semibold)
-                                    Text(podcast.artistName ?? "not loading")
+                                    Text(podcast.artistName ?? "")
                                         .font(.subheadline)
                                         .fontWeight(.medium)
                                     Text("\(self.intToString(podcast.trackCount ?? 0)) episodes")
@@ -120,28 +110,25 @@ struct TabOne: View {
                                         .fontWeight(.light)
                                 }
                             }
-                            .padding(.trailing)
                             
                         }
-                        .listStyle(GroupedListStyle())
-                        .environment(\.horizontalSizeClass, .regular)
                     }
-                    .navigationBarTitle("Browse")
-                    .navigationBarHidden(true)
-                }
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                        .font(.largeTitle)
-                        .padding(.top, 16.0)
-                    Text("Browse")
                 }
             }
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
+        }
+        .tabItem {
+            Image(systemName: "magnifyingglass")
+                .font(.largeTitle)
+            Text("Browse")
         }
     }
     
     
     func loadPodcasts(search: String) {
         networkManager.updatePodcasts(forSearch: searchText)
+        print(isEditing)
     }
     
     func intToString(_ int: Int) -> String {
@@ -151,7 +138,7 @@ struct TabOne: View {
 
 struct TabTwo: View {
     var body: some View {
-        EpisodeDetailView(podcast: DummyPodcast.origins)
+        LoquyListView()
             .tabItem {
                 Image(systemName: "star.fill")
                     .font(.largeTitle)
@@ -170,6 +157,19 @@ struct TabThree: View {
                     .font(.largeTitle)
                     .padding(.top, 16.0)
                 Text("Transcribe")
+        }
+    }
+}
+
+struct TabFour: View {
+    var body: some View {
+        AudioClipsView()
+            .tabItem {
+                
+                Image(systemName: "list.bullet")
+                    .font(.largeTitle)
+                    .padding(.top, 16.0)
+                Text("Loquies")
         }
     }
 }
