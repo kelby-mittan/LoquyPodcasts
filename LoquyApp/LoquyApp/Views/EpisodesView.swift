@@ -40,12 +40,11 @@ struct EpisodesView: View {
                             
                             VStack(alignment: .leading) {
                                 
-                                Text(self.dateToString(episode.pubDate))
+                                Text(episode.pubDate.makeString())
                                     .font(.headline)
                                     .fontWeight(.heavy)
                                     .foregroundColor(Color.white)
                                     .padding()
-//                                    .padding([.top,.bottom])
                                 
                                 Text(episode.title)
                                     .font(.subheadline)
@@ -65,7 +64,6 @@ struct EpisodesView: View {
                 UITableView.appearance().separatorStyle = .none
                 self.getPodcasts()
             })
-//                .listStyle(GroupedListStyle())
                 .environment(\.horizontalSizeClass, .regular)
                 .navigationBarTitle(title)
         }
@@ -73,18 +71,6 @@ struct EpisodesView: View {
     
     func getPodcasts() {
         networkManager.loadEpisodes(feedUrl: podcastFeed)
-    }
-    
-    func intToString(_ int: Int) -> String {
-        return String(int)
-    }
-    
-    func dateToString(_ date: Date) -> String {
-        var dateString = String()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd, yyyy"
-        dateString = dateFormatter.string(from: date)
-        return dateString
     }
     
 }

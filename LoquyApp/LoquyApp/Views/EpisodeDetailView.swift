@@ -23,18 +23,7 @@ struct EpisodeDetailView: View {
                 
             ControlView()
             DescriptionView(episode: episode)
-//            GuestView(podcast: podcast)
-            NavigationLink(destination: Text("Add to Favorites")) {
-                
-                Text("Add to Favorites")
-                    .fontWeight(.heavy)
-                    .padding()
-                    .frame(width: UIScreen.main.bounds.width - 44)
-                    .foregroundColor(.white)
-                    .background(Color.purple)
-                    .clipShape(Capsule())
-                    .padding()
-            }
+            FavoriteView()
         }
         .navigationBarTitle("", displayMode: .inline)
     }
@@ -86,6 +75,16 @@ struct ControlView: View {
                     .padding([.top,.leading,.trailing])
             }
             
+            HStack {
+                Text("0:00:00")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text("2:30:00")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding([.leading,.trailing])
             
             HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
                 
@@ -113,7 +112,6 @@ struct ControlView: View {
                 
             }
             .padding(.top,25)
-            //        .foregroundColor(.white)
         }
     }
 }
@@ -129,37 +127,17 @@ struct DescriptionView: View {
                 Text(episode.title)
                     .font(.title)
                     .fontWeight(.heavy)
-//                    .padding(.leading)
+                    .padding(.top)
                 Spacer()
-                
-//                Image(systemName: "star")
-//                    .font(.largeTitle)
-//                    .padding(.top, 4)
-//                    .foregroundColor(.yellow)
-//                    .padding(.trailing)
             }
-//            .padding(.vertical)
-            
-            Text("2h 30m | Physics, Philosophy | 19 July 2020")
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.leading)
-                .padding(.top, 8)
-                Spacer()
             
             HStack {
-                ForEach(0..<3) { item in
-                    Image(systemName: "star.fill")
-                }
-                Image(systemName: "star.lefthalf.fill")
-                Image(systemName: "star")
-                
-                Text("3.5")
-                    .bold()
-//                    .padding(.leading)
+                Text("Philosophy | Physics | Science")
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+                    .padding(.top)
                 Spacer()
             }
-            .padding(.top, 4)
-            .foregroundColor(.yellow)
             
             HStack {
                 Text(getOnlyDescription(episode.description))
@@ -169,7 +147,6 @@ struct DescriptionView: View {
 //            .padding(.bottom)
             .padding(.top)
             
-            Text("")
             
         }
         .padding()
@@ -183,7 +160,6 @@ struct DescriptionView: View {
 
             word = String(substring)
         }
-        
         if let index2 = word.range(of: "<a ")?.lowerBound {
             let substring = word[..<index2]
             word = String(substring)
@@ -246,19 +222,20 @@ struct GuestView: View {
     }
 }
 
-struct PurchaseView: View {
+struct FavoriteView: View {
     var body: some View {
         NavigationLink(destination: Text("Add to Favorites")) {
             
             Text("Add to Favorites")
                 .fontWeight(.heavy)
                 .padding()
-                .frame(width: UIScreen.main.bounds.width - 24)
+                .frame(width: UIScreen.main.bounds.width - 88)
                 .foregroundColor(.white)
                 .background(Color.purple)
                 .clipShape(Capsule())
                 .padding()
         }
+        
     }
 }
 
