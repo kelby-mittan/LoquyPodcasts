@@ -105,7 +105,7 @@ struct TabOne: View {
                                     Text(podcast.artistName ?? "")
                                         .font(.subheadline)
                                         .fontWeight(.medium)
-                                    Text("\(self.intToString(podcast.trackCount ?? 0)) episodes")
+                                    Text("\(podcast.trackCount ?? 0) episodes")
                                         .font(.caption)
                                         .fontWeight(.light)
                                 }
@@ -129,10 +129,6 @@ struct TabOne: View {
     func loadPodcasts(search: String) {
         networkManager.updatePodcasts(forSearch: searchText)
         print(isEditing)
-    }
-    
-    func intToString(_ int: Int) -> String {
-        return String(int)
     }
 }
 
