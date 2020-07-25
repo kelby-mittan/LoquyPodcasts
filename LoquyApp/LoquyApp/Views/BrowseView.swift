@@ -22,6 +22,7 @@ struct BrowseView: View {
             TabOne().tag(1)
             TabTwo().tag(2)
             TabThree().tag(3)
+            TabFour().tag(4)
         }
         .padding(.bottom, 0)
     }
@@ -56,7 +57,7 @@ struct PodcastPosterView: View {
 
 struct TabOne: View {
     @State private var searchText = ""
-
+    
     @State private var isPodcastShowing = true
     
     @State private var isEditing = false
@@ -67,14 +68,12 @@ struct TabOne: View {
     
     var body: some View {
         
-        
-        Group {
-            if searchText.isEmpty {
-                NavigationView {
-                    VStack {
-                        
-                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
-                            .padding([.leading,.trailing])
+        NavigationView {
+            VStack {
+                SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
+                    .padding([.leading,.trailing])
+                Group {
+                    if searchText.isEmpty {
                         
                         ScrollView(.vertical) {
                             HeaderView(label: "Listen To")
@@ -89,21 +88,8 @@ struct TabOne: View {
                             MoreCastsView()
                             
                         }
-                    }
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
-                }
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                        .font(.largeTitle)
-                    Text("Browse")
-                }                
-                
-            } else {
-                NavigationView {
-                    VStack {
-                        SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
-                            .padding([.leading,.trailing])
+                        
+                    } else {
                         List(networkManager.podcasts, id: \.self) { podcast in
                             
                             NavigationLink(destination: EpisodesView(title: podcast.trackName ?? "", podcastFeed: podcast.feedUrl ?? "")) {
@@ -113,10 +99,10 @@ struct TabOne: View {
                                     .cornerRadius(8)
                                 
                                 VStack(alignment: .leading) {
-                                    Text(podcast.trackName ?? "not loading")
+                                    Text(podcast.trackName ?? "")
                                         .font(.headline)
                                         .fontWeight(.semibold)
-                                    Text(podcast.artistName ?? "not loading")
+                                    Text(podcast.artistName ?? "")
                                         .font(.subheadline)
                                         .fontWeight(.medium)
                                     Text("\(self.intToString(podcast.trackCount ?? 0)) episodes")
@@ -124,22 +110,18 @@ struct TabOne: View {
                                         .fontWeight(.light)
                                 }
                             }
-                            .padding(.trailing)
                             
                         }
-//                        .listStyle(GroupedListStyle())
-//                        .environment(\.horizontalSizeClass, .regular)
                     }
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
-                }
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                        .font(.largeTitle)
-                        .padding(.top, 16.0)
-                    Text("")
                 }
             }
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
+        }
+        .tabItem {
+            Image(systemName: "magnifyingglass")
+                .font(.largeTitle)
+            Text("Browse")
         }
     }
     
@@ -156,7 +138,7 @@ struct TabOne: View {
 
 struct TabTwo: View {
     var body: some View {
-        TabOne()
+        LoquyListView()
             .tabItem {
                 Image(systemName: "star.fill")
                     .font(.largeTitle)
@@ -175,6 +157,19 @@ struct TabThree: View {
                     .font(.largeTitle)
                     .padding(.top, 16.0)
                 Text("Transcribe")
+        }
+    }
+}
+
+struct TabFour: View {
+    var body: some View {
+        AudioClipsView()
+            .tabItem {
+                
+                Image(systemName: "list.bullet")
+                    .font(.largeTitle)
+                    .padding(.top, 16.0)
+                Text("Loquies")
         }
     }
 }

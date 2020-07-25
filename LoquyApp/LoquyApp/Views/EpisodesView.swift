@@ -15,6 +15,9 @@ struct EpisodesView: View {
     let title: String
     let podcastFeed: String
     
+    let gradColor1 = PaletteColour.colors.randomElement()
+    let gradColor2 = PaletteColour.colors.randomElement()
+    
     var body: some View {
         
         VStack {
@@ -23,7 +26,7 @@ struct EpisodesView: View {
                 NavigationLink(destination: EpisodeDetailView(episode: episode)) {
                     
                     ZStack(alignment: .leading) {
-                        LinearGradient(gradient: Gradient(colors: [Color(.systemGray3), Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                        LinearGradient(gradient: Gradient(colors: [self.gradColor1!, self.gradColor2!]), startPoint: .top, endPoint: .bottomTrailing)
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
                             .padding(.trailing)
@@ -40,14 +43,14 @@ struct EpisodesView: View {
                                 Text(self.dateToString(episode.pubDate))
                                     .font(.headline)
                                     .fontWeight(.heavy)
-                                    .foregroundColor(Color.purple)
+                                    .foregroundColor(Color.white)
                                     .padding()
 //                                    .padding([.top,.bottom])
                                 
                                 Text(episode.title)
                                     .font(.subheadline)
-                                    .foregroundColor(Color(.black))
-                                    .fontWeight(.medium)
+                                    .foregroundColor(Color.white)
+                                    .fontWeight(.semibold)
                                     .padding([.horizontal])
                             }
                             

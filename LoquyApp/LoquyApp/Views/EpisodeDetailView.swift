@@ -176,17 +176,25 @@ struct DescriptionView: View {
     }
     
     func getOnlyDescription(_ str: String) -> String {
-        let word = str
-        var string = String()
-        if let index = word.range(of: "\n")?.lowerBound {
+        var word = str
+                
+        if let index = word.range(of: "\n\n")?.lowerBound {
             let substring = word[..<index]
 
-            string = String(substring)
-            print(string)
-            return string
+            word = String(substring)
         }
         
-        return str
+        if let index2 = word.range(of: "<a ")?.lowerBound {
+            let substring = word[..<index2]
+            word = String(substring)
+        }
+        
+        word = word.replacingOccurrences(of: "</p>", with: "\n\n")
+        word = word.replacingOccurrences(of: "<p>", with: "")
+        word = word.replacingOccurrences(of: "&nbsp", with: "")
+        word = word.replacingOccurrences(of: "  ", with: "")
+        
+        return word
     }
 }
 
