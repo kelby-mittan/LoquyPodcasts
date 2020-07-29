@@ -26,7 +26,7 @@ struct RemoteImage: View {
         
         if let image = self.imageLoader.downloadImage {
             
-            var newImage = Image(uiImage: image)
+            let newImage = Image(uiImage: image)
             
 //            newImage = newImage.resizable()
 //            newImage.frame(width: 100, height: 100)
