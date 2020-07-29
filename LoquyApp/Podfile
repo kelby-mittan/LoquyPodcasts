@@ -7,7 +7,7 @@ target 'LoquyApp' do
 
   # Pods for LoquyApp
   pod 'Alamofire'
-  pod 'FeedKit', '7.0.1'
+  pod 'FeedKit'
 
   target 'LoquyAppTests' do
     inherit! :search_paths
