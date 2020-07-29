@@ -17,6 +17,7 @@ struct Podcast: Decodable, Identifiable, Hashable {
     var artworkUrl600: String?
     var trackCount: Int?
     var feedUrl: String?
+    var genres: [String]?
 }
 
 struct SearchResults: Decodable {
