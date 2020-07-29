@@ -9,7 +9,7 @@
 import SwiftUI
 import Combine
 
-struct BrowseView: View {
+struct HomeView: View {
     
     //    init () {
     //        UITabBar.appearance().backgroundColor = UIColor.green
@@ -19,7 +19,7 @@ struct BrowseView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            TabOne().tag(1)
+            BrowseView().tag(1)
             TabTwo().tag(2)
             TabThree().tag(3)
             TabFour().tag(4)
@@ -30,7 +30,7 @@ struct BrowseView: View {
 
 struct BrowseView_Previews: PreviewProvider {
     static var previews: some View {
-        BrowseView()
+        HomeView()
     }
 }
 
@@ -55,7 +55,7 @@ struct PodcastPosterView: View {
     }
 }
 
-struct TabOne: View {
+struct BrowseView: View {
     @State private var searchText = ""
     
     @State private var isPodcastShowing = true

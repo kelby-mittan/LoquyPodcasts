@@ -28,7 +28,7 @@
 		02B5688C24C4DBBA004D5C6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02B5688B24C4DBBA004D5C6D /* Preview Assets.xcassets */; };
 		02B5688F24C4DBBA004D5C6D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02B5688D24C4DBBA004D5C6D /* LaunchScreen.storyboard */; };
 		02B5689A24C4DBBA004D5C6D /* LoquyAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5689924C4DBBA004D5C6D /* LoquyAppTests.swift */; };
-		02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A724C4DD11004D5C6D /* BrowseView.swift */; };
+		02B568A824C4DD11004D5C6D /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A724C4DD11004D5C6D /* HomeTabView.swift */; };
 		02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568A924C4DD7D004D5C6D /* EpisodesView.swift */; };
 		02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */; };
 		02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */; };
@@ -77,7 +77,7 @@
 		02B5689524C4DBBA004D5C6D /* LoquyAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoquyAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B5689924C4DBBA004D5C6D /* LoquyAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoquyAppTests.swift; sourceTree = "<group>"; };
 		02B5689B24C4DBBA004D5C6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		02B568A724C4DD11004D5C6D /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
+		02B568A724C4DD11004D5C6D /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
 		02B568A924C4DD7D004D5C6D /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
 		02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeView.swift; sourceTree = "<group>"; };
 		02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
@@ -160,6 +160,7 @@
 		02272D7D24C9FA45007548C3 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				02B568B824C4FA8D004D5C6D /* NetworkingManager.swift */,
 				02272D7E24C9FA69007548C3 /* ImageLoader.swift */,
 			);
 			path = Services;
@@ -232,7 +233,7 @@
 		02B568A524C4DC91004D5C6D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				02B568A724C4DD11004D5C6D /* BrowseView.swift */,
+				02B568A724C4DD11004D5C6D /* HomeTabView.swift */,
 				02B568A924C4DD7D004D5C6D /* EpisodesView.swift */,
 				02B568AB24C4DD9D004D5C6D /* TranscribeView.swift */,
 				02B568AD24C4DF2B004D5C6D /* EpisodeDetailView.swift */,
@@ -258,7 +259,6 @@
 				02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */,
 				02B568B624C4F299004D5C6D /* Podcast.swift */,
 				02272D8224CA3CD6007548C3 /* Episode.swift */,
-				02B568B824C4FA8D004D5C6D /* NetworkingManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -450,7 +450,7 @@
 				02272D8124C9FBF4007548C3 /* RemoteImage.swift in Sources */,
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
 				02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */,
-				02B568A824C4DD11004D5C6D /* BrowseView.swift in Sources */,
+				02B568A824C4DD11004D5C6D /* HomeTabView.swift in Sources */,
 				02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */,
 				02B568B924C4FA8D004D5C6D /* NetworkingManager.swift in Sources */,
 				02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */,
