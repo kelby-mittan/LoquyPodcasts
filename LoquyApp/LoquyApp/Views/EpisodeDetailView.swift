@@ -73,6 +73,7 @@ struct ControlView: View {
                             print("width val is : \(self.width)")
                             
                             
+                            
                         }).onEnded({ (value) in
 //
 //                            let x = value.location.x
@@ -81,8 +82,27 @@ struct ControlView: View {
 //
 //                            let percent = x / screen
                             
+//                            let percentage = x
+//                            guard let duration = self.player.currentItem?.duration else { return }
+//                            let durationInSeconds = CMTimeGetSeconds(duration)
+//                            let seekTimeInSeconds = Float64(percentage) * durationInSeconds
+//                            let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
+//
+//                            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
+//
+//                            self.player.seek(to: seekTime)
+                            
+//                            let x = value.location.x
+//                            
+//                            let screen = UIScreen.main.bounds.width - 30
+//                            
+//                            let percent = x / screen
+                            
+//                            self.player.currentTime = Double(percent) * self.player.duration
+//                            self.player.seek(to: <#T##CMTime#>)
                         }))
                     .padding([.top,.leading,.trailing])
+                
             }
             
             HStack {
@@ -106,6 +126,7 @@ struct ControlView: View {
                 }
                 
                 Button(action: {
+//                    self.setupAudioSession()
                     self.playing.toggle()
                     
                     if self.isFirstPlay {
@@ -133,6 +154,8 @@ struct ControlView: View {
                 
             }
             .padding(.top,25)
+        }.onAppear {
+            
         }
     }
     
@@ -146,6 +169,15 @@ struct ControlView: View {
             let playerItem = AVPlayerItem(url: url)
             player.replaceCurrentItem(with: playerItem)
             player.play()
+        }
+    }
+    
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch let sessionErr {
+            print("Failed to activate session:", sessionErr)
         }
     }
     
