@@ -37,7 +37,7 @@ struct ControlView: View {
     
     @State var width : CGFloat = 30
     @State var playing = false
-    @State var paused = true
+    @State var isFirstPlay = true
     
     let player: AVPlayer = {
         let avPlayer = AVPlayer()
@@ -100,18 +100,26 @@ struct ControlView: View {
                 
                 Button(action: {
                     
+                    
                 }) {
                     Image(systemName: "gobackward.15").font(.largeTitle)
                 }
                 
                 Button(action: {
-                    self.paused.toggle()
                     self.playing.toggle()
                     
-                    print(self.paused)
-                    self.playEpisode()
+                    if self.isFirstPlay {
+                        self.playEpisode()
+                        self.isFirstPlay = false
+                    } else {
+                        
+                        self.playing ? self.player.play() : self.player.pause()
+                    }
+                    
+                    
+                    
                 }) {
-                    Image(systemName: self.playing && !self.paused ? "pause.fill" : "play.fill").font(.largeTitle)
+                    Image(systemName: self.playing ? "pause.fill" : "play.fill").font(.largeTitle)
                 }
                 
                 Button(action: {
@@ -155,6 +163,23 @@ struct ControlView: View {
         let playerItem = AVPlayerItem(url: trueLocation)
         player.replaceCurrentItem(with: playerItem)
         player.play()
+    }
+    
+    private func setupElapsedTime(playbackRate: Float) {
+        let elapsedTime = CMTimeGetSeconds(player.currentTime())
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate
+    }
+    
+    func handlePlayPause() {
+        print("Trying to play and pause")
+        if player.timeControlStatus == .paused {
+            player.play()
+            self.setupElapsedTime(playbackRate: 1)
+        } else {
+            player.pause()
+            self.setupElapsedTime(playbackRate: 0)
+        }
     }
 }
 
