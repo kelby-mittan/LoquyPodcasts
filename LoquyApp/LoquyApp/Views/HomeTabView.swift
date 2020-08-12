@@ -57,11 +57,8 @@ struct PodcastPosterView: View {
 
 struct BrowseView: View {
     @State private var searchText = ""
-    
     @State private var isPodcastShowing = true
-    
     @State private var isEditing = false
-    
     @ObservedObject private var networkManager = NetworkingManager()
     
     let mindcast = DummyPodcast.podcasts[6]
@@ -78,7 +75,7 @@ struct BrowseView: View {
                         ScrollView(.vertical) {
                             HeaderView(label: "Listen To")
                             NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl)) {
-                                ListenToView(isPodcastShowing: $isPodcastShowing)
+                                ListenToView()
                             }
                             PodcastScrollView()
                             

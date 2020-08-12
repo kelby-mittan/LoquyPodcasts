@@ -144,7 +144,6 @@ struct DescriptionView: View {
                     .fontWeight(.bold)
                 Spacer()
             }
-//            .padding(.bottom)
             .padding(.top)
             
             
