@@ -75,31 +75,30 @@ struct ControlView: View {
                             
                             
                         }).onEnded({ (value) in
-//
+
+                            let x = value.location.x
+
+                            let screen = UIScreen.main.bounds.width - 30
+
+//                            let percent = x / screen
+                            
+                            let percentage = x
+                            guard let duration = self.player.currentItem?.duration else { return }
+                            let durationInSeconds = CMTimeGetSeconds(duration)
+                            let seekTimeInSeconds = Float64(percentage) * durationInSeconds
+                            let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
+
+                            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
+
+                            self.player.seek(to: seekTime)
+                            
+                            print(seekTime)
+                            
 //                            let x = value.location.x
 //
 //                            let screen = UIScreen.main.bounds.width - 30
 //
 //                            let percent = x / screen
-                            
-//                            let percentage = x
-//                            guard let duration = self.player.currentItem?.duration else { return }
-//                            let durationInSeconds = CMTimeGetSeconds(duration)
-//                            let seekTimeInSeconds = Float64(percentage) * durationInSeconds
-//                            let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
-//
-//                            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
-//
-//                            self.player.seek(to: seekTime)
-                            
-//                            let x = value.location.x
-//                            
-//                            let screen = UIScreen.main.bounds.width - 30
-//                            
-//                            let percent = x / screen
-                            
-//                            self.player.currentTime = Double(percent) * self.player.duration
-//                            self.player.seek(to: <#T##CMTime#>)
                         }))
                     .padding([.top,.leading,.trailing])
                 
@@ -155,6 +154,7 @@ struct ControlView: View {
             }
             .padding(.top,25)
         }.onAppear {
+            self.playEpisode()
             
         }
     }
