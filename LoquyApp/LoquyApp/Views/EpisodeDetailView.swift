@@ -22,7 +22,7 @@ struct EpisodeDetailView: View {
                 .frame(width: 250, height: 250)
                 .cornerRadius(12)
                 .padding()
-                
+            
             ControlView(episode: episode)
             DescriptionView(episode: episode)
             FavoriteView()
@@ -31,189 +31,7 @@ struct EpisodeDetailView: View {
     }
 }
 
-struct ControlView: View {
-    
-    let episode: Episode
-    
-    @State var width : CGFloat = 30
-    @State var playing = false
-    @State var isFirstPlay = true
-    
-    let player: AVPlayer = {
-        let avPlayer = AVPlayer()
-        avPlayer.automaticallyWaitsToMinimizeStalling = false
-        return avPlayer
-    }()
-    
-    var body: some View {
-        
-        VStack {
-            
-            ZStack(alignment: .leading) {
-                
-                Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    .padding([.top,.leading,.trailing])
-                
-                Capsule().fill(Color.blue).frame(width: self.width, height: 8)
-                    .gesture(DragGesture()
-                        .onChanged({ (value) in
-                            
-                            let x = value.location.x
-                            let maxVal = UIScreen.main.bounds.width - 10
-                            let minVal: CGFloat = 10
-                            
-                            if x < minVal {
-                                self.width = minVal
-                            } else if x > maxVal {
-                                self.width = maxVal
-                            } else {
-                               self.width = x
-                            }
-                            
-                            print("width val is : \(self.width)")
-                            
-                            
-                            
-                        }).onEnded({ (value) in
-//
-//                            let x = value.location.x
-//
-//                            let screen = UIScreen.main.bounds.width - 30
-//
-//                            let percent = x / screen
-                            
-//                            let percentage = x
-//                            guard let duration = self.player.currentItem?.duration else { return }
-//                            let durationInSeconds = CMTimeGetSeconds(duration)
-//                            let seekTimeInSeconds = Float64(percentage) * durationInSeconds
-//                            let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
-//
-//                            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
-//
-//                            self.player.seek(to: seekTime)
-                            
-//                            let x = value.location.x
-//                            
-//                            let screen = UIScreen.main.bounds.width - 30
-//                            
-//                            let percent = x / screen
-                            
-//                            self.player.currentTime = Double(percent) * self.player.duration
-//                            self.player.seek(to: <#T##CMTime#>)
-                        }))
-                    .padding([.top,.leading,.trailing])
-                
-            }
-            
-            HStack {
-                Text("0:00:00")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Spacer()
-                Text("2:30:00")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding([.leading,.trailing])
-            
-            HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
-                
-                Button(action: {
-                    
-                    
-                }) {
-                    Image(systemName: "gobackward.15").font(.largeTitle)
-                }
-                
-                Button(action: {
-//                    self.setupAudioSession()
-                    self.playing.toggle()
-                    
-                    if self.isFirstPlay {
-                        self.playEpisode()
-                        self.isFirstPlay = false
-                    } else {
-                        
-                        self.playing ? self.player.play() : self.player.pause()
-                    }
-                    
-                    
-                    
-                }) {
-                    Image(systemName: self.playing ? "pause.fill" : "play.fill").font(.largeTitle)
-                }
-                
-                Button(action: {
-                    
-                    
-                }) {
-                    
-                    Image(systemName: "goforward.15").font(.largeTitle)
-                    
-                }
-                
-            }
-            .padding(.top,25)
-        }.onAppear {
-            
-        }
-    }
-    
-    private func playEpisode() {
-        if episode.fileUrl != nil {
-            playEpisodeUsingFileUrl()
-        } else {
-            print("Trying to play episode at url:", episode.streamUrl)
-            
-            guard let url = URL(string: episode.streamUrl) else { return }
-            let playerItem = AVPlayerItem(url: url)
-            player.replaceCurrentItem(with: playerItem)
-            player.play()
-        }
-    }
-    
-    private func setupAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch let sessionErr {
-            print("Failed to activate session:", sessionErr)
-        }
-    }
-    
-    private func playEpisodeUsingFileUrl() {
-        print("Attempt to play episode with file url:", episode.fileUrl ?? "")
-        
-        // let's figure out the file name for our episode file url
-        guard let fileURL = URL(string: episode.fileUrl ?? "") else { return }
-        let fileName = fileURL.lastPathComponent
-        
-        guard var trueLocation = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        
-        trueLocation.appendPathComponent(fileName)
-        print("True Location of episode:", trueLocation.absoluteString)
-        let playerItem = AVPlayerItem(url: trueLocation)
-        player.replaceCurrentItem(with: playerItem)
-        player.play()
-    }
-    
-    private func setupElapsedTime(playbackRate: Float) {
-        let elapsedTime = CMTimeGetSeconds(player.currentTime())
-        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
-        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate
-    }
-    
-    func handlePlayPause() {
-        print("Trying to play and pause")
-        if player.timeControlStatus == .paused {
-            player.play()
-            self.setupElapsedTime(playbackRate: 1)
-        } else {
-            player.pause()
-            self.setupElapsedTime(playbackRate: 0)
-        }
-    }
-}
+
 
 struct DescriptionView: View {
     
@@ -252,10 +70,10 @@ struct DescriptionView: View {
     
     func getOnlyDescription(_ str: String) -> String {
         var word = str
-                
+        
         if let index = word.range(of: "\n\n")?.lowerBound {
             let substring = word[..<index]
-
+            
             word = String(substring)
         }
         if let index2 = word.range(of: "<a ")?.lowerBound {

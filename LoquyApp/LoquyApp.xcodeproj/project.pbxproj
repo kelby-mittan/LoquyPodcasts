@@ -22,6 +22,8 @@
 		02272D8124C9FBF4007548C3 /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8024C9FBF4007548C3 /* RemoteImage.swift */; };
 		02272D8324CA3CD6007548C3 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8224CA3CD6007548C3 /* Episode.swift */; };
 		02272D8524CA82EB007548C3 /* MoreCastsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8424CA82EB007548C3 /* MoreCastsView.swift */; };
+		029955C624F32C0E00479318 /* CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C524F32C0E00479318 /* CMTime.swift */; };
+		029955C824F339D200479318 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C724F339D100479318 /* ControlView.swift */; };
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
 		02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */; };
 		02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688324C4DBB6004D5C6D /* LoquyApp.xcdatamodeld */; };
@@ -68,6 +70,8 @@
 		02272D8024C9FBF4007548C3 /* RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
 		02272D8224CA3CD6007548C3 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		02272D8424CA82EB007548C3 /* MoreCastsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreCastsView.swift; sourceTree = "<group>"; };
+		029955C524F32C0E00479318 /* CMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTime.swift; sourceTree = "<group>"; };
+		029955C724F339D100479318 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
 		02B5687C24C4DBB6004D5C6D /* LoquyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoquyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -133,6 +137,7 @@
 				0224B56824CBB37A0062E43F /* PaletteColour.swift */,
 				0224B56E24CBC1C30062E43F /* RSSFeed.swift */,
 				0224B57024CBC2CB0062E43F /* MakeStrings+exts.swift */,
+				029955C524F32C0E00479318 /* CMTime.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -155,6 +160,7 @@
 				02272D8424CA82EB007548C3 /* MoreCastsView.swift */,
 				02272D7424C91E5F007548C3 /* LabelViews.swift */,
 				02272D8024C9FBF4007548C3 /* RemoteImage.swift */,
+				029955C724F339D100479318 /* ControlView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -461,6 +467,8 @@
 				02272D8324CA3CD6007548C3 /* Episode.swift in Sources */,
 				02B568B724C4F299004D5C6D /* Podcast.swift in Sources */,
 				0224B56B24CBB7130062E43F /* LoquyListView.swift in Sources */,
+				029955C824F339D200479318 /* ControlView.swift in Sources */,
+				029955C624F32C0E00479318 /* CMTime.swift in Sources */,
 				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
 				0226FCCA24D2300300B5B03A /* Loquy.swift in Sources */,
 				02272D7F24C9FA69007548C3 /* ImageLoader.swift in Sources */,
