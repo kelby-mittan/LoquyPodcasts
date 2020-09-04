@@ -9,7 +9,7 @@
 import SwiftUI
 import AVKit
 import MediaPlayer
-import AVFoundation
+//import AVFoundation
 
 struct ControlView: View {
     
@@ -27,7 +27,9 @@ struct ControlView: View {
         return avPlayer
     }()
     
-    private var audioRecorder: AVAudioRecorder!
+    var recordButton: UIButton!
+    var recordingSession: AVAudioSession!
+    var audioRecorder: AVAudioRecorder!
     
     var body: some View {
         
@@ -56,29 +58,11 @@ struct ControlView: View {
                             
                             print("width val is : \(self.width)")
                             
-                            
-                            
                         }).onEnded({ (value) in
                             
-                            let x = value.location.x
+                            self.player.seek(to: self.capsuleDragged(value.location.x))
                             
-                            let screen = UIScreen.main.bounds.width - 30
-                            
-                            let percentage = x / screen
-                            
-                            guard let duration = self.player.currentItem?.duration else { return }
-                            let durationInSeconds = CMTimeGetSeconds(duration)
-                            let seekTimeInSeconds = Float64(percentage) * durationInSeconds
-                            let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
-                            
-                            MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
-                            
-                            self.player.seek(to: seekTime)
-                            
-                            print(seekTime)
-                            
-                        }))
-                    .padding([.top,.leading,.trailing])
+                        }))                    .padding([.top,.leading,.trailing])
                 
             }
             
@@ -96,7 +80,7 @@ struct ControlView: View {
             HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
                 
                 Button(action: {
-                    self.seekToCurrentTime(delta: -15)
+                    Player.seekToCurrentTime(delta: -15, player: self.player)
                 }) {
                     Image(systemName: "gobackward.15").font(.largeTitle)
                 }
@@ -110,7 +94,7 @@ struct ControlView: View {
                 }
                 
                 Button(action: {
-                    self.seekToCurrentTime(delta: 15)
+                    Player.seekToCurrentTime(delta: 15, player: self.player)
                     
                 }) {
                     
@@ -122,56 +106,46 @@ struct ControlView: View {
             Button(action: {
                 self.isRecording.toggle()
                 
+                print(self.isRecording)
+                
                 if self.isRecording {
                     
+                } else {
+                    self.audioRecorder.record(forDuration: 60)
                 }
             }) {
                 Image(systemName: "recordingtape").font(.largeTitle)
             }
             .padding(.top,25)
         }.onAppear {
-            self.playEpisode()
+            Player.playEpisode(episode: self.episode, player: self.player)
             self.observePlayerCurrentTime()
             
             print(self.episode.fileUrl ?? "error")
         }
     }
     
-    private func playEpisode() {
-        if episode.fileUrl != nil {
-            playEpisodeUsingFileUrl()
-        } else {
-            print("Trying to play episode at url:", episode.streamUrl)
-            
-            guard let url = URL(string: episode.streamUrl) else { return }
-            let playerItem = AVPlayerItem(url: url)
-            player.replaceCurrentItem(with: playerItem)
-            player.play()
-        }
+    private func updateTimeCapsule() -> CGFloat {
+        let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
+        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
+        let percentage = currentTimeSeconds / durationSeconds
+        
+        return CGFloat(percentage)
     }
     
-    private func setupAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch let sessionErr {
-            print("Failed to activate session:", sessionErr)
-        }
-    }
-    
-    private func playEpisodeUsingFileUrl() {
-        print("Attempt to play episode with file url:", episode.fileUrl ?? "")
+    private func capsuleDragged(_ xVal: CGFloat) -> CMTime {
+        //        let x = value.location.x
+        let screen = UIScreen.main.bounds.width - 30
+        let percentage = xVal / screen
         
-        guard let fileURL = URL(string: episode.fileUrl ?? "") else { return }
-        let fileName = fileURL.lastPathComponent
+        guard let duration = self.player.currentItem?.duration else { return CMTime(value: 0, timescale: 0) }
+        let durationInSeconds = CMTimeGetSeconds(duration)
+        let seekTimeInSeconds = Float64(percentage) * durationInSeconds
+        let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
         
-        guard var trueLocation = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
         
-        trueLocation.appendPathComponent(fileName)
-        print("True Location of episode:", trueLocation.absoluteString)
-        let playerItem = AVPlayerItem(url: trueLocation)
-        player.replaceCurrentItem(with: playerItem)
-        player.play()
+        return seekTime
     }
     
     @discardableResult
@@ -187,52 +161,46 @@ struct ControlView: View {
         return (currentTime,durationLabel)
     }
     
-    private func seekToCurrentTime(delta: Int64) {
-        let fifteenSeconds = CMTimeMake(value: delta, timescale: 1)
-        let seekTime = CMTimeAdd(player.currentTime(), fifteenSeconds)
-        player.seek(to: seekTime)
-    }
+    //    mutating func startRecording() {
+    //        guard let newFileURL = createURLForNewRecord() else {
+    //            print("Error")
+    //            return
+    //        }
+    //
+    //        do {
+    //
+    //            //                var urlString = URL(string: newFileURL)
+    //            //                urlString = newFileURL
+    //            audioRecorder = try AVAudioRecorder(url: newFileURL,
+    //                                                settings: [AVFormatIDKey:Int(kAudioFormatMPEG4AAC),
+    //                                                    AVSampleRateKey: 8000,
+    //                                                    AVNumberOfChannelsKey: 1,
+    //                                                    AVEncoderAudioQualityKey: AVAudioQuality.min.rawValue])
+    //            //                audioRecorder.delegate = self
+    //            audioRecorder.prepareToRecord()
+    //            audioRecorder.record(forDuration: 60)
+    //        } catch {
+    //            print("RECORDING ERROR: \(error)")
+    //        }
+    //
+    //    }
     
-    mutating func startRecording() {
-        guard let newFileURL = createURLForNewRecord() else {
-            print("Error")
-            return
-        }
-        
-        do {
-            
-            //                var urlString = URL(string: newFileURL)
-            //                urlString = newFileURL
-            audioRecorder = try AVAudioRecorder(url: newFileURL,
-                                                settings: [AVFormatIDKey:Int(kAudioFormatMPEG4AAC),
-                                                           AVSampleRateKey: 8000,
-                                                           AVNumberOfChannelsKey: 1,
-                                                           AVEncoderAudioQualityKey: AVAudioQuality.min.rawValue])
-            //                audioRecorder.delegate = self
-            audioRecorder.prepareToRecord()
-            audioRecorder.record(forDuration: 60)
-        } catch {
-            print("RECORDING ERROR: \(error)")
-        }
-        
-    }
-    
-    private func createURLForNewRecord() -> URL? {
-        guard let appGroupFolderUrl = FileManager.getAppFolderURL() else {
-            return nil
-        }
-        
-        let date = String(describing: Date())
-        let fullFileName = "LoquyClip" + date + ".m4a"
-        let newRecordFileName = appGroupFolderUrl.appendingPathComponent(fullFileName)
-        return newRecordFileName
-    }
+    //    private func createURLForNewRecord() -> URL? {
+    //        guard let appGroupFolderUrl = FileManager.getAppFolderURL() else {
+    //            return nil
+    //        }
+    //
+    //        let date = String(describing: Date())
+    //        let fullFileName = "LoquyClip" + date + ".m4a"
+    //        let newRecordFileName = appGroupFolderUrl.appendingPathComponent(fullFileName)
+    //        return newRecordFileName
+    //    }
 }
 
-extension FileManager {
-    class func getAppFolderURL() -> URL? {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        return documentsDirectory
-    }
-}
+//extension FileManager {
+//    class func getAppFolderURL() -> URL? {
+//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+//        let documentsDirectory = paths[0]
+//        return documentsDirectory
+//    }
+//}
