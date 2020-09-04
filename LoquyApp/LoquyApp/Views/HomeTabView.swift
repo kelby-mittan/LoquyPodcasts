@@ -83,7 +83,6 @@ struct BrowseView: View {
                             
                             HeaderView(label: "More Cool Casts")
                             MoreCastsView()
-                            
                         }
                         
                     } else {
@@ -107,7 +106,6 @@ struct BrowseView: View {
                                         .fontWeight(.light)
                                 }
                             }
-                            
                         }
                     }
                 }

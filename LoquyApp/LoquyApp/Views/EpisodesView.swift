@@ -15,8 +15,8 @@ struct EpisodesView: View {
     let title: String
     let podcastFeed: String
     
-    let gradColor1 = PaletteColour.colors.randomElement()
-    let gradColor2 = PaletteColour.colors.randomElement()
+    let gradColor1 = PaletteColour.colors1.randomElement()
+    let gradColor2 = PaletteColour.colors2.randomElement()
     
     var body: some View {
         
@@ -63,6 +63,8 @@ struct EpisodesView: View {
             }.onAppear(perform: {
                 UITableView.appearance().separatorStyle = .none
                 self.getPodcasts()
+                print(self.podcastFeed)
+                print(self.networkManager.episodes.count)
             })
                 .environment(\.horizontalSizeClass, .regular)
                 .navigationBarTitle(title)

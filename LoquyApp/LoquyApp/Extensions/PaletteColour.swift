@@ -10,7 +10,7 @@ import SwiftUI
 
 enum PaletteColour: String {
     case offWhite = "#f9f7e3"
-    case lightBlue = "#333fc1"
+    case lightBlue = "#d4ebf2"
     case lightGreen = "#a9bd95"
     case peach = "#e2a093"
     case pink = "#c67eb2"
@@ -27,5 +27,7 @@ enum PaletteColour: String {
         return Color(red: Double(CGFloat(hexTuple.0)) / 255.0, green: Double(CGFloat(hexTuple.1)) / 255.0, blue: Double(CGFloat(hexTuple.2)) / 255.0)
     }
     
-    static let colors = [PaletteColour.lightBlue.colour, PaletteColour.lightGreen.colour, PaletteColour.peach.colour, PaletteColour.pink.colour, PaletteColour.darkBlue.colour, PaletteColour.aqua.colour]
+    static let colors1 = [ PaletteColour.pink.colour, PaletteColour.darkBlue.colour, PaletteColour.aqua.colour]
+    
+    static let colors2 = [PaletteColour.lightBlue.colour, PaletteColour.lightGreen.colour, PaletteColour.peach.colour]
 }
