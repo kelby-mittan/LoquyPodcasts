@@ -59,9 +59,8 @@ struct ControlView: View {
                             
                             let screen = UIScreen.main.bounds.width - 30
                             
-                            //                            let percent = x / screen
+                            let percentage = x / screen
                             
-                            let percentage = x
                             guard let duration = self.player.currentItem?.duration else { return }
                             let durationInSeconds = CMTimeGetSeconds(duration)
                             let seekTimeInSeconds = Float64(percentage) * durationInSeconds
@@ -72,12 +71,7 @@ struct ControlView: View {
                             self.player.seek(to: seekTime)
                             
                             print(seekTime)
-                            
-                            //                            let x = value.location.x
-                            //
-                            //                            let screen = UIScreen.main.bounds.width - 30
-                            //
-                            //                            let percent = x / screen
+        
                         }))
                     .padding([.top,.leading,.trailing])
                 
