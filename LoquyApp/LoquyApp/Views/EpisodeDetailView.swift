@@ -141,11 +141,13 @@ struct GuestView: View {
 struct FavoriteView: View {
     
     let episode: Episode
+    @State var isSaved = false
+    @State var saveText = ""
     
     var body: some View {
         NavigationLink(destination: Text("Add to Favorites")) {
             
-            Text("Save Episode")
+            Text(saveText)
                 .fontWeight(.heavy)
                 .padding()
                 .frame(width: UIScreen.main.bounds.width - 88)
@@ -155,14 +157,27 @@ struct FavoriteView: View {
                 .padding()
                 .onTapGesture {
                 
-                    var episodes = UserDefaults.standard.savedEpisodes()
-                    episodes.append(self.episode)
-                    print(self.episode.author)
                     
-                    UserDefaults.standard.saveTheEpisode(episode: self.episode)
-                    
-                    print("Tapped favorites")
+                    if !self.isSaved {
+                        var episodes = UserDefaults.standard.savedEpisodes()
+                        episodes.append(self.episode)
+                        self.saveText = "Remove Episode"
+                        UserDefaults.standard.saveTheEpisode(episode: self.episode)
+                    } else {
+                        self.saveText = "Save Episode"
+                        UserDefaults.standard.deleteEpisode(episode: self.episode)
+                    }
+                    self.isSaved.toggle()
             }
+        }.onAppear {
+            if UserDefaults.standard.savedEpisodes().contains(self.episode) {
+                self.isSaved = true
+                self.saveText = "Remove Episode"
+            } else {
+                self.isSaved = false
+                self.saveText = "Save Episode"
+            }
+        
         }
         
     }

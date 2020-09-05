@@ -40,9 +40,7 @@ extension UserDefaults {
     
     func deleteEpisode(episode: Episode) {
         let episodes = savedEpisodes()
-        let filteredEpisodes = episodes.filter { (e) -> Bool in
-            return e.id != episode.id
-        }
+        let filteredEpisodes = episodes.filter { $0.title != episode.title }
         
         do {
             let data = try JSONEncoder().encode(filteredEpisodes)
