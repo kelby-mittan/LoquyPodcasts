@@ -26,7 +26,8 @@
 		0270947525030720009E0BF5 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947425030720009E0BF5 /* FavoritesViewController.swift */; };
 		0270947725030889009E0BF5 /* PodcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947625030889009E0BF5 /* PodcastCell.swift */; };
 		0270947A25030A3D009E0BF5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 0270947925030A3D009E0BF5 /* Kingfisher */; };
-		0270947C25031152009E0BF5 /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947B25031152009E0BF5 /* Favorites.swift */; };
+		0270947C25031152009E0BF5 /* FavoritesVCWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947B25031152009E0BF5 /* FavoritesVCWrapper.swift */; };
+		0270947E250403F9009E0BF5 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947D250403F9009E0BF5 /* UserDefaults.swift */; };
 		029955C624F32C0E00479318 /* CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C524F32C0E00479318 /* CMTime.swift */; };
 		029955C824F339D200479318 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C724F339D100479318 /* ControlView.swift */; };
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
@@ -78,7 +79,8 @@
 		027094712502F39E009E0BF5 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		0270947425030720009E0BF5 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		0270947625030889009E0BF5 /* PodcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastCell.swift; sourceTree = "<group>"; };
-		0270947B25031152009E0BF5 /* Favorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
+		0270947B25031152009E0BF5 /* FavoritesVCWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesVCWrapper.swift; sourceTree = "<group>"; };
+		0270947D250403F9009E0BF5 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		029955C524F32C0E00479318 /* CMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTime.swift; sourceTree = "<group>"; };
 		029955C724F339D100479318 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
 		02B5687C24C4DBB6004D5C6D /* LoquyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoquyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,6 +150,7 @@
 				0224B56E24CBC1C30062E43F /* RSSFeed.swift */,
 				0224B57024CBC2CB0062E43F /* MakeStrings+exts.swift */,
 				029955C524F32C0E00479318 /* CMTime.swift */,
+				0270947D250403F9009E0BF5 /* UserDefaults.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -166,7 +169,7 @@
 			children = (
 				02272D7824C91FF7007548C3 /* ListenToView.swift */,
 				02272D7624C91EF5007548C3 /* TopPodcastsView.swift */,
-				0270947B25031152009E0BF5 /* Favorites.swift */,
+				0270947B25031152009E0BF5 /* FavoritesVCWrapper.swift */,
 				02272D7B24C928BA007548C3 /* FeaturedView.swift */,
 				02272D8424CA82EB007548C3 /* MoreCastsView.swift */,
 				02272D7424C91E5F007548C3 /* LabelViews.swift */,
@@ -499,12 +502,13 @@
 				029955C824F339D200479318 /* ControlView.swift in Sources */,
 				029955C624F32C0E00479318 /* CMTime.swift in Sources */,
 				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
+				0270947E250403F9009E0BF5 /* UserDefaults.swift in Sources */,
 				0226FCCA24D2300300B5B03A /* Loquy.swift in Sources */,
 				02272D7F24C9FA69007548C3 /* ImageLoader.swift in Sources */,
 				0224B56924CBB37A0062E43F /* PaletteColour.swift in Sources */,
 				02272D7524C91E5F007548C3 /* LabelViews.swift in Sources */,
 				0270947725030889009E0BF5 /* PodcastCell.swift in Sources */,
-				0270947C25031152009E0BF5 /* Favorites.swift in Sources */,
+				0270947C25031152009E0BF5 /* FavoritesVCWrapper.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
 				02272D8524CA82EB007548C3 /* MoreCastsView.swift in Sources */,
 				02B568B124C4E3C9004D5C6D /* DummyPodcast.swift in Sources */,
