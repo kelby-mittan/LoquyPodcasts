@@ -11,6 +11,7 @@ import AVKit
 import MediaPlayer
 //import AVFoundation
 
+
 struct ControlView: View {
     
     let episode: Episode
@@ -45,7 +46,7 @@ struct ControlView: View {
                         .onChanged({ (value) in
                             
                             let x = value.location.x
-                            let maxVal = UIScreen.main.bounds.width - 10
+                            let maxVal = UIScreen.main.bounds.width - 30
                             let minVal: CGFloat = 10
                             
                             if x < minVal {
@@ -55,7 +56,7 @@ struct ControlView: View {
                             } else {
                                 self.width = x
                             }
-                            
+                            self.currentTime = self.capsuleDragged(value.location.x).toDisplayString()
                             print("width val is : \(self.width)")
                             
                         }).onEnded({ (value) in
@@ -71,7 +72,7 @@ struct ControlView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
-                Text(observePlayerCurrentTime().durationTime)
+                Text(getCurrentPlayerTime().durationTime)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -119,12 +120,14 @@ struct ControlView: View {
             .padding(.top,25)
         }.onAppear {
             Player.playEpisode(episode: self.episode, player: self.player)
-            self.observePlayerCurrentTime()
+            self.getCurrentPlayerTime()
             
             print(self.episode.fileUrl ?? "error")
         }
     }
     
+    /// Function determines the AVPlayer's current playing time and its percentage of the full podcast duration
+    /// - Returns: CGFloat representing where the Capsule should be on the screen
     private func updateTimeCapsule() -> CGFloat {
         let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
         let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
@@ -133,6 +136,10 @@ struct ControlView: View {
         return CGFloat(percentage)
     }
     
+    /// Function determines where to seek to within a podcast based on a capsule drag
+    /// - Parameter xVal: CGFloat determined from a Capsules x location
+    /// - Returns: A CMTime to be used when seeking a certain time in a podcast
+    @discardableResult
     private func capsuleDragged(_ xVal: CGFloat) -> CMTime {
         //        let x = value.location.x
         let screen = UIScreen.main.bounds.width - 30
@@ -144,12 +151,12 @@ struct ControlView: View {
         let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
-        
         return seekTime
     }
     
+    
     @discardableResult
-    private func observePlayerCurrentTime() -> (currentTime: String, durationTime: String) {
+    private func getCurrentPlayerTime() -> (currentTime: String, durationTime: String) {
         let interval = CMTimeMake(value: 1, timescale: 2)
         var durationLabel = ""
         player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in

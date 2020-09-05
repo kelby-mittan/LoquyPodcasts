@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct DummyPodcast: Identifiable {
+struct DummyPodcast: Identifiable, Hashable {
     var id = UUID()
     let title: String
     let host: String

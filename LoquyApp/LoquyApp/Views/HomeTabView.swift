@@ -129,7 +129,7 @@ struct BrowseView: View {
 
 struct TabTwo: View {
     var body: some View {
-        LoquyListView()
+        FavoritesVCWrapper()
             .tabItem {
                 Image(systemName: "star.fill")
                     .font(.largeTitle)
