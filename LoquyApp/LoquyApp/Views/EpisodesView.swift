@@ -13,7 +13,8 @@ struct EpisodesView: View {
     @ObservedObject private var networkManager = NetworkingManager()
     
     let title: String
-    let podcastFeed: String
+    let podcastFeed: String?
+    let isSaved: Bool
     
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
@@ -62,9 +63,14 @@ struct EpisodesView: View {
                 
             }.onAppear(perform: {
                 UITableView.appearance().separatorStyle = .none
-                self.getPodcasts()
-                print(self.podcastFeed)
-                print(self.networkManager.episodes.count)
+//                self.getPodcasts()
+                
+                if !self.isSaved {
+                    self.networkManager.episodes = UserDefaults.standard.savedEpisodes()
+                } else {
+                    self.getPodcasts()
+                }
+                
             })
                 .environment(\.horizontalSizeClass, .regular)
                 .navigationBarTitle(title)
@@ -72,13 +78,13 @@ struct EpisodesView: View {
     }
     
     func getPodcasts() {
-        networkManager.loadEpisodes(feedUrl: podcastFeed)
+        networkManager.loadEpisodes(feedUrl: podcastFeed ?? "")
     }
     
 }
 
 struct EpisodesView_Previews: PreviewProvider {
     static var previews: some View {
-        EpisodesView(title: "Yang Speaks", podcastFeed: "https://feeds.megaphone.fm/yang-speaks")
+        EpisodesView(title: "Yang Speaks", podcastFeed: "https://feeds.megaphone.fm/yang-speaks", isSaved: false)
     }
 }

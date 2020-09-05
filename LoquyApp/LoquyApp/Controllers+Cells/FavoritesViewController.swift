@@ -9,6 +9,7 @@
 import UIKit
 import Combine
 import Kingfisher
+import SwiftUI
 
 class FavoritesViewController: UIViewController {
     
@@ -18,19 +19,21 @@ class FavoritesViewController: UIViewController {
     
     private var collectionView: UICollectionView!
     
-    typealias DataSource = UICollectionViewDiffableDataSource<SectionKind, DummyPodcast>
+    typealias DataSource = UICollectionViewDiffableDataSource<SectionKind, String>
     private var dataSource: DataSource!
     
     private var subscriptions: Set<AnyCancellable> = []
+    
+    let podcasts = Array(Set(UserDefaults.standard.savedEpisodes().map { $0.imageUrl ?? ""}))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Favorite Casts"
         configureCollectionView()
         configureDataSource()
-        updateSnapshot(with: DummyPodcast.podcasts)
+        updateSnapshot(with: podcasts.reversed())
         print("USER D EPS: \(UserDefaults.standard.savedEpisodes().count)")
-//        print("DUMMY EPS: \(DummyPodcast.eps.count)")
+        dump(podcasts)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,11 +41,11 @@ class FavoritesViewController: UIViewController {
         print("\(UserDefaults.standard.savedEpisodes().count)")
     }
     
-    private func updateSnapshot(with podcasts: [DummyPodcast]) {
+    private func updateSnapshot(with episodes: [String]) {
         var snapshot = dataSource.snapshot()
         snapshot.deleteAllItems()
         snapshot.appendSections([.main])
-        snapshot.appendItems(podcasts)
+        snapshot.appendItems(episodes)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
@@ -52,6 +55,7 @@ class FavoritesViewController: UIViewController {
         collectionView.backgroundColor = .systemBackground
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(collectionView)
+        collectionView.delegate = self
     }
     
     private func createLayout() -> UICollectionViewLayout {
@@ -100,22 +104,34 @@ class FavoritesViewController: UIViewController {
     private func configureDataSource() {
         // initializing the data source and
         // configuring the cell
-        dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, podcast) -> UICollectionViewCell? in
+        dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, episodeArt) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PodcastCell.reuseIdentifier, for: indexPath) as? PodcastCell else {
                 fatalError("could not dequeue Podcast Cell")
             }
-//            cell.imageView.kf.indicatorType = .activity
-//            cell.imageView.kf.setImage(with: URL(string: podcast.artworkUrl600 ?? ""))
-            cell.imageView.image = UIImage(named: podcast.image)
-            cell.imageView.contentMode = .scaleAspectFill
+            cell.imageView.kf.indicatorType = .activity
+            cell.imageView.kf.setImage(with: URL(string: episodeArt ))
+//            cell.imageView.image = UIImage(named: podcast.image)
+            cell.imageView.contentMode = .scaleToFill
             return cell
         })
         
-        // setup initial snapshot
         var snapshot = dataSource.snapshot() // current snapshot
         snapshot.appendSections([.main])
-        //snapshot.appendItems(Array(1...4))
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
+}
+
+extension FavoritesViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let episodeArt = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+        
+        print(episodeArt)
+    }
+    
+    func goToEpisodesList(episode: Episode) {
+//        let host = UIHostingController(rootView: EpisodesView()
+    }
 }

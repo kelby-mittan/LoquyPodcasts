@@ -21,7 +21,7 @@ struct FeaturedView: View {
                     ForEach(podcasts, id: \.id) { pCast in
                         ZStack(alignment: .center) {
                             
-                            NavigationLink(destination: EpisodesView(title: pCast.title, podcastFeed: pCast.feedUrl)) {
+                            NavigationLink(destination: EpisodesView(title: pCast.title, podcastFeed: pCast.feedUrl, isSaved: false)) {
                                 
                                 Image(pCast.image)
                                     .resizable()
