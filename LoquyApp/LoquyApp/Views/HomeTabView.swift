@@ -115,7 +115,7 @@ struct BrowseView: View {
         }
         .tabItem {
             Image(systemName: "magnifyingglass")
-                .font(.largeTitle)
+                .font(.body)
             Text("Browse")
         }
     }
@@ -129,12 +129,17 @@ struct BrowseView: View {
 
 struct TabTwo: View {
     var body: some View {
-        FavoritesVCWrapper()
-            .tabItem {
-                Image(systemName: "star.fill")
-                    .font(.largeTitle)
-                    .padding(.top, 16.0)
-                Text("Favorites")
+        NavigationView {
+            FavoritesVCWrapper()
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
+            
+        }
+        .tabItem {
+            Image(systemName: "star.fill")
+                .font(.body)
+                .padding(.top, 16.0)
+            Text("Favorites")
         }
     }
 }
@@ -145,7 +150,7 @@ struct TabThree: View {
             .tabItem {
                 
                 Image(systemName: "textbox")
-                    .font(.largeTitle)
+                    .font(.body)
                     .padding(.top, 16.0)
                 Text("Transcribe")
         }
@@ -158,7 +163,7 @@ struct TabFour: View {
             .tabItem {
                 
                 Image(systemName: "list.bullet")
-                    .font(.largeTitle)
+                    .font(.body)
                     .padding(.top, 16.0)
                 Text("Loquies")
         }

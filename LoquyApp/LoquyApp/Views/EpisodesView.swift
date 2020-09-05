@@ -63,17 +63,15 @@ struct EpisodesView: View {
                 
             }.onAppear(perform: {
                 UITableView.appearance().separatorStyle = .none
-//                self.getPodcasts()
-                
-                if !self.isSaved {
-                    self.networkManager.episodes = UserDefaults.standard.savedEpisodes()
+                if self.isSaved {
+                    self.networkManager.episodes = UserDefaults.standard.savedEpisodes().filter { $0.imageUrl == self.title }
                 } else {
                     self.getPodcasts()
                 }
                 
             })
-                .environment(\.horizontalSizeClass, .regular)
-                .navigationBarTitle(title)
+            .environment(\.horizontalSizeClass, .regular)
+            .navigationBarTitle(title)
         }
     }
     

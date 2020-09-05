@@ -128,10 +128,26 @@ extension FavoritesViewController: UICollectionViewDelegate {
             return
         }
         
+        goToEpisodesList(episodeArt: episodeArt)
         print(episodeArt)
     }
     
-    func goToEpisodesList(episode: Episode) {
-//        let host = UIHostingController(rootView: EpisodesView()
+    func goToEpisodesList(episodeArt: String) {
+//        let host = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true))
+//
+//        guard let hostView = host.view else { return }
+//        hostView.translatesAutoresizingMaskIntoConstraints = false
+//
+//        NSLayoutConstraint.activate([
+//            hostView.topAnchor.constraint(equalTo: view.topAnchor),
+//            hostView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            hostView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            hostView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//        ])
+        let childView = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true))
+        addChild(childView)
+        childView.view.frame = view.bounds
+        view.addSubview(childView.view)
+        childView.didMove(toParent: self)
     }
 }
