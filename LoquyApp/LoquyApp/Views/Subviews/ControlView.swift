@@ -104,15 +104,16 @@ struct ControlView: View {
                 
             }
             Button(action: {
-//                self.isRecording.toggle()
-//
-//                print(self.isRecording)
-//
-//                if self.isRecording {
-//
-//                } else {
-//                    self.audioRecorder.record(forDuration: 60)
-//                }
+                
+                guard let streamURL = URL(string: self.episode.streamUrl) else {
+                    print("COULD NOT GET STREAM URL")
+                    return
+                }
+                let asset = AVAsset(url: streamURL)
+                
+                AudioTrim.exportAsset(asset: asset, fileName: "PLEASEWORK", stream: self.episode.streamUrl)
+                
+                
             }) {
                 Image(systemName: "recordingtape").font(.largeTitle)
             }
@@ -167,46 +168,154 @@ struct ControlView: View {
         return (currentTime,durationLabel)
     }
     
-    //    mutating func startRecording() {
-    //        guard let newFileURL = createURLForNewRecord() else {
-    //            print("Error")
-    //            return
-    //        }
-    //
-    //        do {
-    //
-    //            //                var urlString = URL(string: newFileURL)
-    //            //                urlString = newFileURL
-    //            audioRecorder = try AVAudioRecorder(url: newFileURL,
-    //                                                settings: [AVFormatIDKey:Int(kAudioFormatMPEG4AAC),
-    //                                                    AVSampleRateKey: 8000,
-    //                                                    AVNumberOfChannelsKey: 1,
-    //                                                    AVEncoderAudioQualityKey: AVAudioQuality.min.rawValue])
-    //            //                audioRecorder.delegate = self
-    //            audioRecorder.prepareToRecord()
-    //            audioRecorder.record(forDuration: 60)
-    //        } catch {
-    //            print("RECORDING ERROR: \(error)")
-    //        }
-    //
-    //    }
-    
-    //    private func createURLForNewRecord() -> URL? {
-    //        guard let appGroupFolderUrl = FileManager.getAppFolderURL() else {
-    //            return nil
-    //        }
-    //
-    //        let date = String(describing: Date())
-    //        let fullFileName = "LoquyClip" + date + ".m4a"
-    //        let newRecordFileName = appGroupFolderUrl.appendingPathComponent(fullFileName)
-    //        return newRecordFileName
-    //    }
+//    func trimAudio(asset: AVAsset, startTime: Double, stopTime: Double, finished:@escaping (URL) -> ()) {
+//        
+//        let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith:asset)
+//        
+//        if compatiblePresets.contains(AVAssetExportPresetMediumQuality) {
+//            
+//            guard let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A) else {
+//                
+//                print("ERROR CREATING EXPORT SESSION")
+//                return
+//                
+//            }
+//            
+//            // Creating new output File url and removing it if already exists.
+//            //            let furl = createUrlInAppDD("trimmedAudio.m4a") //Custom Function
+//            guard let furl = createURLForNewRecord() else {
+//                print("ERROR WITH URL")
+//                return
+//            }
+//            //            removeFileIfExists(fileURL: furl) //Custom Function
+//            
+//            print("FILE URL: \(furl)")
+//            
+//            exportSession.outputURL = furl
+//            exportSession.outputFileType = AVFileType.m4a
+//            
+//            let start: CMTime = CMTimeMakeWithSeconds(startTime, preferredTimescale: asset.duration.timescale)
+//            let stop: CMTime = CMTimeMakeWithSeconds(stopTime, preferredTimescale: asset.duration.timescale)
+//            let range: CMTimeRange = CMTimeRangeFromTimeToTime(start: start, end: stop)
+//            exportSession.timeRange = range
+//            
+//            exportSession.exportAsynchronously(completionHandler: {
+//                
+//                switch exportSession.status {
+//                case .failed:
+//                    print("Export failed: \(exportSession.error!.localizedDescription)")
+//                case .cancelled:
+//                    print("Export canceled")
+//                default:
+//                    print("Successfully trimmed audio")
+//                    DispatchQueue.main.async(execute: {
+//                        finished(furl)
+//                    })
+//                }
+//            })
+//        }
+//    }
+//    
+//    func exportAsset(asset: AVAsset, fileName: String) {
+//        print("\(#function)")
+//        
+//        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//        let trimmedSoundFileURL = documentsDirectory.appendingPathComponent(fileName)
+//        print("saving to \(trimmedSoundFileURL.absoluteString)")
+//        
+//        if FileManager.default.fileExists(atPath: trimmedSoundFileURL.absoluteString) {
+//            print("sound exists, removing \(trimmedSoundFileURL.absoluteString)")
+//            do {
+//                if try trimmedSoundFileURL.checkResourceIsReachable() {
+//                    print("is reachable")
+//                }
+//                
+//                try FileManager.default.removeItem(atPath: trimmedSoundFileURL.absoluteString)
+//            } catch {
+//                print("could not remove \(trimmedSoundFileURL)")
+//                print(error.localizedDescription)
+//            }
+//            
+//        }
+//        
+//        print("creating export session for \(asset)")
+//        
+//        if let exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A) {
+//            exporter.outputFileType = AVFileType.m4a
+//            exporter.outputURL = trimmedSoundFileURL
+//            
+//            let duration = CMTimeGetSeconds(asset.duration)
+//            if duration < 5.0 {
+//                print("sound is not long enough")
+//                return
+//            }
+//            // the first 5 seconds
+//            let startTime = CMTimeMake(value: 0, timescale: 1)
+//            let stopTime = CMTimeMake(value: 5, timescale: 1)
+//            exporter.timeRange = CMTimeRangeFromTimeToTime(start: startTime, end: stopTime)
+//            
+//            // do it
+//            exporter.exportAsynchronously(completionHandler: {
+//                print("export complete \(exporter.status)")
+//                
+//                switch exporter.status {
+//                case  AVAssetExportSessionStatus.failed:
+//                    
+//                    if let e = exporter.error {
+//                        print("export failed \(e)")
+//                    }
+//                    
+//                case AVAssetExportSessionStatus.cancelled:
+//                    print("export cancelled \(String(describing: exporter.error))")
+//                default:
+//                    print("export complete")
+//                }
+//            })
+//        } else {
+//            print("cannot create AVAssetExportSession for asset \(asset)")
+//        }
+//    }
+//    
+//    mutating func startRecording() {
+//        guard let newFileURL = createURLForNewRecord() else {
+//            print("Error")
+//            return
+//        }
+//
+//        do {
+//
+//            //                var urlString = URL(string: newFileURL)
+//            //                urlString = newFileURL
+//            audioRecorder = try AVAudioRecorder(url: newFileURL,
+//                                                settings: [AVFormatIDKey:Int(kAudioFormatMPEG4AAC),
+//                                                    AVSampleRateKey: 8000,
+//                                                    AVNumberOfChannelsKey: 1,
+//                                                    AVEncoderAudioQualityKey: AVAudioQuality.min.rawValue])
+//            //                audioRecorder.delegate = self
+//            audioRecorder.prepareToRecord()
+//            audioRecorder.record(forDuration: 60)
+//        } catch {
+//            print("RECORDING ERROR: \(error)")
+//        }
+//
+//    }
+//    
+//    private func createURLForNewRecord() -> URL? {
+//        guard let appGroupFolderUrl = FileManager.getAppFolderURL() else {
+//            return nil
+//        }
+//        
+//        let date = String(describing: Date())
+//        let fullFileName = "LoquyClip" + date + ".m4a"
+//        let newRecordFileName = appGroupFolderUrl.appendingPathComponent(fullFileName)
+//        return newRecordFileName
+//    }
 }
 
-//extension FileManager {
-//    class func getAppFolderURL() -> URL? {
-//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//        let documentsDirectory = paths[0]
-//        return documentsDirectory
-//    }
-//}
+extension FileManager {
+    class func getAppFolderURL() -> URL? {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+}

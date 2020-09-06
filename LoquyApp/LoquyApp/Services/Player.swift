@@ -42,6 +42,7 @@ struct Player {
         } else {
             print("Trying to play episode at url:", episode.streamUrl)
             
+            print("EPISODE STREAM URL: \(episode.streamUrl)")
             guard let url = URL(string: episode.streamUrl) else { return }
             let playerItem = AVPlayerItem(url: url)
             player.replaceCurrentItem(with: playerItem)
@@ -53,5 +54,11 @@ struct Player {
         let fifteenSeconds = CMTimeMake(value: delta, timescale: 1)
         let seekTime = CMTimeAdd(player.currentTime(), fifteenSeconds)
         player.seek(to: seekTime)
+    }
+    
+    static func playAudioClip(url: URL, player: AVPlayer) {
+        let playerItem = AVPlayerItem(url: url)
+        player.replaceCurrentItem(with: playerItem)
+        player.play()
     }
 }
