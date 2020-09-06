@@ -30,4 +30,7 @@ enum PaletteColour: String {
     static let colors1 = [ PaletteColour.pink.colour, PaletteColour.darkBlue.colour, PaletteColour.aqua.colour]
     
     static let colors2 = [PaletteColour.lightBlue.colour, PaletteColour.lightGreen.colour, PaletteColour.peach.colour]
+    
+    static let gradColor1 = colors1.randomElement()
+    static let gradColor2 = colors2.randomElement()
 }

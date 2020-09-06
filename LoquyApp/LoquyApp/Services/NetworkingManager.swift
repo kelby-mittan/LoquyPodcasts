@@ -25,6 +25,12 @@ class NetworkingManager: ObservableObject {
         }
     }
     
+    @Published var isShowAlert = Bool() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
     func updatePodcasts(forSearch: String) {
         ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { (podcasts) in
             DispatchQueue.main.async {
@@ -39,5 +45,9 @@ class NetworkingManager: ObservableObject {
                 self.episodes = episodes
             }
         }
+    }
+    
+    func updateShowAlert(showAlert: Bool) {
+        self.isShowAlert.toggle()
     }
 }

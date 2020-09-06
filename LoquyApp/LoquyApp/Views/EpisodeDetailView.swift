@@ -17,6 +17,9 @@ struct EpisodeDetailView: View {
     let artwork: String
 //    let isLocalImage: Bool
     
+//    @ObservedObject private var networkManager = NetworkingManager()
+    
+    @State var showAlert = false
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
             RemoteImage(url: episode.imageUrl ?? "")
@@ -28,6 +31,11 @@ struct EpisodeDetailView: View {
             ControlView(episode: episode)
             DescriptionView(episode: episode)
             FavoriteView(episode: episode, artwork: artwork)
+            
+//                .blur(radius: networkManager.isShowAlert ? 30 : 0)
+//            if networkManager.isShowAlert {
+//                TimeStampAlertView()
+//            }
         }
         .navigationBarTitle("", displayMode: .inline)
     }
@@ -145,6 +153,8 @@ struct FavoriteView: View {
     let artwork: String
     @State var isSaved = false
     @State var saveText = ""
+    
+    @State private var showAlert = false
     
     var body: some View {
         NavigationLink(destination: Text("Add to Favorites")) {

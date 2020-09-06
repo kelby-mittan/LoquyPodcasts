@@ -12,6 +12,8 @@ import MediaPlayer
 
 struct AudioTrim {
     
+    // https://www.rockhoppertech.com/blog/ios-trimming-audio-files/#:~:text=One%20way%20to%20trim%20an,in%20the%20soundFileURL%20instance%20variable.
+    
     static func exportAsset(asset: AVAsset, fileName: String, stream: String) {
         
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -162,4 +164,12 @@ struct AudioTrim {
         return newRecordFileName
     }
 
+}
+
+extension FileManager {
+    class func getAppFolderURL() -> URL? {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
 }

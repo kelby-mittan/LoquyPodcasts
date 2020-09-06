@@ -29,6 +29,7 @@
 		0270947C25031152009E0BF5 /* FavoritesVCWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947B25031152009E0BF5 /* FavoritesVCWrapper.swift */; };
 		0270947E250403F9009E0BF5 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947D250403F9009E0BF5 /* UserDefaults.swift */; };
 		0270948025054A75009E0BF5 /* AudioTrim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947F25054A75009E0BF5 /* AudioTrim.swift */; };
+		0270948225058952009E0BF5 /* TimeStampAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270948125058952009E0BF5 /* TimeStampAlertView.swift */; };
 		029955C624F32C0E00479318 /* CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C524F32C0E00479318 /* CMTime.swift */; };
 		029955C824F339D200479318 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C724F339D100479318 /* ControlView.swift */; };
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
@@ -83,6 +84,7 @@
 		0270947B25031152009E0BF5 /* FavoritesVCWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesVCWrapper.swift; sourceTree = "<group>"; };
 		0270947D250403F9009E0BF5 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		0270947F25054A75009E0BF5 /* AudioTrim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTrim.swift; sourceTree = "<group>"; };
+		0270948125058952009E0BF5 /* TimeStampAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStampAlertView.swift; sourceTree = "<group>"; };
 		029955C524F32C0E00479318 /* CMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTime.swift; sourceTree = "<group>"; };
 		029955C724F339D100479318 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
 		02B5687C24C4DBB6004D5C6D /* LoquyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoquyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,6 +179,7 @@
 				02272D7424C91E5F007548C3 /* LabelViews.swift */,
 				02272D8024C9FBF4007548C3 /* RemoteImage.swift */,
 				029955C724F339D100479318 /* ControlView.swift */,
+				0270948125058952009E0BF5 /* TimeStampAlertView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -292,10 +295,10 @@
 		02B568AF24C4E29C004D5C6D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */,
 				02B568B624C4F299004D5C6D /* Podcast.swift */,
 				02272D8224CA3CD6007548C3 /* Episode.swift */,
 				0226FCC924D2300300B5B03A /* Loquy.swift */,
+				02B568B024C4E3C9004D5C6D /* DummyPodcast.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 				0270948025054A75009E0BF5 /* AudioTrim.swift in Sources */,
 				0270947725030889009E0BF5 /* PodcastCell.swift in Sources */,
 				0270947C25031152009E0BF5 /* FavoritesVCWrapper.swift in Sources */,
+				0270948225058952009E0BF5 /* TimeStampAlertView.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
 				02272D8524CA82EB007548C3 /* MoreCastsView.swift in Sources */,
 				02B568B124C4E3C9004D5C6D /* DummyPodcast.swift in Sources */,
