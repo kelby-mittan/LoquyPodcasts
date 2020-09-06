@@ -27,16 +27,18 @@ extension UserDefaults {
     }
     
     func saveTheEpisode(episode: Episode) {
-            do {
-                var episodes = savedEpisodes()
-                episodes.insert(episode, at: 0)
-                let data = try JSONEncoder().encode(episodes)
-                UserDefaults.standard.set(data, forKey: UserDefaults.favoriteKey)
-                
-            } catch let encodeErr {
-                print("Could not encode episode:", encodeErr)
-            }
+        do {
+            var episodes = savedEpisodes()
+            episodes.insert(episode, at: 0)
+            let data = try JSONEncoder().encode(episodes)
+            UserDefaults.standard.set(data, forKey: UserDefaults.favoriteKey)
+            
+        } catch let encodeErr {
+            print("Could not encode episode:", encodeErr)
         }
+    }
+    
+    
     
     func deleteEpisode(episode: Episode) {
         let episodes = savedEpisodes()
@@ -50,15 +52,17 @@ extension UserDefaults {
         }
     }
     
-    func deletePodcast(episode: Episode) {
-        let episodes = savedEpisodes()
-        
-        let filteredEpisodes = episodes.filter { (eps) -> Bool in
-            return eps.id != episode.id && eps.description != episode.description
-        }
-        
-        let data = try? NSKeyedArchiver.archivedData(withRootObject: filteredEpisodes, requiringSecureCoding: false)
-        UserDefaults.standard.set(data, forKey: UserDefaults.favoriteKey)
+    func getPodcastArt() -> [String] {
+        return UserDefaults.standard.object(forKey: UserDefaults.pCastKey) as? [String] ?? []
     }
     
+    func setPodcastArt(_ pCasts: [String]) {
+        UserDefaults.standard.set(pCasts, forKey: UserDefaults.pCastKey)
+    }
+    
+    func deletePodcastArt(_ pCast: String) {
+        let pCasts = getPodcastArt()
+        let filteredPCasts = pCasts.filter { $0 != pCast }
+        UserDefaults.standard.set(filteredPCasts, forKey: UserDefaults.pCastKey)
+    }
 }

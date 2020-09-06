@@ -19,26 +19,50 @@ class FavoritesViewController: UIViewController {
     
     private var collectionView: UICollectionView!
     
-    typealias DataSource = UICollectionViewDiffableDataSource<SectionKind, String>
+    typealias DataSource = UICollectionViewDiffableDataSource<SectionKind,String>
     private var dataSource: DataSource!
     
     private var subscriptions: Set<AnyCancellable> = []
     
-    let podcasts = Array(Set(UserDefaults.standard.savedEpisodes().map { $0.imageUrl ?? ""}))
+//    let podcasts = Array(Set(UserDefaults.standard.savedEpisodes().map { $0.imageUrl ?? ""}))
+    let heyNow = "hey$now"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Favorite Casts"
         configureCollectionView()
         configureDataSource()
-        updateSnapshot(with: podcasts.reversed())
-        print("USER D EPS: \(UserDefaults.standard.savedEpisodes().count)")
-        dump(podcasts)
+        updateSnapshot(with: Array(Set(nonDuplicatedCasts())))
+//        print("USER D EPS: \(UserDefaults.standard.savedEpisodes().count)")
+//        dump(podcasts)
+//        dump(getArtArray())
+        dump(getAuthorArray())
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         print("\(UserDefaults.standard.savedEpisodes().count)")
+    }
+    
+    private func nonDuplicatedCasts() -> [String] {
+        var artAndAuthors = [String]()
+        var authors = [String]()
+        let episodes = UserDefaults.standard.savedEpisodes()
+        for episode in episodes {
+            if !authors.contains(episode.author) {
+                artAndAuthors.append((episode.imageUrl ?? "") + heyNow + episode.author)
+                authors.append(episode.author)
+            }
+        }
+        return artAndAuthors
+    }
+    
+    private func getArtArray() -> [String] {
+        return nonDuplicatedCasts().map { $0.components(separatedBy: heyNow)[0] }
+    }
+    
+    private func getAuthorArray() -> [String] {
+        return nonDuplicatedCasts().map { $0.components(separatedBy: heyNow)[1] }
     }
     
     private func updateSnapshot(with episodes: [String]) {
@@ -109,8 +133,12 @@ class FavoritesViewController: UIViewController {
                 fatalError("could not dequeue Podcast Cell")
             }
             cell.imageView.kf.indicatorType = .activity
-            cell.imageView.kf.setImage(with: URL(string: episodeArt ))
-//            cell.imageView.image = UIImage(named: podcast.image)
+            print(episodeArt)
+            if episodeArt.count > 12 {
+                cell.imageView.kf.setImage(with: URL(string: episodeArt.components(separatedBy: self.heyNow)[0] ))
+            } else {
+                cell.imageView.image = UIImage(named: episodeArt)
+            }
             cell.imageView.contentMode = .scaleToFill
             return cell
         })
@@ -128,7 +156,7 @@ extension FavoritesViewController: UICollectionViewDelegate {
             return
         }
         
-        goToEpisodesList(episodeArt: episodeArt)
+        goToEpisodesList(episodeArt: episodeArt.components(separatedBy: heyNow)[1])
         print(episodeArt)
     }
     
@@ -144,7 +172,7 @@ extension FavoritesViewController: UICollectionViewDelegate {
 //            hostView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 //            hostView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 //        ])
-        let childView = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true))
+        let childView = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true, artWork: episodeArt))
         addChild(childView)
         childView.view.frame = view.bounds
         view.addSubview(childView.view)

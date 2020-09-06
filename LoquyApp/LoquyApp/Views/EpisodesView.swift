@@ -15,6 +15,7 @@ struct EpisodesView: View {
     let title: String
     let podcastFeed: String?
     let isSaved: Bool
+    let artWork: String
     
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
@@ -24,7 +25,7 @@ struct EpisodesView: View {
         VStack {
             List(networkManager.episodes, id: \.self) { episode in
                 
-                NavigationLink(destination: EpisodeDetailView(episode: episode)) {
+                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: self.artWork)) {
                     
                     ZStack(alignment: .leading) {
                         LinearGradient(gradient: Gradient(colors: [self.gradColor1!, self.gradColor2!]), startPoint: .top, endPoint: .bottomTrailing)
@@ -69,7 +70,7 @@ struct EpisodesView: View {
 //                    self.getPodcasts()
 //                }
                 
-                self.isSaved ? self.networkManager.episodes = UserDefaults.standard.savedEpisodes().filter { $0.imageUrl == self.title } : self.getPodcasts()
+                self.isSaved ? self.networkManager.episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == self.title } : self.getPodcasts()
             })
             .environment(\.horizontalSizeClass, .regular)
             .navigationBarTitle(title)
@@ -84,6 +85,6 @@ struct EpisodesView: View {
 
 struct EpisodesView_Previews: PreviewProvider {
     static var previews: some View {
-        EpisodesView(title: "Yang Speaks", podcastFeed: "https://feeds.megaphone.fm/yang-speaks", isSaved: false)
+        EpisodesView(title: "Yang Speaks", podcastFeed: "https://feeds.megaphone.fm/yang-speaks", isSaved: false, artWork: "")
     }
 }

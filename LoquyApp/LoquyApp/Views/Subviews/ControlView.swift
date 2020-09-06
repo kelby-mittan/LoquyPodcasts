@@ -16,7 +16,7 @@ struct ControlView: View {
     
     let episode: Episode
     
-    @State var width : CGFloat = 30
+    @State var width : CGFloat = 10
     @State var playing = true
     @State var isFirstPlay = false
     @State var currentTime: String = "0:00"
@@ -28,7 +28,6 @@ struct ControlView: View {
         return avPlayer
     }()
     
-    var recordButton: UIButton!
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
     
@@ -63,7 +62,7 @@ struct ControlView: View {
                             
                             self.player.seek(to: self.capsuleDragged(value.location.x))
                             
-                        }))                    .padding([.top,.leading,.trailing])
+                        })).padding([.top,.leading,.trailing])
                 
             }
             
@@ -105,15 +104,15 @@ struct ControlView: View {
                 
             }
             Button(action: {
-                self.isRecording.toggle()
-                
-                print(self.isRecording)
-                
-                if self.isRecording {
-                    
-                } else {
-                    self.audioRecorder.record(forDuration: 60)
-                }
+//                self.isRecording.toggle()
+//
+//                print(self.isRecording)
+//
+//                if self.isRecording {
+//
+//                } else {
+//                    self.audioRecorder.record(forDuration: 60)
+//                }
             }) {
                 Image(systemName: "recordingtape").font(.largeTitle)
             }

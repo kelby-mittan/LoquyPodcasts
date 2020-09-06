@@ -14,6 +14,8 @@ import MediaPlayer
 struct EpisodeDetailView: View {
     
     let episode: Episode
+    let artwork: String
+//    let isLocalImage: Bool
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: true) {
@@ -25,7 +27,7 @@ struct EpisodeDetailView: View {
             
             ControlView(episode: episode)
             DescriptionView(episode: episode)
-            FavoriteView(episode: episode)
+            FavoriteView(episode: episode, artwork: artwork)
         }
         .navigationBarTitle("", displayMode: .inline)
     }
@@ -80,7 +82,6 @@ struct DescriptionView: View {
             let substring = word[..<index2]
             word = String(substring)
         }
-        
         word = word.replacingOccurrences(of: "</p>", with: "\n\n")
         word = word.replacingOccurrences(of: "<p>", with: "")
         word = word.replacingOccurrences(of: "&nbsp", with: "")
@@ -141,6 +142,7 @@ struct GuestView: View {
 struct FavoriteView: View {
     
     let episode: Episode
+    let artwork: String
     @State var isSaved = false
     @State var saveText = ""
     
@@ -163,9 +165,15 @@ struct FavoriteView: View {
                         episodes.append(self.episode)
                         self.saveText = "Remove Episode"
                         UserDefaults.standard.saveTheEpisode(episode: self.episode)
+                        
+                        var pCasts = UserDefaults.standard.getPodcastArt()
+                        pCasts.append(self.artwork)
+                        UserDefaults.standard.setPodcastArt(pCasts)
+                        
                     } else {
                         self.saveText = "Save Episode"
                         UserDefaults.standard.deleteEpisode(episode: self.episode)
+                        UserDefaults.standard.deletePodcastArt(self.artwork)
                     }
                     self.isSaved.toggle()
             }

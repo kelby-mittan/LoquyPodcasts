@@ -40,7 +40,7 @@ struct GridItemView: View {
     var body: some View {
         HStack {
             
-            NavigationLink(destination: EpisodesView(title: cast1.title, podcastFeed: cast1.feedUrl, isSaved: false)) {
+            NavigationLink(destination: EpisodesView(title: cast1.title, podcastFeed: cast1.feedUrl, isSaved: false, artWork: cast1.image)) {
                 
                 VStack {
                     Text(cast1.category)
@@ -60,7 +60,7 @@ struct GridItemView: View {
             
             Spacer()
             
-            NavigationLink(destination: EpisodesView(title: cast2.title, podcastFeed: cast2.feedUrl, isSaved: false)) {
+            NavigationLink(destination: EpisodesView(title: cast2.title, podcastFeed: cast2.feedUrl, isSaved: false, artWork: cast2.image)) {
                 VStack {
                     Text(cast2.category)
                         .font(.subheadline)

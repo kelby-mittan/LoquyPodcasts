@@ -36,7 +36,7 @@ struct TopPodcastsView: View {
     var body: some View {
         VStack(alignment: .leading) {
             ForEach(podcasts, id: \.id) { pcast in
-                NavigationLink(destination: EpisodesView(title: pcast.title, podcastFeed: pcast.feedUrl, isSaved: false)) {
+                NavigationLink(destination: EpisodesView(title: pcast.title, podcastFeed: pcast.feedUrl, isSaved: false, artWork: pcast.image)) {
                     
                     HStack(alignment: .top) {
                         Image(pcast.image)
