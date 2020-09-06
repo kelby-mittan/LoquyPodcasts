@@ -17,27 +17,39 @@ struct EpisodeDetailView: View {
     let artwork: String
 //    let isLocalImage: Bool
     
-//    @ObservedObject private var networkManager = NetworkingManager()
+    @ObservedObject private var networkManager = NetworkingManager()
     
     @State var showAlert = false
+    @State var text = "0:00:63"
     var body: some View {
-        ScrollView(.vertical, showsIndicators: true) {
-            RemoteImage(url: episode.imageUrl ?? "")
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 250, height: 250)
-                .cornerRadius(12)
-                .padding()
-            
-            ControlView(episode: episode)
-            DescriptionView(episode: episode)
-            FavoriteView(episode: episode, artwork: artwork)
-            
-//                .blur(radius: networkManager.isShowAlert ? 30 : 0)
-//            if networkManager.isShowAlert {
-//                TimeStampAlertView()
+//        ZStack {
+            ScrollView(.vertical, showsIndicators: true) {
+                RemoteImage(url: episode.imageUrl ?? "")
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 250, height: 250)
+                    .cornerRadius(12)
+                    .padding()
+//                    .onTapGesture {
+//                        self.showAlert.toggle()
+//                        print(self.$showAlert)
+//                }
+                
+                ControlView(episode: episode)
+                DescriptionView(episode: episode)//.offset(x: 0, y: -20)
+                FavoriteView(episode: episode, artwork: artwork)
+                
+                    
 //            }
-        }
-        .navigationBarTitle("", displayMode: .inline)
+            
+//            .blur(radius: showAlert ? 30 : 0)
+//            if showAlert {
+//                TimeStampAlertView(showAlert: $showAlert, timeStamp: $text)
+//            }
+            
+        }.onAppear(perform: {
+            self.showAlert = self.networkManager.isShowAlert
+        })
+            .navigationBarTitle("", displayMode: .inline)
     }
 }
 
@@ -75,7 +87,7 @@ struct DescriptionView: View {
             
             
         }
-        .padding()
+        .padding([.leading,.trailing,.bottom])
     }
     
     func getOnlyDescription(_ str: String) -> String {

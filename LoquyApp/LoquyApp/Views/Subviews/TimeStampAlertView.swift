@@ -27,7 +27,7 @@ struct TimeStampAlertView: View {
                     Spacer()
                     Button(action: {
                         self.showAlert.toggle()
-//                        self.networkManager.isShowAlert.toggle()
+//                        self.networkManager.updateShowAlert(showAlert: self.showAlert)
                     }, label: {
                                                 
                         Image(systemName: "xmark")
@@ -37,7 +37,25 @@ struct TimeStampAlertView: View {
                     }).padding(.all,10)
                     
                 }
+                
+                PCastHeaderLabelView(label: "Save this time?")
+                    .padding(.bottom, 5)
                 PCastHeaderLabelView(label: timeStamp)
+                
+                Button(action: {
+                    self.showAlert.toggle()
+                    
+                }) {
+                    Text("yes")
+                        .fontWeight(.bold)
+                        .frame(width: 120,height: 40)
+                        .foregroundColor(Color.purple)
+                        .background(PaletteColour.offWhite.colour)
+                        .clipShape(Capsule())
+                        .padding()
+                }
+//                .padding([.leading,.top],20)
+                
                 Spacer()
             }
         }
@@ -47,19 +65,5 @@ struct TimeStampAlertView: View {
         
     }
     
-}
-
-class TimeStampViewModel: ObservableObject {
-    @Published var textValue: String = "Hello"
-    @Published var enteredTextValue: String = "" {
-        didSet {
-            checkIfTextsMatch()
-        }
-    }
-    @Published var textsMatch: Bool = false
-
-    func checkIfTextsMatch() {
-        self.textsMatch = textValue == enteredTextValue
-    }
 }
 

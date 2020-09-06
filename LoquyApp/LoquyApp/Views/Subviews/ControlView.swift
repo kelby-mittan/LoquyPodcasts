@@ -54,7 +54,7 @@ struct ControlView: View {
                 Capsule().fill(Color.blue).frame(width: self.width, height: 8)
                     .gesture(DragGesture()
                         .onChanged({ (value) in
-                            
+                            self.player.pause()
                             let x = value.location.x
                             let maxVal = UIScreen.main.bounds.width - 30
                             let minVal: CGFloat = 10
@@ -70,9 +70,9 @@ struct ControlView: View {
                             print("width val is : \(self.width)")
                             
                         }).onEnded({ (value) in
-                            
                             self.player.seek(to: self.capsuleDragged(value.location.x))
-                            
+                            self.player.play()
+                            self.playing = true
                         })).padding([.top,.leading,.trailing])
                 
             }
@@ -115,15 +115,25 @@ struct ControlView: View {
                 
             }
             HStack {
-                
+//                Spacer()
                 Button(action: {
                     self.showAlert.toggle()
-//                    self.networkManager.isShowAlert.toggle()
+//                    self.networkManager.updateShowAlert(showAlert: self.showAlert)
 //                    print(self.networkManager.isShowAlert)
                 }) {
-                    Text("ADD")
+//                    Image(systemName: "timer").font(.largeTitle)
+                    Text("Time Stamp")
+                        .fontWeight(.medium)
+                        .frame(width: 120,height: 40)
+                        .foregroundColor(.white)
+                        .background(Color.purple)
+                        .clipShape(Capsule())
+                        .padding()
                 }
-                
+                .animation(.spring())
+                .buttonStyle(PlainButtonStyle())
+                .padding([.leading,.top],20)
+                Spacer()
                 Button(action: {
                     
     //                guard let streamURL = URL(string: self.episode.streamUrl) else {
@@ -136,15 +146,23 @@ struct ControlView: View {
 //                    Text("Coming Soon")
                     
                 }) {
-                    Image(systemName: "recordingtape").font(.largeTitle)
-                    
-                    
+//                    Image(systemName: "recordingtape").font(.largeTitle)
+                    Text("Record Clip")
+                        .fontWeight(.medium)
+                        .frame(width: 120,height: 40)
+                        .foregroundColor(.white)
+                        .background(Color.purple)
+                        .clipShape(Capsule())
+                        .padding()
                 }
-                    .padding(.top,25)
+                .padding([.top,.trailing],20)
+                Spacer()
             }
+            .padding([.leading,.trailing])
             .blur(radius: showAlert ? 30 : 0)
             if showAlert {
                 TimeStampAlertView(showAlert: $showAlert, timeStamp: $currentTime)
+                .offset(x: 0, y: -70)
             }
             
         }
@@ -197,7 +215,7 @@ struct ControlView: View {
         let durationTime = self.player.currentItem?.duration
         guard let dt = durationTime else { return ("0:00","0:00") }
         durationLabel = dt.toDisplayString()
-        return (currentTime,durationLabel)
+        return ("",durationLabel)
     }
     
 
