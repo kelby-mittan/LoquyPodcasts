@@ -57,14 +57,11 @@ struct EpisodeTimesView: View {
             }
         }
     }
-    @discardableResult
-    func getTimes() -> [String] {
-        //        networkManager.timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
-        //        networkManager.loadTimeStamps(for: episode)
-//        timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
-        
-        return UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
-    }
+    
+//    @discardableResult
+//    func getTimes() -> [String] {
+//        return UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
+//    }
     
     func loadTimes(episode: Episode) {
         networkManager.loadTimeStamps(for: self.episode)

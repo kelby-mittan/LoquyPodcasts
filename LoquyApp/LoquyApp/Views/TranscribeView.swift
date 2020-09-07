@@ -27,7 +27,6 @@ struct TranscribeView: View {
             
             HStack {
                 PodcastPosterView(podcast: DummyPodcast.podcasts[6], width: 100, height: 100)
-                //                    .padding(.leading)
                 Spacer()
                 
                 Button(action: {
@@ -117,32 +116,6 @@ struct TranscribeView: View {
                     
                 }
             }
-            
-            
-//            Group {
-//                if isTranscribed {
-//
-//                    MultilineTextField("", text: $transcription, onCommit: {
-//                        print("Final text: \(self.transcription)")
-//                    })
-//                        .padding()
-//
-//                    Button(action: {
-//                        self.isTranscribed = false
-//                    }) {
-//                        Text("Save Loquy")
-//                            .fontWeight(.heavy)
-//                            .padding()
-//                            .frame(width: UIScreen.main.bounds.width - 88)
-//                            .foregroundColor(.white)
-//                            .background(Color.purple)
-//                            .clipShape(Capsule())
-//
-//                            .padding()
-//                    }
-//                }
-//            }
-            
             
         }
         .padding(.top, 20)

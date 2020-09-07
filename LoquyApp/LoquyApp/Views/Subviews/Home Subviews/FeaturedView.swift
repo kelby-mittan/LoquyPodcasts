@@ -28,10 +28,6 @@ struct FeaturedView: View {
                                     .renderingMode(.original)
                                     .frame(width: UIScreen.main.bounds.width - 80, height: 240)
                                     .cornerRadius(12)
-                                
-//                                Rectangle()
-//                                    .foregroundColor(.black)
-//                                    .opacity(0.0)
                             }
                         }
                                                 

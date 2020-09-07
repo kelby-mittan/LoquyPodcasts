@@ -64,11 +64,6 @@ struct EpisodesView: View {
                 
             }.onAppear(perform: {
                 UITableView.appearance().separatorStyle = .none
-//                if self.isSaved {
-//                    self.networkManager.episodes = UserDefaults.standard.savedEpisodes().filter { $0.imageUrl == self.title }
-//                } else {
-//                    self.getPodcasts()
-//                }
                 
                 self.isSaved ? self.networkManager.episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == self.title } : self.getPodcasts()
             })

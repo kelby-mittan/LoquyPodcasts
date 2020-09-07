@@ -57,8 +57,6 @@ struct TopPodcastsView: View {
                                 .font(.subheadline)
                                 .fontWeight(.light)
                                 .padding(.bottom, 0)
-                            
-                            
                             HStack {
                                 Text(pcast.category)
                                     .foregroundColor(.secondary)

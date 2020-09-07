@@ -24,7 +24,6 @@ class FavoritesViewController: UIViewController {
     
     private var subscriptions: Set<AnyCancellable> = []
     
-//    let podcasts = Array(Set(UserDefaults.standard.savedEpisodes().map { $0.imageUrl ?? ""}))
     let heyNow = "hey$now"
     
     override func viewDidLoad() {
@@ -33,9 +32,6 @@ class FavoritesViewController: UIViewController {
         configureCollectionView()
         configureDataSource()
         updateSnapshot(with: Array(Set(nonDuplicatedCasts())))
-//        print("USER D EPS: \(UserDefaults.standard.savedEpisodes().count)")
-//        dump(podcasts)
-//        dump(getArtArray())
         dump(getAuthorArray())
     }
     
@@ -161,17 +157,6 @@ extension FavoritesViewController: UICollectionViewDelegate {
     }
     
     func goToEpisodesList(episodeArt: String) {
-//        let host = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true))
-//
-//        guard let hostView = host.view else { return }
-//        hostView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        NSLayoutConstraint.activate([
-//            hostView.topAnchor.constraint(equalTo: view.topAnchor),
-//            hostView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            hostView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            hostView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-//        ])
         let childView = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true, artWork: episodeArt))
         addChild(childView)
         childView.view.frame = view.bounds

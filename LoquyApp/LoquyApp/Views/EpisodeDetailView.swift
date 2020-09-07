@@ -15,7 +15,6 @@ struct EpisodeDetailView: View {
     
     let episode: Episode
     let artwork: String
-    //    let isLocalImage: Bool
     
     @ObservedObject private var networkManager = NetworkingManager()
     
@@ -30,20 +29,12 @@ struct EpisodeDetailView: View {
     }()
     
     var body: some View {
-        //        ZStack {
         ScrollView(.vertical, showsIndicators: true) {
             RemoteImage(url: episode.imageUrl ?? "")
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 250, height: 250)
                 .cornerRadius(12)
                 .padding([.leading,.trailing,.top])
-                .onTapGesture {
-                    //                        self.showAlert.toggle()
-                    //                        print(self.$showAlert)
-                    //                        dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
-                    
-                    //                dump(self.networkManager.timeStamps)
-            }
             
             ControlView(episode: episode, player: player, networkManager: networkManager)
             
@@ -54,9 +45,7 @@ struct EpisodeDetailView: View {
             FavoriteView(episode: episode, artwork: artwork)
             
             
-        }.onAppear(perform: {
-            self.showAlert = self.networkManager.isShowAlert
-        })
+        }
         .navigationBarTitle("", displayMode: .inline)
     }
     
@@ -68,16 +57,7 @@ struct EpisodeDetailView: View {
         return CGFloat(percentage)
     }
     
-    //    func loadTimeStamps(episode: Episode) {
-    //        networkManager.loadTimeStamps(for: episode)
-    //    }
-    
-    
 }
-
-
-
-
 
 struct GuestView: View {
     let podcast: DummyPodcast
@@ -120,10 +100,7 @@ struct GuestView: View {
     }
     
     func seeGuestInfoButton() {
-        print("Guest Info")
-        ITunesAPI.shared.fetchPodcasts(searchText: "joe+rogan") { (podcasts) in
-            dump(podcasts)
-        }
+        
     }
 }
 
