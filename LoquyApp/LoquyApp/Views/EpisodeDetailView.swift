@@ -45,9 +45,9 @@ struct EpisodeDetailView: View {
                     //                dump(self.networkManager.timeStamps)
             }
             
-            ControlView(episode: episode, player: player)
+            ControlView(episode: episode, player: player, networkManager: networkManager)
             
-            EpisodeTimesView(episode: episode, player: player)
+            EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
             
             
             DescriptionView(episode: episode)//.offset(x: 0, y: -20)

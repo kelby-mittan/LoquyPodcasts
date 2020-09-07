@@ -13,8 +13,9 @@ struct TimeStampAlertView: View {
     @Binding var showAlert: Bool
     @Binding var time: String
     let episode: Episode
-//    @ObservedObject private var networkManager = NetworkingManager()
+    @ObservedObject var networkManager: NetworkingManager
     
+    @State var timeStamps = [TimeStamp]()
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
     
@@ -28,9 +29,9 @@ struct TimeStampAlertView: View {
                     Spacer()
                     Button(action: {
                         self.showAlert.toggle()
-//                        self.networkManager.updateShowAlert(showAlert: self.showAlert)
+                        //                        self.networkManager.updateShowAlert(showAlert: self.showAlert)
                     }, label: {
-                                                
+                        
                         Image(systemName: "xmark")
                             .resizable()
                             .frame(width: 20, height: 20)
@@ -49,16 +50,20 @@ struct TimeStampAlertView: View {
                     var stamps = UserDefaults.standard.savedTimeStamps()
                     stamps.append(newTStamp)
                     UserDefaults.standard.saveTheTimeStamp(timeStamp: newTStamp)
+                    self.loadTimes(episode: self.episode)
+                    self.networkManager.timeStamps.append(newTStamp.time)
+                    
+                    
                 }) {
-                    Text("yes")
-                        .fontWeight(.bold)
-                        .frame(width: 120,height: 40)
-                        .foregroundColor(Color.purple)
-                        .background(PaletteColour.offWhite.colour)
-                        .clipShape(Capsule())
-                        .padding()
+                        Text("yes")
+                            .fontWeight(.bold)
+                            .frame(width: 120,height: 40)
+                            .foregroundColor(Color.purple)
+                            .background(PaletteColour.offWhite.colour)
+                            .clipShape(Capsule())
+                            .padding()
                 }
-//                .padding([.leading,.top],20)
+                //                .padding([.leading,.top],20)
                 
                 Spacer()
             }
@@ -69,5 +74,8 @@ struct TimeStampAlertView: View {
         
     }
     
+    func loadTimes(episode: Episode) {
+        networkManager.loadTimeStamps(for: episode)
+    }
 }
 

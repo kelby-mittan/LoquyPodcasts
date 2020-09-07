@@ -14,12 +14,16 @@ struct EpisodeTimesView: View {
     let episode: Episode
     let player: AVPlayer
     
+    @State var timeStamps = [String]()
+    
+    @ObservedObject var networkManager: NetworkingManager
+    
     var body: some View {
         Group {
             if UserDefaults.standard.savedEpisodes().contains(episode) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        ForEach(getTimes().sorted(), id:\.self) { time in
+                        ForEach(networkManager.timeStamps.sorted(), id:\.self) { time in
                             ZStack {
                                 Text(time)
                                     .font(.subheadline)
@@ -38,6 +42,7 @@ struct EpisodeTimesView: View {
                                 }
                                 
                                 UserDefaults.standard.deleteTimeStamp(timeStamp: tStamp)
+                                self.loadTimes(episode: self.episode)
                                 dump(tStamp)
                             }
                             .frame(width: 84, height: 40)
@@ -45,14 +50,23 @@ struct EpisodeTimesView: View {
                             .cornerRadius(10)
                         }
                     }.padding([.leading,.trailing])
+                }.onAppear {
+                    self.loadTimes(episode: self.episode)
+//                    self.timeStamps = self.networkManager.timeStamps
                 }
             }
         }
     }
-    
+    @discardableResult
     func getTimes() -> [String] {
         //        networkManager.timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
         //        networkManager.loadTimeStamps(for: episode)
+//        timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
+        
         return UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
+    }
+    
+    func loadTimes(episode: Episode) {
+        networkManager.loadTimeStamps(for: self.episode)
     }
 }

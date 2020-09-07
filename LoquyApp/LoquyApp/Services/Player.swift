@@ -8,7 +8,7 @@
 
 import Foundation
 import AVKit
-//import MediaPlayer
+import MediaPlayer
 
 struct Player {
     
@@ -61,4 +61,33 @@ struct Player {
         player.replaceCurrentItem(with: playerItem)
         player.play()
     }
+    
+    /// Function determines the AVPlayer's current playing time and its percentage of the full podcast duration
+    /// - Returns: CGFloat representing where the Capsule should be on the screen
+    static func updateTimeCapsule(player: AVPlayer) -> CGFloat {
+        let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
+        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
+        let percentage = currentTimeSeconds / durationSeconds
+        
+        return CGFloat(percentage)
+    }
+    
+    /// Function determines where to seek to within a podcast based on a capsule drag
+    /// - Parameter xVal: CGFloat determined from a Capsules x location
+    /// - Returns: A CMTime to be used when seeking a certain time in a podcast
+    @discardableResult
+    static func capsuleDragged(_ xVal: CGFloat, player: AVPlayer) -> CMTime {
+        //        let x = value.location.x
+        let screen = UIScreen.main.bounds.width - 30
+        let percentage = xVal / screen
+        
+        guard let duration = player.currentItem?.duration else { return CMTime(value: 0, timescale: 0) }
+        let durationInSeconds = CMTimeGetSeconds(duration)
+        let seekTimeInSeconds = Float64(percentage) * durationInSeconds
+        let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
+        
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = seekTimeInSeconds
+        return seekTime
+    }
+    
 }
