@@ -47,36 +47,7 @@ struct EpisodeDetailView: View {
             
             ControlView(episode: episode, player: player)
             
-            Group {
-                if UserDefaults.standard.savedEpisodes().contains(episode) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(getTimes().sorted(), id:\.self) { item in
-                                ZStack {
-                                    Text(item)
-                                        .font(.subheadline)
-                                        .fontWeight(.heavy)
-                                        .foregroundColor(Color.black)
-                                        .multilineTextAlignment(.center)
-                                        .padding(.top, 2)
-                                    
-                                }.onTapGesture {
-                                    print(item)
-                                    self.player.seek(to: item.getCMTime())
-                                }
-                                .onLongPressGesture {
-                                    print("Hello: \(item)")
-                                //                                    UserDefaults.standard.deleteTimeStamp(timeStamp: UserDefaults.standard.savedTimeStamps().filter { $0.time == item }.first!)
-                                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.time == item }.first!)
-                                }
-                                .frame(width: 84, height: 40)
-                                    .background(Color(.systemGray5))
-                                    .cornerRadius(10)
-                            }
-                        }.padding([.leading,.trailing])
-                    }
-                }
-            }
+            EpisodeTimesView(episode: episode, player: player)
             
             
             DescriptionView(episode: episode)//.offset(x: 0, y: -20)
@@ -101,70 +72,12 @@ struct EpisodeDetailView: View {
     //        networkManager.loadTimeStamps(for: episode)
     //    }
     
-    func getTimes() -> [String] {
-        //        networkManager.timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
-        //        networkManager.loadTimeStamps(for: episode)
-        return UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
-    }
+    
 }
 
 
 
-struct DescriptionView: View {
-    
-    let episode: Episode
-    
-    var body: some View {
-        VStack {
-            
-            HStack {
-                Text(episode.title)
-                    .font(.title)
-                    .fontWeight(.heavy)
-                    .padding(.top)
-                Spacer()
-            }
-            
-            HStack {
-                Text("Philosophy | Physics | Science")
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.leading)
-                    .padding(.top)
-                Spacer()
-            }
-            
-            HStack {
-                Text(getOnlyDescription(episode.description))
-                    .fontWeight(.bold)
-                Spacer()
-            }
-            .padding(.top)
-            
-            
-        }
-        .padding([.leading,.trailing,.bottom])
-    }
-    
-    func getOnlyDescription(_ str: String) -> String {
-        var word = str
-        
-        if let index = word.range(of: "\n\n")?.lowerBound {
-            let substring = word[..<index]
-            
-            word = String(substring)
-        }
-        if let index2 = word.range(of: "<a ")?.lowerBound {
-            let substring = word[..<index2]
-            word = String(substring)
-        }
-        word = word.replacingOccurrences(of: "</p>", with: "\n\n")
-        word = word.replacingOccurrences(of: "<p>", with: "")
-        word = word.replacingOccurrences(of: "&nbsp", with: "")
-        word = word.replacingOccurrences(of: "  ", with: "")
-        
-        return word
-    }
-}
+
 
 struct GuestView: View {
     let podcast: DummyPodcast
@@ -214,57 +127,7 @@ struct GuestView: View {
     }
 }
 
-struct FavoriteView: View {
-    
-    let episode: Episode
-    let artwork: String
-    @State var isSaved = false
-    @State var saveText = ""
-    
-    @State private var showAlert = false
-    
-    var body: some View {
-        NavigationLink(destination: Text("Add to Favorites")) {
-            
-            Text(saveText)
-                .fontWeight(.heavy)
-                .padding()
-                .frame(width: UIScreen.main.bounds.width - 88)
-                .foregroundColor(.white)
-                .background(Color.purple)
-                .clipShape(Capsule())
-                .padding()
-                .onTapGesture {
-                    
-                    
-                    if !self.isSaved {
-                        var episodes = UserDefaults.standard.savedEpisodes()
-                        episodes.append(self.episode)
-                        self.saveText = "Remove Episode"
-                        UserDefaults.standard.saveTheEpisode(episode: self.episode)
-                        
-                        var pCasts = UserDefaults.standard.getPodcastArt()
-                        pCasts.append(self.artwork)
-                        UserDefaults.standard.setPodcastArt(pCasts)
-                        
-                    } else {
-                        self.saveText = "Save Episode"
-                        UserDefaults.standard.deleteEpisode(episode: self.episode)
-                        UserDefaults.standard.deletePodcastArt(self.artwork)
-                    }
-                    self.isSaved.toggle()
-            }
-        }.onAppear {
-            if UserDefaults.standard.savedEpisodes().contains(self.episode) {
-                self.isSaved = true
-                self.saveText = "Remove Episode"
-            } else {
-                self.isSaved = false
-                self.saveText = "Save Episode"
-            }
-            
-        }
-        
-    }
-}
+
+
+
 

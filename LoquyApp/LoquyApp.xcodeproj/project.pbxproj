@@ -31,6 +31,9 @@
 		0270948025054A75009E0BF5 /* AudioTrim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947F25054A75009E0BF5 /* AudioTrim.swift */; };
 		0270948225058952009E0BF5 /* TimeStampAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270948125058952009E0BF5 /* TimeStampAlertView.swift */; };
 		027094842505AF2D009E0BF5 /* TimeStamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094832505AF2D009E0BF5 /* TimeStamp.swift */; };
+		027094882506ADB5009E0BF5 /* EpisodeTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094872506ADB5009E0BF5 /* EpisodeTimesView.swift */; };
+		0270948A2506AE36009E0BF5 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094892506AE36009E0BF5 /* DescriptionView.swift */; };
+		0270948C2506AE73009E0BF5 /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270948B2506AE73009E0BF5 /* FavoriteView.swift */; };
 		029955C624F32C0E00479318 /* CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C524F32C0E00479318 /* CMTime.swift */; };
 		029955C824F339D200479318 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C724F339D100479318 /* ControlView.swift */; };
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
@@ -87,6 +90,9 @@
 		0270947F25054A75009E0BF5 /* AudioTrim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTrim.swift; sourceTree = "<group>"; };
 		0270948125058952009E0BF5 /* TimeStampAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStampAlertView.swift; sourceTree = "<group>"; };
 		027094832505AF2D009E0BF5 /* TimeStamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStamp.swift; sourceTree = "<group>"; };
+		027094872506ADB5009E0BF5 /* EpisodeTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTimesView.swift; sourceTree = "<group>"; };
+		027094892506AE36009E0BF5 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
+		0270948B2506AE73009E0BF5 /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		029955C524F32C0E00479318 /* CMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTime.swift; sourceTree = "<group>"; };
 		029955C724F339D100479318 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
 		02B5687C24C4DBB6004D5C6D /* LoquyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoquyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -217,6 +223,9 @@
 			isa = PBXGroup;
 			children = (
 				029955C724F339D100479318 /* ControlView.swift */,
+				027094872506ADB5009E0BF5 /* EpisodeTimesView.swift */,
+				027094892506AE36009E0BF5 /* DescriptionView.swift */,
+				0270948B2506AE73009E0BF5 /* FavoriteView.swift */,
 				0270948125058952009E0BF5 /* TimeStampAlertView.swift */,
 			);
 			path = "Detail Subviews";
@@ -513,6 +522,7 @@
 				02272D7724C91EF5007548C3 /* TopPodcastsView.swift in Sources */,
 				02B568B524C4F02F004D5C6D /* ITunesAPI.swift in Sources */,
 				02272D8124C9FBF4007548C3 /* RemoteImage.swift in Sources */,
+				0270948C2506AE73009E0BF5 /* FavoriteView.swift in Sources */,
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
 				02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */,
 				02B568A824C4DD11004D5C6D /* HomeTabView.swift in Sources */,
@@ -520,6 +530,7 @@
 				02B568B924C4FA8D004D5C6D /* NetworkingManager.swift in Sources */,
 				02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */,
 				027094842505AF2D009E0BF5 /* TimeStamp.swift in Sources */,
+				0270948A2506AE36009E0BF5 /* DescriptionView.swift in Sources */,
 				02272D7924C91FF7007548C3 /* ListenToView.swift in Sources */,
 				02272D8324CA3CD6007548C3 /* Episode.swift in Sources */,
 				02B568B724C4F299004D5C6D /* Podcast.swift in Sources */,
@@ -534,6 +545,7 @@
 				0224B56924CBB37A0062E43F /* PaletteColour.swift in Sources */,
 				02272D7524C91E5F007548C3 /* LabelViews.swift in Sources */,
 				0270948025054A75009E0BF5 /* AudioTrim.swift in Sources */,
+				027094882506ADB5009E0BF5 /* EpisodeTimesView.swift in Sources */,
 				0270947725030889009E0BF5 /* PodcastCell.swift in Sources */,
 				0270947C25031152009E0BF5 /* FavoritesVCWrapper.swift in Sources */,
 				0270948225058952009E0BF5 /* TimeStampAlertView.swift in Sources */,
