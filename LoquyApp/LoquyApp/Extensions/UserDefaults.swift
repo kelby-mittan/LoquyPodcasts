@@ -12,6 +12,7 @@ extension UserDefaults {
     
     static let favoriteKey = "favoriteKey"
     static let pCastKey = "pCastKey"
+    static let timeStampKey = "timeStampKey"
     
     func savedEpisodes() -> [Episode] {
         guard let episodesData = data(forKey: UserDefaults.favoriteKey) else { return [] }
@@ -64,5 +65,44 @@ extension UserDefaults {
         let pCasts = getPodcastArt()
         let filteredPCasts = pCasts.filter { $0 != pCast }
         UserDefaults.standard.set(filteredPCasts, forKey: UserDefaults.pCastKey)
+    }
+    
+    func getTimeStamps() -> [TimeStamp] {
+        return UserDefaults.standard.object(forKey: UserDefaults.timeStampKey) as? [TimeStamp] ?? []
+    }
+    
+    func setTimeStamps(_ timeStamps: [TimeStamp]) {
+        UserDefaults.standard.set(timeStamps, forKey: UserDefaults.timeStampKey)
+    }
+    
+    func deleteTimeStamp(_ timeStamp: TimeStamp) {
+        let stamps = getTimeStamps()
+        let filteredStamps = stamps.filter { $0 != timeStamp }
+        UserDefaults.standard.set(filteredStamps, forKey: UserDefaults.timeStampKey)
+    }
+    
+    func savedTimeStamps() -> [TimeStamp] {
+        guard let stampsData = data(forKey: UserDefaults.timeStampKey) else { return [] }
+        
+        do {
+            let stamps = try JSONDecoder().decode([TimeStamp].self, from: stampsData)
+            return stamps
+        } catch let decodeErr {
+            print("Could not decode:", decodeErr)
+        }
+        
+        return []
+    }
+    
+    func saveTheTimeStamp(timeStamp: TimeStamp) {
+        do {
+            var stamps = savedTimeStamps()
+            stamps.insert(timeStamp, at: 0)
+            let data = try JSONEncoder().encode(stamps)
+            UserDefaults.standard.set(data, forKey: UserDefaults.timeStampKey)
+            
+        } catch let encodeErr {
+            print("Could not encode episode:", encodeErr)
+        }
     }
 }

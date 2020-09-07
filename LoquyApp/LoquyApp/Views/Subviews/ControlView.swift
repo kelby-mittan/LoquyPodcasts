@@ -30,7 +30,6 @@ struct ControlView: View {
     @State var showAlert = false
     
 //    let showTheAlert: Bool
-    
 //    @ObservedObject private var networkManager = NetworkingManager()
     
     let player: AVPlayer = {
@@ -143,7 +142,7 @@ struct ControlView: View {
     //                let asset = AVAsset(url: streamURL)
     //
     //                AudioTrim.exportAsset(asset: asset, fileName: "PLEASEWORK", stream: self.episode.streamUrl)
-//                    Text("Coming Soon")
+                    dump(UserDefaults.standard.savedTimeStamps())
                     
                 }) {
 //                    Image(systemName: "recordingtape").font(.largeTitle)
@@ -155,13 +154,14 @@ struct ControlView: View {
                         .clipShape(Capsule())
                         .padding()
                 }
+                .animation(.spring())
                 .padding([.top,.trailing],20)
                 Spacer()
             }
             .padding([.leading,.trailing])
             .blur(radius: showAlert ? 30 : 0)
             if showAlert {
-                TimeStampAlertView(showAlert: $showAlert, timeStamp: $currentTime)
+                TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode)
                 .offset(x: 0, y: -70)
             }
             

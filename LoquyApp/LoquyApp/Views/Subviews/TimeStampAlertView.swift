@@ -11,7 +11,8 @@ import SwiftUI
 struct TimeStampAlertView: View {
     
     @Binding var showAlert: Bool
-    @Binding var timeStamp: String
+    @Binding var time: String
+    let episode: Episode
 //    @ObservedObject private var networkManager = NetworkingManager()
     
     let gradColor1 = PaletteColour.colors1.randomElement()
@@ -34,17 +35,20 @@ struct TimeStampAlertView: View {
                             .resizable()
                             .frame(width: 20, height: 20)
                             .foregroundColor(.white)
-                    }).padding(.all,10)
+                    }).padding(.all,14)
                     
                 }
                 
                 PCastHeaderLabelView(label: "Save this time?")
                     .padding(.bottom, 5)
-                PCastHeaderLabelView(label: timeStamp)
+                PCastHeaderLabelView(label: time)
                 
                 Button(action: {
                     self.showAlert.toggle()
-                    
+                    let newTStamp = TimeStamp(episode: self.episode, time: self.time)
+                    var stamps = UserDefaults.standard.savedTimeStamps()
+                    stamps.append(newTStamp)
+                    UserDefaults.standard.saveTheTimeStamp(timeStamp: newTStamp)
                 }) {
                     Text("yes")
                         .fontWeight(.bold)
