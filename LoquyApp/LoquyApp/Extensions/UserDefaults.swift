@@ -94,7 +94,7 @@ extension UserDefaults {
     
     func deleteTimeStamp(timeStamp: TimeStamp) {
         let stamps = savedTimeStamps()
-        let filteredStamps = stamps.filter { $0.episode.title != timeStamp.episode.title }
+        let filteredStamps = stamps.filter { $0.time != timeStamp.time && $0.episode == timeStamp.episode }
         
         do {
             let data = try JSONEncoder().encode(filteredStamps)

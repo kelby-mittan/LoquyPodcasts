@@ -19,9 +19,9 @@ struct EpisodeTimesView: View {
             if UserDefaults.standard.savedEpisodes().contains(episode) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        ForEach(getTimes().sorted(), id:\.self) { item in
+                        ForEach(getTimes().sorted(), id:\.self) { time in
                             ZStack {
-                                Text(item)
+                                Text(time)
                                     .font(.subheadline)
                                     .fontWeight(.heavy)
                                     .foregroundColor(Color.black)
@@ -29,13 +29,16 @@ struct EpisodeTimesView: View {
                                     .padding(.top, 2)
                                 
                             }.onTapGesture {
-                                print(item)
-                                self.player.seek(to: item.getCMTime())
+//                                print(time)
+                                self.player.seek(to: time.getCMTime())
                             }
                             .onLongPressGesture {
-                                print("Hello: \(item)")
-                                //                                    UserDefaults.standard.deleteTimeStamp(timeStamp: UserDefaults.standard.savedTimeStamps().filter { $0.time == item }.first!)
-                                dump(UserDefaults.standard.savedTimeStamps().filter { $0.time == item }.first!)
+                                guard let tStamp = UserDefaults.standard.savedTimeStamps().filter({ $0.time == time && $0.episode == self.episode }).first else {
+                                    return
+                                }
+                                
+                                UserDefaults.standard.deleteTimeStamp(timeStamp: tStamp)
+                                dump(tStamp)
                             }
                             .frame(width: 84, height: 40)
                             .background(Color(.systemGray5))
