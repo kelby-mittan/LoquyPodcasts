@@ -31,6 +31,12 @@ class NetworkingManager: ObservableObject {
         }
     }
     
+    @Published var timeStamps = [String]() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
     func updatePodcasts(forSearch: String) {
         ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { (podcasts) in
             DispatchQueue.main.async {
@@ -44,6 +50,13 @@ class NetworkingManager: ObservableObject {
             DispatchQueue.main.async {
                 self.episodes = episodes
             }
+        }
+    }
+    
+    func loadTimeStamps(for episode: Episode) {
+        let timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
+        DispatchQueue.main.async {
+            self.timeStamps = timeStamps
         }
     }
     

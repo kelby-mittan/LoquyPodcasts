@@ -67,20 +67,6 @@ extension UserDefaults {
         UserDefaults.standard.set(filteredPCasts, forKey: UserDefaults.pCastKey)
     }
     
-    func getTimeStamps() -> [TimeStamp] {
-        return UserDefaults.standard.object(forKey: UserDefaults.timeStampKey) as? [TimeStamp] ?? []
-    }
-    
-    func setTimeStamps(_ timeStamps: [TimeStamp]) {
-        UserDefaults.standard.set(timeStamps, forKey: UserDefaults.timeStampKey)
-    }
-    
-    func deleteTimeStamp(_ timeStamp: TimeStamp) {
-        let stamps = getTimeStamps()
-        let filteredStamps = stamps.filter { $0 != timeStamp }
-        UserDefaults.standard.set(filteredStamps, forKey: UserDefaults.timeStampKey)
-    }
-    
     func savedTimeStamps() -> [TimeStamp] {
         guard let stampsData = data(forKey: UserDefaults.timeStampKey) else { return [] }
         
@@ -103,6 +89,18 @@ extension UserDefaults {
             
         } catch let encodeErr {
             print("Could not encode episode:", encodeErr)
+        }
+    }
+    
+    func deleteTimeStamp(timeStamp: TimeStamp) {
+        let stamps = savedTimeStamps()
+        let filteredStamps = stamps.filter { $0.episode.title != timeStamp.episode.title }
+        
+        do {
+            let data = try JSONEncoder().encode(filteredStamps)
+            UserDefaults.standard.set(data, forKey: UserDefaults.timeStampKey)
+        } catch let encodeErr {
+            print("Failed to encode episode:", encodeErr)
         }
     }
 }

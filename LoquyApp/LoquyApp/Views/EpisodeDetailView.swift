@@ -15,41 +15,70 @@ struct EpisodeDetailView: View {
     
     let episode: Episode
     let artwork: String
-//    let isLocalImage: Bool
+    //    let isLocalImage: Bool
     
     @ObservedObject private var networkManager = NetworkingManager()
     
     @State var showAlert = false
     @State var text = "0:00:63"
+    @State var times = [String]()
+    
     var body: some View {
-//        ZStack {
-            ScrollView(.vertical, showsIndicators: true) {
-                RemoteImage(url: episode.imageUrl ?? "")
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 250, height: 250)
-                    .cornerRadius(12)
-                    .padding()
-//                    .onTapGesture {
-//                        self.showAlert.toggle()
-//                        print(self.$showAlert)
-//                }
-                
-                ControlView(episode: episode)
-                DescriptionView(episode: episode)//.offset(x: 0, y: -20)
-                FavoriteView(episode: episode, artwork: artwork)
-                
+        //        ZStack {
+        ScrollView(.vertical, showsIndicators: true) {
+            RemoteImage(url: episode.imageUrl ?? "")
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 250, height: 250)
+                .cornerRadius(12)
+                .padding()
+                .onTapGesture {
+                    //                        self.showAlert.toggle()
+                    //                        print(self.$showAlert)
+                    //                        dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
                     
-//            }
+//                dump(self.networkManager.timeStamps)
+            }
             
-//            .blur(radius: showAlert ? 30 : 0)
-//            if showAlert {
-//                TimeStampAlertView(showAlert: $showAlert, timeStamp: $text)
-//            }
+            ControlView(episode: episode)
+            
+            ScrollView(.horizontal, showsIndicators: true) {
+                HStack {
+                    ForEach(getTimes(), id:\.self) { item in
+                        VStack {
+                            Image(systemName: "person.crop.circle")
+                                .font(.system(size: 60))
+                            Text(item)
+                                .fontWeight(.semibold)
+                                .multilineTextAlignment(.center)
+                                .padding(.top, 2)
+                            
+                        }
+                        .padding()
+                    }
+                }
+            }
+            
+            DescriptionView(episode: episode)//.offset(x: 0, y: -20)
+            FavoriteView(episode: episode, artwork: artwork)
+            
             
         }.onAppear(perform: {
             self.showAlert = self.networkManager.isShowAlert
+            //            self.loadTimeStamps(episode: self.episode)
+            //            self.getTimes(for: self.episode)
         })
+            
             .navigationBarTitle("", displayMode: .inline)
+    }
+    
+    //    func loadTimeStamps(episode: Episode) {
+    //        networkManager.loadTimeStamps(for: episode)
+    //    }
+    
+    func getTimes() -> [String] {
+//        networkManager.timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
+//        networkManager.loadTimeStamps(for: episode)
+        return UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
     }
 }
 
@@ -180,7 +209,7 @@ struct FavoriteView: View {
                 .clipShape(Capsule())
                 .padding()
                 .onTapGesture {
-                
+                    
                     
                     if !self.isSaved {
                         var episodes = UserDefaults.standard.savedEpisodes()
@@ -207,7 +236,7 @@ struct FavoriteView: View {
                 self.isSaved = false
                 self.saveText = "Save Episode"
             }
-        
+            
         }
         
     }

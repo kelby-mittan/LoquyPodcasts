@@ -11,12 +11,6 @@ import AVKit
 import MediaPlayer
 //import AVFoundation
 
-
-struct Message: Identifiable {
-    let id = UUID()
-    let text: String
-}
-
 struct ControlView: View {
     
     let episode: Episode
@@ -142,7 +136,7 @@ struct ControlView: View {
     //                let asset = AVAsset(url: streamURL)
     //
     //                AudioTrim.exportAsset(asset: asset, fileName: "PLEASEWORK", stream: self.episode.streamUrl)
-                    dump(UserDefaults.standard.savedTimeStamps())
+//                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
                     
                 }) {
 //                    Image(systemName: "recordingtape").font(.largeTitle)

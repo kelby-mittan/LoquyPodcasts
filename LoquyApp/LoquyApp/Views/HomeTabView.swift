@@ -123,7 +123,6 @@ struct BrowseView: View {
     
     func loadPodcasts(search: String) {
         networkManager.updatePodcasts(forSearch: searchText)
-        print(isEditing)
     }
 }
 
