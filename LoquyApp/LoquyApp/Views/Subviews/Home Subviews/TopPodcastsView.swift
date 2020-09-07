@@ -67,16 +67,6 @@ struct TopPodcastsView: View {
                                     .padding(.bottom, 0)
                                 Spacer()
                                 
-                                //                                ZStack(alignment: .leading) {
-                                //                                    Rectangle()
-                                //                                        .frame(width: 100, height: 8)
-                                //                                        .foregroundColor(Color(.systemGray4))
-                                //
-                                //                                    Rectangle()
-                                //                                        .frame(width: 40, height: 8)
-                                //                                        .foregroundColor(Color(.orange))
-                                //                                }
-                                //                                .clipShape(Capsule())
                             }
                             
                         }

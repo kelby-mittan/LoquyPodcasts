@@ -15,7 +15,7 @@ struct ControlView: View {
     
     let episode: Episode
     
-    @State var width : CGFloat = 10
+    @State var width: CGFloat = 30
     @State var playing = true
     @State var isFirstPlay = false
     @State var currentTime: String = "0:00"
@@ -26,11 +26,13 @@ struct ControlView: View {
 //    let showTheAlert: Bool
 //    @ObservedObject private var networkManager = NetworkingManager()
     
-    let player: AVPlayer = {
-        let avPlayer = AVPlayer()
-        avPlayer.automaticallyWaitsToMinimizeStalling = false
-        return avPlayer
-    }()
+//    let player: AVPlayer = {
+//        let avPlayer = AVPlayer()
+//        avPlayer.automaticallyWaitsToMinimizeStalling = false
+//        return avPlayer
+//    }()
+    
+    let player: AVPlayer
     
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
@@ -67,7 +69,9 @@ struct ControlView: View {
                             self.player.play()
                             self.playing = true
                         })).padding([.top,.leading,.trailing])
-                
+                    .onAppear {
+                        self.updateTimeCapsule()
+                }
             }
             
             HStack {
@@ -166,6 +170,23 @@ struct ControlView: View {
             self.getCurrentPlayerTime()
             
             print(self.episode.fileUrl ?? "error")
+            
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+
+                if self.playing {
+
+                    let screen = UIScreen.main.bounds.width - 30
+                    
+                    if self.player.currentItem?.duration.toDisplayString() != "--:--" && self.width > 0.0 {
+                        print("here")
+                        print(self.currentTime)
+                        let duration = self.player.currentItem?.duration.toDisplayString() ?? "00:00:00"
+                        print(self.player.currentItem?.duration.toDisplayString() ?? "00:00:00")
+                        let percent = self.currentTime.toSecDouble() / duration.toSecDouble()
+                        self.width = screen * CGFloat(percent)
+                    }
+                }
+            }
         }
         
     }
@@ -207,11 +228,23 @@ struct ControlView: View {
             self.currentTime = time.toDisplayString()
         }
         let durationTime = self.player.currentItem?.duration
-        guard let dt = durationTime else { return ("0:00","0:00") }
+        guard let dt = durationTime else { return ("00:00:00","00:00:00") }
         durationLabel = dt.toDisplayString()
         return ("",durationLabel)
     }
     
+    private func updateTimeCapsule() {
+        
+        let currentTimeSeconds = CMTimeGetSeconds(currentTime.getCMTime())
+//        print($currentTime)
+        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
+        print(durationSeconds)
+        let percentage = currentTimeSeconds / durationSeconds
+        
+//        print(CGFloat(percentage) + 10)
+//        width = CGFloat(percentage)
+    }
+
 
 }
 

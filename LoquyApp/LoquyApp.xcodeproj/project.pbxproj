@@ -173,15 +173,11 @@
 		02272D7A24C9225D007548C3 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				02272D7824C91FF7007548C3 /* ListenToView.swift */,
-				02272D7624C91EF5007548C3 /* TopPodcastsView.swift */,
+				027094862506AB24009E0BF5 /* Detail Subviews */,
+				027094852506AA85009E0BF5 /* Home Subviews */,
 				0270947B25031152009E0BF5 /* FavoritesVCWrapper.swift */,
-				02272D7B24C928BA007548C3 /* FeaturedView.swift */,
-				02272D8424CA82EB007548C3 /* MoreCastsView.swift */,
 				02272D7424C91E5F007548C3 /* LabelViews.swift */,
 				02272D8024C9FBF4007548C3 /* RemoteImage.swift */,
-				029955C724F339D100479318 /* ControlView.swift */,
-				0270948125058952009E0BF5 /* TimeStampAlertView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -204,6 +200,26 @@
 				0270947625030889009E0BF5 /* PodcastCell.swift */,
 			);
 			path = "Controllers+Cells";
+			sourceTree = "<group>";
+		};
+		027094852506AA85009E0BF5 /* Home Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				02272D7824C91FF7007548C3 /* ListenToView.swift */,
+				02272D7624C91EF5007548C3 /* TopPodcastsView.swift */,
+				02272D7B24C928BA007548C3 /* FeaturedView.swift */,
+				02272D8424CA82EB007548C3 /* MoreCastsView.swift */,
+			);
+			path = "Home Subviews";
+			sourceTree = "<group>";
+		};
+		027094862506AB24009E0BF5 /* Detail Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				029955C724F339D100479318 /* ControlView.swift */,
+				0270948125058952009E0BF5 /* TimeStampAlertView.swift */,
+			);
+			path = "Detail Subviews";
 			sourceTree = "<group>";
 		};
 		02B5687324C4DBB6004D5C6D = {

@@ -20,8 +20,14 @@ struct EpisodeDetailView: View {
     @ObservedObject private var networkManager = NetworkingManager()
     
     @State var showAlert = false
-    @State var text = "0:00:63"
+    @State var text = "0:08:22"
     @State var times = [String]()
+    
+    let player: AVPlayer = {
+        let avPlayer = AVPlayer()
+        avPlayer.automaticallyWaitsToMinimizeStalling = false
+        return avPlayer
+    }()
     
     var body: some View {
         //        ZStack {
@@ -30,33 +36,48 @@ struct EpisodeDetailView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 250, height: 250)
                 .cornerRadius(12)
-                .padding()
+                .padding([.leading,.trailing,.top])
                 .onTapGesture {
                     //                        self.showAlert.toggle()
                     //                        print(self.$showAlert)
                     //                        dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
                     
-//                dump(self.networkManager.timeStamps)
+                    //                dump(self.networkManager.timeStamps)
             }
             
-            ControlView(episode: episode)
+            ControlView(episode: episode, player: player)
             
-            ScrollView(.horizontal, showsIndicators: true) {
-                HStack {
-                    ForEach(getTimes(), id:\.self) { item in
-                        VStack {
-                            Image(systemName: "person.crop.circle")
-                                .font(.system(size: 60))
-                            Text(item)
-                                .fontWeight(.semibold)
-                                .multilineTextAlignment(.center)
-                                .padding(.top, 2)
-                            
-                        }
-                        .padding()
+            Group {
+                if UserDefaults.standard.savedEpisodes().contains(episode) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(getTimes().sorted(), id:\.self) { item in
+                                ZStack {
+                                    Text(item)
+                                        .font(.subheadline)
+                                        .fontWeight(.heavy)
+                                        .foregroundColor(Color.black)
+                                        .multilineTextAlignment(.center)
+                                        .padding(.top, 2)
+                                    
+                                }.onTapGesture {
+                                    print(item)
+                                    self.player.seek(to: item.getCMTime())
+                                }
+                                .onLongPressGesture {
+                                    print("Hello: \(item)")
+                                //                                    UserDefaults.standard.deleteTimeStamp(timeStamp: UserDefaults.standard.savedTimeStamps().filter { $0.time == item }.first!)
+                                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.time == item }.first!)
+                                }
+                                .frame(width: 84, height: 40)
+                                    .background(Color(.systemGray5))
+                                    .cornerRadius(10)
+                            }
+                        }.padding([.leading,.trailing])
                     }
                 }
             }
+            
             
             DescriptionView(episode: episode)//.offset(x: 0, y: -20)
             FavoriteView(episode: episode, artwork: artwork)
@@ -64,11 +85,16 @@ struct EpisodeDetailView: View {
             
         }.onAppear(perform: {
             self.showAlert = self.networkManager.isShowAlert
-            //            self.loadTimeStamps(episode: self.episode)
-            //            self.getTimes(for: self.episode)
         })
-            
-            .navigationBarTitle("", displayMode: .inline)
+        .navigationBarTitle("", displayMode: .inline)
+    }
+    
+    func getCapsulePosition() -> CGFloat {
+        let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
+        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
+        let percentage = currentTimeSeconds / durationSeconds
+        
+        return CGFloat(percentage)
     }
     
     //    func loadTimeStamps(episode: Episode) {
@@ -76,8 +102,8 @@ struct EpisodeDetailView: View {
     //    }
     
     func getTimes() -> [String] {
-//        networkManager.timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
-//        networkManager.loadTimeStamps(for: episode)
+        //        networkManager.timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
+        //        networkManager.loadTimeStamps(for: episode)
         return UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
     }
 }
