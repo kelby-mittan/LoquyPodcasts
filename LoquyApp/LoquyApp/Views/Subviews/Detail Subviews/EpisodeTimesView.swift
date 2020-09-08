@@ -33,7 +33,6 @@ struct EpisodeTimesView: View {
                                     .padding(.top, 2)
                                 
                             }.onTapGesture {
-//                                print(time)
                                 self.player.seek(to: time.getCMTime())
                             }
                             .onLongPressGesture {
@@ -52,7 +51,6 @@ struct EpisodeTimesView: View {
                     }.padding([.leading,.trailing])
                 }.onAppear {
                     self.loadTimes(episode: self.episode)
-//                    self.timeStamps = self.networkManager.timeStamps
                 }
             }
         }

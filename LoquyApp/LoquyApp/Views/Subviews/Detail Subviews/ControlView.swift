@@ -119,8 +119,19 @@ struct ControlView: View {
                 .buttonStyle(PlainButtonStyle())
                 .padding([.leading,.top],20)
                 Spacer()
+                
+//                NavigationLink(destination: Text("Coming Soon!")) {
+//                    Text("Record Clip")
+//                    .fontWeight(.medium)
+//                    .frame(width: 120,height: 40)
+//                    .foregroundColor(.white)
+//                    .background(Color.purple)
+//                    .clipShape(Capsule())
+//                    .padding()
+//                }.padding([.top,.trailing],20)
+                
                 Button(action: {
-                    
+
     //                guard let streamURL = URL(string: self.episode.streamUrl) else {
     //                    print("COULD NOT GET STREAM URL")
     //                    return
@@ -129,7 +140,7 @@ struct ControlView: View {
     //
     //                AudioTrim.exportAsset(asset: asset, fileName: "PLEASEWORK", stream: self.episode.streamUrl)
 //                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
-                    
+
                 }) {
                     Text("Record Clip")
                         .fontWeight(.medium)
@@ -138,7 +149,7 @@ struct ControlView: View {
                         .background(Color.purple)
                         .clipShape(Capsule())
                         .padding()
-                }
+                    }
                 .animation(.spring())
                 .padding([.top,.trailing],20)
                 Spacer()
@@ -185,9 +196,12 @@ struct ControlView: View {
         player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
             self.currentTime = time.toDisplayString()
         }
-        let durationTime = self.player.currentItem?.duration
-        guard let dt = durationTime else { return ("00:00:00","00:00:00") }
-        durationLabel = dt.toDisplayString()
+        guard let durationTime = self.player.currentItem?.duration else {
+            return ("--:--", "--:--")
+        }
+        let dt = durationTime - currentTime.getCMTime()
+//        guard let dt = durationTime else { return ("00:00:00","00:00:00") }
+        durationLabel = "-" + dt.toDisplayString()
         return ("",durationLabel)
     }
 
