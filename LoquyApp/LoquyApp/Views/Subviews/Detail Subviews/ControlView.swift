@@ -132,13 +132,19 @@ struct ControlView: View {
                 
                 Button(action: {
 
-    //                guard let streamURL = URL(string: self.episode.streamUrl) else {
-    //                    print("COULD NOT GET STREAM URL")
-    //                    return
-    //                }
-    //                let asset = AVAsset(url: streamURL)
-    //
-    //                AudioTrim.exportAsset(asset: asset, fileName: "PLEASEWORK", stream: self.episode.streamUrl)
+                    guard let streamURL = URL(string: self.episode.streamUrl) else {
+                        print("COULD NOT GET STREAM URL")
+                        return
+                    }
+                    let asset = AVAsset(url: streamURL)
+                    
+                    
+//                    guard let fileUrl = self.episode.fileUrl else {
+//                        print("\(self.episode.streamUrl)")
+//                        return
+//                    }
+    
+                    AudioTrim.exportAsset(asset: asset, fileName: "PLEASEWORK", stream: self.episode.streamUrl)
 //                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
 
                 }) {

@@ -44,6 +44,7 @@ struct AudioTrim {
         
 //        let asset2 = AVMutableComposition(url: streamURL)
         
+        
         if let exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A) {
             exporter.outputFileType = AVFileType.m4a
             exporter.outputURL = trimmedSoundFileURL
@@ -55,7 +56,7 @@ struct AudioTrim {
             }
             // the first 5 seconds
             let startTime = CMTimeMake(value: 0, timescale: 1)
-            let stopTime = CMTimeMake(value: 5, timescale: 1)
+            let stopTime = CMTimeMake(value: 20, timescale: 1)
             exporter.timeRange = CMTimeRangeFromTimeToTime(start: startTime, end: stopTime)
             
             // do it

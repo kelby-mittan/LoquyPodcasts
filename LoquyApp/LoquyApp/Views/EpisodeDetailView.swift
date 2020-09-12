@@ -22,6 +22,8 @@ struct EpisodeDetailView: View {
     @State var text = "0:08:22"
     @State var times = [String]()
     
+    @Environment(\.presentationMode) var presentationMode
+    
     let player: AVPlayer = {
         let avPlayer = AVPlayer()
         avPlayer.automaticallyWaitsToMinimizeStalling = false
@@ -47,6 +49,7 @@ struct EpisodeDetailView: View {
             
         }
         .navigationBarTitle("", displayMode: .inline)
+//        .navigationBarItems(leading: Button(""){self.presentationMode.wrappedValue.dismiss()})
     }
     
     func getCapsulePosition() -> CGFloat {

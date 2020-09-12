@@ -17,14 +17,16 @@ struct HomeView: View {
     
     @State private var selectedTab = 1
     
+    var edges = UIApplication.shared.windows.first?.safeAreaInsets
+    
     var body: some View {
         TabView(selection: $selectedTab) {
             BrowseView().tag(1)
-            TabTwo().tag(2)
+            FavoritesTabView().tag(2)
             TabThree().tag(3)
             TabFour().tag(4)
         }
-        .padding(.bottom, 0)
+
     }
 }
 
@@ -34,32 +36,13 @@ struct BrowseView_Previews: PreviewProvider {
     }
 }
 
-struct PodcastPosterView: View {
-    let podcast: DummyPodcast
-    let width: CGFloat
-    let height: CGFloat
-    
-    init(podcast: DummyPodcast, width: CGFloat, height: CGFloat) {
-        self.podcast = podcast
-        self.width = width
-        self.height = height
-    }
-    var body: some View {
-        Image(podcast.image)
-            .renderingMode(.original)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: width, height: height)
-            .cornerRadius(12)
-            .padding()
-    }
-}
-
 struct BrowseView: View {
     @State private var searchText = ""
     @State private var isPodcastShowing = true
     @State private var isEditing = false
     @ObservedObject private var networkManager = NetworkingManager()
+    
+    @Environment(\.presentationMode) var presentationMode
     
     let mindcast = DummyPodcast.podcasts[6]
     
@@ -112,6 +95,7 @@ struct BrowseView: View {
             }
             .navigationBarTitle("")
             .navigationBarHidden(true)
+            .navigationBarItems(leading: Button("Back"){self.presentationMode.wrappedValue.dismiss()})
         }
         .tabItem {
             Image(systemName: "magnifyingglass")
@@ -126,7 +110,7 @@ struct BrowseView: View {
     }
 }
 
-struct TabTwo: View {
+struct FavoritesTabView: View {
     var body: some View {
         NavigationView {
             FavoritesVCWrapper()
@@ -160,7 +144,6 @@ struct TabFour: View {
     var body: some View {
         AudioClipsView()
             .tabItem {
-                
                 Image(systemName: "list.bullet")
                     .font(.body)
                     .padding(.top, 16.0)
@@ -168,5 +151,3 @@ struct TabFour: View {
         }
     }
 }
-
-
