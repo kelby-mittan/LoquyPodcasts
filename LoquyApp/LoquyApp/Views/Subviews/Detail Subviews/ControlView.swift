@@ -80,7 +80,20 @@ struct ControlView: View {
             HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
                 
                 Button(action: {
+                    
+                    
+                    
                     Player.seekToCurrentTime(delta: -15, player: self.player)
+                    
+                    guard let url = AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") else {
+                        print(AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") ?? "Couldn't Find MP3")
+                        return
+                        }
+                    
+                    
+                    Player.playAudioClip(url: url, player: self.player)
+                    
+//                    dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0])
                 }) {
                     Image(systemName: "gobackward.15").font(.largeTitle)
                 }
@@ -132,19 +145,14 @@ struct ControlView: View {
                 
                 Button(action: {
 
-                    guard let streamURL = URL(string: self.episode.streamUrl) else {
-                        print("COULD NOT GET STREAM URL")
-                        return
-                    }
-                    let asset = AVAsset(url: streamURL)
-                    
-                    
-//                    guard let fileUrl = self.episode.fileUrl else {
-//                        print("\(self.episode.streamUrl)")
+//                    guard let streamURL = URL(string: "https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.m4a") else {
+//                        print("COULD NOT GET STREAM URL")
 //                        return
 //                    }
-    
-                    AudioTrim.exportAsset(asset: asset, fileName: "PLEASEWORK", stream: self.episode.streamUrl)
+//                    let asset = AVAsset(url: streamURL)
+                    
+                    AudioTrim.exportUsingComposition(streamUrl: self.episode.streamUrl, pathForFile:  self.episode.title)
+                    
 //                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
 
                 }) {

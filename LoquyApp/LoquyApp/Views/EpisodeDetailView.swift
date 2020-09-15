@@ -22,7 +22,7 @@ struct EpisodeDetailView: View {
     @State var text = "0:08:22"
     @State var times = [String]()
     
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     
     let player: AVPlayer = {
         let avPlayer = AVPlayer()
