@@ -11,37 +11,35 @@ import AVKit
 
 struct ClipAlertView: View {
     
+    
+    var clipTime: String
+    
     @State var selected = ""
     
     var body: some View {
         
         VStack {
-//            Text("00:57:20")
+            Text("\(clipTime)")
             
             CustomPicker(selected: self.$selected, currentTime: "00:57:20")
             
-//            Text(selected)
+            //            Text(selected)
             
         }
     }
 }
 
-struct ClipAlertView_Previews: PreviewProvider {
-    static var previews: some View {
-        ClipAlertView()
-    }
-}
+//struct ClipAlertView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ClipAlertView()
+//    }
+//}
 
 struct CustomPicker: UIViewRepresentable {
     
     @Binding var selected : String
     
     var currentTime: String
-
-//    init(time: String) {
-//        currentTime = time
-////        selected = selected1
-//    }
     
     func makeCoordinator() -> CustomPicker.Coordinator {
         return CustomPicker.Coordinator(theParent: self, time: currentTime)
@@ -119,7 +117,7 @@ struct CustomPicker: UIViewRepresentable {
                 let sec = currentTime.toSecDouble() + counterIncrements
                 let cmTime = CMTime(seconds: sec, preferredTimescale: 1)
                 var timeStr = cmTime.toDisplayString()
-//                timeStr = timeStr.replacingOccurrences(of: "00:", with: "")
+                //                timeStr = timeStr.replacingOccurrences(of: "00:", with: "")
                 endTimeArr.append(timeStr)
                 counterIncrements += 29.0
             }
@@ -129,4 +127,118 @@ struct CustomPicker: UIViewRepresentable {
     }
     
     
+}
+
+
+struct HalfModalView<Content: View> : View {
+    
+    
+    @GestureState private var dragState = DragState.inactive
+    @Binding var isShown:Bool
+    
+    private func onDragEnded(drag: DragGesture.Value) {
+        let dragThreshold = modalHeight * (2/3)
+        if drag.predictedEndTranslation.height > dragThreshold || drag.translation.height > dragThreshold{
+            isShown = false
+        }
+    }
+    
+    var modalHeight:CGFloat = 400
+    
+    
+    var content: () -> Content
+    var body: some View {
+        
+        let drag = DragGesture()
+            .updating($dragState) { drag, state, transaction in
+                state = .dragging(translation: drag.translation)
+        }
+        .onEnded(onDragEnded)
+        return Group {
+            ZStack {
+                //Background
+                Spacer()
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
+                    .background(isShown ? Color.black.opacity( 0.5 * fractionProgress(lowerLimit: 0, upperLimit: Double(modalHeight), current: Double(dragState.translation.height), inverted: true)) : Color.clear)
+                    .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
+                    .gesture(
+                        TapGesture()
+                            .onEnded { _ in
+                                self.isShown = false
+                        }
+                )
+                
+                //Foreground
+                VStack{
+                    Spacer()
+                    ZStack{
+                        Color.white.opacity(1.0)
+                            .frame(width: UIScreen.main.bounds.size.width, height:modalHeight)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                        self.content()
+                            .padding()
+                            .padding(.bottom, 65)
+                            .frame(width: UIScreen.main.bounds.size.width, height:modalHeight)
+                            .clipped()
+                    }
+                    .offset(y: isShown ? ((self.dragState.isDragging && dragState.translation.height >= 1) ? dragState.translation.height : 0) : modalHeight)
+                    .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
+                    .gesture(drag)
+                    
+                    
+                }
+            }.edgesIgnoringSafeArea(.all)
+        }
+        
+    }
+}
+
+enum DragState {
+    case inactive
+    case dragging(translation: CGSize)
+    
+    var translation: CGSize {
+        switch self {
+        case .inactive:
+            return .zero
+        case .dragging(let translation):
+            return translation
+        }
+    }
+    
+    var isDragging: Bool {
+        switch self {
+        case .inactive:
+            return false
+        case .dragging:
+            return true
+        }
+    }
+}
+
+
+
+func fractionProgress(lowerLimit: Double = 0, upperLimit:Double, current:Double, inverted:Bool = false) -> Double{
+    var val:Double = 0
+    if current >= upperLimit {
+        val = 1
+    } else if current <= lowerLimit {
+        val = 0
+    } else {
+        val = (current - lowerLimit)/(upperLimit - lowerLimit)
+    }
+    
+    if inverted {
+        return (1 - val)
+        
+    } else {
+        return val
+    }
+    
+}
+
+final class UserData: ObservableObject {
+    @Published var showFullScreen = false
 }

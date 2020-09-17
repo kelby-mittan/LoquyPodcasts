@@ -11,9 +11,9 @@ import Combine
 
 struct HomeView: View {
     
-    //    init () {
-    //        UITabBar.appearance().backgroundColor = UIColor.green
-    //    }
+//        init () {
+//            UITabBar.appearance().backgroundColor = UIColor.green
+//        }
     
     @State private var selectedTab = 1
     
@@ -26,7 +26,6 @@ struct HomeView: View {
             TabThree().tag(3)
             TabFour().tag(4)
         }
-
     }
 }
 
@@ -141,7 +140,7 @@ struct TabThree: View {
 
 struct TabFour: View {
     var body: some View {
-        ClipAlertView()
+        LoquyListView()
             .tabItem {
                 Image(systemName: "list.bullet")
                     .font(.body)

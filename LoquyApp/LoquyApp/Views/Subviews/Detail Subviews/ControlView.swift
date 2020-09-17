@@ -9,7 +9,6 @@
 import SwiftUI
 import AVKit
 import MediaPlayer
-//import AVFoundation
 
 struct ControlView: View {
     
@@ -26,6 +25,11 @@ struct ControlView: View {
     let player: AVPlayer
     
     @ObservedObject var networkManager: NetworkingManager
+    
+    @State var halfModal_shown = false
+    
+    @Binding var showModal: Bool
+    @Binding var clipTime: String
     
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
@@ -85,13 +89,13 @@ struct ControlView: View {
                     
                     Player.seekToCurrentTime(delta: -15, player: self.player)
                     
-                    guard let url = AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") else {
-                        print(AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") ?? "Couldn't Find MP3")
-                        return
-                        }
-                    
-                    
-                    Player.playAudioClip(url: url, player: self.player)
+//                    guard let url = AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") else {
+//                        print(AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") ?? "Couldn't Find MP3")
+//                        return
+//                        }
+//
+//
+//                    Player.playAudioClip(url: url, player: self.player)
                     
 //                    dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0])
                 }) {
@@ -145,13 +149,9 @@ struct ControlView: View {
                 
                 Button(action: {
 
-//                    guard let streamURL = URL(string: "https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.m4a") else {
-//                        print("COULD NOT GET STREAM URL")
-//                        return
-//                    }
-//                    let asset = AVAsset(url: streamURL)
-                    
-                    AudioTrim.exportUsingComposition(streamUrl: self.episode.streamUrl, pathForFile:  self.episode.title)
+                    self.showModal.toggle()
+                    self.clipTime = self.currentTime
+//                    AudioTrim.exportUsingComposition(streamUrl: self.episode.streamUrl, pathForFile:  self.episode.title)
                     
 //                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
 
@@ -167,6 +167,7 @@ struct ControlView: View {
                 .animation(.spring())
                 .padding([.top,.trailing],20)
                 Spacer()
+    
             }
             .padding([.leading,.trailing])
             .blur(radius: showAlert ? 30 : 0)
@@ -174,6 +175,10 @@ struct ControlView: View {
                 TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode, networkManager: networkManager)
                 .offset(x: 0, y: -70)
             }
+            
+//            HalfModalView(isShown: $halfModal_shown, modalHeight: 600){
+//                Text("hello world")
+//            }
             
         }
         .animation(.spring())

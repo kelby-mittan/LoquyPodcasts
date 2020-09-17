@@ -18,8 +18,8 @@ struct EpisodeDetailView: View {
     
     @ObservedObject private var networkManager = NetworkingManager()
     
-    @State var showAlert = false
-    @State var text = "0:08:22"
+    @State var halfModalShown = false
+    @State var clipTime = ""
     @State var times = [String]()
     
 //    @Environment(\.presentationMode) var presentationMode
@@ -31,21 +31,29 @@ struct EpisodeDetailView: View {
     }()
     
     var body: some View {
-        ScrollView(.vertical, showsIndicators: true) {
-            RemoteImage(url: episode.imageUrl ?? "")
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 250, height: 250)
-                .cornerRadius(12)
-                .padding([.leading,.trailing,.top])
+        ZStack {
+            ScrollView(.vertical, showsIndicators: true) {
+                Spacer()
+                RemoteImage(url: episode.imageUrl ?? "")
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 250, height: 250)
+                    .cornerRadius(12)
+                    .padding([.leading,.trailing,.top])
+                
+                ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
+                
+                EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
+                
+                
+                DescriptionView(episode: episode)//.offset(x: 0, y: -20)
+                FavoriteView(episode: episode, artwork: artwork)
+                
+                
+            }.offset(x: 0, y: 40)
             
-            ControlView(episode: episode, player: player, networkManager: networkManager)
-            
-            EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
-            
-            
-            DescriptionView(episode: episode)//.offset(x: 0, y: -20)
-            FavoriteView(episode: episode, artwork: artwork)
-            
+            HalfModalView(isShown: $halfModalShown, modalHeight: 600){
+                ClipAlertView(clipTime: self.clipTime)
+            }
             
         }
         .navigationBarTitle("", displayMode: .inline)
@@ -60,51 +68,6 @@ struct EpisodeDetailView: View {
         return CGFloat(percentage)
     }
     
-}
-
-struct GuestView: View {
-    let podcast: DummyPodcast
-    
-    init(podcast: DummyPodcast) {
-        self.podcast = podcast
-    }
-    var body: some View {
-        VStack {
-            HStack {
-                Text("Guest")
-                    .fontWeight(.medium)
-                Spacer()
-                Button(action: seeGuestInfoButton) {
-                    Text("See Info")
-                }
-                .padding()
-                .foregroundColor(.secondary)
-                .clipShape(Capsule())
-            }
-            .padding()
-            
-            ScrollView(.horizontal, showsIndicators: true) {
-                HStack {
-                    ForEach(0 ..< 10) { item in
-                        VStack {
-                            Image(systemName: "person.crop.circle")
-                                .font(.system(size: 60))
-                            Text(self.podcast.guest.replacingOccurrences(of: " ", with: "\n"))
-                                .fontWeight(.semibold)
-                                .multilineTextAlignment(.center)
-                                .padding(.top, 2)
-                            
-                        }
-                        .padding()
-                    }
-                }
-            }
-        }
-    }
-    
-    func seeGuestInfoButton() {
-        
-    }
 }
 
 
