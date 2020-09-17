@@ -116,7 +116,6 @@ struct FavoritesTabView: View {
             FavoritesVCWrapper()
         .navigationBarTitle("")
         .navigationBarHidden(true)
-            
         }
         .tabItem {
             Image(systemName: "star.fill")
@@ -142,7 +141,7 @@ struct TabThree: View {
 
 struct TabFour: View {
     var body: some View {
-        AudioClipsView()
+        ClipAlertView()
             .tabItem {
                 Image(systemName: "list.bullet")
                     .font(.body)

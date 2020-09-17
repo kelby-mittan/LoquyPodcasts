@@ -15,7 +15,14 @@ struct ClipAlertView: View {
     
     var body: some View {
         
-        CustomPicker(selected: self.$selected, currentTime: "00:57:20")
+        VStack {
+//            Text("00:57:20")
+            
+            CustomPicker(selected: self.$selected, currentTime: "00:57:20")
+            
+//            Text(selected)
+            
+        }
     }
 }
 
