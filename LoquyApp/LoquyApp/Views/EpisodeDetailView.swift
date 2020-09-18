@@ -31,14 +31,14 @@ struct EpisodeDetailView: View {
     }()
     
     var body: some View {
-        ZStack {
+//        ZStack {
             ScrollView(.vertical, showsIndicators: true) {
                 Spacer()
                 RemoteImage(url: episode.imageUrl ?? "")
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 250, height: 250)
                     .cornerRadius(12)
-                    .padding([.leading,.trailing,.top])
+                    .padding([.leading,.trailing])
                 
                 ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
                 
@@ -49,13 +49,13 @@ struct EpisodeDetailView: View {
                 FavoriteView(episode: episode, artwork: artwork)
                 
                 
-            }.offset(x: 0, y: 40)
+//            }.offset(x: 0, y: 40)
             
-            HalfModalView(isShown: $halfModalShown, modalHeight: 600){
-                ClipAlertView(clipTime: self.clipTime)
-            }
-            
+//            HalfModalView(isShown: $halfModalShown, modalHeight: 600){
+//                ClipAlertView(clipTime: self.clipTime)
+//            }
         }
+//        .navigationBarBackButtonHidden(/*@START_MENU_TOKEN@*/false/*@END_MENU_TOKEN@*/)
         .navigationBarTitle("", displayMode: .inline)
 //        .navigationBarItems(leading: Button(""){self.presentationMode.wrappedValue.dismiss()})
     }
