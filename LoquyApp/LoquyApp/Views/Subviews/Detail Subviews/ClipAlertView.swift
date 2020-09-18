@@ -20,10 +20,8 @@ struct ClipAlertView: View {
         
         VStack {
             
-//            HStack {
-                HeaderView(label: "Start: \(clipTime)")
+            HeaderView(label: "Start: \(clipTime)")
                 
-//            }
             
             
             CustomPicker(selected: self.$selected, currentTime: clipTime)
