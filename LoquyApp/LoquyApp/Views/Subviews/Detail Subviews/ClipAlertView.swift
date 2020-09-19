@@ -14,7 +14,7 @@ struct ClipAlertView: View {
     
     var clipTime: String
     
-    @State var selected = ""
+    @State var selected = "00:30"
     
     var body: some View {
         

@@ -47,11 +47,13 @@ struct CustomPicker: UIViewRepresentable {
         }
         
         func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            return getEndTimeArr(currentTime).count
+//            return getEndTimeArr(currentTime).count
+            return timeIntervals.count
         }
         
         func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-            return getEndTimeArr(currentTime)[row]
+//            return getEndTimeArr(currentTime)[row]
+            return timeIntervals[row]
         }
         
         func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
@@ -59,7 +61,7 @@ struct CustomPicker: UIViewRepresentable {
             view.backgroundColor = .systemPurple
             
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
-            label.text = getEndTimeArr(currentTime)[row]
+            label.text = timeIntervals[row]
             label.textColor = .white
             label.textAlignment = .center
             label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -79,7 +81,7 @@ struct CustomPicker: UIViewRepresentable {
         }
         
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            self.parent.selected = getEndTimeArr(currentTime)[row]
+            self.parent.selected = timeIntervals[row]
             print(currentTime)
         }
         
@@ -88,13 +90,14 @@ struct CustomPicker: UIViewRepresentable {
             
             print("Current Time: \(currentTime)")
             
-            var counterIncrements = 30.0
+            var counterIncrements = 29.0
             
-            for _ in 0..<9{
+            for _ in 0..<10{
                 let sec = currentTime.toSecDouble() + counterIncrements
                 let cmTime = CMTime(seconds: sec, preferredTimescale: 1)
                 let timeStr = cmTime.toDisplayString()
                 //                timeStr = timeStr.replacingOccurrences(of: "00:", with: "")
+                
                 endTimeArr.append(timeStr)
                 counterIncrements += 30.0
             }
@@ -105,3 +108,5 @@ struct CustomPicker: UIViewRepresentable {
     
     
 }
+
+let timeIntervals = ["00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00",]
