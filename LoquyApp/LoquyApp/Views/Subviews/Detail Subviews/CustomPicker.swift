@@ -80,12 +80,15 @@ struct CustomPicker: UIViewRepresentable {
         
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             self.parent.selected = getEndTimeArr(currentTime)[row]
+            print(currentTime)
         }
         
-        func getEndTimeArr(_ currentTime: String = "00:00:00") -> [String] {
+        func getEndTimeArr(_ currentTime: String) -> [String] {
             var endTimeArr = [String]()
             
-            var counterIncrements = 29.0
+            print("Current Time: \(currentTime)")
+            
+            var counterIncrements = 30.0
             
             for _ in 0..<9{
                 let sec = currentTime.toSecDouble() + counterIncrements
@@ -93,7 +96,7 @@ struct CustomPicker: UIViewRepresentable {
                 let timeStr = cmTime.toDisplayString()
                 //                timeStr = timeStr.replacingOccurrences(of: "00:", with: "")
                 endTimeArr.append(timeStr)
-                counterIncrements += 29.0
+                counterIncrements += 30.0
             }
             
             return endTimeArr

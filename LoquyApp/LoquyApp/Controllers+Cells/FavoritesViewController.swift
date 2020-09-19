@@ -117,13 +117,11 @@ class FavoritesViewController: UIViewController {
             return section
         }
         
-        // layout
         return layout
     }
     
     private func configureDataSource() {
-        // initializing the data source and
-        // configuring the cell
+        
         dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, episodeArt) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PodcastCell.reuseIdentifier, for: indexPath) as? PodcastCell else {
                 fatalError("could not dequeue Podcast Cell")
@@ -139,7 +137,7 @@ class FavoritesViewController: UIViewController {
             return cell
         })
         
-        var snapshot = dataSource.snapshot() // current snapshot
+        var snapshot = dataSource.snapshot()
         snapshot.appendSections([.main])
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -153,7 +151,7 @@ extension FavoritesViewController: UICollectionViewDelegate {
         }
         
         goToEpisodesList(episodeArt: episodeArt.components(separatedBy: heyNow)[1])
-        print(episodeArt)
+
     }
     
     func goToEpisodesList(episodeArt: String) {
@@ -161,6 +159,6 @@ extension FavoritesViewController: UICollectionViewDelegate {
         addChild(childView)
         childView.view.frame = view.bounds
         view.addSubview(childView.view)
-        childView.didMove(toParent: self)
+//        childView.didMove(toParent: self)
     }
 }

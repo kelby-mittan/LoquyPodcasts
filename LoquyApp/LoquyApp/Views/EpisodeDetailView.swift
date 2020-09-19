@@ -21,8 +21,8 @@ struct EpisodeDetailView: View {
     @State var halfModalShown = false
     @State var clipTime = ""
     @State var times = [String]()
-    
-//    @Environment(\.presentationMode) var presentationMode
+        
+//    @Binding var modalShown: Bool
     
     let player: AVPlayer = {
         let avPlayer = AVPlayer()
@@ -31,7 +31,8 @@ struct EpisodeDetailView: View {
     }()
     
     var body: some View {
-//        ZStack {
+        ZStack {
+            Spacer()
             ScrollView(.vertical, showsIndicators: true) {
                 Spacer()
                 RemoteImage(url: episode.imageUrl ?? "")
@@ -49,15 +50,16 @@ struct EpisodeDetailView: View {
                 FavoriteView(episode: episode, artwork: artwork)
                 
                 
-//            }.offset(x: 0, y: 40)
+            }.offset(x: 0, y: 40)
             
-//            HalfModalView(isShown: $halfModalShown, modalHeight: 600){
-//                ClipAlertView(clipTime: self.clipTime)
-//            }
-        }
+            HalfModalView(isShown: $halfModalShown, modalHeight: 600){
+                ClipAlertView(clipTime: self.clipTime)
+            }
+        }.onAppear(perform: {
+            clipTime = player.currentTime().toDisplayString()
+        })
 //        .navigationBarBackButtonHidden(/*@START_MENU_TOKEN@*/false/*@END_MENU_TOKEN@*/)
         .navigationBarTitle("", displayMode: .inline)
-//        .navigationBarItems(leading: Button(""){self.presentationMode.wrappedValue.dismiss()})
     }
     
     func getCapsulePosition() -> CGFloat {

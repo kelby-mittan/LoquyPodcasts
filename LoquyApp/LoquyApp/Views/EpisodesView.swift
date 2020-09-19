@@ -12,13 +12,14 @@ struct EpisodesView: View {
     
     @ObservedObject private var networkManager = NetworkingManager()
     
-    let title: String
+    @State var title: String
     let podcastFeed: String?
     let isSaved: Bool
     let artWork: String
     
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
+    
     
     var body: some View {
         
@@ -64,16 +65,21 @@ struct EpisodesView: View {
                 
             }.onAppear(perform: {
                 UITableView.appearance().separatorStyle = .none
-                
-                self.isSaved ? self.networkManager.episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == self.title } : self.getPodcasts()
+                self.isSaved ? self.networkManager.episodes = getFavorites() : self.getPodcasts()
             })
-            .environment(\.horizontalSizeClass, .regular)
+//            .environment(\.horizontalSizeClass, .regular)
             .navigationBarTitle(title)
         }
     }
     
     func getPodcasts() {
         networkManager.loadEpisodes(feedUrl: podcastFeed ?? "")
+    }
+    
+    func getFavorites() -> [Episode] {
+        let episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == self.title }
+        title = episodes.first?.author ?? "NOOOOO"
+        return episodes
     }
     
 }
