@@ -19,17 +19,43 @@ struct ClipAlertView: View {
     var body: some View {
         
         VStack {
-            
-            HeaderView(label: "Start: \(clipTime)")
                 
-            
+            Spacer()
+            Text("Start: \(clipTime)")
+                .font(.title)
+                .fontWeight(.heavy)
+                .background(Color.green)
             
             CustomPicker(selected: self.$selected, currentTime: clipTime)
             
-            //            Text(selected)
+            Text("End: \(getEndTime())")
+                .font(.title)
+                .fontWeight(.heavy)
+                .background(Color.green)
+            
+            Button(action: {
+                print(("00:"+selected).toSecDouble())
+                
+            }) {
+                    Text("Save Clip")
+                        .fontWeight(.heavy)
+                        .frame(width: 240,height: 60)
+                        .foregroundColor(Color.white)
+                        .background(Color.purple)
+                        .clipShape(Capsule())
+                        .padding()
+            }
             
             Spacer()
-        }
+        }.background(Color.yellow)
+        Spacer()
+    }
+    
+    func getEndTime() -> String {
+    
+        let timeSec = clipTime.toSecDouble() + ("00:"+selected).toSecDouble()
+        
+        return CMTime(seconds: timeSec, preferredTimescale: 1).toDisplayString()
     }
 }
 
