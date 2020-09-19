@@ -24,6 +24,7 @@ struct CustomPicker: UIViewRepresentable {
         let picker = UIPickerView()
         picker.dataSource = context.coordinator
         picker.delegate = context.coordinator
+        picker.selectRow(3, inComponent: 0, animated: true)
         return picker
     }
     

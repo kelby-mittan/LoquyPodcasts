@@ -53,7 +53,7 @@ struct EpisodeDetailView: View {
             }.offset(x: 0, y: 40)
             
             HalfModalView(isShown: $halfModalShown, modalHeight: 600){
-                ClipAlertView(clipTime: self.clipTime)
+                ClipAlertView(clipTime: self.clipTime, modalShown: $halfModalShown)
             }
         }.onAppear(perform: {
             clipTime = player.currentTime().toDisplayString()

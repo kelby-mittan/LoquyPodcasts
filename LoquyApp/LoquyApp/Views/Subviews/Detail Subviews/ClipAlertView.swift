@@ -14,7 +14,8 @@ struct ClipAlertView: View {
     
     var clipTime: String
     
-    @State var selected = "00:30"
+    @State var selected = "02:00"
+    @Binding var modalShown: Bool
     
     var body: some View {
         
@@ -35,6 +36,7 @@ struct ClipAlertView: View {
             
             Button(action: {
                 print(("00:"+selected).toSecDouble())
+                self.modalShown = false
                 
             }) {
                     Text("Save Clip")
