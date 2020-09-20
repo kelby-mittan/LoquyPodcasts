@@ -16,13 +16,31 @@ struct ClipAlertView: View {
     @State var selected = "02:00"
     @Binding var modalShown: Bool
     @Binding var notificationShown: Bool
+    @State var titleText = ""
     
     var body: some View {
         
         VStack {
             Spacer()
+            
+            HStack {
+                Text("title: ")
+                    .font(.headline)
+                    .fontWeight(.heavy)
+                    .foregroundColor(.purple)
+                    .padding(.leading)
+                
+                TextField("  give this clip a title", text: $titleText)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .background(Color.purple)
+                    .cornerRadius(8)
+                    .padding(.trailing)
+                    .frame(height: 44)
+            }
+            
             Text("start  \(clipTime)")
-                .font(.title)
+                .font(.headline)
                 .fontWeight(.heavy)
                 .foregroundColor(.purple)
                 .offset(y: 10)
@@ -30,13 +48,14 @@ struct ClipAlertView: View {
             CustomPicker(selected: $selected, currentTime: clipTime)
             
             Text("end  \(getEndTime())")
-                .font(.title)
+                .font(.headline)
                 .fontWeight(.heavy)
                 .foregroundColor(.purple)
                 .offset(y: -10)
             
             Button(action: {
                 print(("00:"+selected).toSecDouble())
+                print(titleText)
                 modalShown = false
                 notificationShown.toggle()
                 

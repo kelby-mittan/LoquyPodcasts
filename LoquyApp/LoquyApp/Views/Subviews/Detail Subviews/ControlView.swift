@@ -85,10 +85,8 @@ struct ControlView: View {
                 
                 Button(action: {
                     
-                    
-                    
                     Player.seekToCurrentTime(delta: -15, player: player)
-                    
+                    getCapsuleWidth()
 //                    guard let url = AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") else {
 //                        print(AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") ?? "Couldn't Find MP3")
 //                        return
@@ -112,6 +110,7 @@ struct ControlView: View {
                 
                 Button(action: {
                     Player.seekToCurrentTime(delta: 15, player: player)
+                    getCapsuleWidth()
                     
                 }) {
                     
@@ -185,23 +184,21 @@ struct ControlView: View {
             getCurrentPlayerTime()
                         
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-
                 if playing {
-
-                    let screen = UIScreen.main.bounds.width - 30
-                    
                     if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-                        print("here")
-                        print(currentTime)
-                        let duration = player.currentItem?.duration.toDisplayString() ?? "00:00:00"
-                        print(player.currentItem?.duration.toDisplayString() ?? "00:00:00")
-                        let percent = currentTime.toSecDouble() / duration.toSecDouble()
-                        width = screen * CGFloat(percent)
+                        getCapsuleWidth()
                     }
                 }
             }
         }
         
+    }
+    
+    private func getCapsuleWidth() {
+        let screen = UIScreen.main.bounds.width - 30
+        let duration = player.currentItem?.duration.toDisplayString() ?? "00:00:00"
+        let percent = currentTime.toSecDouble() / duration.toSecDouble()
+        width = screen * CGFloat(percent) + 20
     }
     
     @discardableResult
