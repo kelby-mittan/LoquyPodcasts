@@ -26,10 +26,10 @@ struct EpisodesView: View {
         VStack {
             List(networkManager.episodes, id: \.self) { episode in
                 
-                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: self.artWork)) {
+                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork)) {
                     
                     ZStack(alignment: .leading) {
-                        LinearGradient(gradient: Gradient(colors: [self.gradColor1!, self.gradColor2!]), startPoint: .top, endPoint: .bottomTrailing)
+                        LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .top, endPoint: .bottomTrailing)
                             .cornerRadius(12)
                             .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
                             .padding(.trailing)
@@ -65,7 +65,7 @@ struct EpisodesView: View {
                 
             }.onAppear(perform: {
                 UITableView.appearance().separatorStyle = .none
-                self.isSaved ? self.networkManager.episodes = getFavorites() : self.getPodcasts()
+                isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
             })
 //            .environment(\.horizontalSizeClass, .regular)
             .navigationBarTitle(title)
@@ -77,7 +77,7 @@ struct EpisodesView: View {
     }
     
     func getFavorites() -> [Episode] {
-        let episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == self.title }
+        let episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == title }
         title = episodes.first?.author ?? "NOOOOO"
         return episodes
     }

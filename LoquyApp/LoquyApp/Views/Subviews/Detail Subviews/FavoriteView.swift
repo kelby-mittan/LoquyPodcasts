@@ -22,6 +22,7 @@ struct FavoriteView: View {
             
             Text(saveText)
                 .fontWeight(.heavy)
+                .font(.headline)
                 .padding()
                 .frame(width: UIScreen.main.bounds.width - 88)
                 .foregroundColor(.white)
@@ -31,30 +32,30 @@ struct FavoriteView: View {
                 .onTapGesture {
                     
                     
-                    if !self.isSaved {
+                    if !isSaved {
                         var episodes = UserDefaults.standard.savedEpisodes()
-                        episodes.append(self.episode)
-                        self.saveText = "Remove Episode"
-                        UserDefaults.standard.saveTheEpisode(episode: self.episode)
+                        episodes.append(episode)
+                        saveText = "remove episode"
+                        UserDefaults.standard.saveTheEpisode(episode: episode)
                         
                         var pCasts = UserDefaults.standard.getPodcastArt()
-                        pCasts.append(self.artwork)
+                        pCasts.append(artwork)
                         UserDefaults.standard.setPodcastArt(pCasts)
                         
                     } else {
-                        self.saveText = "Save Episode"
-                        UserDefaults.standard.deleteEpisode(episode: self.episode)
-                        UserDefaults.standard.deletePodcastArt(self.artwork)
+                        saveText = "save episode"
+                        UserDefaults.standard.deleteEpisode(episode: episode)
+                        UserDefaults.standard.deletePodcastArt(artwork)
                     }
-                    self.isSaved.toggle()
+                    isSaved.toggle()
             }
         }.onAppear {
-            if UserDefaults.standard.savedEpisodes().contains(self.episode) {
-                self.isSaved = true
-                self.saveText = "Remove Episode"
+            if UserDefaults.standard.savedEpisodes().contains(episode) {
+                isSaved = true
+                saveText = "remove episode"
             } else {
-                self.isSaved = false
-                self.saveText = "Save Episode"
+                isSaved = false
+                saveText = "save episode"
             }
             
         }

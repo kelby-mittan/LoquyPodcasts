@@ -45,28 +45,28 @@ struct ControlView: View {
                 Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
                     .padding([.top,.leading,.trailing])
                 
-                Capsule().fill(Color.blue).frame(width: self.width, height: 8)
+                Capsule().fill(Color.blue).frame(width: width, height: 8)
                     .gesture(DragGesture()
                         .onChanged({ (value) in
-                            self.player.pause()
+                            player.pause()
                             let x = value.location.x
                             let maxVal = UIScreen.main.bounds.width - 30
                             let minVal: CGFloat = 10
                             
                             if x < minVal {
-                                self.width = minVal
+                                width = minVal
                             } else if x > maxVal {
-                                self.width = maxVal
+                                width = maxVal
                             } else {
-                                self.width = x
+                                width = x
                             }
-                            self.currentTime = Player.capsuleDragged(value.location.x,player: self.player).toDisplayString()
-                            print("width val is : \(self.width)")
+                            currentTime = Player.capsuleDragged(value.location.x,player: player).toDisplayString()
+                            print("width val is : \(width)")
                             
                         }).onEnded({ (value) in
-                            self.player.seek(to: Player.capsuleDragged(value.location.x, player: self.player))
-                            self.player.play()
-                            self.playing = true
+                            player.seek(to: Player.capsuleDragged(value.location.x, player: player))
+                            player.play()
+                            playing = true
                         })).padding([.top,.leading,.trailing])
             }
             
@@ -75,7 +75,7 @@ struct ControlView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
-                Text(self.getCurrentPlayerTime().durationTime)
+                Text(getCurrentPlayerTime().durationTime)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -87,7 +87,7 @@ struct ControlView: View {
                     
                     
                     
-                    Player.seekToCurrentTime(delta: -15, player: self.player)
+                    Player.seekToCurrentTime(delta: -15, player: player)
                     
 //                    guard let url = AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") else {
 //                        print(AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") ?? "Couldn't Find MP3")
@@ -103,15 +103,15 @@ struct ControlView: View {
                 }
                 
                 Button(action: {
-                    self.playing.toggle()
-                    self.playing ? self.player.play() : self.player.pause()
+                    playing.toggle()
+                    playing ? player.play() : player.pause()
                     
                 }) {
-                    Image(systemName: self.playing ? "pause.fill" : "play.fill").font(.largeTitle)
+                    Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
                 }
                 
                 Button(action: {
-                    Player.seekToCurrentTime(delta: 15, player: self.player)
+                    Player.seekToCurrentTime(delta: 15, player: player)
                     
                 }) {
                     
@@ -122,11 +122,12 @@ struct ControlView: View {
             }
             HStack {
                 Button(action: {
-                    self.showAlert.toggle()
+                    showAlert.toggle()
                 }) {
-                    Text("Time Stamp")
-                        .fontWeight(.medium)
-                        .frame(width: 120,height: 40)
+                    Text("time stamp")
+                        .font(.headline)
+                        .fontWeight(.heavy)
+                        .frame(width: 122,height: 44)
                         .foregroundColor(.white)
                         .background(Color.purple)
                         .clipShape(Capsule())
@@ -134,7 +135,7 @@ struct ControlView: View {
                 }
                 .animation(.spring())
                 .buttonStyle(PlainButtonStyle())
-                .padding([.leading,.top],20)
+                .padding([.leading],20)
                 Spacer()
                 
 //                NavigationLink(destination: Text("Coming Soon!")) {
@@ -149,23 +150,24 @@ struct ControlView: View {
                 
                 Button(action: {
 
-                    self.showModal.toggle()
-                    self.clipTime = self.currentTime
+                    showModal.toggle()
+                    clipTime = currentTime
 //                    AudioTrim.exportUsingComposition(streamUrl: self.episode.streamUrl, pathForFile:  self.episode.title)
                     
 //                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
 
                 }) {
-                    Text("Record Clip")
-                        .fontWeight(.medium)
-                        .frame(width: 120,height: 40)
+                    Text("record clip")
+                        .font(.headline)
+                        .fontWeight(.heavy)
+                        .frame(width: 122,height: 44)
                         .foregroundColor(.white)
                         .background(Color.purple)
                         .clipShape(Capsule())
                         .padding()
                     }
                 .animation(.spring())
-                .padding([.top,.trailing],20)
+                .padding([.trailing],20)
                 Spacer()
     
             }
@@ -179,24 +181,22 @@ struct ControlView: View {
         }
         .animation(.spring())
         .onAppear {
-            Player.playEpisode(episode: self.episode, player: self.player)
-            self.getCurrentPlayerTime()
-            
-            print(self.episode.fileUrl ?? "error")
-            
+            Player.playEpisode(episode: episode, player: player)
+            getCurrentPlayerTime()
+                        
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
 
-                if self.playing {
+                if playing {
 
                     let screen = UIScreen.main.bounds.width - 30
                     
-                    if self.player.currentItem?.duration.toDisplayString() != "--:--" && self.width > 0.0 {
+                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
                         print("here")
-                        print(self.currentTime)
-                        let duration = self.player.currentItem?.duration.toDisplayString() ?? "00:00:00"
-                        print(self.player.currentItem?.duration.toDisplayString() ?? "00:00:00")
-                        let percent = self.currentTime.toSecDouble() / duration.toSecDouble()
-                        self.width = screen * CGFloat(percent)
+                        print(currentTime)
+                        let duration = player.currentItem?.duration.toDisplayString() ?? "00:00:00"
+                        print(player.currentItem?.duration.toDisplayString() ?? "00:00:00")
+                        let percent = currentTime.toSecDouble() / duration.toSecDouble()
+                        width = screen * CGFloat(percent)
                     }
                 }
             }
@@ -211,7 +211,7 @@ struct ControlView: View {
         player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
             self.currentTime = time.toDisplayString()
         }
-        guard let durationTime = self.player.currentItem?.duration else {
+        guard let durationTime = player.currentItem?.duration else {
             return ("--:--", "--:--")
         }
         let dt = durationTime - currentTime.getCMTime()

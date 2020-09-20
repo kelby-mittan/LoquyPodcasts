@@ -33,15 +33,15 @@ struct EpisodeTimesView: View {
                                     .padding(.top, 2)
                                 
                             }.onTapGesture {
-                                self.player.seek(to: time.getCMTime())
+                                player.seek(to: time.getCMTime())
                             }
                             .onLongPressGesture {
-                                guard let tStamp = UserDefaults.standard.savedTimeStamps().filter({ $0.time == time && $0.episode == self.episode }).first else {
+                                guard let tStamp = UserDefaults.standard.savedTimeStamps().filter({ $0.time == time && $0.episode == episode }).first else {
                                     return
                                 }
                                 
                                 UserDefaults.standard.deleteTimeStamp(timeStamp: tStamp)
-                                self.loadTimes(episode: self.episode)
+                                loadTimes(episode: episode)
                                 dump(tStamp)
                             }
                             .frame(width: 84, height: 40)
@@ -50,7 +50,7 @@ struct EpisodeTimesView: View {
                         }
                     }.padding([.leading,.trailing])
                 }.onAppear {
-                    self.loadTimes(episode: self.episode)
+                    loadTimes(episode: episode)
                 }
             }
         }
@@ -62,6 +62,6 @@ struct EpisodeTimesView: View {
 //    }
     
     func loadTimes(episode: Episode) {
-        networkManager.loadTimeStamps(for: self.episode)
+        networkManager.loadTimeStamps(for: episode)
     }
 }

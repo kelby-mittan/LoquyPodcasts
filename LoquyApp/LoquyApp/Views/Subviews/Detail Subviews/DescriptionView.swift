@@ -19,28 +19,28 @@ struct DescriptionView: View {
                 Text(episode.title)
                     .font(.title)
                     .fontWeight(.heavy)
-                    .padding(.top)
+                    .padding(.top,4)
                 Spacer()
             }
             
-            HStack {
-                Text("Philosophy | Physics | Science")
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.leading)
-                    .padding(.top)
-                Spacer()
-            }
+//            HStack {
+//                Text("Philosophy | Physics | Science")
+//                    .foregroundColor(.secondary)
+//                    .multilineTextAlignment(.leading)
+//                    .padding(.top)
+//                Spacer()
+//            }
             
             HStack {
                 Text(getOnlyDescription(episode.description))
                     .fontWeight(.bold)
                 Spacer()
             }
-            .padding(.top)
+            .padding(.top,4)
             
             
         }
-        .padding([.leading,.trailing,.bottom])
+        .padding([.leading,.trailing])
     }
     
     func getOnlyDescription(_ str: String) -> String {

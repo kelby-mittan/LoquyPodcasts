@@ -30,11 +30,10 @@ struct TranscribeView: View {
                 Spacer()
                 
                 Button(action: {
-                    self.paused.toggle()
-                    self.playing.toggle()
-                    print(self.playing)
+                    paused.toggle()
+                    playing.toggle()
                 }) {
-                    Image(systemName: self.playing && !self.paused ? "pause.fill" : "play.fill").font(.largeTitle)
+                    Image(systemName: playing && !paused ? "pause.fill" : "play.fill").font(.largeTitle)
                         .padding(.trailing)
                 }
             }
@@ -44,13 +43,13 @@ struct TranscribeView: View {
                 
                 Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
                 
-                Capsule().fill(Color.blue).frame(width: self.width, height: 8)
+                Capsule().fill(Color.blue).frame(width: width, height: 8)
                     .gesture(DragGesture()
                         .onChanged({ (value) in
                             
                             let x = value.location.x
                             
-                            self.width = x
+                            width = x
                             
                         }).onEnded({ (value) in
                             
@@ -73,8 +72,8 @@ struct TranscribeView: View {
             Group {
                 if !isTranscribed {
                     Button(action: {
-                        self.transcription = "Donec ultricies massa dui, dapibus auctor nibh pharetra eu. Cras vestibulum nisl quis sem ullamcorper interdum. Quisque eget varius sem. Nunc vitae massa ac erat interdum fringilla vel quis nulla. Phasellus a pharetra orcidsalvaskvm."
-                        self.isTranscribed = true
+                        transcription = "Donec ultricies massa dui, dapibus auctor nibh pharetra eu. Cras vestibulum nisl quis sem ullamcorper interdum. Quisque eget varius sem. Nunc vitae massa ac erat interdum fringilla vel quis nulla. Phasellus a pharetra orcidsalvaskvm."
+                        isTranscribed = true
                     }) {
                         Text("Transcribe")
                             .fontWeight(.heavy)
@@ -93,15 +92,15 @@ struct TranscribeView: View {
                             .fontWeight(.heavy)
             
                         MultilineTextField("", text: $transcription, onCommit: {
-                            print("Final text: \(self.transcription)")
+                            print("Final text: \(transcription)")
                         })
                         
                     }
                     .padding()
                     
                         Button(action: {
-                            self.isTranscribed = false
-                            print("Your Loquy is : \(self.transcription)")
+                            isTranscribed = false
+                            print("Your Loquy is : \(transcription)")
                         }) {
                             Text("Save Loquy")
                                 .fontWeight(.heavy)

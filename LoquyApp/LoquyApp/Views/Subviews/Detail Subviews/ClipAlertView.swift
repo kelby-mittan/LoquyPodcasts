@@ -25,6 +25,7 @@ struct ClipAlertView: View {
                 .font(.title)
                 .fontWeight(.heavy)
                 .foregroundColor(.purple)
+                .offset(y: 10)
             
             CustomPicker(selected: $selected, currentTime: clipTime)
             
@@ -32,6 +33,7 @@ struct ClipAlertView: View {
                 .font(.title)
                 .fontWeight(.heavy)
                 .foregroundColor(.purple)
+                .offset(y: -10)
             
             Button(action: {
                 print(("00:"+selected).toSecDouble())
@@ -55,6 +57,7 @@ struct ClipAlertView: View {
                         .background(Color.purple)
                         .clipShape(Capsule())
                         .padding()
+                        .offset(y: -10)
             }
             
             Spacer()
@@ -84,7 +87,7 @@ struct HalfModalView<Content: View> : View {
         }
     }
     
-    var modalHeight:CGFloat = 400
+    var modalHeight:CGFloat = 300
     
     
     var content: () -> Content
@@ -124,7 +127,7 @@ struct HalfModalView<Content: View> : View {
                             .frame(width: UIScreen.main.bounds.size.width, height:modalHeight)
                             .clipped()
                     }
-                    .offset(y: isShown ? ((self.dragState.isDragging && dragState.translation.height >= 1) ? dragState.translation.height : 0) : modalHeight)
+                    .offset(y: isShown ? ((dragState.isDragging && dragState.translation.height >= 1) ? dragState.translation.height : 0) : modalHeight)
                     .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
                     .gesture(drag)
                     

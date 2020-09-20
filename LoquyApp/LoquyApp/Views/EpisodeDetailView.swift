@@ -44,20 +44,19 @@ struct EpisodeDetailView: View {
                 
                 EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
                 
-                DescriptionView(episode: episode).onTapGesture( perform: {
-                    print("here")
-                    self.showNotification.toggle()
-                })
-                FavoriteView(episode: episode, artwork: artwork)
+                DescriptionView(episode: episode)
                 
-            }.padding([.bottom], 100)
+                FavoriteView(episode: episode, artwork: artwork)
+                    .padding(.bottom, 100)
+                
+            }
             
             NotificationView()
-                .offset(y: self.showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
+                .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
             
-            HalfModalView(isShown: $halfModalShown, modalHeight: 600){
-                ClipAlertView(clipTime: self.clipTime, modalShown: $halfModalShown, notificationShown: $showNotification)
+            HalfModalView(isShown: $halfModalShown, modalHeight: 500){
+                ClipAlertView(clipTime: clipTime, modalShown: $halfModalShown, notificationShown: $showNotification)
             }
         }.onAppear(perform: {
             clipTime = player.currentTime().toDisplayString()

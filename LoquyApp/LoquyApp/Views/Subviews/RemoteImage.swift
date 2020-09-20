@@ -24,7 +24,7 @@ struct RemoteImage: View {
     var body: some View {
         
         
-        if let image = self.imageLoader.downloadImage {
+        if let image = imageLoader.downloadImage {
             
             let newImage = Image(uiImage: image)
             
