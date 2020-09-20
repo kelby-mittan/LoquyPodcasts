@@ -21,7 +21,7 @@ struct EpisodeDetailView: View {
     @State var halfModalShown = false
     @State var clipTime = ""
     @State var times = [String]()
-    @State var showNotification = true
+    @State var showNotification = false
     //    @Binding var modalShown: Bool
     
     let player: AVPlayer = {
@@ -37,22 +37,27 @@ struct EpisodeDetailView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 250, height: 250)
                     .cornerRadius(12)
+                    .padding(.top,100)
                     .padding([.leading,.trailing])
                 
                 ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
                 
                 EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
                 
-                DescriptionView(episode: episode)//.offset(x: 0, y: -20)
+                DescriptionView(episode: episode).onTapGesture( perform: {
+                    print("here")
+                    self.showNotification.toggle()
+                })
                 FavoriteView(episode: episode, artwork: artwork)
                 
-            }.padding([.top,.bottom], 100)
+            }.padding([.bottom], 100)
             
             NotificationView()
                 .offset(y: self.showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
+                .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
             
             HalfModalView(isShown: $halfModalShown, modalHeight: 600){
-                ClipAlertView(clipTime: self.clipTime, modalShown: $halfModalShown)
+                ClipAlertView(clipTime: self.clipTime, modalShown: $halfModalShown, notificationShown: $showNotification)
             }
         }.onAppear(perform: {
             clipTime = player.currentTime().toDisplayString()

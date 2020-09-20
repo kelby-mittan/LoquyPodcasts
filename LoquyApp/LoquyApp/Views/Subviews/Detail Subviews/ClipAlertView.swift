@@ -11,32 +11,41 @@ import AVKit
 
 struct ClipAlertView: View {
     
-    
     var clipTime: String
     
     @State var selected = "02:00"
     @Binding var modalShown: Bool
+    @Binding var notificationShown: Bool
     
     var body: some View {
         
         VStack {
-                
             Spacer()
-            Text("Start: \(clipTime)")
+            Text("start  \(clipTime)")
                 .font(.title)
                 .fontWeight(.heavy)
-                .background(Color.green)
+                .foregroundColor(.purple)
             
-            CustomPicker(selected: self.$selected, currentTime: clipTime)
+            CustomPicker(selected: $selected, currentTime: clipTime)
             
-            Text("End: \(getEndTime())")
+            Text("end  \(getEndTime())")
                 .font(.title)
                 .fontWeight(.heavy)
-                .background(Color.green)
+                .foregroundColor(.purple)
             
             Button(action: {
                 print(("00:"+selected).toSecDouble())
-                self.modalShown = false
+                modalShown = false
+                notificationShown.toggle()
+                
+                var timer = 0
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+                    timer += 1
+                    if timer > 1 {
+                        notificationShown = false
+                    }
+                }
+                
                 
             }) {
                     Text("Save Clip")
@@ -49,7 +58,7 @@ struct ClipAlertView: View {
             }
             
             Spacer()
-        }.background(Color.yellow)
+        }
         Spacer()
     }
     
@@ -97,7 +106,7 @@ struct HalfModalView<Content: View> : View {
                     .gesture(
                         TapGesture()
                             .onEnded { _ in
-                                self.isShown = false
+                                isShown = false
                         }
                 )
                 
@@ -109,7 +118,7 @@ struct HalfModalView<Content: View> : View {
                             .frame(width: UIScreen.main.bounds.size.width, height:modalHeight)
                             .cornerRadius(10)
                             .shadow(radius: 5)
-                        self.content()
+                            content()
                             .padding()
                             .padding(.bottom, 65)
                             .frame(width: UIScreen.main.bounds.size.width, height:modalHeight)
@@ -169,8 +178,4 @@ func fractionProgress(lowerLimit: Double = 0, upperLimit:Double, current:Double,
         return val
     }
     
-}
-
-final class UserData: ObservableObject {
-    @Published var showFullScreen = false
 }

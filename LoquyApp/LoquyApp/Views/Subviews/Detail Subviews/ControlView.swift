@@ -176,10 +176,6 @@ struct ControlView: View {
                 .offset(x: 0, y: -70)
             }
             
-//            HalfModalView(isShown: $halfModal_shown, modalHeight: 600){
-//                Text("hello world")
-//            }
-            
         }
         .animation(.spring())
         .onAppear {
