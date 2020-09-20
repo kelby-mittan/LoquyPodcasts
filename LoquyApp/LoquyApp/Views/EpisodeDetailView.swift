@@ -21,8 +21,8 @@ struct EpisodeDetailView: View {
     @State var halfModalShown = false
     @State var clipTime = ""
     @State var times = [String]()
-        
-//    @Binding var modalShown: Bool
+    @State var showNotification = true
+    //    @Binding var modalShown: Bool
     
     let player: AVPlayer = {
         let avPlayer = AVPlayer()
@@ -32,9 +32,7 @@ struct EpisodeDetailView: View {
     
     var body: some View {
         ZStack {
-            Spacer()
             ScrollView(.vertical, showsIndicators: true) {
-                Spacer()
                 RemoteImage(url: episode.imageUrl ?? "")
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 250, height: 250)
@@ -45,12 +43,13 @@ struct EpisodeDetailView: View {
                 
                 EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
                 
-                
                 DescriptionView(episode: episode)//.offset(x: 0, y: -20)
                 FavoriteView(episode: episode, artwork: artwork)
                 
-                
-            }.offset(x: 0, y: 40)
+            }.padding([.top,.bottom], 100)
+            
+            NotificationView()
+                .offset(y: self.showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
             
             HalfModalView(isShown: $halfModalShown, modalHeight: 600){
                 ClipAlertView(clipTime: self.clipTime, modalShown: $halfModalShown)
@@ -58,7 +57,6 @@ struct EpisodeDetailView: View {
         }.onAppear(perform: {
             clipTime = player.currentTime().toDisplayString()
         })
-//        .navigationBarBackButtonHidden(/*@START_MENU_TOKEN@*/false/*@END_MENU_TOKEN@*/)
         .navigationBarTitle("", displayMode: .inline)
     }
     
@@ -72,7 +70,20 @@ struct EpisodeDetailView: View {
     
 }
 
-
+struct NotificationView: View {
+    
+    var body: some View {
+        Text("clip saved")
+            .fontWeight(.bold)
+            .padding()
+            .font(.title)
+            .foregroundColor(Color.white)
+            .frame(width: UIScreen.main.bounds.width - 40, height: 40)
+            .background(Color.purple)
+            .cornerRadius(20)
+        
+    }
+}
 
 
 
