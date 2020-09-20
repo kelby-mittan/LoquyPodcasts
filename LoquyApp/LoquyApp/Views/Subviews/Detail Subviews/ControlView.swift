@@ -87,13 +87,6 @@ struct ControlView: View {
                     
                     Player.seekToCurrentTime(delta: -15, player: player)
                     getCapsuleWidth()
-//                    guard let url = AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") else {
-//                        print(AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") ?? "Couldn't Find MP3")
-//                        return
-//                        }
-//
-//
-//                    Player.playAudioClip(url: url, player: self.player)
                     
 //                    dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0])
                 }) {
@@ -137,23 +130,10 @@ struct ControlView: View {
                 .padding([.leading],20)
                 Spacer()
                 
-//                NavigationLink(destination: Text("Coming Soon!")) {
-//                    Text("Record Clip")
-//                    .fontWeight(.medium)
-//                    .frame(width: 120,height: 40)
-//                    .foregroundColor(.white)
-//                    .background(Color.purple)
-//                    .clipShape(Capsule())
-//                    .padding()
-//                }.padding([.top,.trailing],20)
-                
                 Button(action: {
 
                     showModal.toggle()
                     clipTime = currentTime
-//                    AudioTrim.exportUsingComposition(streamUrl: self.episode.streamUrl, pathForFile:  self.episode.title)
-                    
-//                    dump(UserDefaults.standard.savedTimeStamps().filter { $0.episode == self.episode }.map { $0.time })
 
                 }) {
                     Text("record clip")

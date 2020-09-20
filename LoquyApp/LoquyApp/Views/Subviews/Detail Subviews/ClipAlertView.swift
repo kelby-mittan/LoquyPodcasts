@@ -12,6 +12,7 @@ import AVKit
 struct ClipAlertView: View {
     
     var clipTime: String
+    let episode: Episode
     
     @State var selected = "02:00"
     @Binding var modalShown: Bool
@@ -67,6 +68,7 @@ struct ClipAlertView: View {
                     }
                 }
                 
+                AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, end: "00:"+selected, pathForFile:  episode.title)
                 
             }) {
                     Text("Save Clip")

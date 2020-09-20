@@ -39,6 +39,15 @@ struct EpisodeDetailView: View {
                     .cornerRadius(12)
                     .padding(.top,100)
                     .padding([.leading,.trailing])
+                    .onTapGesture(perform: {
+                        guard let url = AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") else {
+                            print(AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") ?? "Couldn't Find MP3")
+                            return
+                            }
+
+
+                        Player.playAudioClip(url: url, player: self.player)
+                    })
                 
                 ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
                 
@@ -56,7 +65,7 @@ struct EpisodeDetailView: View {
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
             
             HalfModalView(isShown: $halfModalShown, modalHeight: 500){
-                ClipAlertView(clipTime: clipTime, modalShown: $halfModalShown, notificationShown: $showNotification)
+                ClipAlertView(clipTime: clipTime, episode: episode, modalShown: $halfModalShown, notificationShown: $showNotification)
             }
         }.onAppear(perform: {
             clipTime = player.currentTime().toDisplayString()

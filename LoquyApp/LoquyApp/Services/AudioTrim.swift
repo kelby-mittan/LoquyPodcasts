@@ -12,9 +12,7 @@ import MediaPlayer
 
 struct AudioTrim {
     
-    // https://www.rockhoppertech.com/blog/ios-trimming-audio-files/#:~:text=One%20way%20to%20trim%20an,in%20the%20soundFileURL%20instance%20variable.
-    
-    static func exportUsingComposition(streamUrl: String, pathForFile: String) {
+    static func exportUsingComposition(streamUrl: String, start: String, end: String, pathForFile: String) {
         
         guard let url = URL(string: streamUrl) else {
             return
@@ -56,8 +54,12 @@ struct AudioTrim {
         exportSession.outputURL = trimmedFileURL
         exportSession.outputFileType = .mp4
         
-        let startTime = CMTime(value: 20, timescale: 1)
-        let stopTime = CMTime(value: 40, timescale: 1)
+        let startDouble = start.toSecDouble()
+        let endDouble = startDouble + end.toSecDouble()
+        
+        let startTime = CMTime(seconds: startDouble, preferredTimescale: 1)
+        let stopTime = CMTime(seconds: endDouble, preferredTimescale: 1)
+        
         exportSession.timeRange = CMTimeRange(start: startTime, end: stopTime)
         
         exportSession.exportAsynchronously {
