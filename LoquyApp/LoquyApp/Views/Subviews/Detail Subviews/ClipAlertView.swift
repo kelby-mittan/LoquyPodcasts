@@ -67,6 +67,10 @@ struct ClipAlertView: View {
                         notificationShown = false
                     }
                 }
+                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime())
+                var audioClips = UserDefaults.standard.savedAudioClips()
+                audioClips.append(newClip)
+                UserDefaults.standard.saveTheClip(clip: newClip)
                 
                 AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, end: "00:"+selected, pathForFile:  episode.title)
                 

@@ -48,14 +48,14 @@ struct TimeStampAlertView: View {
                 PCastHeaderLabelView(label: time)
                 
                 Button(action: {
-                    if self.isFavorited {
-                        self.showAlert.toggle()
-                        let newTStamp = TimeStamp(episode: self.episode, time: self.time)
+                    if isFavorited {
+                        showAlert.toggle()
+                        let newTStamp = TimeStamp(episode: episode, time: time)
                         var stamps = UserDefaults.standard.savedTimeStamps()
                         stamps.append(newTStamp)
                         UserDefaults.standard.saveTheTimeStamp(timeStamp: newTStamp)
-                        self.loadTimes(episode: self.episode)
-                        self.networkManager.timeStamps.append(newTStamp.time)
+                        loadTimes(episode: episode)
+                        networkManager.timeStamps.append(newTStamp.time)
                     } else {
                         self.showAlert.toggle()
                     }

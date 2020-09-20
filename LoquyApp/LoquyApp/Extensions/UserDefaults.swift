@@ -13,6 +13,7 @@ extension UserDefaults {
     static let favoriteKey = "favoriteKey"
     static let pCastKey = "pCastKey"
     static let timeStampKey = "timeStampKey"
+    static let clipsKey = "clipsKey"
     
     func savedEpisodes() -> [Episode] {
         guard let episodesData = data(forKey: UserDefaults.favoriteKey) else { return [] }
@@ -88,7 +89,7 @@ extension UserDefaults {
             UserDefaults.standard.set(data, forKey: UserDefaults.timeStampKey)
             
         } catch let encodeErr {
-            print("Could not encode episode:", encodeErr)
+            print("Could not encode time stamp:", encodeErr)
         }
     }
     
@@ -100,7 +101,44 @@ extension UserDefaults {
             let data = try JSONEncoder().encode(filteredStamps)
             UserDefaults.standard.set(data, forKey: UserDefaults.timeStampKey)
         } catch let encodeErr {
-            print("Failed to encode episode:", encodeErr)
+            print("Failed to encode time stamp:", encodeErr)
+        }
+    }
+    
+    func savedAudioClips() -> [AudioClip] {
+        guard let audioClipsData = data(forKey: UserDefaults.clipsKey) else { return [] }
+        
+        do {
+            let clips = try JSONDecoder().decode([AudioClip].self, from: audioClipsData)
+            return clips
+        } catch let decodeErr {
+            print("Could not decode:", decodeErr)
+        }
+        
+        return []
+    }
+    
+    func saveTheClip(clip: AudioClip) {
+        do {
+            var clips = savedAudioClips()
+            clips.insert(clip, at: 0)
+            let data = try JSONEncoder().encode(clips)
+            UserDefaults.standard.set(data, forKey: UserDefaults.clipsKey)
+            
+        } catch let encodeErr {
+            print("Could not encode audio clip:", encodeErr)
+        }
+    }
+    
+    func deleteAudioClip(clip: AudioClip) {
+        let clips = savedAudioClips()
+        let filteredClips = clips.filter { $0.time != clip.time && $0.episode == clip.episode }
+        
+        do {
+            let data = try JSONEncoder().encode(filteredClips)
+            UserDefaults.standard.set(data, forKey: UserDefaults.clipsKey)
+        } catch let encodeErr {
+            print("Failed to encode audio clip:", encodeErr)
         }
     }
 }
