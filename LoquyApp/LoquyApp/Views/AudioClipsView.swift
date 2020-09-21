@@ -27,7 +27,7 @@ struct AudioClipsView: View {
                     
                     NavigationLink(destination: TranscribeView(audioClip: clip)) {
                         
-                        ZStack(alignment: .leading) {
+                        ZStack(alignment: .center) {
                             LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .top, endPoint: .bottomTrailing)
                                 .cornerRadius(12)
                                 .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
@@ -83,7 +83,7 @@ struct AudioClipsView: View {
             //            .environment(\.horizontalSizeClass, .regular)
             .navigationBarTitle("Your Audio Clips")
             
-        }
+        }.background(Color.white)
     }
     
     var actionSheet: ActionSheet {

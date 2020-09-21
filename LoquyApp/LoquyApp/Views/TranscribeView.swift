@@ -27,29 +27,42 @@ struct TranscribeView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             
+            Text(audioClip.title)
+                .fontWeight(.heavy)
+                .foregroundColor(Color(.label))
+                .font(.title)
+                .padding(.bottom,6)
+            
+            NavigationLink(destination: EpisodeDetailView(episode: audioClip.episode, artwork: audioClip.episode.imageUrl ?? "")) {
+                
+                Text(audioClip.episode.title)
+                    .fontWeight(.heavy)
+                    .foregroundColor(Color.purple)
+                    .font(.headline)
+                    .padding([.leading,.trailing])
+            }.onTapGesture(perform: {
+                playing = false
+            })
+            
+            Text(audioClip.startTime + " - " + audioClip.endTime)
+                .fontWeight(.heavy)
+                .foregroundColor(Color(.label))
+                .font(.subheadline)
+                .padding(.top,4)
+            
             HStack {
                 image
                     .frame(width: 100, height: 100)
                     .cornerRadius(6)
                 
-//                RemoteImage2(url: URL(string: audioClip.episode.imageUrl ?? "")!, errorView: { error in
-//                            Text(error.localizedDescription)
-//                        }, imageView: { image in
-//                            image
-//                            .resizable()
-//                            .frame(width: 100, height: 100)
-//                            .cornerRadius(6)
-////                            .aspectRatio(contentMode: .fit)
-//                        }, loadingView: {
-////                            Text("Loading ...")
-//                            ActivityIndicator(style: .medium)
-//                        }).onAppear(perform: {
-////                            url = getImageUrl()!
-//                            guard let urlStr = URL(string: audioClip.episode.imageUrl ?? "") else { return }
-////                            url = urlStr
-//                        })
-                
                 Spacer()
+                
+//                Text(audioClip.startTime + " - " + audioClip.endTime)
+//                    .fontWeight(.heavy)
+//                    .foregroundColor(Color(.label))
+//                    .font(.subheadline)
+//
+//                Spacer()
                 
                 Button(action: {
                     
@@ -118,6 +131,7 @@ struct TranscribeView: View {
                             .background(Color.purple)
                             .clipShape(Capsule())
                             .padding()
+//                        Spacer()
                     }
                 } else {
                     
@@ -147,6 +161,7 @@ struct TranscribeView: View {
                                 
                                 .padding()
                         }
+//                    Spacer()
                     
                 }
             }
