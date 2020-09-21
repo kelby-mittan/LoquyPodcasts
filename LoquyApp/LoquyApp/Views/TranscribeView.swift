@@ -19,6 +19,7 @@ struct TranscribeView: View {
 //    @State var paused = true
     @State var transcription: String = ""
     @State var isTranscribed = false
+//    @State var url: URL
     
     let player = Player.shared.player
     
@@ -30,6 +31,21 @@ struct TranscribeView: View {
                     .frame(width: 100, height: 100)
                     .cornerRadius(6)
                 
+//                RemoteImage2(url: getImageUrl()!, errorView: { error in
+//                            Text(error.localizedDescription)
+//                        }, imageView: { image in
+//                            image
+//                            .resizable()
+//                            .frame(width: 100, height: 100)
+//                            .cornerRadius(6)
+////                            .aspectRatio(contentMode: .fit)
+//                        }, loadingView: {
+////                            Text("Loading ...")
+//                            ActivityIndicator(style: .medium)
+//                        }).onAppear(perform: {
+////                            url = getImageUrl()!
+//                            getImageUrl()
+//                        })
                 
                 Spacer()
                 
@@ -42,7 +58,7 @@ struct TranscribeView: View {
                         .padding(.trailing)
                 }
             }
-            .padding()
+            .padding([.leading,.trailing,.bottom])
             
             ZStack(alignment: .leading) {
                 
@@ -73,7 +89,6 @@ struct TranscribeView: View {
                             playing = true
                         }))
             }.padding([.leading,.trailing])
-//            .padding(.top)
             
             HStack {
                 Text(currentTime)
@@ -147,20 +162,12 @@ struct TranscribeView: View {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                 if playing {
                     if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-                        getCapsuleWidth()
+                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                     }
                 }
             }
         })
-        .padding(.top, 20)
         
-    }
-    
-    private func getCapsuleWidth() {
-        let screen = UIScreen.main.bounds.width - 30
-        let duration = player.currentItem?.duration.toDisplayString() ?? "00:00:00"
-        let percent = currentTime.toSecDouble() / duration.toSecDouble()
-        width = screen * CGFloat(percent) + 20
     }
     
     @discardableResult
@@ -184,5 +191,12 @@ struct TranscribeView: View {
 //            .cornerRadius(6)
 //        return image
 //    }
+    
+    func getImageUrl() -> URL? {
+        guard let url = URL(string: audioClip.episode.imageUrl ?? "") else {
+            return nil
+        }
+        return url
+    }
 }
 

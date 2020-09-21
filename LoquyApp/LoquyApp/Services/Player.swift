@@ -98,4 +98,28 @@ class Player {
         return seekTime
     }
     
+    static func getCapsuleWidth(width: inout CGFloat, currentTime: String) {
+        let screen = UIScreen.main.bounds.width - 30
+        let duration = Player.shared.player.currentItem?.duration.toDisplayString() ?? "00:00:00"
+        let percent = currentTime.toSecDouble() / duration.toSecDouble()
+        width = screen * CGFloat(percent) + 20
+    }
+    
+    @discardableResult
+    static func getCurrentPlayerTime(currentTime: inout String) -> (cTime: String, durationTime: String) {
+        let interval = CMTimeMake(value: 1, timescale: 2)
+        var durationLabel = ""
+        var timeStr = "--:--"
+        Player.shared.player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
+            timeStr = time.toDisplayString()
+        }
+        currentTime = timeStr
+        guard let durationTime = Player.shared.player.currentItem?.duration else {
+            return ("--:--", "--:--")
+        }
+        let dt = durationTime - currentTime.getCMTime()
+        durationLabel = "-" + dt.toDisplayString()
+        return ("",durationLabel)
+    }
+    
 }
