@@ -16,5 +16,6 @@ struct AudioClip: Codable, Identifiable, Hashable {
     let duration: String
     let startTime: String
     let endTime: String
+    let savedDate: String
     
 }

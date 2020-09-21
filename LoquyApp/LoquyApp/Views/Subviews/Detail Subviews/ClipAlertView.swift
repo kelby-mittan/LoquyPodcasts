@@ -67,7 +67,8 @@ struct ClipAlertView: View {
                         notificationShown = false
                     }
                 }
-                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime())
+                
+                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString())
                 var audioClips = UserDefaults.standard.savedAudioClips()
                 audioClips.append(newClip)
                 UserDefaults.standard.saveTheClip(clip: newClip)

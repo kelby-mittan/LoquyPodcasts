@@ -37,6 +37,12 @@ class NetworkingManager: ObservableObject {
         }
     }
     
+    @Published var audioClips = [AudioClip]() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
     func updatePodcasts(forSearch: String) {
         ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { (podcasts) in
             DispatchQueue.main.async {
@@ -57,6 +63,13 @@ class NetworkingManager: ObservableObject {
         let timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
         DispatchQueue.main.async {
             self.timeStamps = timeStamps
+        }
+    }
+    
+    func loadAudioClips() {
+        let audioClips = UserDefaults.standard.savedAudioClips()
+        DispatchQueue.main.async {
+            self.audioClips = audioClips
         }
     }
     

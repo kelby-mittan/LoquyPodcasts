@@ -40,20 +40,22 @@ struct EpisodeDetailView: View {
                     .padding(.top,100)
                     .padding([.leading,.trailing])
                     .onTapGesture(perform: {
-                        guard let url = AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") else {
-                            print(AudioTrim.loadUrlFromDiskWith(fileName: self.episode.title + ".m4a") ?? "Couldn't Find MP3")
+                        guard let url = AudioTrim.loadUrlFromDiskWith(fileName: episode.title + ".m4a") else {
+                            print(AudioTrim.loadUrlFromDiskWith(fileName: episode.title + ".m4a") ?? "Couldn't Find MP3")
                             return
                             }
 
 
-                        Player.playAudioClip(url: url, player: self.player)
+                        Player.playAudioClip(url: url, player: player)
                     })
                 
                 ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
                 
                 EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
                 
-                DescriptionView(episode: episode)
+                DescriptionView(episode: episode).onTapGesture(perform: {
+                    dump(UserDefaults.standard.savedAudioClips())
+                })
                 
                 FavoriteView(episode: episode, artwork: artwork)
                     .padding(.bottom, 100)

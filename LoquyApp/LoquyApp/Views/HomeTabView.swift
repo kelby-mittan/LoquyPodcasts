@@ -127,7 +127,7 @@ struct FavoritesTabView: View {
 
 struct TabThree: View {
     var body: some View {
-        TranscribeView(podcast: DummyPodcast.podcasts[4])
+        AudioClipsView()
             .tabItem {
                 
                 Image(systemName: "textbox")

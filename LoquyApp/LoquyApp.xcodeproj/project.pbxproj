@@ -56,6 +56,7 @@
 		02B568B924C4FA8D004D5C6D /* NetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B568B824C4FA8D004D5C6D /* NetworkingManager.swift */; };
 		02DE63B9251165DD002B307F /* ClipAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DE63B8251165DD002B307F /* ClipAlertView.swift */; };
 		02DF72CF25181238006FDC9E /* AudioClip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DF72CE25181238006FDC9E /* AudioClip.swift */; };
+		02DF72D8251826C6006FDC9E /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DF72D7251826C6006FDC9E /* Date.swift */; };
 		34E3FD100C39B9909F7E36BC /* Pods_LoquyAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */; };
 		5F80F7A04C631CDC2E0F879C /* Pods_LoquyApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 768EDA54066F14F767914D5C /* Pods_LoquyApp.framework */; };
 /* End PBXBuildFile section */
@@ -123,6 +124,7 @@
 		02B568B824C4FA8D004D5C6D /* NetworkingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingManager.swift; sourceTree = "<group>"; };
 		02DE63B8251165DD002B307F /* ClipAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipAlertView.swift; sourceTree = "<group>"; };
 		02DF72CE25181238006FDC9E /* AudioClip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioClip.swift; sourceTree = "<group>"; };
+		02DF72D7251826C6006FDC9E /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		5A1FE38E8B88A97BC59B255E /* Pods-LoquyApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyApp.release.xcconfig"; path = "Target Support Files/Pods-LoquyApp/Pods-LoquyApp.release.xcconfig"; sourceTree = "<group>"; };
 		5DBCD5426E03BF62E24E2304 /* Pods-LoquyAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LoquyAppTests.release.xcconfig"; path = "Target Support Files/Pods-LoquyAppTests/Pods-LoquyAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		707A137DE2FFDB5C5037FDC7 /* Pods_LoquyAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LoquyAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,6 +173,7 @@
 				0224B57024CBC2CB0062E43F /* MakeStrings+exts.swift */,
 				029955C524F32C0E00479318 /* CMTime.swift */,
 				0270947D250403F9009E0BF5 /* UserDefaults.swift */,
+				02DF72D7251826C6006FDC9E /* Date.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 				02B568B924C4FA8D004D5C6D /* NetworkingManager.swift in Sources */,
 				02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */,
 				027094842505AF2D009E0BF5 /* TimeStamp.swift in Sources */,
+				02DF72D8251826C6006FDC9E /* Date.swift in Sources */,
 				0270948A2506AE36009E0BF5 /* DescriptionView.swift in Sources */,
 				02272D7924C91FF7007548C3 /* ListenToView.swift in Sources */,
 				02272D8324CA3CD6007548C3 /* Episode.swift in Sources */,

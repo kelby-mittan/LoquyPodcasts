@@ -7,33 +7,42 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct TranscribeView: View {
     
-    let podcast: DummyPodcast
-    
-    init(podcast: DummyPodcast) {
-        self.podcast = podcast
-    }
+    let audioClip: AudioClip
     
     @State var width : CGFloat = 30
-    @State var playing = false
-    @State var paused = true
+    @State var currentTime: String = "0:00"
+    @State var playing = true
+//    @State var paused = true
     @State var transcription: String = ""
     @State var isTranscribed = false
     
+    let player: AVPlayer = {
+        let avPlayer = AVPlayer()
+        avPlayer.automaticallyWaitsToMinimizeStalling = false
+        return avPlayer
+    }()
+    
     var body: some View {
-        ScrollView(.vertical, showsIndicators: true) {
+        ScrollView(.vertical, showsIndicators: false) {
             
             HStack {
-                PodcastPosterView(podcast: DummyPodcast.podcasts[6], width: 100, height: 100)
+                RemoteImage(url: audioClip.episode.imageUrl ?? "")
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(6)
+                
+                
                 Spacer()
                 
                 Button(action: {
-                    paused.toggle()
+                    
                     playing.toggle()
+                    playing ? player.play() : player.pause()
                 }) {
-                    Image(systemName: playing && !paused ? "pause.fill" : "play.fill").font(.largeTitle)
+                    Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
                         .padding(.trailing)
                 }
             }
@@ -47,23 +56,36 @@ struct TranscribeView: View {
                     .gesture(DragGesture()
                         .onChanged({ (value) in
                             
+                            player.pause()
                             let x = value.location.x
+                            let maxVal = UIScreen.main.bounds.width - 30
+                            let minVal: CGFloat = 10
                             
-                            width = x
+                            if x < minVal {
+                                width = minVal
+                            } else if x > maxVal {
+                                width = maxVal
+                            } else {
+                                width = x
+                            }
+                            currentTime = Player.capsuleDragged(value.location.x,player: player).toDisplayString()
+                            print("width val is : \(width)")
                             
                         }).onEnded({ (value) in
-                            
+                            player.seek(to: Player.capsuleDragged(value.location.x, player: player))
+                            player.play()
+                            playing = true
                         }))
-            }
-            .padding(.top)
+            }.padding([.leading,.trailing])
+//            .padding(.top)
             
             HStack {
-                Text("0:00")
+                Text(currentTime)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.leading, 4)
                 Spacer()
-                Text("2:30")
+                Text(getCurrentPlayerTime().durationTime)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .padding(.trailing, 4)
@@ -115,15 +137,56 @@ struct TranscribeView: View {
                     
                 }
             }
+        }.onAppear(perform: {
             
-        }
+            guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + ".m4a") else {
+                print(AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + ".m4a") ?? "Couldn't Find MP3")
+                return
+                }
+
+            Player.playAudioClip(url: url, player: player)
+            
+            getCurrentPlayerTime()
+
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+                if playing {
+                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                        getCapsuleWidth()
+                    }
+                }
+            }
+        })
         .padding(.top, 20)
         
     }
+    
+    private func getCapsuleWidth() {
+        let screen = UIScreen.main.bounds.width - 30
+        let duration = player.currentItem?.duration.toDisplayString() ?? "00:00:00"
+        let percent = currentTime.toSecDouble() / duration.toSecDouble()
+        width = screen * CGFloat(percent) + 20
+    }
+    
+    @discardableResult
+    private func getCurrentPlayerTime() -> (currentTime: String, durationTime: String) {
+        let interval = CMTimeMake(value: 1, timescale: 2)
+        var durationLabel = ""
+        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
+            self.currentTime = time.toDisplayString()
+        }
+        guard let durationTime = player.currentItem?.duration else {
+            return ("--:--", "--:--")
+        }
+        let dt = durationTime - currentTime.getCMTime()
+        durationLabel = "-" + dt.toDisplayString()
+        return ("",durationLabel)
+    }
+    
+//    func getStaticImage() -> View {
+//        let image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
+//            .frame(width: 100, height: 100)
+//            .cornerRadius(6)
+//        return image
+//    }
 }
 
-struct TranscribeView_Previews: PreviewProvider {
-    static var previews: some View {
-        TranscribeView(podcast: DummyPodcast.podcasts[4])
-    }
-}
