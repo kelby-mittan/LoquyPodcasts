@@ -132,7 +132,7 @@ extension UserDefaults {
     
     func deleteAudioClip(clip: AudioClip) {
         let clips = savedAudioClips()
-        let filteredClips = clips.filter { $0.startTime != clip.startTime && $0.episode == clip.episode }
+        let filteredClips = clips.filter { $0.startTime != clip.startTime }
         
         do {
             let data = try JSONEncoder().encode(filteredClips)

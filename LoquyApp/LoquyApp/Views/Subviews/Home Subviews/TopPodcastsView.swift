@@ -49,7 +49,7 @@ struct TopPodcastsView: View {
                         
                         VStack(alignment: .leading) {
                             Text(pcast.title)
-                                .foregroundColor(.black)
+                                .foregroundColor(Color(.label))
                                 .font(.headline)
                                 .padding(.top, 4)
                             Text(pcast.host)

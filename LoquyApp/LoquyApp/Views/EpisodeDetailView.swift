@@ -18,6 +18,8 @@ struct EpisodeDetailView: View {
     
     @ObservedObject private var networkManager = NetworkingManager()
     
+    @State var image = RemoteImage(url: "")
+    
     @State var halfModalShown = false
     @State var clipTime = ""
     @State var times = [String]()
@@ -29,7 +31,7 @@ struct EpisodeDetailView: View {
     var body: some View {
         ZStack {
             ScrollView(.vertical, showsIndicators: true) {
-                RemoteImage(url: episode.imageUrl ?? "")
+                image
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 250, height: 250)
                     .cornerRadius(12)
@@ -66,6 +68,7 @@ struct EpisodeDetailView: View {
                 ClipAlertView(clipTime: clipTime, episode: episode, modalShown: $halfModalShown, notificationShown: $showNotification)
             }
         }.onAppear(perform: {
+            image = RemoteImage(url: episode.imageUrl ?? "")
             clipTime = player.currentTime().toDisplayString()
         })
         .navigationBarTitle("", displayMode: .inline)

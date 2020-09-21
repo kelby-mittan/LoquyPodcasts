@@ -18,6 +18,7 @@ struct RemoteImage: View {
     init(url: String, placeholder: ActivityIndicator = ActivityIndicator(style:.medium)) {
         self.placeholder = placeholder
         imageLoader.fetchImage(url: url)
+        
     }
     
     var body: some View {

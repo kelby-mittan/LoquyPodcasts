@@ -15,6 +15,10 @@ struct AudioClipsView: View {
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
     
+    @State var showActionSheet: Bool = false
+    @State var audioClip = UserDefaults.standard.savedAudioClips().first
+    
+    
     var body: some View {
         
         NavigationView {
@@ -35,41 +39,71 @@ struct AudioClipsView: View {
                                     .font(.headline)
                                     .fontWeight(.heavy)
                                     .foregroundColor(Color.white)
-//                                    .padding()
-                                    
+                                //                                    .padding()
+                                
                                 RemoteImage(url: clip.episode.imageUrl ?? "")
                                     .frame(width: 140, height: 140)
                                     .cornerRadius(6)
-//                                    .padding([.leading,.bottom,.top])
-                                    
-                                    Text(clip.title)
-                                        .font(.headline)
-                                        .foregroundColor(Color.white)
-                                        .fontWeight(.semibold)
-//                                        .padding([.horizontal])
-                                    
-                                    Text(clip.episode.title)
-                                        .font(.subheadline)
-                                        .foregroundColor(Color.white)
-                                        .fontWeight(.semibold)
-//                                        .padding([.horizontal])
-                                    
+                                    .onLongPressGesture {
+                                        audioClip = clip
+                                        showActionSheet.toggle()
+                                    }
+                                //                                    .padding([.leading,.bottom,.top])
+                                
+                                Text(clip.title)
+                                    .font(.headline)
+                                    .foregroundColor(Color.white)
+                                    .fontWeight(.semibold)
+                                //                                        .padding([.horizontal])
+                                
+                                Text(clip.episode.title)
+                                    .font(.subheadline)
+                                    .foregroundColor(Color.white)
+                                    .fontWeight(.semibold)
+                                //                                        .padding([.horizontal])
+                                
                                 
                             }.padding()
+                            
                         }
-                        
                     }
                     .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
                     
                 }
+                
+                
             }.onAppear(perform: {
-//                UITableView.appearance().separatorStyle = .none
+                //                UITableView.appearance().separatorStyle = .none
                 getAudioClips()
             })
-//            .environment(\.horizontalSizeClass, .regular)
+            .actionSheet(isPresented: $showActionSheet, content: {
+                actionSheet
+            })
+            
+            //            .environment(\.horizontalSizeClass, .regular)
             .navigationBarTitle("Your Audio Clips")
             
         }
+    }
+    
+    var actionSheet: ActionSheet {
+        ActionSheet(title: Text("Remove Clip").font(.title), buttons: [
+            .default(Text("Cancel")) {
+                dump(UserDefaults.standard.savedAudioClips().filter { $0.startTime != audioClip?.startTime } )
+            },
+            .destructive(Text("Delete")) {
+                print("clicked DELETE")
+                
+                guard let audioClip = UserDefaults.standard.savedAudioClips().filter({ $0.episode.description == audioClip?.episode.description && $0.startTime == audioClip?.startTime }).first else {
+                    return
+                }
+                
+                dump(audioClip)
+                UserDefaults.standard.deleteAudioClip(clip: audioClip)
+                getAudioClips()
+            }
+            
+        ])
     }
     
     func getAudioClips() {

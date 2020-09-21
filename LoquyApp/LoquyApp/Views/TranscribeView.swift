@@ -19,7 +19,8 @@ struct TranscribeView: View {
 //    @State var paused = true
     @State var transcription: String = ""
     @State var isTranscribed = false
-//    @State var url: URL
+    
+    @State var image = RemoteImage(url: "")
     
     let player = Player.shared.player
     
@@ -27,11 +28,11 @@ struct TranscribeView: View {
         ScrollView(.vertical, showsIndicators: false) {
             
             HStack {
-                RemoteImage(url: audioClip.episode.imageUrl ?? "")
+                image
                     .frame(width: 100, height: 100)
                     .cornerRadius(6)
                 
-//                RemoteImage2(url: getImageUrl()!, errorView: { error in
+//                RemoteImage2(url: URL(string: audioClip.episode.imageUrl ?? "")!, errorView: { error in
 //                            Text(error.localizedDescription)
 //                        }, imageView: { image in
 //                            image
@@ -44,7 +45,8 @@ struct TranscribeView: View {
 //                            ActivityIndicator(style: .medium)
 //                        }).onAppear(perform: {
 ////                            url = getImageUrl()!
-//                            getImageUrl()
+//                            guard let urlStr = URL(string: audioClip.episode.imageUrl ?? "") else { return }
+////                            url = urlStr
 //                        })
                 
                 Spacer()
@@ -149,6 +151,8 @@ struct TranscribeView: View {
                 }
             }
         }.onAppear(perform: {
+            
+            image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
             
             guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + ".m4a") else {
                 print(AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + ".m4a") ?? "Couldn't Find MP3")
