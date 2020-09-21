@@ -20,11 +20,7 @@ struct TranscribeView: View {
     @State var transcription: String = ""
     @State var isTranscribed = false
     
-    let player: AVPlayer = {
-        let avPlayer = AVPlayer()
-        avPlayer.automaticallyWaitsToMinimizeStalling = false
-        return avPlayer
-    }()
+    let player = Player.shared.player
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -68,11 +64,11 @@ struct TranscribeView: View {
                             } else {
                                 width = x
                             }
-                            currentTime = Player.capsuleDragged(value.location.x,player: player).toDisplayString()
+                            currentTime = Player.capsuleDragged(value.location.x).toDisplayString()
                             print("width val is : \(width)")
                             
                         }).onEnded({ (value) in
-                            player.seek(to: Player.capsuleDragged(value.location.x, player: player))
+                            player.seek(to: Player.capsuleDragged(value.location.x))
                             player.play()
                             playing = true
                         }))
@@ -144,7 +140,7 @@ struct TranscribeView: View {
                 return
                 }
 
-            Player.playAudioClip(url: url, player: player)
+            Player.playAudioClip(url: url)
             
             getCurrentPlayerTime()
 

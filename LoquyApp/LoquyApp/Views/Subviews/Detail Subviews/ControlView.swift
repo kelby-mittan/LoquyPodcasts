@@ -60,11 +60,11 @@ struct ControlView: View {
                             } else {
                                 width = x
                             }
-                            currentTime = Player.capsuleDragged(value.location.x,player: player).toDisplayString()
+                            currentTime = Player.capsuleDragged(value.location.x).toDisplayString()
                             print("width val is : \(width)")
                             
                         }).onEnded({ (value) in
-                            player.seek(to: Player.capsuleDragged(value.location.x, player: player))
+                            player.seek(to: Player.capsuleDragged(value.location.x))
                             player.play()
                             playing = true
                         })).padding([.top,.leading,.trailing])
@@ -85,7 +85,7 @@ struct ControlView: View {
                 
                 Button(action: {
                     
-                    Player.seekToCurrentTime(delta: -15, player: player)
+                    Player.seekToCurrentTime(delta: -15)
                     getCapsuleWidth()
                     
 //                    dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0])
@@ -102,7 +102,7 @@ struct ControlView: View {
                 }
                 
                 Button(action: {
-                    Player.seekToCurrentTime(delta: 15, player: player)
+                    Player.seekToCurrentTime(delta: 15)
                     getCapsuleWidth()
                     
                 }) {
@@ -160,7 +160,7 @@ struct ControlView: View {
         }
         .animation(.spring())
         .onAppear {
-            Player.playEpisode(episode: episode, player: player)
+            Player.playEpisode(episode: episode)
             getCurrentPlayerTime()
                         
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in

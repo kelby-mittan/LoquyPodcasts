@@ -24,11 +24,7 @@ struct EpisodeDetailView: View {
     @State var showNotification = false
     //    @Binding var modalShown: Bool
     
-    let player: AVPlayer = {
-        let avPlayer = AVPlayer()
-        avPlayer.automaticallyWaitsToMinimizeStalling = false
-        return avPlayer
-    }()
+    let player = Player.shared.player
     
     var body: some View {
         ZStack {
@@ -46,7 +42,7 @@ struct EpisodeDetailView: View {
                             }
 
 
-                        Player.playAudioClip(url: url, player: player)
+                        Player.playAudioClip(url: url)
                     })
                 
                 ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
