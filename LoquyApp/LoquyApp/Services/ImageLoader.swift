@@ -27,7 +27,6 @@ class ImageLoader: ObservableObject {
     func fetchImage(url:String) {
         guard let imageUrl = URL(string: url) else {
 //            fatalError("url string is invalid")
-            print("error")
             return
         }
         

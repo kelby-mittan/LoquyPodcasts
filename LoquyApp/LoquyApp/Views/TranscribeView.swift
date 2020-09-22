@@ -16,7 +16,6 @@ struct TranscribeView: View {
     @State var width : CGFloat = 30
     @State var currentTime: String = "0:00"
     @State var playing = true
-//    @State var paused = true
     @State var transcription: String = ""
     @State var isTranscribed = false
     
@@ -56,13 +55,6 @@ struct TranscribeView: View {
                     .cornerRadius(6)
                 
                 Spacer()
-                
-//                Text(audioClip.startTime + " - " + audioClip.endTime)
-//                    .fontWeight(.heavy)
-//                    .foregroundColor(Color(.label))
-//                    .font(.subheadline)
-//
-//                Spacer()
                 
                 Button(action: {
                     
@@ -161,10 +153,10 @@ struct TranscribeView: View {
                                 
                                 .padding()
                         }
-//                    Spacer()
                     
                 }
             }
+            Spacer()
         }.onAppear(perform: {
             
             image = RemoteImage(url: audioClip.episode.imageUrl ?? "")

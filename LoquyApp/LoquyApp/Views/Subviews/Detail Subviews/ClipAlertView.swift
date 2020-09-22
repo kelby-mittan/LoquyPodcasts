@@ -25,20 +25,27 @@ struct ClipAlertView: View {
             Spacer()
             
             HStack {
-                Text("title: ")
-                    .font(.headline)
+                Text("Title: ")
+                    .font(.title)
                     .fontWeight(.heavy)
-                    .foregroundColor(.purple)
+                    .foregroundColor(.white)
                     .padding(.leading)
                 
-                TextField("  give this clip a title", text: $titleText)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .background(Color.purple)
-                    .cornerRadius(8)
-                    .padding(.trailing)
-                    .frame(height: 44)
+                    
+                    TextField("give this clip a title", text: $titleText)
+                        .font(.headline)
+                        .foregroundColor(.purple)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .padding([.leading,.trailing])
+                        .frame(height: 44)
+                        .textFieldStyle(SuperCustomTextFieldStyle())
+                
             }
+            .frame(width: UIScreen.main.bounds.width)
+            .background(Color.purple)
+            .cornerRadius(10)
+            .offset(y: -8)
             
             Text("start  \(clipTime)")
                 .font(.headline)
@@ -207,4 +214,14 @@ func fractionProgress(lowerLimit: Double = 0, upperLimit:Double, current:Double,
         return val
     }
     
+}
+
+
+struct SuperCustomTextFieldStyle: TextFieldStyle {
+    func _body(configuration: TextField<_Label>) -> some View {
+        configuration
+            .padding()
+            .border(Color.purple)
+            .frame(height: 34)
+    }
 }
