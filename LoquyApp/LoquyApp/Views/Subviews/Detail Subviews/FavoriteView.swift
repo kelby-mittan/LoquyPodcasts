@@ -15,7 +15,10 @@ struct FavoriteView: View {
     @State var isSaved = false
     @State var saveText = ""
     
-    @State private var showAlert = false
+//    @State private var showAlert = false
+    
+    @Binding var notificationShown: Bool
+    @Binding var message: String
     
     var body: some View {
         NavigationLink(destination: Text("Add to Favorites")) {
@@ -31,11 +34,21 @@ struct FavoriteView: View {
                 .padding()
                 .onTapGesture {
                     
+                    notificationShown.toggle()
+                    
+                    var timer = 0
+                    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+                        timer += 1
+                        if timer > 1 {
+                            notificationShown = false
+                        }
+                    }
                     
                     if !isSaved {
                         var episodes = UserDefaults.standard.savedEpisodes()
                         episodes.append(episode)
                         saveText = "remove episode"
+                        message = "episode saved"
                         UserDefaults.standard.saveTheEpisode(episode: episode)
                         
                         var pCasts = UserDefaults.standard.getPodcastArt()
@@ -44,6 +57,7 @@ struct FavoriteView: View {
                         
                     } else {
                         saveText = "save episode"
+                        message = "episode removed"
                         UserDefaults.standard.deleteEpisode(episode: episode)
                         UserDefaults.standard.deletePodcastArt(artwork)
                     }

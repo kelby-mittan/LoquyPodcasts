@@ -24,6 +24,8 @@ struct EpisodeDetailView: View {
     @State var clipTime = ""
     @State var times = [String]()
     @State var showNotification = false
+    @State var showSavedNotification = false
+    @State var notificationMessage = ""
     //    @Binding var modalShown: Bool
     
     let player = Player.shared.player
@@ -44,17 +46,17 @@ struct EpisodeDetailView: View {
                 
                 DescriptionView(episode: episode)
                 
-                FavoriteView(episode: episode, artwork: artwork)
+                FavoriteView(episode: episode, artwork: artwork, notificationShown: $showNotification, message: $notificationMessage)
                     .padding(.bottom, 100)
                 
             }
             
-            NotificationView()
+            NotificationView(message: $notificationMessage)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
             
             HalfModalView(isShown: $halfModalShown, modalHeight: 500){
-                ClipAlertView(clipTime: clipTime, episode: episode, modalShown: $halfModalShown, notificationShown: $showNotification)
+                ClipAlertView(clipTime: clipTime, episode: episode, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
             }
         }.onAppear(perform: {
             image = RemoteImage(url: episode.imageUrl ?? "")
@@ -75,8 +77,10 @@ struct EpisodeDetailView: View {
 
 struct NotificationView: View {
     
+    @Binding var message: String
+    
     var body: some View {
-        Text("clip saved")
+        Text(message)
             .fontWeight(.bold)
             .padding()
             .font(.title)

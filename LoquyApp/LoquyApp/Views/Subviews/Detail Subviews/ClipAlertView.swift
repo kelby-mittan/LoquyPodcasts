@@ -17,6 +17,7 @@ struct ClipAlertView: View {
     @State var selected = "02:00"
     @Binding var modalShown: Bool
     @Binding var notificationShown: Bool
+    @Binding var message: String
     @State var titleText = ""
     
     var body: some View {
@@ -66,7 +67,7 @@ struct ClipAlertView: View {
                 print(titleText)
                 modalShown = false
                 notificationShown.toggle()
-                
+                message = "clip saved"
                 var timer = 0
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                     timer += 1
