@@ -66,14 +66,10 @@ struct ClipAlertView: View {
                 print(("00:"+selected).toSecDouble())
                 print(titleText)
                 modalShown = false
-                notificationShown.toggle()
+                notificationShown = true
                 message = "clip saved"
-                var timer = 0
-                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                    timer += 1
-                    if timer > 1 {
-                        notificationShown = false
-                    }
+                Timer.scheduledTimer(withTimeInterval: 2.5, repeats: false) { (value) in
+                    notificationShown = false
                 }
                 
                 let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString())
@@ -81,7 +77,9 @@ struct ClipAlertView: View {
                 audioClips.append(newClip)
                 UserDefaults.standard.saveTheClip(clip: newClip)
                 
-                AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, end: "00:"+selected, pathForFile:  episode.title)
+                AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, duration: "00:"+selected, pathForFile:  episode.title+clipTime)
+                
+                titleText = ""
                 
             }) {
                     Text("Save Clip")

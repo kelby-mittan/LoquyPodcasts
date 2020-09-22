@@ -36,12 +36,8 @@ struct FavoriteView: View {
                     
                     notificationShown.toggle()
                     
-                    var timer = 0
-                    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                        timer += 1
-                        if timer > 1 {
-                            notificationShown = false
-                        }
+                    Timer.scheduledTimer(withTimeInterval: 1.75, repeats: false) { (value) in
+                        notificationShown = false
                     }
                     
                     if !isSaved {

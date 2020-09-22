@@ -161,7 +161,7 @@ struct TranscribeView: View {
             
             image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
             
-            guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + ".m4a") else {
+            guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") else {
                 print(AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + ".m4a") ?? "Couldn't Find MP3")
                 return
                 }

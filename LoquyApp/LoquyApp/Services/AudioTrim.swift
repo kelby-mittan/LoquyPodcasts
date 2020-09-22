@@ -12,7 +12,7 @@ import MediaPlayer
 
 struct AudioTrim {
     
-    static func exportUsingComposition(streamUrl: String, start: String, end: String, pathForFile: String) {
+    static func exportUsingComposition(streamUrl: String, start: String, duration: String, pathForFile: String) {
         
         guard let url = URL(string: streamUrl) else {
             return
@@ -55,7 +55,7 @@ struct AudioTrim {
         exportSession.outputFileType = .mp4
         
         let startDouble = start.toSecDouble()
-        let endDouble = startDouble + end.toSecDouble()
+        let endDouble = startDouble + duration.toSecDouble()
         
         let startTime = CMTime(seconds: startDouble, preferredTimescale: 1)
         let stopTime = CMTime(seconds: endDouble, preferredTimescale: 1)
