@@ -24,6 +24,9 @@ struct TranscribeView: View {
     
     let player = Player.shared.player
     
+    private let audioEngine = AVAudioEngine()
+    var speechRecognizer = SFSpeechRecognizer()
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             
@@ -113,8 +116,8 @@ struct TranscribeView: View {
             Group {
                 if !isTranscribed {
                     Button(action: {
-                        
-                        getTranscription()
+//                        configAudio()
+                        transcribeLiveAudio()
                         
                         isTranscribed = true
                     }) {
@@ -144,6 +147,8 @@ struct TranscribeView: View {
                     
                         Button(action: {
                             isTranscribed = false
+                            audioEngine.stop()
+                            audioEngine.inputNode.removeTap(onBus: 0)
                             print("Your Loquy is : \(transcription)")
                         }) {
                             Text("Save Loquy")
@@ -183,17 +188,70 @@ struct TranscribeView: View {
         
     }
     
-    private func getTranscription() {
+    private func configAudio() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("error configuring \(error)")
+        }
+        audioEngine.prepare()
+        do {
+            try audioEngine.start()
+        } catch {
+            print("ayayayaay")
+        }
+    }
+    
+    private func transcribeLiveAudio() {
+        let audioSession = AVAudioSession.sharedInstance()
+        let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+        recognitionRequest.shouldReportPartialResults = true
+        do {
+            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("error configuring \(error)")
+        }
         
+        let recordingFormat = audioEngine.inputNode.outputFormat(forBus: 0)
+        
+        audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, time) in
+            recognitionRequest.append(buffer)
+        }
+
+        audioEngine.prepare()
+        do {
+            try audioEngine.start()
+        } catch {
+            print("Error starting engine: \(error)")
+        }
+        
+        speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
+            if let theError = error {
+                print("recognition error: \(theError)")
+            } else {
+                transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
+            }
+        })
+        
+    }
+    
+    private func getTranscriptionOfFullFile() {
+        
+        player.pause()
+        
+        playing = true
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") {
-//                Player.playAudioClip(url: url)
+                Player.playAudioClip(url: url)
 
 
-                let recognizer = SFSpeechRecognizer()
+//                speechRecognizer = SFSpeechRecognizer()
                 let request = SFSpeechURLRecognitionRequest(url: url)
 
-                recognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
+                speechRecognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
                     if let theError = error {
                         print("recognition error: \(theError)")
                     } else {
@@ -201,6 +259,8 @@ struct TranscribeView: View {
                     }
 
                 })
+                
+                
 
             }
         }
