@@ -8,6 +8,7 @@
 
 import SwiftUI
 import AVKit
+import Speech
 
 struct TranscribeView: View {
     
@@ -112,7 +113,9 @@ struct TranscribeView: View {
             Group {
                 if !isTranscribed {
                     Button(action: {
-                        transcription = "Donec ultricies massa dui, dapibus auctor nibh pharetra eu. Cras vestibulum nisl quis sem ullamcorper interdum. Quisque eget varius sem. Nunc vitae massa ac erat interdum fringilla vel quis nulla. Phasellus a pharetra orcidsalvaskvm."
+                        
+                        getTranscription()
+                        
                         isTranscribed = true
                     }) {
                         Text("Transcribe")
@@ -150,7 +153,6 @@ struct TranscribeView: View {
                                 .foregroundColor(.white)
                                 .background(Color.purple)
                                 .clipShape(Capsule())
-                                
                                 .padding()
                         }
                     
@@ -179,6 +181,29 @@ struct TranscribeView: View {
             }
         })
         
+    }
+    
+    private func getTranscription() {
+        
+        SFSpeechRecognizer.requestAuthorization { (authStatus) in
+            if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") {
+//                Player.playAudioClip(url: url)
+
+
+                let recognizer = SFSpeechRecognizer()
+                let request = SFSpeechURLRecognitionRequest(url: url)
+
+                recognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
+                    if let theError = error {
+                        print("recognition error: \(theError)")
+                    } else {
+                        transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
+                    }
+
+                })
+
+            }
+        }
     }
     
     @discardableResult
