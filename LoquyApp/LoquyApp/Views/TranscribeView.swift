@@ -247,8 +247,6 @@ struct TranscribeView: View {
             if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") {
                 Player.playAudioClip(url: url)
 
-
-//                speechRecognizer = SFSpeechRecognizer()
                 let request = SFSpeechURLRecognitionRequest(url: url)
 
                 speechRecognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
@@ -280,13 +278,6 @@ struct TranscribeView: View {
         durationLabel = "-" + dt.toDisplayString()
         return ("",durationLabel)
     }
-    
-//    func getStaticImage() -> View {
-//        let image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
-//            .frame(width: 100, height: 100)
-//            .cornerRadius(6)
-//        return image
-//    }
     
     func getImageUrl() -> URL? {
         guard let url = URL(string: audioClip.episode.imageUrl ?? "") else {
