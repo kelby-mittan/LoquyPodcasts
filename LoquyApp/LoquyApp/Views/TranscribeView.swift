@@ -116,8 +116,9 @@ struct TranscribeView: View {
             Group {
                 if !isTranscribed {
                     Button(action: {
-//                        configAudio()
+
                         transcribeLiveAudio()
+//                        getTranscriptionOfFullFile()
                         
                         isTranscribed = true
                     }) {
@@ -188,21 +189,21 @@ struct TranscribeView: View {
         
     }
     
-    private func configAudio() {
-        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            print("error configuring \(error)")
-        }
-        audioEngine.prepare()
-        do {
-            try audioEngine.start()
-        } catch {
-            print("ayayayaay")
-        }
-    }
+//    private func configAudio() {
+//        let audioSession = AVAudioSession.sharedInstance()
+//        do {
+//            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+//            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+//        } catch {
+//            print("error configuring \(error)")
+//        }
+//        audioEngine.prepare()
+//        do {
+//            try audioEngine.start()
+//        } catch {
+//            print("ayayayaay")
+//        }
+//    }
     
     private func transcribeLiveAudio() {
         let audioSession = AVAudioSession.sharedInstance()
@@ -287,3 +288,4 @@ struct TranscribeView: View {
     }
 }
 
+//git rm --cached LoquyApp.xcodeproj/project.xcworkspace/xcuserdata/
