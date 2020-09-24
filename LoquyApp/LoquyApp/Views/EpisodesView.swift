@@ -82,7 +82,7 @@ struct EpisodesView: View {
         var episodes: [Episode] = []
         
         do {
-            episodes = try Persistence.episodePersistence.loadItems()
+            episodes = try Persistence.episodes.loadItems().filter { $0.author == title }
         } catch {
             print("error getting episodes: \(error)")
         }

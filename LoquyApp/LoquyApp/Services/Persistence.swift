@@ -10,5 +10,8 @@ import Foundation
 import DataPersistence
 
 struct Persistence {
-    static var episodePersistence = DataPersistence<Episode>(filename: "favEpisodes.plist")
+    static var episodes = DataPersistence<Episode>(filename: "favEpisodes.plist")
+    static var artWork = DataPersistence<String>(filename: "artWork.plist")
+    static var timeStamps = DataPersistence<TimeStamp>(filename: "timeStamps.plist")
+    static var audioClips = DataPersistence<AudioClip>(filename: "audioClips.plist")
 }

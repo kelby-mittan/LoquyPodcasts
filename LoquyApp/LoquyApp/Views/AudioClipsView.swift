@@ -16,7 +16,7 @@ struct AudioClipsView: View {
     let gradColor2 = PaletteColour.colors2.randomElement()
     
     @State var showActionSheet: Bool = false
-    @State var audioClip = UserDefaults.standard.savedAudioClips().first
+    @State var audioClip: AudioClip?
     
     
     var body: some View {
@@ -102,7 +102,25 @@ struct AudioClipsView: View {
                     return
                 }
                 
-                UserDefaults.standard.deleteAudioClip(clip: audioClip)
+//                guard let validEpsiode = episodes.firstIndex(of: episode) else {
+//                    print("couldn't get episode")
+//                    return
+//                }
+//                try Persistence.episodes.deleteItem(at: validEpsiode)
+                
+                do {
+                    
+                    let clips = try Persistence.audioClips.loadItems()
+                    guard let clipIndex = clips.firstIndex(of: audioClip) else {
+                        print("couldn't find clip")
+                        return
+                    }
+                    try Persistence.audioClips.deleteItem(at: clipIndex)
+                } catch {
+                    print("error deleting clip: \(error)")
+                }
+                
+//                UserDefaults.standard.deleteAudioClip(clip: audioClip)
                 AudioTrim.removeUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime)
                 getAudioClips()
             }

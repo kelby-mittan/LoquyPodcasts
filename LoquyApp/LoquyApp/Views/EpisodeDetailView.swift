@@ -39,6 +39,9 @@ struct EpisodeDetailView: View {
                     .cornerRadius(12)
                     .padding(.top,100)
                     .padding([.leading,.trailing])
+                    .onTapGesture(perform: {
+                        dump(try! Persistence.artWork.loadItems())
+                    })
                 
                 ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
                 

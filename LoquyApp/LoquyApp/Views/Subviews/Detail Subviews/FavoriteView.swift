@@ -16,8 +16,6 @@ struct FavoriteView: View {
     @State var isSaved = false
     @State var saveText = ""
     
-    public var episodePersistence = DataPersistence<Episode>(filename: "favEpisodes.plist")
-    
 //    @State private var showAlert = false
     
     @Binding var notificationShown: Bool
@@ -43,26 +41,22 @@ struct FavoriteView: View {
                         notificationShown = false
                     }
                     
-                    if !episodePersistence.hasItemBeenSaved(episode) {
+                    if !Persistence.episodes.hasItemBeenSaved(episode) {
 //                        var episodes = UserDefaults.standard.savedEpisodes()
 //                        episodes.append(episode)
+//                        UserDefaults.standard.saveTheEpisode(episode: episode)
                         saveText = "remove episode"
                         message = "episode saved"
-//                        UserDefaults.standard.saveTheEpisode(episode: episode)
-                        
-                        
                         do {
-                            try episodePersistence.createItem(episode)
-                            
+                            try Persistence.episodes.createItem(episode)
+                            try Persistence.artWork.createItem(artwork)
                         } catch {
-                            print("could not save")
+                            print("could not save episode/ artwork")
                         }
                         
-                        
-                        
-                        var pCasts = UserDefaults.standard.getPodcastArt()
-                        pCasts.append(artwork)
-                        UserDefaults.standard.setPodcastArt(pCasts)
+//                        var pCasts = UserDefaults.standard.getPodcastArt()
+//                        pCasts.append(artwork)
+//                        UserDefaults.standard.setPodcastArt(pCasts)
                         
                     } else {
                         saveText = "save episode"
@@ -70,26 +64,31 @@ struct FavoriteView: View {
 //                        UserDefaults.standard.deleteEpisode(episode: episode)
                         
                         do {
-                            let episodes = try episodePersistence.loadItems()
+                            let episodes = try Persistence.episodes.loadItems()
+                            let artWorks = try Persistence.artWork.loadItems()
                             
-                            guard let validEpsiode = episodes.firstIndex(of: episode) else { return }
+                            guard let validEpsiode = episodes.firstIndex(of: episode) else {
+                                print("couldn't get episode")
+                                return
+                            }
+                            try Persistence.episodes.deleteItem(at: validEpsiode)
                             
-                            try episodePersistence.deleteItem(at: validEpsiode)
+                            guard let art = artWorks.firstIndex(of: artwork) else {
+                                print("couldn't get art")
+                                return
+                            }
+                            try Persistence.artWork.deleteItem(at: art)
                             
                         } catch {
-                            print("error getting episodes or deleting episode")
+                            print("error getting episodes or deleting episode/ art")
                         }
                         
-                        
-                        
-                        
-                        
-                        UserDefaults.standard.deletePodcastArt(artwork)
+//                        UserDefaults.standard.deletePodcastArt(artwork)
                     }
                     isSaved.toggle()
             }
         }.onAppear {
-            if episodePersistence.hasItemBeenSaved(episode) {
+            if Persistence.episodes.hasItemBeenSaved(episode) {
                 isSaved = true
                 saveText = "remove episode"
             } else {

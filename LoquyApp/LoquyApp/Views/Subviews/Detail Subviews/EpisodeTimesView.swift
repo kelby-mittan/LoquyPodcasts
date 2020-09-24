@@ -20,7 +20,7 @@ struct EpisodeTimesView: View {
     
     var body: some View {
         Group {
-            if UserDefaults.standard.savedEpisodes().contains(episode) {
+            if Persistence.episodes.hasItemBeenSaved(episode) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(networkManager.timeStamps.sorted(), id:\.self) { time in
@@ -37,13 +37,35 @@ struct EpisodeTimesView: View {
                                 player.play()
                             }
                             .onLongPressGesture {
-                                guard let tStamp = UserDefaults.standard.savedTimeStamps().filter({ $0.time == time && $0.episode == episode }).first else {
-                                    return
-                                }
                                 
-                                UserDefaults.standard.deleteTimeStamp(timeStamp: tStamp)
+                                do {
+                                    let tStamps = try Persistence.timeStamps.loadItems().filter({ $0.episode == episode })
+                                    
+                                    dump(tStamps)
+                                    
+                                    let index = tStamps.firstIndex { (timeStamp) -> Bool in
+                                        timeStamp.time == time
+                                    }
+                                    
+                                    guard let i = index else {
+                                        print("couldn't get an index")
+                                        return
+                                    }
+                                    
+                                    try Persistence.timeStamps.deleteItem(at: i)
+                                    
+                                } catch {
+                                    print("error deleting timestamp \(error)")
+                                }
                                 loadTimes(episode: episode)
-                                dump(tStamp)
+                                
+//                                guard let tStamp = UserDefaults.standard.savedTimeStamps().filter({ $0.time == time && $0.episode == episode }).first else {
+//                                    return
+//                                }
+//
+//                                UserDefaults.standard.deleteTimeStamp(timeStamp: tStamp)
+//                                loadTimes(episode: episode)
+//                                dump(tStamp)
                             }
                             .frame(width: 84, height: 40)
                             .background(Color(.systemGray5))

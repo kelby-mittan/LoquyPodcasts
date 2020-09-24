@@ -19,7 +19,7 @@ struct TimeStampAlertView: View {
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
     
-    @State var isFavorited = true
+//    @State var isFavorited = true
     @State var favToSave = ""
     @State var saveText = ""
     
@@ -48,14 +48,22 @@ struct TimeStampAlertView: View {
                 PCastHeaderLabelView(label: time)
                 
                 Button(action: {
-                    if isFavorited {
+                    if Persistence.episodes.hasItemBeenSaved(episode) {
                         showAlert.toggle()
                         let newTStamp = TimeStamp(episode: episode, time: time)
-                        var stamps = UserDefaults.standard.savedTimeStamps()
-                        stamps.append(newTStamp)
-                        UserDefaults.standard.saveTheTimeStamp(timeStamp: newTStamp)
+//                        var stamps = UserDefaults.standard.savedTimeStamps()
+                        
+                        do {
+//                            var stamps = try Persistence.timeStamps.loadItems()
+                            try Persistence.timeStamps.createItem(newTStamp)
+                        } catch {
+                            print("error saving timestamp: \(error)")
+                        }
+                        
+//                        stamps.append(newTStamp)
+//                        UserDefaults.standard.saveTheTimeStamp(timeStamp: newTStamp)
                         loadTimes(episode: episode)
-                        networkManager.timeStamps.append(newTStamp.time)
+//                        networkManager.timeStamps.append(newTStamp.time)
                     } else {
                         self.showAlert.toggle()
                     }
@@ -72,18 +80,17 @@ struct TimeStampAlertView: View {
                 Spacer()
             }
         }.onAppear(perform: {
-            self.isFavorited = UserDefaults.standard.savedEpisodes().contains(self.episode)
             
-            if !self.isFavorited {
-                self.favToSave = "⇩Fave to Save!⇩"
-                self.saveText = "okay"
+            if !Persistence.episodes.hasItemBeenSaved(episode) {
+                favToSave = "⇩Fave to Save!⇩"
+                saveText = "okay"
             } else {
-                self.favToSave = "Save this time?"
-                self.saveText = "save"
+                favToSave = "Save this time?"
+                saveText = "save"
             }
         })
         .frame(width: 300, height: 200)
-        .background(LinearGradient(gradient: Gradient(colors: [self.gradColor1!, self.gradColor2!]), startPoint: .top, endPoint: .bottomTrailing))
+        .background(LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .top, endPoint: .bottomTrailing))
         .cornerRadius(20)
         
     }

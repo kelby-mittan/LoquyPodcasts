@@ -74,9 +74,15 @@ struct ClipAlertView: View {
                 }
                 
                 let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString())
-                var audioClips = UserDefaults.standard.savedAudioClips()
-                audioClips.append(newClip)
-                UserDefaults.standard.saveTheClip(clip: newClip)
+//                var audioClips = UserDefaults.standard.savedAudioClips()
+//                audioClips.append(newClip)
+//                UserDefaults.standard.saveTheClip(clip: newClip)
+                
+                do {
+                    try Persistence.audioClips.createItem(newClip)
+                } catch {
+                    print("error saving clip: \(error)")
+                }
                 
                 AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, duration: "00:"+selected, pathForFile:  episode.title+clipTime)
                 

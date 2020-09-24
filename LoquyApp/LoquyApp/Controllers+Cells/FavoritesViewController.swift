@@ -41,7 +41,6 @@ class FavoritesViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         updateSnapshot(with: Array(Set(nonDuplicatedCasts())))
-        print("\(UserDefaults.standard.savedEpisodes().count)")
     }
     
     private func nonDuplicatedCasts() -> [String] {
@@ -49,7 +48,7 @@ class FavoritesViewController: UIViewController {
         var authors = [String]()
 //        let episodes = UserDefaults.standard.savedEpisodes()
         do {
-            episodes = try Persistence.episodePersistence.loadItems()
+            episodes = try Persistence.episodes.loadItems()
         } catch {
             print("error getting episodes: \(error)")
         }
