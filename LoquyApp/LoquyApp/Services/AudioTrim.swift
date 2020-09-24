@@ -161,11 +161,26 @@ struct AudioTrim {
         
         if let dirPath = paths.first {
             let url = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
+            print(url)
             return url
             
         }
         
         return nil
+    }
+    
+    static func removeUrlFromDiskWith(fileName: String) {
+        
+        let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = documentsDir.appendingPathComponent("\(fileName).m4a")
+        
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            print("file removed")
+            try? FileManager.default.removeItem(at: fileURL)
+            dump(FileManager.default.urls)
+        } else {
+            print("file does not exist")
+        }
     }
 }
 

@@ -39,7 +39,7 @@ struct AudioClipsView: View {
                                     .font(.headline)
                                     .fontWeight(.heavy)
                                     .foregroundColor(Color.white)
-                                //                                    .padding()
+                        
                                 
                                 RemoteImage(url: clip.episode.imageUrl ?? "")
                                     .frame(width: 140, height: 140)
@@ -48,13 +48,14 @@ struct AudioClipsView: View {
                                         audioClip = clip
                                         showActionSheet.toggle()
                                     }
-                                //                                    .padding([.leading,.bottom,.top])
                                 
                                 Text(clip.title)
                                     .font(.headline)
                                     .foregroundColor(Color.white)
                                     .fontWeight(.semibold)
-                                //                                        .padding([.horizontal])
+                                    .onTapGesture(perform: {
+                                        dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].pathComponents)
+                                    })
                                 
                                 Text(clip.episode.title)
                                     .font(.subheadline)
@@ -72,34 +73,35 @@ struct AudioClipsView: View {
                 }
                 
                 
-            }.onAppear(perform: {
-                //                UITableView.appearance().separatorStyle = .none
-                getAudioClips()
-            })
+            }
             .actionSheet(isPresented: $showActionSheet, content: {
                 actionSheet
             })
             
-            //            .environment(\.horizontalSizeClass, .regular)
+//            .environment(\.horizontalSizeClass, .regular)
             .navigationBarTitle("Your Audio Clips")
             
-        }.background(Color.white)
+        }.onAppear(perform: {
+//                UITableView.appearance().separatorStyle = .none
+            getAudioClips()
+        })
+        .background(Color.white)
     }
     
     var actionSheet: ActionSheet {
         ActionSheet(title: Text("Remove Clip").font(.title), buttons: [
             .default(Text("Cancel")) {
-                dump(UserDefaults.standard.savedAudioClips().filter { $0.startTime != audioClip?.startTime } )
+//                dump(UserDefaults.standard.savedAudioClips().filter { $0.startTime != audioClip?.startTime } )
+//                print(AudioTrim.loadUrlFromDiskWith(fileName: audioClip!.title + audioClip!.startTime) ?? "none")
+//                dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0])
             },
             .destructive(Text("Delete")) {
-                print("clicked DELETE")
-                
-                guard let audioClip = UserDefaults.standard.savedAudioClips().filter({ $0.episode.description == audioClip?.episode.description && $0.startTime == audioClip?.startTime }).first else {
+                guard let audioClip = audioClip else {
                     return
                 }
                 
-                dump(audioClip)
                 UserDefaults.standard.deleteAudioClip(clip: audioClip)
+                AudioTrim.removeUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime)
                 getAudioClips()
             }
             

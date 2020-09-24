@@ -13,6 +13,7 @@ struct ClipAlertView: View {
     
     var clipTime: String
     let episode: Episode
+    @ObservedObject var networkManager: NetworkingManager
     
     @State var selected = "02:00"
     @Binding var modalShown: Bool
@@ -80,7 +81,7 @@ struct ClipAlertView: View {
                 AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, duration: "00:"+selected, pathForFile:  episode.title+clipTime)
                 
                 titleText = ""
-                
+                networkManager.loadAudioClips()
             }) {
                     Text("Save Clip")
                         .fontWeight(.heavy)

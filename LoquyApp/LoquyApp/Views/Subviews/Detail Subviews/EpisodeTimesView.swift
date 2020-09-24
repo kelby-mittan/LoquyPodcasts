@@ -34,6 +34,7 @@ struct EpisodeTimesView: View {
                                 
                             }.onTapGesture {
                                 player.seek(to: time.getCMTime())
+                                player.play()
                             }
                             .onLongPressGesture {
                                 guard let tStamp = UserDefaults.standard.savedTimeStamps().filter({ $0.time == time && $0.episode == episode }).first else {

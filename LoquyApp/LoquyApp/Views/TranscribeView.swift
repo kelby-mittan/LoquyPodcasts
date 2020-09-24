@@ -117,8 +117,8 @@ struct TranscribeView: View {
                 if !isTranscribed {
                     Button(action: {
 
-                        transcribeLiveAudio()
-//                        getTranscriptionOfFullFile()
+//                        transcribeLiveAudio()
+                        getTranscriptionOfFullFile()
                         
                         isTranscribed = true
                     }) {

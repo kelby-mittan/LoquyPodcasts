@@ -56,7 +56,7 @@ struct EpisodeDetailView: View {
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
             
             HalfModalView(isShown: $halfModalShown, modalHeight: 500){
-                ClipAlertView(clipTime: clipTime, episode: episode, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
+                ClipAlertView(clipTime: clipTime, episode: episode, networkManager: networkManager, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
             }
         }.onAppear(perform: {
             image = RemoteImage(url: episode.imageUrl ?? "")
