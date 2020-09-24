@@ -77,7 +77,16 @@ struct EpisodesView: View {
     }
     
     func getFavorites() -> [Episode] {
-        let episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == title }
+//        let episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == title }
+        
+        var episodes: [Episode] = []
+        
+        do {
+            episodes = try Persistence.episodePersistence.loadItems()
+        } catch {
+            print("error getting episodes: \(error)")
+        }
+        
         title = episodes.first?.author ?? "NOOOOO"
         return episodes
     }

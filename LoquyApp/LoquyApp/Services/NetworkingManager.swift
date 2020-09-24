@@ -72,8 +72,4 @@ class NetworkingManager: ObservableObject {
             self.audioClips = audioClips
         }
     }
-    
-    func updateShowAlert(showAlert: Bool) {
-        self.isShowAlert.toggle()
-    }
 }

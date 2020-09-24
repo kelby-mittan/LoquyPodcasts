@@ -22,7 +22,7 @@ struct AudioClipsView: View {
     var body: some View {
         
         NavigationView {
-            VStack {
+//            VStack {
                 List(networkManager.audioClips, id: \.self) { clip in
                     
                     NavigationLink(destination: TranscribeView(audioClip: clip)) {
@@ -70,10 +70,13 @@ struct AudioClipsView: View {
                     }
                     .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
                     
-                }
+                }.onAppear(perform: {
+                    UITableView.appearance().separatorStyle = .none
+                })
+                .background(Color(.blue))
                 
                 
-            }
+//            }
             .actionSheet(isPresented: $showActionSheet, content: {
                 actionSheet
             })
@@ -85,7 +88,6 @@ struct AudioClipsView: View {
 //                UITableView.appearance().separatorStyle = .none
             getAudioClips()
         })
-        .background(Color.white)
     }
     
     var actionSheet: ActionSheet {

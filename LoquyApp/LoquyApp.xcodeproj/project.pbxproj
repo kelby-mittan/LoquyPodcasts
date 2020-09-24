@@ -22,6 +22,8 @@
 		02272D8124C9FBF4007548C3 /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8024C9FBF4007548C3 /* RemoteImage.swift */; };
 		02272D8324CA3CD6007548C3 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8224CA3CD6007548C3 /* Episode.swift */; };
 		02272D8524CA82EB007548C3 /* MoreCastsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8424CA82EB007548C3 /* MoreCastsView.swift */; };
+		0247E428251D421300E14DEB /* DataPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 0247E427251D421300E14DEB /* DataPersistence */; };
+		0247E42E251D488A00E14DEB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E42D251D488A00E14DEB /* Persistence.swift */; };
 		024F0D78250D758D002B4A5F /* PodcastPosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024F0D77250D758D002B4A5F /* PodcastPosterView.swift */; };
 		027094722502F39F009E0BF5 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094712502F39E009E0BF5 /* Player.swift */; };
 		0270947525030720009E0BF5 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947425030720009E0BF5 /* FavoritesViewController.swift */; };
@@ -87,6 +89,7 @@
 		02272D8024C9FBF4007548C3 /* RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
 		02272D8224CA3CD6007548C3 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		02272D8424CA82EB007548C3 /* MoreCastsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreCastsView.swift; sourceTree = "<group>"; };
+		0247E42D251D488A00E14DEB /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		024F0D77250D758D002B4A5F /* PodcastPosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPosterView.swift; sourceTree = "<group>"; };
 		027094712502F39E009E0BF5 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		0270947425030720009E0BF5 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0247E428251D421300E14DEB /* DataPersistence in Frameworks */,
 				0270947A25030A3D009E0BF5 /* Kingfisher in Frameworks */,
 				5F80F7A04C631CDC2E0F879C /* Pods_LoquyApp.framework in Frameworks */,
 			);
@@ -207,6 +211,7 @@
 				02272D7E24C9FA69007548C3 /* ImageLoader.swift */,
 				027094712502F39E009E0BF5 /* Player.swift */,
 				0270947F25054A75009E0BF5 /* AudioTrim.swift */,
+				0247E42D251D488A00E14DEB /* Persistence.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -375,6 +380,7 @@
 			name = LoquyApp;
 			packageProductDependencies = (
 				0270947925030A3D009E0BF5 /* Kingfisher */,
+				0247E427251D421300E14DEB /* DataPersistence */,
 			);
 			productName = LoquyApp;
 			productReference = 02B5687C24C4DBB6004D5C6D /* LoquyApp.app */;
@@ -429,6 +435,7 @@
 			mainGroup = 02B5687324C4DBB6004D5C6D;
 			packageReferences = (
 				0270947825030A3D009E0BF5 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				0247E426251D421300E14DEB /* XCRemoteSwiftPackageReference "DataPersistence" */,
 			);
 			productRefGroup = 02B5687D24C4DBB6004D5C6D /* Products */;
 			projectDirPath = "";
@@ -544,6 +551,7 @@
 				02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */,
 				02B568B924C4FA8D004D5C6D /* NetworkingManager.swift in Sources */,
 				02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */,
+				0247E42E251D488A00E14DEB /* Persistence.swift in Sources */,
 				027094842505AF2D009E0BF5 /* TimeStamp.swift in Sources */,
 				02DF72D8251826C6006FDC9E /* Date.swift in Sources */,
 				0270948A2506AE36009E0BF5 /* DescriptionView.swift in Sources */,
@@ -846,6 +854,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0247E426251D421300E14DEB /* XCRemoteSwiftPackageReference "DataPersistence" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alexpaul/DataPersistence";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 		0270947825030A3D009E0BF5 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
@@ -857,6 +873,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0247E427251D421300E14DEB /* DataPersistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0247E426251D421300E14DEB /* XCRemoteSwiftPackageReference "DataPersistence" */;
+			productName = DataPersistence;
+		};
 		0270947925030A3D009E0BF5 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0270947825030A3D009E0BF5 /* XCRemoteSwiftPackageReference "Kingfisher" */;

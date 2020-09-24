@@ -10,6 +10,7 @@ import UIKit
 import Combine
 import Kingfisher
 import SwiftUI
+import DataPersistence
 
 class FavoritesViewController: UIViewController {
     
@@ -22,7 +23,9 @@ class FavoritesViewController: UIViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<SectionKind,String>
     private var dataSource: DataSource!
     
-    private var subscriptions: Set<AnyCancellable> = []
+    var episodes: [Episode] = []
+    
+//    private var subscriptions: Set<AnyCancellable> = []
     
     let heyNow = "hey$now"
     
@@ -44,7 +47,12 @@ class FavoritesViewController: UIViewController {
     private func nonDuplicatedCasts() -> [String] {
         var artAndAuthors = [String]()
         var authors = [String]()
-        let episodes = UserDefaults.standard.savedEpisodes()
+//        let episodes = UserDefaults.standard.savedEpisodes()
+        do {
+            episodes = try Persistence.episodePersistence.loadItems()
+        } catch {
+            print("error getting episodes: \(error)")
+        }
         for episode in episodes {
             if !authors.contains(episode.author) {
                 artAndAuthors.append((episode.imageUrl ?? "") + heyNow + episode.author)

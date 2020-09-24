@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import DataPersistence
 
 struct FavoriteView: View {
     
@@ -14,6 +15,8 @@ struct FavoriteView: View {
     let artwork: String
     @State var isSaved = false
     @State var saveText = ""
+    
+    public var episodePersistence = DataPersistence<Episode>(filename: "favEpisodes.plist")
     
 //    @State private var showAlert = false
     
@@ -40,12 +43,22 @@ struct FavoriteView: View {
                         notificationShown = false
                     }
                     
-                    if !isSaved {
-                        var episodes = UserDefaults.standard.savedEpisodes()
-                        episodes.append(episode)
+                    if !episodePersistence.hasItemBeenSaved(episode) {
+//                        var episodes = UserDefaults.standard.savedEpisodes()
+//                        episodes.append(episode)
                         saveText = "remove episode"
                         message = "episode saved"
-                        UserDefaults.standard.saveTheEpisode(episode: episode)
+//                        UserDefaults.standard.saveTheEpisode(episode: episode)
+                        
+                        
+                        do {
+                            try episodePersistence.createItem(episode)
+                            
+                        } catch {
+                            print("could not save")
+                        }
+                        
+                        
                         
                         var pCasts = UserDefaults.standard.getPodcastArt()
                         pCasts.append(artwork)
@@ -54,13 +67,29 @@ struct FavoriteView: View {
                     } else {
                         saveText = "save episode"
                         message = "episode removed"
-                        UserDefaults.standard.deleteEpisode(episode: episode)
+//                        UserDefaults.standard.deleteEpisode(episode: episode)
+                        
+                        do {
+                            let episodes = try episodePersistence.loadItems()
+                            
+                            guard let validEpsiode = episodes.firstIndex(of: episode) else { return }
+                            
+                            try episodePersistence.deleteItem(at: validEpsiode)
+                            
+                        } catch {
+                            print("error getting episodes or deleting episode")
+                        }
+                        
+                        
+                        
+                        
+                        
                         UserDefaults.standard.deletePodcastArt(artwork)
                     }
                     isSaved.toggle()
             }
         }.onAppear {
-            if UserDefaults.standard.savedEpisodes().contains(episode) {
+            if episodePersistence.hasItemBeenSaved(episode) {
                 isSaved = true
                 saveText = "remove episode"
             } else {
