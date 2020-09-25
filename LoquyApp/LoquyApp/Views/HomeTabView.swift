@@ -94,7 +94,7 @@ struct BrowseView: View {
             }
             .navigationBarTitle("")
             .navigationBarHidden(true)
-            .navigationBarItems(leading: Button("Back"){presentationMode.wrappedValue.dismiss()})
+//            .navigationBarItems(leading: Button("Back"){presentationMode.wrappedValue.dismiss()})
         }
         .tabItem {
             Image(systemName: "magnifyingglass")

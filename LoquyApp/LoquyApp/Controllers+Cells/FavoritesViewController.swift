@@ -164,9 +164,10 @@ extension FavoritesViewController: UICollectionViewDelegate {
     
     func goToEpisodesList(episodeArt: String) {
         let childView = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true, artWork: episodeArt))
-        addChild(childView)
-        childView.view.frame = view.bounds
-        view.addSubview(childView.view)
-//        childView.didMove(toParent: self)
+//        addChild(childView)
+//        childView.view.frame = UIScreen.main.bounds
+//        view.addSubview(childView.view)
+//        childView.willMove(toParent: self)
+        navigationController?.pushViewController(childView, animated: true)
     }
 }

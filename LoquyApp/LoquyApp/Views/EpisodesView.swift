@@ -23,7 +23,7 @@ struct EpisodesView: View {
     
     var body: some View {
         
-        VStack {
+//        NavigationView {
             List(networkManager.episodes, id: \.self) { episode in
                 
                 NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork)) {
@@ -59,7 +59,6 @@ struct EpisodesView: View {
                         }
                         .padding()
                     }
-                    
                 }
                 .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
                 
@@ -68,8 +67,10 @@ struct EpisodesView: View {
                 isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
             })
 //            .environment(\.horizontalSizeClass, .regular)
+//            .navigationBarHidden(true)
+            
             .navigationBarTitle(title)
-        }
+//        }
     }
     
     func getPodcasts() {
