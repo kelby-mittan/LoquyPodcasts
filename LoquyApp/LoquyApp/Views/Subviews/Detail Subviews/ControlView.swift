@@ -120,7 +120,7 @@ struct ControlView: View {
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: 122,height: 44)
                         .foregroundColor(.purple)
-                        .background(Color.white)
+                        .background(NeoButtonView())
                         .clipShape(Capsule())
                         .padding()
                 }
@@ -141,7 +141,7 @@ struct ControlView: View {
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: 122,height: 44)
                         .foregroundColor(.purple)
-                        .background(Color.white)
+                        .background(NeoButtonView())
                         .clipShape(Capsule())
                         .padding()
                     }

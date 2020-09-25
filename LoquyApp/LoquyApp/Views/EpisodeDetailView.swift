@@ -33,15 +33,18 @@ struct EpisodeDetailView: View {
     var body: some View {
         ZStack {
             ScrollView(.vertical, showsIndicators: true) {
-                image
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 250, height: 250)
-                    .cornerRadius(12)
-                    .padding(.top,100)
-                    .padding([.leading,.trailing])
-                    .onTapGesture(perform: {
-                        dump(try! Persistence.artWork.loadItems())
+                ZStack {
+//                    NeoButtonView()
+                    image
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 250, height: 250)
+                        .cornerRadius(12)
+                        .padding(.top,100)
+                        .padding([.leading,.trailing])
+                        .onTapGesture(perform: {
+                            dump(try! Persistence.artWork.loadItems())
                     })
+                }
                 
                 ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
                 

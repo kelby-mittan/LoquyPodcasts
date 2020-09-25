@@ -37,8 +37,9 @@ struct TimeStampAlertView: View {
                     }, label: {
                         Image(systemName: "xmark")
                             .resizable()
-                            .frame(width: 20, height: 20)
+                            .frame(width: 18, height: 18)
                             .foregroundColor(.white)
+                            .offset(y: 8)
                     }).padding(.all,14)
                     
                 }
@@ -73,13 +74,17 @@ struct TimeStampAlertView: View {
                             .fontWeight(.bold)
                             .frame(width: 120,height: 40)
                             .foregroundColor(Color.purple)
-                            .background(PaletteColour.offWhite.colour)
+                            .background(NeoButtonView())
                             .clipShape(Capsule())
                             .padding()
                 }                
                 Spacer()
             }
-        }.onAppear(perform: {
+//            .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
+//            .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
+            
+        }
+        .onAppear(perform: {
             
             if !Persistence.episodes.hasItemBeenSaved(episode) {
                 favToSave = "⇩Fave to Save!⇩"
@@ -90,9 +95,10 @@ struct TimeStampAlertView: View {
             }
         })
         .frame(width: 300, height: 200)
-        .background(LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .top, endPoint: .bottomTrailing))
+        .background(CardNeoView())
         .cornerRadius(20)
-        
+        .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
+        .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
     }
     
     func loadTimes(episode: Episode) {

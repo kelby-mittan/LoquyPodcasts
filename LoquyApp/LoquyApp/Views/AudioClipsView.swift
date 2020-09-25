@@ -28,10 +28,22 @@ struct AudioClipsView: View {
                     NavigationLink(destination: TranscribeView(audioClip: clip)) {
                         
                         ZStack(alignment: .center) {
-                            LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .top, endPoint: .bottomTrailing)
+//                            LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .top, endPoint: .bottomTrailing)
+//                                .cornerRadius(12)
+//                                .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
+//                                .padding(.trailing)
+                            ZStack(alignment: .leading) {
+                                ZStack {
+                                    Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
+                                        .offset(x: -10, y: -10)
+                                    LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                                        .padding(2)
+                                        .blur(radius: 4)
+                                }
                                 .cornerRadius(12)
                                 .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
                                 .padding(.trailing)
+                            }
                             
                             VStack(alignment: .center) {
                                 

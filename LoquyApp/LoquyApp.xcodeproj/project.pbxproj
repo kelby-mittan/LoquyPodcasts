@@ -24,6 +24,7 @@
 		02272D8524CA82EB007548C3 /* MoreCastsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8424CA82EB007548C3 /* MoreCastsView.swift */; };
 		0247E428251D421300E14DEB /* DataPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 0247E427251D421300E14DEB /* DataPersistence */; };
 		0247E42E251D488A00E14DEB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E42D251D488A00E14DEB /* Persistence.swift */; };
+		0247E432251E582000E14DEB /* NeoViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E431251E582000E14DEB /* NeoViews.swift */; };
 		024F0D78250D758D002B4A5F /* PodcastPosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024F0D77250D758D002B4A5F /* PodcastPosterView.swift */; };
 		027094722502F39F009E0BF5 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094712502F39E009E0BF5 /* Player.swift */; };
 		0270947525030720009E0BF5 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947425030720009E0BF5 /* FavoritesViewController.swift */; };
@@ -90,6 +91,7 @@
 		02272D8224CA3CD6007548C3 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		02272D8424CA82EB007548C3 /* MoreCastsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreCastsView.swift; sourceTree = "<group>"; };
 		0247E42D251D488A00E14DEB /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		0247E431251E582000E14DEB /* NeoViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeoViews.swift; sourceTree = "<group>"; };
 		024F0D77250D758D002B4A5F /* PodcastPosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPosterView.swift; sourceTree = "<group>"; };
 		027094712502F39E009E0BF5 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		0270947425030720009E0BF5 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				02272D7424C91E5F007548C3 /* LabelViews.swift */,
 				02272D8024C9FBF4007548C3 /* RemoteImage.swift */,
 				024F0D77250D758D002B4A5F /* PodcastPosterView.swift */,
+				0247E431251E582000E14DEB /* NeoViews.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -548,6 +551,7 @@
 				02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */,
 				02B568AE24C4DF2B004D5C6D /* EpisodeDetailView.swift in Sources */,
 				02B568A824C4DD11004D5C6D /* HomeTabView.swift in Sources */,
+				0247E432251E582000E14DEB /* NeoViews.swift in Sources */,
 				02B568B324C4E413004D5C6D /* SearchBar.swift in Sources */,
 				02B568B924C4FA8D004D5C6D /* NetworkingManager.swift in Sources */,
 				02272D7224C7A10A007548C3 /* MultilineTextField.swift in Sources */,
