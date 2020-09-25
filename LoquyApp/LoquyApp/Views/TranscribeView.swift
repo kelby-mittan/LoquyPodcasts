@@ -151,7 +151,8 @@ struct TranscribeView: View {
                     isTranscribed.toggle()
                     
                     if isTranscribed {
-                        getTranscriptionOfFullFile()
+//                        getTranscriptionOfFullFile()
+                        getTranscriptionOfClippedFile()
                         saveText = "save loquy"
                         
                     } else {
@@ -160,7 +161,6 @@ struct TranscribeView: View {
                         playing = false
                         print(transcription)
                     }
-//                        transcribeLiveAudio()
                     
                     
                 }) {
@@ -252,9 +252,43 @@ struct TranscribeView: View {
                     if let theError = error {
                         print("recognition error: \(theError)")
                     } else {
-                        transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
+                        
+                        if playing {
+                            transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
+                        }
                     }
                 })
+            }
+        }
+    }
+    
+    private func getTranscriptionOfClippedFile() {
+        
+        SFSpeechRecognizer.requestAuthorization { (authStatus) in
+            if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") {
+                
+                AudioTrim.trimUsingComposition(url: url, start: currentTime, duration: audioClip.duration, pathForFile: "trimmedFile") { (result) in
+                    switch result {
+                    case .success(let clipUrl):
+                        print(clipUrl)
+
+                        let request = SFSpeechURLRecognitionRequest(url: clipUrl)
+
+                        speechRecognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
+                            if let theError = error {
+                                print("recognition error: \(theError)")
+                            } else {
+                                
+                                if playing {
+                                    transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
+                                }
+                            }
+                        })
+                    default:
+                        print("problem getting clip")
+                    }
+                }
+
             }
         }
     }

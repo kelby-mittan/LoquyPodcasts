@@ -17,7 +17,6 @@ struct AudioTrim {
         guard let url = URL(string: streamUrl) else {
             return
         }
-//        let assetItem = AVPlayerItem(url: url)
         
         let asset = AVURLAsset(url: url, options: nil)
         
@@ -25,9 +24,7 @@ struct AudioTrim {
         let compositionAudioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
         
         let sourceAudioTrack = asset.tracks(withMediaType: AVMediaType.audio).first!
-        
-//        let sourceAudioTrack = assetItem.asset.tracks(withMediaType: AVMediaType.audio).first!
-        
+                
         do {
             try compositionAudioTrack?.insertTimeRange(CMTimeRange(start: CMTime.zero, duration: asset.duration), of: sourceAudioTrack, at: CMTime.zero)
         } catch {
@@ -89,16 +86,17 @@ struct AudioTrim {
     }
     
     
-    static func trimUsingComposition(url: URL, start: String, duration: String, pathForFile: String) {
+    static func trimUsingComposition(url: URL, start: String, duration: String, pathForFile: String, completion: @escaping (Result<URL,Error>) -> ()) {
         
-        let assetItem = AVPlayerItem(url: url)
+        let asset = AVURLAsset(url: url, options: nil)
         
         let composition = AVMutableComposition()
         let compositionAudioTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: CMPersistentTrackID(kCMPersistentTrackID_Invalid))
-        let sourceAudioTrack = assetItem.asset.tracks(withMediaType: AVMediaType.audio).first!
         
+        let sourceAudioTrack = asset.tracks(withMediaType: AVMediaType.audio).first!
+                
         do {
-            try compositionAudioTrack?.insertTimeRange(CMTimeRange(start: CMTime.zero, duration: assetItem.duration), of: sourceAudioTrack, at: CMTime.zero)
+            try compositionAudioTrack?.insertTimeRange(CMTimeRange(start: CMTime.zero, duration: asset.duration), of: sourceAudioTrack, at: CMTime.zero)
         } catch {
             print("failed exportUsingComposition: \(error)")
         }
@@ -147,6 +145,7 @@ struct AudioTrim {
                 print("exporting")
             case .completed:
                 print("completed")
+                completion(.success(trimmedFileURL))
             case .waiting:
                 print("waiting")
             case .unknown:
