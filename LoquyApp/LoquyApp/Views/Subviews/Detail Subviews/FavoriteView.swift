@@ -29,9 +29,11 @@ struct FavoriteView: View {
                 .font(.headline)
                 .padding()
                 .frame(width: UIScreen.main.bounds.width - 88)
-                .foregroundColor(.white)
-                .background(Color.purple)
+                .foregroundColor(.purple)
+                .background(Color.white)
                 .clipShape(Capsule())
+                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 20, x: 12, y: 12)
+                .shadow(color: Color(.white), radius: 20, x: -12, y: -12)
                 .padding()
                 .onTapGesture {
                     

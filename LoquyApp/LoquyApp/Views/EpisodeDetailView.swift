@@ -65,6 +65,9 @@ struct EpisodeDetailView: View {
             image = RemoteImage(url: episode.imageUrl ?? "")
             clipTime = player.currentTime().toDisplayString()
         })
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemGroupedBackground))
+        .edgesIgnoringSafeArea(.all)
         .navigationBarTitle("", displayMode: .inline)
     }
     

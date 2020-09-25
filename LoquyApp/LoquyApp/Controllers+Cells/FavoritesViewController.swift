@@ -94,16 +94,16 @@ class FavoritesViewController: UIViewController {
                 widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalWidth(2.2/3)))
 
-            fullArtItem.contentInsets = NSDirectionalEdgeInsets(top: 4,leading: 4,bottom: 4,trailing: 4)
+            fullArtItem.contentInsets = NSDirectionalEdgeInsets(top: 6,leading: 6,bottom: 6,trailing: 6)
             
             let mainItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1.0)))
 
-            mainItem.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
+            mainItem.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
 
             // 2
             let pairItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .fractionalHeight(0.6)))
 
-            pairItem.contentInsets = NSDirectionalEdgeInsets(top: 4,leading: 4,bottom: 4,trailing: 4)
+            pairItem.contentInsets = NSDirectionalEdgeInsets(top: 6,leading: 6,bottom: 6,trailing: 6)
 
             let trailingGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)), subitem: pairItem, count: 2)
 
@@ -112,13 +112,13 @@ class FavoritesViewController: UIViewController {
             
             let tripletItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)))
 
-            tripletItem.contentInsets = NSDirectionalEdgeInsets(top: 4,leading: 4,bottom: 4,trailing: 4)
+            tripletItem.contentInsets = NSDirectionalEdgeInsets(top: 6,leading: 6,bottom: 6,trailing: 6)
 
             let tripletGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize( widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(2.5/9)), subitems: [tripletItem, tripletItem, tripletItem])
             
             let mainWithPairReversedGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(4/9)), subitems: [trailingGroup, mainItem])
             
-            let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(16/9)), subitems: [fullArtItem,mainWithPairGroup,tripletGroup,mainWithPairReversedGroup])
+            let nestedGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(14.2/9)), subitems: [fullArtItem,mainWithPairGroup,tripletGroup,mainWithPairReversedGroup])
 
             let section = NSCollectionLayoutSection(group: nestedGroup)
             
