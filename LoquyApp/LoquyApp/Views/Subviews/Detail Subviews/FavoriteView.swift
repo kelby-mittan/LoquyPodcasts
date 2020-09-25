@@ -22,7 +22,7 @@ struct FavoriteView: View {
     @Binding var message: String
     
     var body: some View {
-        NavigationLink(destination: Text("Add to Favorites")) {
+//        NavigationLink(destination: Text("Add to Favorites")) {
             
             Text(saveText)
                 .fontWeight(.heavy)
@@ -88,7 +88,7 @@ struct FavoriteView: View {
 //                        UserDefaults.standard.deletePodcastArt(artwork)
                     }
                     isSaved.toggle()
-            }
+//            }
         }.onAppear {
             if Persistence.episodes.hasItemBeenSaved(episode) {
                 isSaved = true

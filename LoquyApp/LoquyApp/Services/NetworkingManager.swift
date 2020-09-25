@@ -80,7 +80,7 @@ class NetworkingManager: ObservableObject {
         do {
             let audioClips = try Persistence.audioClips.loadItems()
             DispatchQueue.main.async {
-                self.audioClips = audioClips
+                self.audioClips = audioClips.reversed()
             }
         } catch {
             print("error getting clips: \(error)")

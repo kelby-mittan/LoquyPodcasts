@@ -40,7 +40,7 @@ struct ListenToView: View {
         }
         .padding()
         .frame(width: UIScreen.main.bounds.width - 32, height: 200, alignment: .center)
-        .background(LinearGradient(gradient: Gradient(colors: [Color(.systemIndigo), Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
+        .background(CardNeoView())
         .cornerRadius(14)
         
     }

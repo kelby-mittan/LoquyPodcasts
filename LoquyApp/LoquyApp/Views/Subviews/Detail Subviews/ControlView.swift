@@ -45,7 +45,7 @@ struct ControlView: View {
                 Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
                     .padding([.top,.leading,.trailing])
                 
-                Capsule().fill(Color.blue).frame(width: width, height: 8)
+                Capsule().fill(Color.purple).frame(width: width, height: 8)
                     .gesture(DragGesture()
                         .onChanged({ (value) in
                             player.pause()
@@ -67,7 +67,8 @@ struct ControlView: View {
                             player.seek(to: Player.capsuleDragged(value.location.x))
                             player.play()
                             playing = true
-                        })).padding([.top,.leading,.trailing])
+                        }))
+                        .padding([.top,.leading,.trailing])
             }
             
             HStack {
@@ -88,18 +89,34 @@ struct ControlView: View {
                     Player.seekToCurrentTime(delta: -15)
                     getCapsuleWidth()
                     
-//                    dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0])
                 }) {
-                    Image(systemName: "gobackward.15").font(.largeTitle)
-                }
+                    ZStack {
+                        NeoButtonView()
+                        Image(systemName: "gobackward.15").font(.largeTitle)
+                            .foregroundColor(.purple)
+                    }.background(NeoButtonView())
+                    .frame(width: 60, height: 60)
+                    .clipShape(Capsule())
+                    
+                }.offset(x: 20)
+                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
+                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
                 Button(action: {
                     playing.toggle()
                     playing ? player.play() : player.pause()
                     
                 }) {
-                    Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
+                    ZStack {
+                        NeoButtonView()
+                        Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
+                            .foregroundColor(.purple)
+                    }.background(NeoButtonView())
+                    .frame(width: 80, height: 80)
+                    .clipShape(Capsule())
                 }
+                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
+                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
                 Button(action: {
                     Player.seekToCurrentTime(delta: 15)
@@ -107,9 +124,18 @@ struct ControlView: View {
                     
                 }) {
                     
-                    Image(systemName: "goforward.15").font(.largeTitle)
+                    ZStack {
+                        NeoButtonView()
+                        Image(systemName: "goforward.15").font(.largeTitle)
+                            .foregroundColor(.purple)
+                    }.background(NeoButtonView())
+                    .frame(width: 60, height: 60)
+                    .clipShape(Capsule())
                     
                 }
+                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
+                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
+                .offset(x: -20)
                 
             }
             HStack {
@@ -124,7 +150,7 @@ struct ControlView: View {
                         .clipShape(Capsule())
                         .padding()
                 }
-                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
+                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 .animation(.spring())
                 .buttonStyle(PlainButtonStyle())

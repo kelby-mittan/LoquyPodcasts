@@ -11,10 +11,6 @@ import Combine
 
 struct HomeView: View {
     
-//        init () {
-//            UITabBar.appearance().backgroundColor = UIColor.green
-//        }
-    
     @State private var selectedTab = 1
     
     var edges = UIApplication.shared.windows.first?.safeAreaInsets
@@ -96,6 +92,7 @@ struct BrowseView: View {
             .navigationBarHidden(true)
 //            .navigationBarItems(leading: Button("Back"){presentationMode.wrappedValue.dismiss()})
         }
+        
         .tabItem {
             Image(systemName: "magnifyingglass")
                 .font(.body)

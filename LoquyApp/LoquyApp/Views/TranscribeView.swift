@@ -19,6 +19,7 @@ struct TranscribeView: View {
     @State var playing = true
     @State var transcription: String = ""
     @State var isTranscribed = false
+    @State var saveText = "transcribe"
     
     @State var image = RemoteImage(url: "")
     
@@ -26,6 +27,7 @@ struct TranscribeView: View {
     
     private let audioEngine = AVAudioEngine()
     var speechRecognizer = SFSpeechRecognizer()
+//    var sfTask = SFSpeechRecognitionTask()
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -65,8 +67,18 @@ struct TranscribeView: View {
                     playing.toggle()
                     playing ? player.play() : player.pause()
                 }) {
-                    Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
-                        .padding(.trailing)
+                    ZStack {
+                        NeoButtonView()
+                        Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
+                            .foregroundColor(.purple)
+                            
+                    }
+                    .background(NeoButtonView())
+                    .frame(width: 64, height: 64)
+                    .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
+                    .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
+                    .clipShape(Capsule())
+                    .padding(.trailing)
                 }
             }
             .padding([.leading,.trailing,.bottom])
@@ -75,7 +87,7 @@ struct TranscribeView: View {
                 
                 Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
                 
-                Capsule().fill(Color.blue).frame(width: width, height: 8)
+                Capsule().fill(Color.purple).frame(width: width, height: 8)
                     .gesture(DragGesture()
                         .onChanged({ (value) in
                             
@@ -114,25 +126,7 @@ struct TranscribeView: View {
             }
             
             Group {
-                if !isTranscribed {
-                    Button(action: {
-
-//                        transcribeLiveAudio()
-                        getTranscriptionOfFullFile()
-                        
-                        isTranscribed = true
-                    }) {
-                        Text("Transcribe")
-                            .fontWeight(.heavy)
-                            .padding()
-                            .frame(width: UIScreen.main.bounds.width - 88)
-                            .foregroundColor(.white)
-                            .background(Color.purple)
-                            .clipShape(Capsule())
-                            .padding()
-//                        Spacer()
-                    }
-                } else {
+                if isTranscribed {
                     
                     VStack(alignment: .leading) {
                         Text("Your Loquy...")
@@ -141,29 +135,48 @@ struct TranscribeView: View {
             
                         MultilineTextField("", text: $transcription, onCommit: {
                             print("Final text: \(transcription)")
+                            player.pause()
+                            DispatchQueue.main.async {
+                                playing = false
+                            }
+                            
                         })
                         
-                    }
-                    .padding()
-                    
-                        Button(action: {
-                            isTranscribed = false
-                            audioEngine.stop()
-                            audioEngine.inputNode.removeTap(onBus: 0)
-                            print("Your Loquy is : \(transcription)")
-                        }) {
-                            Text("Save Loquy")
-                                .fontWeight(.heavy)
-                                .padding()
-                                .frame(width: UIScreen.main.bounds.width - 88)
-                                .foregroundColor(.white)
-                                .background(Color.purple)
-                                .clipShape(Capsule())
-                                .padding()
-                        }
-                    
+                    }.padding()
                 }
             }
+                
+                Button(action: {
+
+                    isTranscribed.toggle()
+                    
+                    if isTranscribed {
+                        getTranscriptionOfFullFile()
+                        saveText = "save loquy"
+                        
+                    } else {
+                        saveText = "transcribe"
+                        player.pause()
+                        playing = false
+                        print(transcription)
+                    }
+//                        transcribeLiveAudio()
+                    
+                    
+                }) {
+                    Text(saveText)
+                        .fontWeight(.heavy)
+                        .padding()
+                        .frame(width: UIScreen.main.bounds.width - 88)
+                        .foregroundColor(.purple)
+                        .background(NeoButtonView())
+                        .clipShape(Capsule())
+                        .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
+                        .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
+                        .padding()
+//                        Spacer()
+                }
+            
             Spacer()
         }.onAppear(perform: {
             
@@ -188,22 +201,6 @@ struct TranscribeView: View {
         })
         
     }
-    
-//    private func configAudio() {
-//        let audioSession = AVAudioSession.sharedInstance()
-//        do {
-//            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-//            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-//        } catch {
-//            print("error configuring \(error)")
-//        }
-//        audioEngine.prepare()
-//        do {
-//            try audioEngine.start()
-//        } catch {
-//            print("ayayayaay")
-//        }
-//    }
     
     private func transcribeLiveAudio() {
         let audioSession = AVAudioSession.sharedInstance()
@@ -233,9 +230,10 @@ struct TranscribeView: View {
             if let theError = error {
                 print("recognition error: \(theError)")
             } else {
-                transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
+                transcription = result?.bestTranscription.formattedString ?? "could not get transcription"
             }
         })
+        
         
     }
     
@@ -256,11 +254,7 @@ struct TranscribeView: View {
                     } else {
                         transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
                     }
-
                 })
-                
-                
-
             }
         }
     }
@@ -287,5 +281,3 @@ struct TranscribeView: View {
         return url
     }
 }
-
-//git rm --cached LoquyApp.xcodeproj/project.xcworkspace/xcuserdata/

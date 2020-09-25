@@ -71,13 +71,13 @@ struct EpisodesView: View {
                 .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
                 
             }.onAppear(perform: {
-                UITableView.appearance().separatorStyle = .none
                 isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
+                UITableView.appearance().separatorStyle = .none
             })
 //            .environment(\.horizontalSizeClass, .regular)
 //            .navigationBarHidden(true)
-            
             .navigationBarTitle(title)
+            
 //        }
     }
     
@@ -102,8 +102,8 @@ struct EpisodesView: View {
     
 }
 
-struct EpisodesView_Previews: PreviewProvider {
-    static var previews: some View {
-        EpisodesView(title: "Yang Speaks", podcastFeed: "https://feeds.megaphone.fm/yang-speaks", isSaved: false, artWork: "")
-    }
-}
+//struct EpisodesView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EpisodesView(title: "Yang Speaks", podcastFeed: "https://feeds.megaphone.fm/yang-speaks", isSaved: false, artWork: "")
+//    }
+//}
