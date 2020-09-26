@@ -147,12 +147,22 @@ struct AudioClipsTab: View {
 
 struct TranscriptsTab: View {
     var body: some View {
-        LoquyListView()
-            .tabItem {
-                Image(systemName: "list.bullet")
-                    .font(.body)
-                    .padding(.top, 16.0)
-                Text("Loquies")
+        if #available(iOS 14.0, *) {
+            LoquyListView()
+                .tabItem {
+                    Image(systemName: "list.bullet")
+                        .font(.body)
+                        .padding(.top, 16.0)
+                    Text("Loquies")
+                }
+        } else {
+            Text("Upgrade to iOS 14")
+                .tabItem {
+                    Image(systemName: "list.bullet")
+                        .font(.body)
+                        .padding(.top, 16.0)
+                    Text("Loquies")
+                }
         }
     }
 }
