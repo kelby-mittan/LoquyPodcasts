@@ -28,9 +28,9 @@ struct TranscribeView: View {
     
     let player = Player.shared.player
     
-    private let audioEngine = AVAudioEngine()
     var speechRecognizer = SFSpeechRecognizer()
-//    var sfTask = SFSpeechRecognitionTask()
+    
+    @State var showAlert = false
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -142,66 +142,70 @@ struct TranscribeView: View {
                             DispatchQueue.main.async {
                                 playing = false
                             }
-                            
                         })
-                        
                     }.padding()
                 }
             }
+            Button(action: {
+
+                isTranscribed.toggle()
                 
-                Button(action: {
-
-                    isTranscribed.toggle()
+                if isTranscribed {
+                    getTranscriptionOfClippedFile()
+                    saveText = "save loquy"
                     
-                    if isTranscribed {
-//                        getTranscriptionOfFullFile()
-                        getTranscriptionOfClippedFile()
-                        saveText = "save loquy"
-                        
-                    } else {
-                        saveText = "transcribe"
-                        player.pause()
-                        playing = false
-                        print(transcription)
-                        
-                        var id = 1
-                        
-                        let filteredLoquys = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
-                        
-                        if !filteredLoquys.isEmpty {
-                            id = filteredLoquys.count + 1
-                        }
-                        
-                        print(filteredLoquys.count)
-                        print(id)
-                        
-                        let newLoquy = Loquy(idInCollection: id, title: title, transcription: transcription, audioClip: audioClip)
-
-                        do {
-                            try Persistence.loquys.createItem(newLoquy)
-                        } catch {
-                            print("problem creating loquy")
-                        }
-                        
-                        getLoquyTranscriptions()
-                    }
+                } else {
+                    saveText = "transcribe"
+                    player.pause()
+                    playing = false
+                    print(transcription)
                     
+//                    var id = 1
+//
+//                    let filteredLoquys = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
+//
+//                    if !filteredLoquys.isEmpty {
+//                        id = filteredLoquys.count + 1
+//                    }
+//
+//                    print(filteredLoquys.count)
+//                    print(id)
+//
+//                    let newLoquy = Loquy(idInCollection: id, title: title, transcription: transcription, audioClip: audioClip)
+//
+//                    do {
+//                        try Persistence.loquys.createItem(newLoquy)
+//                    } catch {
+//                        print("problem creating loquy")
+//                    }
+//
+//                    getLoquyTranscriptions()
                     
-                }) {
-                    Text(saveText)
-                        .fontWeight(.heavy)
-                        .padding()
-                        .frame(width: UIScreen.main.bounds.width - 88)
-                        .foregroundColor(.purple)
-                        .background(NeoButtonView())
-                        .clipShape(Capsule())
-                        .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
-                        .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
-                        .padding()
-//                        Spacer()
+                    showAlert.toggle()
                 }
+                
+                
+            }) {
+                Text(saveText)
+                    .fontWeight(.heavy)
+                    .padding()
+                    .frame(width: UIScreen.main.bounds.width - 88)
+                    .foregroundColor(.purple)
+                    .background(NeoButtonView())
+                    .clipShape(Capsule())
+                    .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
+                    .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
+                    .padding()
+//                        Spacer()
+            }
             
             Spacer()
+            
+            if showAlert {
+                SaveLoquyAlertView(showAlert: $showAlert, networkManager: networkManager, audioClip: audioClip, transcription: transcription)
+                .offset(x: 0, y: -70)
+            }
+            
         }.onAppear(perform: {
             
             image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
@@ -225,66 +229,6 @@ struct TranscribeView: View {
             }
         })
         
-    }
-    
-    private func transcribeLiveAudio() {
-        let audioSession = AVAudioSession.sharedInstance()
-        let recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        recognitionRequest.shouldReportPartialResults = true
-        do {
-            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            print("error configuring \(error)")
-        }
-        
-        let recordingFormat = audioEngine.inputNode.outputFormat(forBus: 0)
-        
-        audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, time) in
-            recognitionRequest.append(buffer)
-        }
-
-        audioEngine.prepare()
-        do {
-            try audioEngine.start()
-        } catch {
-            print("Error starting engine: \(error)")
-        }
-        
-        speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
-            if let theError = error {
-                print("recognition error: \(theError)")
-            } else {
-                transcription = result?.bestTranscription.formattedString ?? "could not get transcription"
-            }
-        })
-        
-        
-    }
-    
-    private func getTranscriptionOfFullFile() {
-        
-        player.pause()
-        
-        playing = true
-        SFSpeechRecognizer.requestAuthorization { (authStatus) in
-            if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") {
-                Player.playAudioClip(url: url)
-
-                let request = SFSpeechURLRecognitionRequest(url: url)
-
-                speechRecognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
-                    if let theError = error {
-                        print("recognition error: \(theError)")
-                    } else {
-                        
-                        if playing {
-                            transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
-                        }
-                    }
-                })
-            }
-        }
     }
     
     private func getTranscriptionOfClippedFile() {

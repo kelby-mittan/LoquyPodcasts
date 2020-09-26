@@ -113,7 +113,7 @@ struct LoquyContentView: View {
 //                    RoundedRectangle(cornerRadius: 12).padding().foregroundColor(PaletteColour.colors1.randomElement()).opacity(0.8)
                     VStack {
                         Spacer()
-                        Text("Sean Carroll's Mindscape")
+                        Text("\(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.first?.audioClip.episode.author ?? "")")
                             .font(.system(size: 24, weight: .bold, design: .rounded))
                             .fontWeight(.heavy)
                             .foregroundColor(.white)
@@ -127,24 +127,25 @@ struct LoquyContentView: View {
                         RemoteImage(url: imageUrl)
                             .frame(width: 200, height: 200)
                             .cornerRadius(8)
-//                            .scaleEffect(isAtMaxScale ? 1 : 1.15)
-//                            .animation(Animation.linear(duration: 0.5).repeatForever(autoreverses: true))
-//                            .onAppear() {
-//                                isAtMaxScale.toggle()
-//                            }
+                            .onTapGesture {
+                                print("hello")
+                                dump(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl })
+        //                                Persistence.loquys.removeAll()
+                            }
                         
                             HStack {
                                 VStack(alignment: .leading) {
-                                    Text("You have 10 transcripts")
+                                    Text("You have \(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) transcripts")
                                         .font(.system(size: 18, weight: .bold, design: .rounded))
                                         .foregroundColor(.white)
                                         .fontWeight(.heavy)
+                                    
                                     Text("from")
                                         .font(.system(size: 18, weight: .bold, design: .rounded))
                                         .foregroundColor(.white)
                                         .fontWeight(.heavy)
                                         .padding(.top, 4)
-                                    Text("6 saved audio clips")
+                                    Text("\(networkManager.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) saved audio clips")
                                         .font(.system(size: 18, weight: .bold, design: .rounded))
                                         .foregroundColor(.white)
                                         .fontWeight(.heavy)
@@ -195,6 +196,8 @@ struct LoquyContentView: View {
         }.onAppear(perform: {
             
             getLoquyTranscriptions()
+            getAudioClips()
+            
             dump(networkManager.loquys)//.filter { $0.audioClip.episode.imageUrl == imageUrl })
         })
 //        .background(Color(.secondarySystemBackground))
@@ -204,5 +207,9 @@ struct LoquyContentView: View {
     
     func getLoquyTranscriptions() {
         networkManager.loadLoquys()
+    }
+    
+    func getAudioClips() {
+        networkManager.loadAudioClips()
     }
 }
