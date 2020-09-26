@@ -29,6 +29,8 @@ struct NeoButtonView: View {
 
 struct CardNeoView: View {
     
+    let isRan: Bool
+    
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
     
@@ -36,7 +38,7 @@ struct CardNeoView: View {
         ZStack {
             Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
                 .offset(x: -10, y: -10)
-            LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(gradient: Gradient(colors: isRan ? [gradColor1!, gradColor2!] : [Color.purple,Color(#colorLiteral(red: 0.8037956357, green: 0.7081945539, blue: 1, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .padding(2)
                 .blur(radius: 4)
         }

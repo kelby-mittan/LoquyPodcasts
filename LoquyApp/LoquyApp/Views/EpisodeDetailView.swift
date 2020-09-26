@@ -62,6 +62,7 @@ struct EpisodeDetailView: View {
             HalfModalView(isShown: $halfModalShown, modalHeight: 500){
                 ClipAlertView(clipTime: clipTime, episode: episode, networkManager: networkManager, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
             }
+//                .background(Color(.secondarySystemBackground))
         }.onAppear(perform: {
             image = RemoteImage(url: episode.imageUrl ?? "")
             clipTime = player.currentTime().toDisplayString()

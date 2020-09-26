@@ -45,8 +45,10 @@ struct ClipAlertView: View {
                 
             }
             .frame(width: UIScreen.main.bounds.width)
-            .background(Color.purple)
-            .cornerRadius(10)
+            .background(CardNeoView(isRan: false))
+            .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
+            .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
+            .cornerRadius(12)
             .offset(y: -8)
             
             Text("start  \(clipTime)")
@@ -92,15 +94,19 @@ struct ClipAlertView: View {
                     Text("Save Clip")
                         .fontWeight(.heavy)
                         .frame(width: 240,height: 60)
-                        .foregroundColor(Color.white)
-                        .background(Color.purple)
+                        .foregroundColor(Color.purple)
+                        .background(NeoButtonView())
                         .clipShape(Capsule())
                         .padding()
                         .offset(y: -10)
             }
-            
+            .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
+            .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
             Spacer()
         }
+        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        
+        .background(Color(.secondarySystemBackground))
         Spacer()
     }
     
@@ -166,6 +172,7 @@ struct HalfModalView<Content: View> : View {
                             .frame(width: UIScreen.main.bounds.size.width, height:modalHeight)
                             .clipped()
                     }
+                    .cornerRadius(12)
                     .offset(y: isShown ? ((dragState.isDragging && dragState.translation.height >= 1) ? dragState.translation.height : 0) : modalHeight)
                     .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
                     .gesture(drag)
@@ -227,7 +234,7 @@ struct SuperCustomTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<_Label>) -> some View {
         configuration
             .padding()
-            .border(Color.purple)
+//            .border(Color.purple)
             .frame(height: 34)
     }
 }

@@ -14,19 +14,8 @@ class ImageLoader: ObservableObject {
     
     @Published var downloadImage: UIImage?
     
-//    static func == (lhs: ImageLoader, rhs: ImageLoader) -> Bool {
-//            let lhsImage = lhs.downloadImage
-//            let rhsImage = rhs.downloadImage
-//            if (lhsImage == nil && rhsImage != nil) || (lhsImage != nil && rhsImage == nil) {
-//                return false
-//            } else {
-//                return true
-//            }
-//    }
-    
     func fetchImage(url:String) {
         guard let imageUrl = URL(string: url) else {
-//            fatalError("url string is invalid")
             return
         }
         

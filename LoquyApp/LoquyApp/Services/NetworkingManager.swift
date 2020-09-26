@@ -43,6 +43,12 @@ class NetworkingManager: ObservableObject {
         }
     }
     
+    @Published var hideTabBar = Bool() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
     func updatePodcasts(forSearch: String) {
         ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { (podcasts) in
             DispatchQueue.main.async {
@@ -85,6 +91,9 @@ class NetworkingManager: ObservableObject {
         } catch {
             print("error getting clips: \(error)")
         }
-        
+    }
+    
+    func hideTheTabBar() {
+        self.hideTabBar = true
     }
 }

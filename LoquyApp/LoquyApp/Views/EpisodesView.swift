@@ -17,6 +17,8 @@ struct EpisodesView: View {
     let isSaved: Bool
     let artWork: String
     
+    @State var halfModalShown = false
+    
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
     

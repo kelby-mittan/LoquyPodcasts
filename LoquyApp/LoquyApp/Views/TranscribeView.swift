@@ -188,7 +188,7 @@ struct TranscribeView: View {
                 }
 
             Player.playAudioClip(url: url)
-            
+            playing = true
             getCurrentPlayerTime()
 
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in

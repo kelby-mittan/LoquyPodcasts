@@ -126,7 +126,7 @@ struct AudioTrim {
         exportSession.outputURL = trimmedFileURL
         exportSession.outputFileType = .mp4
         
-        let startDouble = start.toSecDouble()
+        let startDouble = start.toSecDouble() - 3
         let endDouble = startDouble + duration.toSecDouble()
         
         let startTime = CMTime(seconds: startDouble, preferredTimescale: 1)

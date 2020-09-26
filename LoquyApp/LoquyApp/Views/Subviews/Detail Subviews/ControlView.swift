@@ -114,7 +114,9 @@ struct ControlView: View {
                     }.background(NeoButtonView())
                     .frame(width: 80, height: 80)
                     .clipShape(Capsule())
+                    .animation(.spring())
                 }
+                
                 .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
@@ -161,6 +163,7 @@ struct ControlView: View {
 
                     showModal.toggle()
                     clipTime = currentTime
+                    
 
                 }) {
                     Text("record clip")
@@ -190,7 +193,7 @@ struct ControlView: View {
         .onAppear {
             Player.playEpisode(episode: episode)
             getCurrentPlayerTime()
-                        
+            playing = true
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                 if playing {
                     if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {

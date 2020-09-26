@@ -40,7 +40,7 @@ struct ListenToView: View {
         }
         .padding()
         .frame(width: UIScreen.main.bounds.width - 32, height: 200, alignment: .center)
-        .background(CardNeoView())
+        .background(CardNeoView(isRan: true))
         .cornerRadius(14)
         
     }

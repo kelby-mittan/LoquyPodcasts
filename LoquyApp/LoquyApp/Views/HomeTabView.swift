@@ -11,18 +11,25 @@ import Combine
 
 struct HomeView: View {
     
-    @State private var selectedTab = 1
+    @State private var selectedTab = 0
+    @ObservedObject private var networkManager = NetworkingManager()
     
     var edges = UIApplication.shared.windows.first?.safeAreaInsets
     
     var body: some View {
+       
         TabView(selection: $selectedTab) {
             BrowseView().tag(1)
             FavoritesTabView().tag(2)
-            TabThree().tag(3)
-            TabFour().tag(4)
+            AudioClipsTab().tag(3)
+            TranscriptsTab().tag(4)
         }
+        .onAppear(perform: {
+            UITabBar.appearance().isHidden = false
+        })
+                
     }
+    
 }
 
 struct BrowseView_Previews: PreviewProvider {
@@ -52,6 +59,7 @@ struct BrowseView: View {
                         
                         ScrollView(.vertical) {
                             HeaderView(label: "Listen To")
+                            
                             NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl, isSaved: false, artWork: mindcast.image)) {
                                 ListenToView()
                             }
@@ -60,6 +68,7 @@ struct BrowseView: View {
                             FeaturedView()
                             
                             HeaderView(label: "More Cool Casts")
+                            
                             MoreCastsView()
                         }
                         
@@ -114,15 +123,16 @@ struct FavoritesTabView: View {
         .navigationBarHidden(true)
         }
         .tabItem {
-            Image(systemName: "star.fill")
-                .font(.body)
-                .padding(.top, 16.0)
-            Text("Favorites")
+                Image(systemName: "star.fill")
+                    .font(.body)
+                    .padding(.top, 16.0)
+                    .foregroundColor(.purple)
+                Text("Favorites")
         }
     }
 }
 
-struct TabThree: View {
+struct AudioClipsTab: View {
     var body: some View {
         AudioClipsView()
             .tabItem {
@@ -135,7 +145,7 @@ struct TabThree: View {
     }
 }
 
-struct TabFour: View {
+struct TranscriptsTab: View {
     var body: some View {
         LoquyListView()
             .tabItem {
@@ -146,3 +156,5 @@ struct TabFour: View {
         }
     }
 }
+
+

@@ -95,7 +95,7 @@ struct TimeStampAlertView: View {
             }
         })
         .frame(width: 300, height: 200)
-        .background(CardNeoView())
+        .background(CardNeoView(isRan: true))
         .cornerRadius(20)
         .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
