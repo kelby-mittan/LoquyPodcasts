@@ -103,6 +103,7 @@ struct LoquyContentView: View {
                         Text("Sean Carroll's Mindscape")
                             .font(.system(size: 24, weight: .bold, design: .rounded))
                             .fontWeight(.heavy)
+                            .foregroundColor(.white)
                             .padding([.leading,.trailing,.top,.bottom])
                         
                         Image("mindscape")
@@ -119,19 +120,26 @@ struct LoquyContentView: View {
                                 VStack(alignment: .leading) {
                                     Text("You have 10 transcripts")
                                         .font(.system(size: 18, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
                                         .fontWeight(.heavy)
                                     Text("from")
                                         .font(.system(size: 18, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
                                         .fontWeight(.heavy)
                                         .padding(.top, 4)
                                     Text("6 saved audio clips")
                                         .font(.system(size: 18, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
                                         .fontWeight(.heavy)
                                         .padding(.top, 4)
                                 }
+                                .padding([.bottom,.leading])
                                 Spacer()
                             }
-                            .padding([.leading,.trailing,.top])
+                            .padding(.leading, 20)
+                            .padding([.trailing,.top])
+//                            .background(CardNeoView(isRan: false))
+//                            .cornerRadius(12)
                                                     
                         Spacer()
                         HStack {
@@ -144,7 +152,7 @@ struct LoquyContentView: View {
                             }) {
                                 ZStack {
                                     NeoButtonView()
-                                    Image(systemName: "text.bubble").font(.largeTitle)
+                                    Image(systemName: "text.quote").font(.largeTitle)
                                         .foregroundColor(.purple)
                                 }.background(NeoButtonView())
                                 .frame(width: 60, height: 60)
@@ -154,8 +162,11 @@ struct LoquyContentView: View {
                             .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                             .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         }
-                    }.padding([.bottom,.trailing])
+                    }.padding([.leading,.bottom,.trailing])
+                    .background(CardNeoView(isRan: true))
+                    .cornerRadius(12)
                 }
+                .padding([.leading,.trailing],12)
                 .frame(height: UIScreen.main.bounds.height*2/3)
                 .transition(
                     AnyTransition.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing))
@@ -165,7 +176,9 @@ struct LoquyContentView: View {
             }
             
         }
+//        .background(Color(.secondarySystemBackground))
         .navigationBarHidden(false)
         .navigationBarTitle("",displayMode: .inline)
     }
+    
 }
