@@ -12,12 +12,15 @@ import Speech
 
 struct TranscribeView: View {
     
+    @ObservedObject var networkManager = NetworkingManager()
+    
     let audioClip: AudioClip
     
     @State var width : CGFloat = 30
     @State var currentTime: String = "0:00"
     @State var playing = true
     @State var transcription: String = ""
+    @State var title: String = ""
     @State var isTranscribed = false
     @State var saveText = "transcribe"
     
@@ -160,6 +163,27 @@ struct TranscribeView: View {
                         player.pause()
                         playing = false
                         print(transcription)
+                        
+                        var id = 1
+                        
+                        let filteredLoquys = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
+                        
+                        if !filteredLoquys.isEmpty {
+                            id = filteredLoquys.count + 1
+                        }
+                        
+                        print(filteredLoquys.count)
+                        print(id)
+                        
+                        let newLoquy = Loquy(idInCollection: id, title: title, transcription: transcription, audioClip: audioClip)
+
+                        do {
+                            try Persistence.loquys.createItem(newLoquy)
+                        } catch {
+                            print("problem creating loquy")
+                        }
+                        
+                        getLoquyTranscriptions()
                     }
                     
                     
@@ -181,11 +205,12 @@ struct TranscribeView: View {
         }.onAppear(perform: {
             
             image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
+            getLoquyTranscriptions()
             
             guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") else {
                 print(AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + ".m4a") ?? "Couldn't Find MP3")
                 return
-                }
+            }
 
             Player.playAudioClip(url: url)
             playing = true
@@ -308,10 +333,7 @@ struct TranscribeView: View {
         return ("",durationLabel)
     }
     
-    func getImageUrl() -> URL? {
-        guard let url = URL(string: audioClip.episode.imageUrl ?? "") else {
-            return nil
-        }
-        return url
+    func getLoquyTranscriptions() {
+        networkManager.loadLoquys()
     }
 }

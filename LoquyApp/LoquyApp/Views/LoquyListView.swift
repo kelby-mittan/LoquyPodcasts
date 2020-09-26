@@ -11,6 +11,8 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct LoquyListView: View {
     
+    @ObservedObject var networkManager = NetworkingManager()
+    
     let podcasts = DummyPodcast.podcasts
     
     let layout = [
@@ -23,17 +25,16 @@ struct LoquyListView: View {
         NavigationView {
             ScrollView {
                 LazyVGrid(columns: layout, spacing: 10) {
-                    ForEach(podcasts, id: \.self) { item in
+                    ForEach(Array(Set(networkManager.loquys.map { $0.audioClip.episode.imageUrl })), id: \.self) { imageUrl in
                         VStack {
-                            NavigationLink(destination: LoquyContentView()) {
+                            NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? "")) {
                                 ZStack {
-                                    Color(#colorLiteral(red: 0.7904488444, green: 0.7596978545, blue: 1, alpha: 1))
-                                        .offset(x: -6, y: -6)
-                                        .blur(radius: 2)
-                                        .cornerRadius(12)
+//                                    Color(#colorLiteral(red: 0.7904488444, green: 0.7596978545, blue: 1, alpha: 1))
+//                                        .offset(x: -6, y: -6)
+//                                        .blur(radius: 2)
+//                                        .cornerRadius(12)
 
-                                    Image(item.image)
-                                        .resizable()
+                                    RemoteImage(url: imageUrl ?? "")
                                         .frame(width: 170, height: 170)
                                         .padding(2)
                                         .cornerRadius(12)
@@ -45,7 +46,13 @@ struct LoquyListView: View {
             }
             .navigationBarTitle("Loquy List")
 //            .navigationBarHidden(true)
-        }
+        }.onAppear(perform: {
+            getLoquyTranscriptions()
+        })
+    }
+    
+    func getLoquyTranscriptions() {
+        networkManager.loadLoquys()
     }
 }
 
@@ -61,6 +68,12 @@ struct LoquyListView_Previews: PreviewProvider {
 
 
 struct LoquyContentView: View {
+    
+    
+    let imageUrl: String
+    
+    @ObservedObject var networkManager = NetworkingManager()
+    
     @State var toggled = false
     var buttonDimensions:CGFloat = 50
     
@@ -105,9 +118,13 @@ struct LoquyContentView: View {
                             .fontWeight(.heavy)
                             .foregroundColor(.white)
                             .padding([.leading,.trailing,.top,.bottom])
+                            .onTapGesture {
+                                print("hello")
+                                dump(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl })
+//                                Persistence.loquys.removeAll()
+                            }
                         
-                        Image("mindscape")
-                            .resizable()
+                        RemoteImage(url: imageUrl)
                             .frame(width: 200, height: 200)
                             .cornerRadius(8)
 //                            .scaleEffect(isAtMaxScale ? 1 : 1.15)
@@ -175,10 +192,17 @@ struct LoquyContentView: View {
                 .animation(Animation.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5))
             }
             
-        }
+        }.onAppear(perform: {
+            
+            getLoquyTranscriptions()
+            dump(networkManager.loquys)//.filter { $0.audioClip.episode.imageUrl == imageUrl })
+        })
 //        .background(Color(.secondarySystemBackground))
         .navigationBarHidden(false)
         .navigationBarTitle("",displayMode: .inline)
     }
     
+    func getLoquyTranscriptions() {
+        networkManager.loadLoquys()
+    }
 }

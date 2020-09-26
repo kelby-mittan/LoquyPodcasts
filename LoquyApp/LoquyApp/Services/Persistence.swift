@@ -14,4 +14,5 @@ struct Persistence {
     static var artWork = DataPersistence<String>(filename: "artWork.plist")
     static var timeStamps = DataPersistence<TimeStamp>(filename: "timeStamps.plist")
     static var audioClips = DataPersistence<AudioClip>(filename: "audioClips.plist")
+    static var loquys = DataPersistence<Loquy>(filename: "loquys.plist")
 }

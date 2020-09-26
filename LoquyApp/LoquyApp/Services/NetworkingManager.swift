@@ -43,6 +43,12 @@ class NetworkingManager: ObservableObject {
         }
     }
     
+    @Published var loquys = [Loquy]() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
     @Published var hideTabBar = Bool() {
         didSet {
             didChange.send(self)
@@ -90,6 +96,17 @@ class NetworkingManager: ObservableObject {
             }
         } catch {
             print("error getting clips: \(error)")
+        }
+    }
+    
+    func loadLoquys() {
+        do {
+            let loquys = try Persistence.loquys.loadItems()
+            DispatchQueue.main.async {
+                self.loquys = loquys.reversed()
+            }
+        } catch {
+            print("error getting transcriptions: \(error)")
         }
     }
     
