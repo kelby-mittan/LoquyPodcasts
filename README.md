@@ -12,7 +12,13 @@ Loquy is a podcast application that allows for users to browse, search, and play
 Xcode 11, Swift 5, SwiftUI ,MediaPlayer, AVFoundation, Combine, CocoaPods
 
 ## Screen Shots
-![Loquy](Assets/loquyShot1.png)![Loquy](Assets/loquyShot2.png)![Loquy](Assets/loquyShot4.png)![Loquy](Assets/loquyShot5.png)
+![Loquy](Assets/homeTab.png)![Loquy](Assets/playingPodcast.png)![Loquy](Assets/clipView.png)![Loquy](Assets/transcribeView.png)
+![Loquy](Assets/savedTView.png)![Loquy](Assets/pageView.png)
+
+## User Experience
+_Browse_ | _Player_ | _Time_Stamps_
+------------ | ------------- | -------------
+![gif](Assets/loquyGif1.gif) | ![gif](Assets/loquyGif2.gif) | ![gif](Assets/loquyGif3.gif)
 
 ## Code Snippets
 
