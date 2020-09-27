@@ -1,26 +1,31 @@
 # Loquy Podcasts 
 
 ## About
-Loquy is a podcast application that allows for users to browse, search, and play their favorite podcasts. By calling on the Apple Music API, a user can find any podcast on Apple. This application was built and designed using SwiftUI, parses XML, and uses MediaPlayer to play podcasts
+Loquy is a podcast application that allows for users to browse, search, and play their favorite podcasts. By calling on the Apple Music API, a user can find any podcast on Apple. This application was built and designed using SwiftUI, parses XML, and uses MediaPlayer to play podcasts.
+
+One problem that often arises when trying to recall something insightful you might have heard on one of your favorite podcasts is that you might have forgotten when exactly this observation had taken place. Loquy makes it possible for these points in time to be saved as a timestamp so you can easily find it and seek to that specific play time at a later date. 
+
+The main feature of Loquy is what sets it apart from all other available podcast applications. In addition to giving the user functionality that is offered in most other podcast applications, Loquy offers something that doesn't really exist yet. While some other applications allow for clips or snippets to be saved, this application takes it a step further by transcribing the clip they've saved and allowing for the user to save this transcription.
 
 ### Future Implementations
-- Play podcast in the background
-- Favorite and download podcasts
-- Save and transcribe audio clips
+- Play podcast in a mini player
+- Share transcriptions of audio clips
+- Implement a widget for iOS 14
 
 ## Technologies Used
-Xcode 11, Swift 5, SwiftUI ,MediaPlayer, AVFoundation, Combine, CocoaPods
+Xcode 12, Swift 5, SwiftUI, MediaPlayer, AVFoundation, Combine, CocoaPods, Speech
 
-## Screen Shots
-![Loquy](Assets/homeTab.png)![Loquy](Assets/playingPodcast.png)![Loquy](Assets/clipView.png)![Loquy](Assets/transcribeView.png)
+## Main Player
+![Loquy](Assets/homeTab.png) ![Loquy](Assets/playingPodcast.png) ![Loquy](Assets/clipView.png)
 
-![Loquy](Assets/savedTView.png)![Loquy](Assets/pageView.png)
+## Transcribing
+![Loquy](Assets/transcribeView.png) ![Loquy](Assets/savedTView.png) ![Loquy](Assets/pageView.png)
 
 ## User Experience
 _Browse_ | _Player_ | _Save Clip_
 ------------ | ------------- | -------------
 ![gif](Assets/loquyGif1.gif) | ![gif](Assets/loquyGif2.gif) | ![gif](Assets/loquyGif3.gif)
-_Transcribe_ | _Saved Transcriptions_ | _Time_Stamps_
+_Transcribe_ | _Saved Transcriptions_
 ![gif](Assets/loquyGif4.gif) | ![gif](Assets/loquyGif5.gif)
 
 ## Code Snippets
@@ -95,4 +100,6 @@ Button(action: {
     .clipShape(Capsule())
     .animation(.spring())
 }
+.shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
+.shadow(color: Color(.white), radius: 10, x: -6, y: -6)
 ```
