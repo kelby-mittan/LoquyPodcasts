@@ -16,25 +16,15 @@ struct ControlView: View {
     
     @State var width: CGFloat = 30
     @State var playing = true
-    @State var isFirstPlay = false
     @State var currentTime: String = "0:00"
-    @State var isRecording = false
-    
     @State var showAlert = false
     
     let player: AVPlayer
     
     @ObservedObject var networkManager: NetworkingManager
-    
-    @State var halfModal_shown = false
-    
+        
     @Binding var showModal: Bool
     @Binding var clipTime: String
-    
-    var recordingSession: AVAudioSession!
-    var audioRecorder: AVAudioRecorder!
-    
-    
     
     var body: some View {
         

@@ -18,7 +18,6 @@ struct LoquyListView: View {
     let layout = [
         GridItem(.flexible()),
         GridItem(.flexible())
-        //        GridItem(.flexible())
     ]
     
     var body: some View {
@@ -27,25 +26,19 @@ struct LoquyListView: View {
                 LazyVGrid(columns: layout, spacing: 10) {
                     ForEach(Array(Set(networkManager.loquys.map { $0.audioClip.episode.imageUrl })), id: \.self) { imageUrl in
                         VStack {
-                            NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? "")) {
-                                ZStack {
-//                                    Color(#colorLiteral(red: 0.7904488444, green: 0.7596978545, blue: 1, alpha: 1))
-//                                        .offset(x: -6, y: -6)
-//                                        .blur(radius: 2)
-//                                        .cornerRadius(12)
-
-                                    RemoteImage(url: imageUrl ?? "")
-                                        .frame(width: 170, height: 170)
-                                        .padding(2)
-                                        .cornerRadius(12)
-                                }
+                            NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? "", networkManager: networkManager)) {
+                                    
+                                    
+                                RemoteImage(url: imageUrl ?? "")
+                                    .frame(width: 170, height: 170)
+                                    .padding(2)
+                                    .cornerRadius(12)
                             }
                         }
                     }
                 }.padding([.leading,.trailing],8)
             }
             .navigationBarTitle("Loquy List")
-//            .navigationBarHidden(true)
         }.onAppear(perform: {
             getLoquyTranscriptions()
         })
@@ -61,7 +54,7 @@ struct LoquyListView_Previews: PreviewProvider {
         if #available(iOS 14.0, *) {
             LoquyListView()
         } else {
-            // Fallback on earlier versions
+            Text("upgrade to iOS 14")
         }
     }
 }
@@ -69,48 +62,43 @@ struct LoquyListView_Previews: PreviewProvider {
 
 struct LoquyContentView: View {
     
+    @State var page = 0
     
     let imageUrl: String
     
-    @ObservedObject var networkManager = NetworkingManager()
+    @ObservedObject var networkManager : NetworkingManager
     
     @State var toggled = false
-    var buttonDimensions:CGFloat = 50
-    
-    let placeHolderText = "Ever wanted to know how music affects your brain, what quantum mechanics really is, or how black holes work? Do you wonder why you get emotional each time you see a certain movie, or how on earth video games are designed? Then you’ve come to the right place. Each week, Sean Carroll will host conversations with some of the most interesting thinkers in the world. From neuroscientists and engineers to authors and television producers, Sean and his guests talk about the biggest ideas in science, philosophy, culture and much more."
-    
-//    @State var isAtMaxScale = false
-    
+
     var body: some View {
         
         VStack {
             
             if toggled {
                 
-                ZStack(alignment: .bottom) {
-                    RoundedRectangle(cornerRadius: 12).padding().foregroundColor(PaletteColour.lightBlue.colour)//.opacity(0.5)
+                ZStack {
+                    VStack {
+                        GeometryReader{ g in
 
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                                self.toggled = false
-                            }) {
-                                Image(systemName: "list.bullet.below.rectangle")
-                                    .font(.system(size: 25))
-                                    .foregroundColor(!toggled ? Color.white : Color.init(white: 0.8))
+                            Carousel(networkManager: networkManager, imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
+                                .onAppear {
+                                    networkManager.loadLoquys()
+                                }
                         }
-                        .frame(width: buttonDimensions, height:buttonDimensions)
-                        .padding([.bottom,.trailing])
+
+                        PageControl(page: $page, loquyCount: networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
+                            .background(NeoButtonView())
+                            .padding([.bottom,.top], 8)
+                        Spacer()
                     }
-                    
                 }
                 .transition(
                     AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
                 )
-                    .animation(Animation.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5))
+                .animation(Animation.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5))
+                
             } else {
                 ZStack {
-//                    RoundedRectangle(cornerRadius: 12).padding().foregroundColor(PaletteColour.colors1.randomElement()).opacity(0.8)
                     VStack {
                         Spacer()
                         Text("\(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.first?.audioClip.episode.author ?? "")")
@@ -118,53 +106,41 @@ struct LoquyContentView: View {
                             .fontWeight(.heavy)
                             .foregroundColor(.white)
                             .padding([.leading,.trailing,.top,.bottom])
-                            .onTapGesture {
-                                print("hello")
-                                dump(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl })
-//                                Persistence.loquys.removeAll()
-                            }
                         
                         RemoteImage(url: imageUrl)
                             .frame(width: 200, height: 200)
                             .cornerRadius(8)
-                            .onTapGesture {
-                                print("hello")
-                                dump(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl })
-        //                                Persistence.loquys.removeAll()
-                            }
                         
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("You have \(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) transcripts")
-                                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                                        .foregroundColor(.white)
-                                        .fontWeight(.heavy)
-                                    
-                                    Text("from")
-                                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                                        .foregroundColor(.white)
-                                        .fontWeight(.heavy)
-                                        .padding(.top, 4)
-                                    Text("\(networkManager.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) saved audio clips")
-                                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                                        .foregroundColor(.white)
-                                        .fontWeight(.heavy)
-                                        .padding(.top, 4)
-                                }
-                                .padding([.bottom,.leading])
-                                Spacer()
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text("You have \(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) transcripts")
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                                    .fontWeight(.heavy)
+                                
+                                Text("from")
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                                    .fontWeight(.heavy)
+                                    .padding(.top, 4)
+                                Text("\(networkManager.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) saved audio clips")
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                                    .fontWeight(.heavy)
+                                    .padding(.top, 4)
                             }
-                            .padding(.leading, 20)
-                            .padding([.trailing,.top])
-//                            .background(CardNeoView(isRan: false))
-//                            .cornerRadius(12)
-                                                    
+                            .padding([.bottom,.leading])
+                            Spacer()
+                        }
+                        .padding(.leading, 20)
+                        .padding([.trailing,.top])
+                        
                         Spacer()
                         HStack {
                             Spacer()
                             
                             Button(action: {
-                                
+                        
                                 self.toggled = true
                                 
                             }) {
@@ -180,6 +156,7 @@ struct LoquyContentView: View {
                             .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                             .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         }
+                        
                     }.padding([.leading,.bottom,.trailing])
                     .background(CardNeoView(isRan: true))
                     .cornerRadius(12)
@@ -188,19 +165,16 @@ struct LoquyContentView: View {
                 .frame(height: UIScreen.main.bounds.height*2/3)
                 .transition(
                     AnyTransition.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing))
-                        
                 )
                 .animation(Animation.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5))
             }
             
         }.onAppear(perform: {
-            
             getLoquyTranscriptions()
             getAudioClips()
             
-            dump(networkManager.loquys)//.filter { $0.audioClip.episode.imageUrl == imageUrl })
         })
-//        .background(Color(.secondarySystemBackground))
+
         .navigationBarHidden(false)
         .navigationBarTitle("",displayMode: .inline)
     }

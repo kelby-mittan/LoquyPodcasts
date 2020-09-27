@@ -11,6 +11,7 @@ import SwiftUI
 import Combine
 
 class NetworkingManager: ObservableObject {
+    
     var didChange = PassthroughSubject<NetworkingManager, Never>()
     
     @Published var podcasts = [Podcast]() {
@@ -20,12 +21,6 @@ class NetworkingManager: ObservableObject {
     }
     
     @Published var episodes = [Episode]() {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
-    @Published var isShowAlert = Bool() {
         didSet {
             didChange.send(self)
         }
@@ -44,12 +39,6 @@ class NetworkingManager: ObservableObject {
     }
     
     @Published var loquys = [Loquy]() {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
-    @Published var hideTabBar = Bool() {
         didSet {
             didChange.send(self)
         }
@@ -110,7 +99,4 @@ class NetworkingManager: ObservableObject {
         }
     }
     
-    func hideTheTabBar() {
-        self.hideTabBar = true
-    }
 }

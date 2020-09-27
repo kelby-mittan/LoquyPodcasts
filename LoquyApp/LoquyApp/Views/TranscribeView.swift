@@ -21,7 +21,7 @@ struct TranscribeView: View {
     @State var playing = true
     @State var transcription: String = ""
     @State var title: String = ""
-    @State var isTranscribed = false
+    @State var isTranscribing = false
     @State var saveText = "transcribe"
     
     @State var image = RemoteImage(url: "")
@@ -129,7 +129,7 @@ struct TranscribeView: View {
             }
             
             Group {
-                if isTranscribed {
+                if isTranscribing {
                     
                     VStack(alignment: .leading) {
                         Text("Your Loquy...")
@@ -148,9 +148,9 @@ struct TranscribeView: View {
             }
             Button(action: {
 
-                isTranscribed.toggle()
+                isTranscribing.toggle()
                 
-                if isTranscribed {
+                if isTranscribing {
                     getTranscriptionOfClippedFile()
                     saveText = "save loquy"
                     

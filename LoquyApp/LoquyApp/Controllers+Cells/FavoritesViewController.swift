@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Combine
 import Kingfisher
 import SwiftUI
 import DataPersistence
@@ -24,9 +23,7 @@ class FavoritesViewController: UIViewController {
     private var dataSource: DataSource!
     
     var episodes: [Episode] = []
-    
-//    private var subscriptions: Set<AnyCancellable> = []
-    
+        
     let heyNow = "hey$now"
     
     override func viewDidLoad() {
@@ -164,10 +161,6 @@ extension FavoritesViewController: UICollectionViewDelegate {
     
     func goToEpisodesList(episodeArt: String) {
         let childView = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true, artWork: episodeArt))
-//        addChild(childView)
-//        childView.view.frame = UIScreen.main.bounds
-//        view.addSubview(childView.view)
-//        childView.willMove(toParent: self)
         navigationController?.pushViewController(childView, animated: true)
     }
 }

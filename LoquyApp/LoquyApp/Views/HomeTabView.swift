@@ -99,7 +99,6 @@ struct BrowseView: View {
             }
             .navigationBarTitle("")
             .navigationBarHidden(true)
-//            .navigationBarItems(leading: Button("Back"){presentationMode.wrappedValue.dismiss()})
         }
         
         .tabItem {

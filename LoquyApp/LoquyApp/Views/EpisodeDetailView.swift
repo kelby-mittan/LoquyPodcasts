@@ -24,9 +24,7 @@ struct EpisodeDetailView: View {
     @State var clipTime = ""
     @State var times = [String]()
     @State var showNotification = false
-    @State var showSavedNotification = false
     @State var notificationMessage = ""
-    //    @Binding var modalShown: Bool
     
     let player = Player.shared.player
     
@@ -64,7 +62,7 @@ struct EpisodeDetailView: View {
                     ClipAlertView(clipTime: clipTime, episode: episode, networkManager: networkManager, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
                 }
             }
-//                .background(Color(.secondarySystemBackground))
+
         }.onAppear(perform: {
             image = RemoteImage(url: episode.imageUrl ?? "")
             clipTime = player.currentTime().toDisplayString()
