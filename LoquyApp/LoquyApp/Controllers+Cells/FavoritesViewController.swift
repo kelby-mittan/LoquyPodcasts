@@ -16,7 +16,7 @@ class FavoritesViewController: UIViewController {
     enum SectionKind: Int, CaseIterable {
         case main
     }
-    
+        
     private var collectionView: UICollectionView!
     
     typealias DataSource = UICollectionViewDiffableDataSource<SectionKind,String>
