@@ -11,16 +11,15 @@ import SwiftUI
 struct SaveLoquyAlertView: View {
     
     @Binding var showAlert: Bool
-//    @Binding var time: String
+    @Binding var notificationShown: Bool
+    @Binding var message: String
     
     @ObservedObject var networkManager: NetworkingManager
     
     let audioClip: AudioClip
-    
     let transcription: String
     
     @State var timeStamps = [TimeStamp]()
-    
     @State var titleText = ""
     
     
@@ -33,7 +32,7 @@ struct SaveLoquyAlertView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        self.showAlert.toggle()
+                        showAlert.toggle()
                         
                     }, label: {
                         Image(systemName: "xmark")
@@ -58,39 +57,17 @@ struct SaveLoquyAlertView: View {
                     .textFieldStyle(SuperCustomTextFieldStyle())
                 
                 Button(action: {
-                    
                     showAlert.toggle()
-                    
-                    var id = 1
-
-                    let filteredLoquys = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
-
-                    if !filteredLoquys.isEmpty {
-                        id = filteredLoquys.count + 1
-                    }
-
-                    print(filteredLoquys.count)
-                    print(id)
-
-                    let newLoquy = Loquy(idInCollection: id, title: titleText, transcription: transcription, audioClip: audioClip)
-
-                    do {
-                        try Persistence.loquys.createItem(newLoquy)
-                    } catch {
-                        print("problem creating loquy")
-                    }
-
-                    networkManager.loadLoquys()
-                    
-                    
+                    saveLoquyToList()
+                    handleNotification()
                 }) {
-                        Text("save")
-                            .fontWeight(.bold)
-                            .frame(width: 120,height: 40)
-                            .foregroundColor(Color.purple)
-                            .background(NeoButtonView())
-                            .clipShape(Capsule())
-                            .padding()
+                    Text("save")
+                        .fontWeight(.bold)
+                        .frame(width: 120,height: 40)
+                        .foregroundColor(Color.purple)
+                        .background(NeoButtonView())
+                        .clipShape(Capsule())
+                        .padding()
                 }
                 Spacer()
             }
@@ -108,5 +85,31 @@ struct SaveLoquyAlertView: View {
         .cornerRadius(20)
         .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
+    }
+    
+    func saveLoquyToList() {
+        var id = 1
+        let filteredLoquys = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
+        
+        if !filteredLoquys.isEmpty {
+            id = filteredLoquys.count + 1
+        }
+        let newLoquy = Loquy(idInCollection: id, title: titleText, transcription: transcription, audioClip: audioClip)
+        do {
+            try Persistence.loquys.createItem(newLoquy)
+        } catch {
+            print("problem creating loquy")
+        }
+
+        networkManager.loadLoquys()
+    }
+    
+    func handleNotification() {
+        notificationShown = true
+        message = "loquy saved"
+        
+        Timer.scheduledTimer(withTimeInterval: 2.5, repeats: false) { (value) in
+            notificationShown = false
+        }
     }
 }
