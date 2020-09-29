@@ -22,28 +22,22 @@ struct AudioClipsView: View {
     var body: some View {
         
         NavigationView {
-//            VStack {
-                List(networkManager.audioClips, id: \.self) { clip in
+
+            List(networkManager.audioClips, id: \.self) { clip in
                     
                     NavigationLink(destination: TranscribeView(audioClip: clip)) {
                         
                         ZStack(alignment: .center) {
-//                            LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .top, endPoint: .bottomTrailing)
-//                                .cornerRadius(12)
-//                                .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
-//                                .padding(.trailing)
-                            ZStack(alignment: .leading) {
-                                ZStack {
-                                    Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
-                                        .offset(x: -10, y: -10)
-                                    LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                                        .padding(2)
-                                        .blur(radius: 4)
-                                }
-                                .cornerRadius(12)
-                                .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
-                                .padding(.trailing)
+                            ZStack {
+                                Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
+                                    .offset(x: -10, y: -10)
+                                LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                                    .padding(2)
+                                    .blur(radius: 4)
                             }
+                            .cornerRadius(12)
+                            .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
+                            .padding(.trailing)
                             
                             VStack(alignment: .center) {
                                 
@@ -73,7 +67,6 @@ struct AudioClipsView: View {
                                     .font(.subheadline)
                                     .foregroundColor(Color.white)
                                     .fontWeight(.semibold)
-                                //                                        .padding([.horizontal])
                                 
                                 
                             }.padding()
@@ -87,8 +80,6 @@ struct AudioClipsView: View {
                 })
                 .background(Color(.blue))
                 
-                
-//            }
             .actionSheet(isPresented: $showActionSheet, content: {
                 actionSheet
             })
@@ -97,7 +88,7 @@ struct AudioClipsView: View {
             .navigationBarTitle("Your Audio Clips")
             
         }.onAppear(perform: {
-//                UITableView.appearance().separatorStyle = .none
+            UITableView.appearance().separatorStyle = .none
             getAudioClips()
         })
     }
