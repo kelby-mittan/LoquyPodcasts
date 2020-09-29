@@ -76,9 +76,6 @@ struct ClipAlertView: View {
                 }
                 
                 let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString())
-//                var audioClips = UserDefaults.standard.savedAudioClips()
-//                audioClips.append(newClip)
-//                UserDefaults.standard.saveTheClip(clip: newClip)
                 
                 do {
                     try Persistence.audioClips.createItem(newClip)
@@ -120,7 +117,6 @@ struct ClipAlertView: View {
 
 
 struct HalfModalView<Content: View> : View {
-    
     
     @GestureState private var dragState = DragState.inactive
     @Binding var isShown:Bool

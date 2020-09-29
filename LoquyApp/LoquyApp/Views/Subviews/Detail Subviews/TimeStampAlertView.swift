@@ -16,10 +16,6 @@ struct TimeStampAlertView: View {
     @ObservedObject var networkManager: NetworkingManager
     
     @State var timeStamps = [TimeStamp]()
-//    let gradColor1 = PaletteColour.colors1.randomElement()
-//    let gradColor2 = PaletteColour.colors2.randomElement()
-    
-//    @State var isFavorited = true
     @State var favToSave = ""
     @State var saveText = ""
     
@@ -52,19 +48,14 @@ struct TimeStampAlertView: View {
                     if Persistence.episodes.hasItemBeenSaved(episode) {
                         showAlert.toggle()
                         let newTStamp = TimeStamp(episode: episode, time: time)
-//                        var stamps = UserDefaults.standard.savedTimeStamps()
                         
                         do {
-//                            var stamps = try Persistence.timeStamps.loadItems()
                             try Persistence.timeStamps.createItem(newTStamp)
                         } catch {
                             print("error saving timestamp: \(error)")
                         }
                         
-//                        stamps.append(newTStamp)
-//                        UserDefaults.standard.saveTheTimeStamp(timeStamp: newTStamp)
                         loadTimes(episode: episode)
-//                        networkManager.timeStamps.append(newTStamp.time)
                     } else {
                         self.showAlert.toggle()
                     }
@@ -101,7 +92,7 @@ struct TimeStampAlertView: View {
         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
     }
     
-    func loadTimes(episode: Episode) {
+    private func loadTimes(episode: Episode) {
         networkManager.loadTimeStamps(for: episode)
     }
 }

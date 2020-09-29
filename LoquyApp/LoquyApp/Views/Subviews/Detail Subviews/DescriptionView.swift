@@ -23,14 +23,6 @@ struct DescriptionView: View {
                 Spacer()
             }
             
-//            HStack {
-//                Text("Philosophy | Physics | Science")
-//                    .foregroundColor(.secondary)
-//                    .multilineTextAlignment(.leading)
-//                    .padding(.top)
-//                Spacer()
-//            }
-            
             HStack {
                 Text(getOnlyDescription(episode.description))
                     .fontWeight(.bold)

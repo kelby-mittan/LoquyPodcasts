@@ -57,12 +57,9 @@ struct Carousel : UIViewRepresentable {
     
     class Coordinator: NSObject,UIScrollViewDelegate{
         
-        
         var parent: Carousel
         
         init(parent1: Carousel) {
-            
-            
             parent = parent1
         }
         

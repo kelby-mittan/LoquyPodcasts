@@ -38,20 +38,8 @@ struct ControlView: View {
                 Capsule().fill(Color.purple).frame(width: width, height: 8)
                     .gesture(DragGesture()
                         .onChanged({ (value) in
-                            player.pause()
-                            let x = value.location.x
-                            let maxVal = UIScreen.main.bounds.width - 30
-                            let minVal: CGFloat = 10
                             
-                            if x < minVal {
-                                width = minVal
-                            } else if x > maxVal {
-                                width = maxVal
-                            } else {
-                                width = x
-                            }
-                            currentTime = Player.capsuleDragged(value.location.x).toDisplayString()
-                            print("width val is : \(width)")
+                            handleDraggedCapsule(value)
                             
                         }).onEnded({ (value) in
                             player.seek(to: Player.capsuleDragged(value.location.x))
@@ -75,10 +63,8 @@ struct ControlView: View {
             HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
                 
                 Button(action: {
-                    
                     Player.seekToCurrentTime(delta: -15)
                     getCapsuleWidth()
-                    
                 }) {
                     ZStack {
                         NeoButtonView()
@@ -95,7 +81,6 @@ struct ControlView: View {
                 Button(action: {
                     playing.toggle()
                     playing ? player.play() : player.pause()
-                    
                 }) {
                     ZStack {
                         NeoButtonView()
@@ -113,17 +98,15 @@ struct ControlView: View {
                 Button(action: {
                     Player.seekToCurrentTime(delta: 15)
                     getCapsuleWidth()
-                    
                 }) {
-                    
                     ZStack {
                         NeoButtonView()
                         Image(systemName: "goforward.15").font(.largeTitle)
                             .foregroundColor(.purple)
-                    }.background(NeoButtonView())
+                    }
+                    .background(NeoButtonView())
                     .frame(width: 60, height: 60)
                     .clipShape(Capsule())
-                    
                 }
                 .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
@@ -150,11 +133,8 @@ struct ControlView: View {
                 Spacer()
                 
                 Button(action: {
-
                     showModal.toggle()
                     clipTime = currentTime
-                    
-
                 }) {
                     Text("record clip")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
@@ -193,6 +173,22 @@ struct ControlView: View {
             }
         }
         
+    }
+    
+    private func handleDraggedCapsule(_ dragVal: DragGesture.Value) {
+        player.pause()
+        let x = dragVal.location.x
+        let maxVal = UIScreen.main.bounds.width - 30
+        let minVal: CGFloat = 10
+        
+        if x < minVal {
+            width = minVal
+        } else if x > maxVal {
+            width = maxVal
+        } else {
+            width = x
+        }
+        currentTime = Player.capsuleDragged(dragVal.location.x).toDisplayString()
     }
     
     private func getCapsuleWidth() {

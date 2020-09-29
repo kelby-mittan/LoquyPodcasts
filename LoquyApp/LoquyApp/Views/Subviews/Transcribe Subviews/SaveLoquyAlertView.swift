@@ -26,9 +26,7 @@ struct SaveLoquyAlertView: View {
     var body : some View {
         
         ZStack {
-            
             VStack {
-                
                 HStack {
                     Spacer()
                     Button(action: {
@@ -87,7 +85,7 @@ struct SaveLoquyAlertView: View {
         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
     }
     
-    func saveLoquyToList() {
+    private func saveLoquyToList() {
         var id = 1
         let filteredLoquys = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
         
@@ -104,7 +102,7 @@ struct SaveLoquyAlertView: View {
         networkManager.loadLoquys()
     }
     
-    func handleNotification() {
+    private func handleNotification() {
         notificationShown = true
         message = "loquy saved"
         

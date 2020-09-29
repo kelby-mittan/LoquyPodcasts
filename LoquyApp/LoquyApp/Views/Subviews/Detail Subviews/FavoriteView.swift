@@ -15,9 +15,6 @@ struct FavoriteView: View {
     let artwork: String
     @State var isSaved = false
     @State var saveText = ""
-    
-//    @State private var showAlert = false
-    
     @Binding var notificationShown: Bool
     @Binding var message: String
     
@@ -32,9 +29,6 @@ struct FavoriteView: View {
             }
 
             if !Persistence.episodes.hasItemBeenSaved(episode) {
-//                        var episodes = UserDefaults.standard.savedEpisodes()
-//                        episodes.append(episode)
-//                        UserDefaults.standard.saveTheEpisode(episode: episode)
                 saveText = "remove episode"
                 message = "episode saved"
                 do {
@@ -44,14 +38,9 @@ struct FavoriteView: View {
                     print("could not save episode/ artwork")
                 }
 
-//                        var pCasts = UserDefaults.standard.getPodcastArt()
-//                        pCasts.append(artwork)
-//                        UserDefaults.standard.setPodcastArt(pCasts)
-
             } else {
                 saveText = "save episode"
                 message = "episode removed"
-//                        UserDefaults.standard.deleteEpisode(episode: episode)
 
                 do {
                     let episodes = try Persistence.episodes.loadItems()
@@ -72,7 +61,6 @@ struct FavoriteView: View {
                 } catch {
                     print("error getting episodes or deleting episode/ art")
                 }
-//                        UserDefaults.standard.deletePodcastArt(artwork)
             }
             isSaved.toggle()
             
@@ -88,7 +76,6 @@ struct FavoriteView: View {
                 .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
                 .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
                 .padding()
-//                        Spacer()
         }
         .onAppear {
             if Persistence.episodes.hasItemBeenSaved(episode) {
