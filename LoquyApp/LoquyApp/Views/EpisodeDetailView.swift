@@ -25,6 +25,7 @@ struct EpisodeDetailView: View {
     @State var times = [String]()
     @State var showNotification = false
     @State var notificationMessage = ""
+    @State var playing = true
     
     let player = Player.shared.player
     
@@ -34,15 +35,17 @@ struct EpisodeDetailView: View {
 
                 image
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 250, height: 250)
+                    .frame(width: playing ? 250 : 200, height: playing ? 250 : 200)
                     .cornerRadius(12)
-                    .padding(.top,100)
+                    .padding(.top, playing ? 100 : 125)
                     .padding([.leading,.trailing])
+                    .animation(.easeInOut)
                     .onTapGesture(perform: {
                         dump(try! Persistence.artWork.loadItems())
                 })
                 
-                ControlView(episode: episode, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
+                ControlView(episode: episode, isPlaying: $playing, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
+                    .padding(.top, playing ? 0 : 25)
                 
                 EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
                 

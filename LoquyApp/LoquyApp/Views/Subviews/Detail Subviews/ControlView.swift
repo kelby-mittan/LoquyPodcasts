@@ -19,6 +19,8 @@ struct ControlView: View {
     @State var currentTime: String = "0:00"
     @State var showAlert = false
     
+    @Binding var isPlaying: Bool
+    
     let player: AVPlayer
     
     @ObservedObject var networkManager: NetworkingManager
@@ -78,6 +80,7 @@ struct ControlView: View {
                 
                 Button(action: {
                     playing.toggle()
+                    isPlaying.toggle()
                     playing ? player.play() : player.pause()
                 }) {
                     ZStack {
@@ -177,7 +180,7 @@ struct ControlView: View {
     private func handleDraggedCapsule(_ dragVal: DragGesture.Value) {
         player.pause()
         let x = dragVal.location.x
-        let maxVal = UIScreen.main.bounds.width - 30
+        let maxVal = UIScreen.main.bounds.width - 20
         let minVal: CGFloat = 10
 
         if x < minVal {
