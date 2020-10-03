@@ -61,7 +61,6 @@ class NetworkingManager: ObservableObject {
     }
     
     func loadTimeStamps(for episode: Episode) {
-        
         do {
             let timeStamps = try Persistence.timeStamps.loadItems().filter { $0.episode == episode }.map { $0.time }
             DispatchQueue.main.async {
@@ -70,11 +69,6 @@ class NetworkingManager: ObservableObject {
         } catch {
             print("error with timestamps: \(error)")
         }
-        
-//        let timeStamps = UserDefaults.standard.savedTimeStamps().filter { $0.episode == episode }.map { $0.time }
-//        DispatchQueue.main.async {
-//            self.timeStamps = timeStamps
-//        }
     }
     
     func loadAudioClips() {

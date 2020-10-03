@@ -9,6 +9,7 @@
 import Foundation
 import AVKit
 import MediaPlayer
+import SwiftUI
 
 class Player {
     
@@ -121,5 +122,6 @@ class Player {
         durationLabel = "-" + dt.toDisplayString()
         return ("",durationLabel)
     }
+    
     
 }

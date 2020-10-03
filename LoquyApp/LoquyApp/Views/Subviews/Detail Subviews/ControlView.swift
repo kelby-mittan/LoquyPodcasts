@@ -38,9 +38,7 @@ struct ControlView: View {
                 Capsule().fill(Color.purple).frame(width: width, height: 8)
                     .gesture(DragGesture()
                         .onChanged({ (value) in
-                            
                             handleDraggedCapsule(value)
-                            
                         }).onEnded({ (value) in
                             player.seek(to: Player.capsuleDragged(value.location.x))
                             player.play()
@@ -64,7 +62,7 @@ struct ControlView: View {
                 
                 Button(action: {
                     Player.seekToCurrentTime(delta: -15)
-                    getCapsuleWidth()
+                    Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                 }) {
                     ZStack {
                         NeoButtonView()
@@ -97,7 +95,7 @@ struct ControlView: View {
                 
                 Button(action: {
                     Player.seekToCurrentTime(delta: 15)
-                    getCapsuleWidth()
+                    Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                 }) {
                     ZStack {
                         NeoButtonView()
@@ -114,6 +112,7 @@ struct ControlView: View {
                 
             }
             HStack {
+                Spacer()
                 Button(action: {
                     showAlert.toggle()
                 }) {
@@ -167,7 +166,7 @@ struct ControlView: View {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                 if playing {
                     if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-                        getCapsuleWidth()
+                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                     }
                 }
             }
@@ -180,7 +179,7 @@ struct ControlView: View {
         let x = dragVal.location.x
         let maxVal = UIScreen.main.bounds.width - 30
         let minVal: CGFloat = 10
-        
+
         if x < minVal {
             width = minVal
         } else if x > maxVal {
@@ -189,13 +188,6 @@ struct ControlView: View {
             width = x
         }
         currentTime = Player.capsuleDragged(dragVal.location.x).toDisplayString()
-    }
-    
-    private func getCapsuleWidth() {
-        let screen = UIScreen.main.bounds.width - 30
-        let duration = player.currentItem?.duration.toDisplayString() ?? "00:00:00"
-        let percent = currentTime.toSecDouble() / duration.toSecDouble()
-        width = screen * CGFloat(percent) + 20
     }
     
     @discardableResult
@@ -209,7 +201,6 @@ struct ControlView: View {
             return ("--:--", "--:--")
         }
         let dt = durationTime - currentTime.getCMTime()
-//        guard let dt = durationTime else { return ("00:00:00","00:00:00") }
         durationLabel = "-" + dt.toDisplayString()
         return ("",durationLabel)
     }
