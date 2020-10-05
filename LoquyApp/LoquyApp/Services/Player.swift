@@ -21,6 +21,11 @@ class Player {
         return avPlayer
     }()
     
+    public var isPlaying: Bool = {
+        let playing = Bool()
+        return playing
+    }()
+    
     static func setupAudioSession() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)

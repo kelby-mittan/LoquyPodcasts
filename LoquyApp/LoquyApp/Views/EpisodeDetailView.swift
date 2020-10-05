@@ -40,9 +40,6 @@ struct EpisodeDetailView: View {
                     .padding(.top, playing ? 100 : 125)
                     .padding([.leading,.trailing])
                     .animation(.easeInOut)
-                    .onTapGesture(perform: {
-                        dump(try! Persistence.artWork.loadItems())
-                })
                 
                 ControlView(episode: episode, isPlaying: $playing, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
                     .padding(.top, playing ? 0 : 25)
@@ -69,6 +66,7 @@ struct EpisodeDetailView: View {
         }.onAppear(perform: {
             image = RemoteImage(url: episode.imageUrl ?? "")
             clipTime = player.currentTime().toDisplayString()
+            print(playing)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.secondarySystemBackground))
