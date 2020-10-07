@@ -22,7 +22,6 @@ struct EpisodesView: View {
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
     
-    
     var body: some View {
         
         List(networkManager.episodes, id: \.self) { episode in

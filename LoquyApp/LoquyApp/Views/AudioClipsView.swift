@@ -84,7 +84,6 @@ struct AudioClipsView: View {
                 actionSheet
             })
             
-//            .environment(\.horizontalSizeClass, .regular)
             .navigationBarTitle("Your Audio Clips")
             
         }.onAppear(perform: {
@@ -96,20 +95,11 @@ struct AudioClipsView: View {
     var actionSheet: ActionSheet {
         ActionSheet(title: Text("Remove Clip").font(.title), buttons: [
             .default(Text("Cancel")) {
-//                dump(UserDefaults.standard.savedAudioClips().filter { $0.startTime != audioClip?.startTime } )
-//                print(AudioTrim.loadUrlFromDiskWith(fileName: audioClip!.title + audioClip!.startTime) ?? "none")
-//                dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0])
             },
             .destructive(Text("Delete")) {
                 guard let audioClip = audioClip else {
                     return
                 }
-                
-//                guard let validEpsiode = episodes.firstIndex(of: episode) else {
-//                    print("couldn't get episode")
-//                    return
-//                }
-//                try Persistence.episodes.deleteItem(at: validEpsiode)
                 
                 do {
                     
@@ -123,7 +113,6 @@ struct AudioClipsView: View {
                     print("error deleting clip: \(error)")
                 }
                 
-//                UserDefaults.standard.deleteAudioClip(clip: audioClip)
                 AudioTrim.removeUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime)
                 getAudioClips()
             }

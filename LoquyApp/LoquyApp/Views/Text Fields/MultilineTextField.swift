@@ -13,6 +13,7 @@ import SwiftUI
 struct MultilineTextField: View {
 
     private var placeholder: String
+    private var isSaved: Bool
     private var onCommit: (() -> Void)?
     @State private var viewHeight: CGFloat = 40 //start with one line
     @State private var shouldShowPlaceholder = false
@@ -26,7 +27,7 @@ struct MultilineTextField: View {
     }
 
     var body: some View {
-        UITextViewWrapper(text: self.internalText, calculatedHeight: $viewHeight, onDone: onCommit)
+        UITextViewWrapper(isSaved: isSaved, text: self.internalText, calculatedHeight: $viewHeight, onDone: onCommit)
             .frame(minHeight: viewHeight, maxHeight: viewHeight)
             .background(placeholderView, alignment: .topLeading)
     }
@@ -43,8 +44,9 @@ struct MultilineTextField: View {
         }
     }
     
-    init (_ placeholder: String = "", text: Binding<String>, onCommit: (() -> Void)? = nil) {
+    init (_ placeholder: String = "", isSaved: Bool, text: Binding<String>, onCommit: (() -> Void)? = nil) {
         self.placeholder = placeholder
+        self.isSaved = isSaved
         self.onCommit = onCommit
         self._text = text
         self._shouldShowPlaceholder = State<Bool>(initialValue: self.text.isEmpty)
@@ -56,6 +58,7 @@ struct MultilineTextField: View {
 private struct UITextViewWrapper: UIViewRepresentable {
     typealias UIViewType = UITextView
 
+    var isSaved: Bool
     @Binding var text: String
     @Binding var calculatedHeight: CGFloat
     var onDone: (() -> Void)?
@@ -70,6 +73,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textField.isUserInteractionEnabled = true
         textField.isScrollEnabled = false
         textField.backgroundColor = UIColor.clear
+        
+        if isSaved {
+            textField.textColor = .white
+        }
         
         if nil != onDone {
             textField.returnKeyType = .done

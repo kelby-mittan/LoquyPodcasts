@@ -139,7 +139,7 @@ struct TranscribeView: View {
                                 .font(.title)
                                 .fontWeight(.heavy)
                 
-                            MultilineTextField("", text: $transcription, onCommit: {
+                            MultilineTextField("", isSaved: false, text: $transcription, onCommit: {
                                 print("Final text: \(transcription)")
                                 player.pause()
                                 DispatchQueue.main.async {
