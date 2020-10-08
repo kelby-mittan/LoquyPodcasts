@@ -93,6 +93,7 @@ struct SaveLoquyAlertView: View {
             id = filteredLoquys.count + 1
         }
         let newLoquy = Loquy(idInCollection: id, title: titleText, transcription: transcription, audioClip: audioClip)
+        
         do {
             try Persistence.loquys.createItem(newLoquy)
         } catch {

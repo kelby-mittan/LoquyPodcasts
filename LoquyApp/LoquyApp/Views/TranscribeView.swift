@@ -161,28 +161,6 @@ struct TranscribeView: View {
                         saveText = "transcribe"
                         player.pause()
                         playing = false
-                        print(transcription)
-                        
-    //                    var id = 1
-    //
-    //                    let filteredLoquys = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
-    //
-    //                    if !filteredLoquys.isEmpty {
-    //                        id = filteredLoquys.count + 1
-    //                    }
-    //
-    //                    print(filteredLoquys.count)
-    //                    print(id)
-    //
-    //                    let newLoquy = Loquy(idInCollection: id, title: title, transcription: transcription, audioClip: audioClip)
-    //
-    //                    do {
-    //                        try Persistence.loquys.createItem(newLoquy)
-    //                    } catch {
-    //                        print("problem creating loquy")
-    //                    }
-    //
-    //                    getLoquyTranscriptions()
                         
                         showAlert.toggle()
                     }

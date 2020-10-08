@@ -76,6 +76,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         if isSaved {
             textField.textColor = .white
+            textField.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
+//            textField.resignFirstResponder()
         }
         
         if nil != onDone {

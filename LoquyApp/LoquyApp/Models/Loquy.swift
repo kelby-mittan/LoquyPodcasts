@@ -13,7 +13,7 @@ struct Loquy: Codable, Identifiable, Hashable {
     var id: UUID?
     let idInCollection: Int
     let title: String
-    let transcription: String
+    var transcription: String
     let audioClip: AudioClip
     
 }

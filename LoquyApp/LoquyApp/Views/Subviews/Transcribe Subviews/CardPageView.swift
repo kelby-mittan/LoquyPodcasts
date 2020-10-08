@@ -81,17 +81,19 @@ struct CardPageView: View {
                             .fontWeight(.heavy)
                             .padding(.leading)
                         
-                        MultilineTextField("", isSaved: true, text: $transcription, onCommit: {
-                            print("Final text: \(transcription)")
-                            
-                        })
-                        .padding([.leading,.trailing]).padding(.bottom,72)
+//                        MultilineTextField("", isSaved: true, text: $transcription, onCommit: {
+//                            print("Final text: \(transcription)")
+//                            loquy.transcription = transcription
+//                        }).onAppear {
+//                            transcription = loquy.transcription
+//                        }
+//                        .padding([.leading,.trailing]).padding(.bottom,72)
                         
-//                        Text("\(loquy.transcription)")
-//                            .font(.system(size: 18, weight: .bold, design: .rounded))
-//                            .foregroundColor(.white)
-//                            .fontWeight(.heavy)
-//                            .padding([.top,.leading,.trailing]).padding(.bottom,72)
+                        Text("\(loquy.transcription)")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .fontWeight(.heavy)
+                            .padding([.top,.leading,.trailing]).padding(.bottom,72)
                     }
                     .padding([.trailing,.leading], 20)
                     Spacer()
@@ -124,7 +126,7 @@ struct CardPageView: View {
                 
             }.onAppear {
                 networkManager.loadLoquys()
-                transcription = loquy.transcription
+//                transcription = loquy.transcription
                 
                 dump(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl })
                 print("hello: \(imageUrl)")
