@@ -99,6 +99,8 @@ struct BrowseView: View {
             }
             .navigationBarTitle("")
             .navigationBarHidden(true)
+        }.onAppear {
+            Player.setupAudioSession()
         }
         
         .tabItem {
