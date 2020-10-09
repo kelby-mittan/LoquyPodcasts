@@ -163,16 +163,57 @@ struct ControlView: View {
         }
         .animation(.spring())
         .onAppear {
-            Player.playEpisode(episode: episode)
-            getCurrentPlayerTime()
-            playing = true
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                if playing {
-                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+            
+            if player.timeControlStatus == .paused {
+                Player.playEpisode(episode: episode)
+                getCurrentPlayerTime()
+                playing = true
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+                    if playing {
+                        if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                            Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+                        }
                     }
                 }
             }
+            
+            
+            setupRemoteControl()
+        }
+        
+    }
+    
+    private func setupRemoteControl() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        let commandCenter = MPRemoteCommandCenter.shared()
+            
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            player.play()
+            playing = true
+            isPlaying = true
+            return .success
+        }
+        
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            player.pause()
+            playing = false
+            isPlaying = false
+            return .success
+        }
+        
+        commandCenter.togglePlayPauseCommand.isEnabled = true
+        commandCenter.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            
+            if player.timeControlStatus == .playing {
+                player.pause()
+            } else {
+                player.play()
+            }
+            
+            return .success
         }
         
     }

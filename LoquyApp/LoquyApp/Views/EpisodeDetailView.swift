@@ -66,7 +66,6 @@ struct EpisodeDetailView: View {
         }.onAppear(perform: {
             image = RemoteImage(url: episode.imageUrl ?? "")
             clipTime = player.currentTime().toDisplayString()
-            print(playing)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.secondarySystemBackground))
@@ -74,7 +73,7 @@ struct EpisodeDetailView: View {
         .navigationBarTitle("", displayMode: .inline)
     }
     
-    func getCapsulePosition() -> CGFloat {
+    private func getCapsulePosition() -> CGFloat {
         let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
         let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
         let percentage = currentTimeSeconds / durationSeconds

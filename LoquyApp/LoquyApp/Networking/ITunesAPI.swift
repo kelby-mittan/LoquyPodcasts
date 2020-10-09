@@ -67,15 +67,12 @@ class ITunesAPI {
         guard let url = URL(string: secureFeedUrl) else { return }
         
         DispatchQueue.global(qos: .background).async {
-            print("Before parser")
             let parser = FeedParser(URL: url)
-            print("After parser")
             
             parser?.parseAsync(result: { (result) in
-                print("Successfully parse feed:", result.isSuccess)
                 
-                if let err = result.error {
-                    print("Failed to parse XML feed:", err)
+                if let error = result.error {
+                    print("error parsing: \(error)")
                     return
                 }
                 

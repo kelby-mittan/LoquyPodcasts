@@ -23,68 +23,70 @@ struct EpisodesView: View {
     let gradColor2 = PaletteColour.colors2.randomElement()
     
     var body: some View {
-        
-        List(networkManager.episodes, id: \.self) { episode in
-            
-            NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork)) {
-                
-                ZStack(alignment: .leading) {
-                    ZStack {
-                        Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
-                            .offset(x: -10, y: -10)
-                        LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                            .padding(2)
-                            .blur(radius: 4)
-                    }
-                    .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
-                    .padding(.trailing)
-                    
-                    HStack(alignment: .top) {
-                        
-                        RemoteImage(url: episode.imageUrl ?? "")
-                            .frame(width: 110, height: 110)
-                            .cornerRadius(6)
-                            .padding([.leading,.bottom,.top])
-                        
-                        VStack(alignment: .leading) {
-                            
-                            Text(episode.pubDate.makeString())
-                                .font(.headline)
-                                .fontWeight(.heavy)
-                                .foregroundColor(Color.white)
-                                .padding()
-                            
-                            Text(episode.title)
-                                .font(.subheadline)
-                                .foregroundColor(Color.white)
-                                .fontWeight(.semibold)
-                                .padding([.horizontal])
-                        }
-                        
-                    }
-                    .padding()
+        if networkManager.episodes.isEmpty {
+            ActivityIndicator(style: .large)
+                .onAppear {
+                    isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
+                    UITableView.appearance().separatorStyle = .none
                 }
+                .navigationBarTitle(title)
+        } else {
+            List(networkManager.episodes, id: \.self) { episode in
                 
+                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork)) {
+                    
+                    ZStack(alignment: .leading) {
+                        ZStack {
+                            Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
+                                .offset(x: -10, y: -10)
+                            LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                                .padding(2)
+                                .blur(radius: 4)
+                        }
+                        .cornerRadius(12)
+                        .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
+                        .padding(.trailing)
+                        
+                        HStack(alignment: .top) {
+                            
+                            RemoteImage(url: episode.imageUrl ?? "")
+                                .frame(width: 110, height: 110)
+                                .cornerRadius(6)
+                                .padding([.leading,.bottom,.top])
+                            
+                            VStack(alignment: .leading) {
+                                
+                                Text(episode.pubDate.makeString())
+                                    .font(.headline)
+                                    .fontWeight(.heavy)
+                                    .foregroundColor(Color.white)
+                                    .padding()
+                                
+                                Text(episode.title)
+                                    .font(.subheadline)
+                                    .foregroundColor(Color.white)
+                                    .fontWeight(.semibold)
+                                    .padding([.horizontal])
+                            }
+                        }
+                        .padding()
+                    }
+                }
+                .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
+            }.onAppear {
+                isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
+                UITableView.appearance().separatorStyle = .none
             }
-            
-            .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
-            
-        }.onAppear(perform: {
-            isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
-            UITableView.appearance().separatorStyle = .none
-        })
-        .navigationBarTitle(title)
+            .navigationBarTitle(title)
+        }
         
     }
     
-    func getPodcasts() {
+    private func getPodcasts() {
         networkManager.loadEpisodes(feedUrl: podcastFeed ?? "")
     }
     
-    func getFavorites() -> [Episode] {
-        //        let episodes = UserDefaults.standard.savedEpisodes().filter { $0.author == title }
-        
+    private func getFavorites() -> [Episode] {
         var episodes: [Episode] = []
         
         do {
