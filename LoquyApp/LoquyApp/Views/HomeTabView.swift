@@ -121,11 +121,20 @@ struct BrowseView: View {
 }
 
 struct FavoritesTabView: View {
+    
+    @ObservedObject private var networkManager = NetworkingManager()
+    @State var episodes: [Episode] = []
+    
     var body: some View {
+        
+        if !episodes.isEmpty {
         NavigationView {
             FavoritesVCWrapper()
         .navigationBarTitle("")
         .navigationBarHidden(true)
+        }
+        .onAppear {
+            getFavs()
         }
         .tabItem {
                 Image(systemName: "star.fill")
@@ -134,7 +143,30 @@ struct FavoritesTabView: View {
                     .foregroundColor(.purple)
                 Text("Favorites")
         }
+        } else {
+            EmptySavedView(emptyType: .favorite)
+                .onAppear {
+                    getFavs()
+                }
+            .tabItem {
+                    Image(systemName: "star.fill")
+                        .font(.body)
+                        .padding(.top, 16.0)
+                        .foregroundColor(.purple)
+                    Text("Favorites")
+            }
+        }
+        
     }
+    
+    private func getFavs() {
+        do {
+            episodes = try Persistence.episodes.loadItems()
+        } catch {
+            print("error getting episodes: \(error)")
+        }
+    }
+    
 }
 
 struct AudioClipsTab: View {

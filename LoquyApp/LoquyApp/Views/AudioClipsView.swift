@@ -18,12 +18,11 @@ struct AudioClipsView: View {
     @State var showActionSheet: Bool = false
     @State var audioClip: AudioClip?
     
-    
     var body: some View {
         
-        NavigationView {
-
-            List(networkManager.audioClips, id: \.self) { clip in
+        if !networkManager.audioClips.isEmpty {
+            NavigationView {
+                List(networkManager.audioClips, id: \.self) { clip in
                     
                     NavigationLink(destination: TranscribeView(audioClip: clip)) {
                         
@@ -45,7 +44,7 @@ struct AudioClipsView: View {
                                     .font(.headline)
                                     .fontWeight(.heavy)
                                     .foregroundColor(Color.white)
-                        
+                                
                                 
                                 RemoteImage(url: clip.episode.imageUrl ?? "")
                                     .frame(width: 140, height: 140)
@@ -80,16 +79,22 @@ struct AudioClipsView: View {
                 })
                 .background(Color(.blue))
                 
-            .actionSheet(isPresented: $showActionSheet, content: {
-                actionSheet
-            })
+                .actionSheet(isPresented: $showActionSheet, content: {
+                    actionSheet
+                })
+                .navigationBarTitle("Your Audio Clips")
+            }
+            .onAppear {
+                UITableView.appearance().separatorStyle = .none
+                getAudioClips()
+            }
             
-            .navigationBarTitle("Your Audio Clips")
-            
-        }.onAppear(perform: {
-            UITableView.appearance().separatorStyle = .none
-            getAudioClips()
-        })
+            } else {
+                EmptySavedView(emptyType: .audioClip)
+                .onAppear {
+                    getAudioClips()
+                }
+            }
     }
     
     var actionSheet: ActionSheet {

@@ -16,6 +16,9 @@ enum PaletteColour: String {
     case pink = "#c67eb2"
     case darkBlue = "#3e54c7"
     case aqua = "#a1c5c5"
+    case purple = "#da54ff"
+    case lightPurple = "#c57fff"
+    case lighterPurple = "#eaafff"
     case black = "#000000"
     
     var colour: Color {
