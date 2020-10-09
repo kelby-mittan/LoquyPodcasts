@@ -102,7 +102,6 @@ struct BrowseView: View {
         }.onAppear {
             Player.setupAudioSession()
         }
-        
         .tabItem {
             Image(systemName: "magnifyingglass")
                 .font(.body)
@@ -111,8 +110,13 @@ struct BrowseView: View {
     }
     
     
-    func loadPodcasts(search: String) {
-        networkManager.updatePodcasts(forSearch: searchText)
+    private func loadPodcasts(search: String) {
+        var timer: Timer?
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false, block: { (_) in
+            networkManager.updatePodcasts(forSearch: searchText)
+        })
+        
     }
 }
 

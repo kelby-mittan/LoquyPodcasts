@@ -24,12 +24,16 @@ struct EpisodesView: View {
     
     var body: some View {
         if networkManager.episodes.isEmpty {
-            ActivityIndicator(style: .large)
-                .onAppear {
-                    isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
-                    UITableView.appearance().separatorStyle = .none
+            VStack {
+                ActivityIndicator(style: .large)
+                    .padding(.top,40)
+                    .onAppear {
+                        isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
+                        UITableView.appearance().separatorStyle = .none
                 }
-                .navigationBarTitle(title)
+                Spacer()
+            }
+            .navigationBarTitle(title)
         } else {
             List(networkManager.episodes, id: \.self) { episode in
                 
