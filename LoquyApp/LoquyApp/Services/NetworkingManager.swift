@@ -44,6 +44,12 @@ class NetworkingManager: ObservableObject {
         }
     }
     
+    @Published var episodePlaying = String() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
     func updatePodcasts(forSearch: String) {
         ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { (podcasts) in
             DispatchQueue.main.async {

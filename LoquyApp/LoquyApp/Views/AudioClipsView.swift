@@ -38,29 +38,40 @@ struct AudioClipsView: View {
                             .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
                             .padding(.trailing)
                             
-                            VStack(alignment: .center) {
-                                
-                                Text(clip.savedDate)
-                                    .font(.headline)
-                                    .fontWeight(.heavy)
-                                    .foregroundColor(Color.white)
+                            VStack {
                                 
                                 
-                                RemoteImage(url: clip.episode.imageUrl ?? "")
-                                    .frame(width: 140, height: 140)
-                                    .cornerRadius(6)
-                                    .onLongPressGesture {
-                                        audioClip = clip
-                                        showActionSheet.toggle()
+                                
+                                HStack {
+                                    RemoteImage(url: clip.episode.imageUrl ?? "")
+                                        .frame(width: 140, height: 140)
+                                        .cornerRadius(6)
+                                        .onLongPressGesture {
+                                            audioClip = clip
+                                            showActionSheet.toggle()
+                                        }
+                                    
+                                    Spacer()
+                                    
+                                    VStack(alignment:.center) {
+                                        
+                                        Text(clip.title)
+                                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                                            .fontWeight(.heavy)
+                                            .foregroundColor(Color.white)
+                                            .padding([.top,.bottom],8)
+                                        
+                                        Text(clip.savedDate)
+                                            .font(.headline)
+                                            .foregroundColor(Color.white)
+                                            .fontWeight(.semibold)
+                                        
+                                        Spacer()
+                                        
                                     }
-                                
-                                Text(clip.title)
-                                    .font(.headline)
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.semibold)
-                                    .onTapGesture(perform: {
-                                        dump(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].pathComponents)
-                                    })
+                                    .padding(.trailing)
+                                    Spacer()
+                                }
                                 
                                 Text(clip.episode.title)
                                     .font(.subheadline)
@@ -89,12 +100,12 @@ struct AudioClipsView: View {
                 getAudioClips()
             }
             
-            } else {
-                EmptySavedView(emptyType: .audioClip)
+        } else {
+            EmptySavedView(emptyType: .audioClip)
                 .onAppear {
                     getAudioClips()
                 }
-            }
+        }
     }
     
     var actionSheet: ActionSheet {

@@ -15,7 +15,7 @@ struct ControlView: View {
     let episode: Episode
     
     @State var width: CGFloat = 30
-    @State var playing = true
+    @State var playing = false
     @State var currentTime: String = "0:00"
     @State var showAlert = false
     
@@ -27,7 +27,7 @@ struct ControlView: View {
     
     @Binding var showModal: Bool
     @Binding var clipTime: String
-    
+        
     var body: some View {
         
         VStack {
@@ -79,6 +79,10 @@ struct ControlView: View {
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
                 Button(action: {
+                    if episode.title != networkManager.episodePlaying {
+                        networkManager.episodePlaying = episode.title
+                        Player.playEpisode(episode: episode)
+                    }
                     playing.toggle()
                     isPlaying.toggle()
                     playing ? player.play() : player.pause()
@@ -163,21 +167,64 @@ struct ControlView: View {
         }
         .animation(.spring())
         .onAppear {
-            
-            Player.playEpisode(episode: episode)
+            print("Episode Playing: \(networkManager.episodePlaying)")
             getCurrentPlayerTime()
-            playing = true
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                if playing {
-                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+            if player.timeControlStatus != .playing {
+                networkManager.episodePlaying = episode.title
+                Player.playEpisode(episode: episode)
+//                getCurrentPlayerTime()
+                playing = true
+                isPlaying = true
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+                    if playing {
+                        if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                            Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+                        }
                     }
                 }
+            } else {
+//                getCurrentPlayerTime()
+                playing = false
             }
-            
             setupRemoteControl()
         }
         
+    }
+    
+    private func handleDraggedCapsule(_ dragVal: DragGesture.Value) {
+        player.pause()
+        let x = dragVal.location.x
+        let maxVal = UIScreen.main.bounds.width - 20
+        let minVal: CGFloat = 10
+        
+        if x < minVal {
+            width = minVal
+        } else if x > maxVal {
+            width = maxVal
+        } else {
+            width = x
+        }
+        currentTime = Player.capsuleDragged(dragVal.location.x).toDisplayString()
+    }
+    
+    @discardableResult
+    private func getCurrentPlayerTime() -> (currentTime: String, durationTime: String) {
+        let interval = CMTimeMake(value: 1, timescale: 2)
+        var durationLabel = ""
+        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
+            if episode.title == networkManager.episodePlaying {
+                currentTime = time.toDisplayString()
+            } else {
+                currentTime = "00:00:00"
+            }
+            
+        }
+        guard let durationTime = player.currentItem?.duration else {
+            return ("--:--", "--:--")
+        }
+        let dt = durationTime - currentTime.getCMTime()
+        durationLabel = "-" + dt.toDisplayString()
+        return ("",durationLabel)
     }
     
     private func setupRemoteControl() {
@@ -214,38 +261,6 @@ struct ControlView: View {
         }
         
     }
-    
-    private func handleDraggedCapsule(_ dragVal: DragGesture.Value) {
-        player.pause()
-        let x = dragVal.location.x
-        let maxVal = UIScreen.main.bounds.width - 20
-        let minVal: CGFloat = 10
-        
-        if x < minVal {
-            width = minVal
-        } else if x > maxVal {
-            width = maxVal
-        } else {
-            width = x
-        }
-        currentTime = Player.capsuleDragged(dragVal.location.x).toDisplayString()
-    }
-    
-    @discardableResult
-    private func getCurrentPlayerTime() -> (currentTime: String, durationTime: String) {
-        let interval = CMTimeMake(value: 1, timescale: 2)
-        var durationLabel = ""
-        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
-            self.currentTime = time.toDisplayString()
-        }
-        guard let durationTime = player.currentItem?.duration else {
-            return ("--:--", "--:--")
-        }
-        let dt = durationTime - currentTime.getCMTime()
-        durationLabel = "-" + dt.toDisplayString()
-        return ("",durationLabel)
-    }
-    
     
 }
 

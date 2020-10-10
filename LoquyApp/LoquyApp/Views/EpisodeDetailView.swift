@@ -25,7 +25,7 @@ struct EpisodeDetailView: View {
     @State var times = [String]()
     @State var showNotification = false
     @State var notificationMessage = ""
-    @State var playing = true
+    @State var playing = false
     
     let player = Player.shared.player
     
