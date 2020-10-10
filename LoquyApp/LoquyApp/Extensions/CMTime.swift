@@ -41,7 +41,7 @@ extension String {
             case 2:
                 sec += (Double(time) ?? 0.0)
             default:
-                print("")
+                break
             }
         }
         return CMTime(seconds: sec, preferredTimescale: 1)
@@ -62,7 +62,7 @@ extension String {
             case 2:
                 sec += (Double(time) ?? 0.0)
             default:
-                print("")
+                break
             }
         }
         return sec

@@ -66,9 +66,10 @@ struct LoquyListView: View {
             .actionSheet(isPresented: $showActionSheet, content: {
                 actionSheet
             })
-            .onAppear(perform: {
+            .onAppear {
                 getLoquyTranscriptions()
-            })
+            }
+            .accentColor(.purple)
         } else {
             EmptySavedView(emptyType: .transcribedLoquy)
                 .onAppear {

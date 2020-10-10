@@ -61,7 +61,6 @@ struct EpisodeTimesView: View {
             }
             
             guard let i = index else {
-                print("couldn't get an index")
                 return
             }
             

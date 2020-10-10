@@ -83,14 +83,10 @@ struct CustomPicker: UIViewRepresentable {
         
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             self.parent.selected = timeIntervals[row]
-            print(currentTime)
         }
         
         func getEndTimeArr(_ currentTime: String) -> [String] {
             var endTimeArr = [String]()
-            
-            print("Current Time: \(currentTime)")
-            
             var counterIncrements = 29.0
             
             for _ in 0..<10{

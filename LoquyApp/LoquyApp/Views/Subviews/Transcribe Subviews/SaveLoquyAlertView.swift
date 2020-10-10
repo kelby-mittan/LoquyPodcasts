@@ -13,15 +13,13 @@ struct SaveLoquyAlertView: View {
     @Binding var showAlert: Bool
     @Binding var notificationShown: Bool
     @Binding var message: String
-    
     @ObservedObject var networkManager: NetworkingManager
-    
     let audioClip: AudioClip
     let transcription: String
+    let isPlaying: Bool
     
     @State var timeStamps = [TimeStamp]()
     @State var titleText = ""
-    
     
     var body : some View {
         
@@ -42,31 +40,39 @@ struct SaveLoquyAlertView: View {
                     
                 }
                 
-                PCastHeaderLabelView(label: "Title for Loquy")
-                    .padding(.bottom, 5)
-               
-                TextField("give this clip a title", text: $titleText)
-                    .font(.headline)
-                    .foregroundColor(.purple)
-                    .background(Color.white)
-                    .cornerRadius(8)
-                    .padding([.leading,.trailing])
-                    .frame(height: 44)
-                    .textFieldStyle(SuperCustomTextFieldStyle())
+//                Group {
+//                    if isPlaying {
+                    PCastHeaderLabelView(label: "Title for Loquy")
+                        .padding(.bottom, 5)
+                   
+                    TextField("give this clip a title", text: $titleText)
+                        .font(.headline)
+                        .foregroundColor(.purple)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .padding([.leading,.trailing])
+                        .frame(height: 44)
+                        .textFieldStyle(SuperCustomTextFieldStyle())
+                    
+                    Button(action: {
+                        showAlert.toggle()
+                        saveLoquyToList()
+                        handleNotification()
+                    }) {
+                        Text("save")
+                            .fontWeight(.bold)
+                            .frame(width: 120,height: 40)
+                            .foregroundColor(Color.purple)
+                            .background(NeoButtonView())
+                            .clipShape(Capsule())
+                            .padding()
+                    }
+//                    } else {
+//                        PCastHeaderLabelView(label: "Play clip to trancribe")
+//                    }
+//                }
+//
                 
-                Button(action: {
-                    showAlert.toggle()
-                    saveLoquyToList()
-                    handleNotification()
-                }) {
-                    Text("save")
-                        .fontWeight(.bold)
-                        .frame(width: 120,height: 40)
-                        .foregroundColor(Color.purple)
-                        .background(NeoButtonView())
-                        .clipShape(Capsule())
-                        .padding()
-                }
                 Spacer()
             }
 //            .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
@@ -97,7 +103,7 @@ struct SaveLoquyAlertView: View {
         do {
             try Persistence.loquys.createItem(newLoquy)
         } catch {
-            print("problem creating loquy")
+            print("problem creating loquy: \(error)")
         }
 
         networkManager.loadLoquys()

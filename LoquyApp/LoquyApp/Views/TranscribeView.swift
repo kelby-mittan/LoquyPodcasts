@@ -18,21 +18,19 @@ struct TranscribeView: View {
     
     @State var width : CGFloat = 30
     @State var currentTime: String = "0:00"
-    @State var playing = true
+    @State var playing = false
     @State var transcription: String = ""
     @State var title: String = ""
     @State var isTranscribing = false
     @State var saveText = "transcribe"
     @State var image = RemoteImage(url: "")
-    
     @State var showNotification = false
     @State var notificationMessage = ""
+    @State var showAlert = false
     
     let player = Player.shared.player
-    
     var speechRecognizer = SFSpeechRecognizer()
-    
-    @State var showAlert = false
+    @State var startedPlaying = 0
     
     var body: some View {
         ZStack {
@@ -69,8 +67,8 @@ struct TranscribeView: View {
                     Spacer()
                     
                     Button(action: {
-                        
                         playing.toggle()
+                        handlePlay()
                         playing ? player.play() : player.pause()
                     }) {
                         ZStack {
@@ -110,7 +108,6 @@ struct TranscribeView: View {
                                     width = x
                                 }
                                 currentTime = Player.capsuleDragged(value.location.x).toDisplayString()
-                                print("width val is : \(width)")
                                 
                             }).onEnded({ (value) in
                                 player.seek(to: Player.capsuleDragged(value.location.x))
@@ -140,7 +137,6 @@ struct TranscribeView: View {
                                 .fontWeight(.heavy)
                 
                             MultilineTextField("", isSaved: false, text: $transcription, onCommit: {
-                                print("Final text: \(transcription)")
                                 player.pause()
                                 DispatchQueue.main.async {
                                     playing = false
@@ -150,8 +146,12 @@ struct TranscribeView: View {
                     }
                 }
                 Button(action: {
-
+                    
                     isTranscribing.toggle()
+                    
+//                    if player.timeControlStatus != .playing {
+//                        showAlert = true
+//                    }
                     
                     if isTranscribing {
                         getTranscriptionOfClippedFile()
@@ -161,10 +161,8 @@ struct TranscribeView: View {
                         saveText = "transcribe"
                         player.pause()
                         playing = false
-                        
                         showAlert.toggle()
                     }
-                    
                     
                 }) {
                     Text(saveText)
@@ -177,45 +175,45 @@ struct TranscribeView: View {
                         .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
                         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
                         .padding()
-    //                        Spacer()
                 }
                 
                 Spacer()
                 
                 if showAlert {
-                    SaveLoquyAlertView(showAlert: $showAlert, notificationShown: $showNotification, message: $notificationMessage, networkManager: networkManager, audioClip: audioClip, transcription: transcription)
+                    SaveLoquyAlertView(showAlert: $showAlert, notificationShown: $showNotification, message: $notificationMessage, networkManager: networkManager, audioClip: audioClip, transcription: transcription, isPlaying: player.timeControlStatus == .playing)
                     .offset(x: 0, y: -70)
                 }
                 
-            }.onAppear(perform: {
-                
+            }.onAppear {
                 image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
                 getLoquyTranscriptions()
-                
-                guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") else {
-                    print(AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + ".m4a") ?? "Couldn't Find MP3")
-                    return
-                }
-
-                Player.playAudioClip(url: url)
-                playing = true
-                getCurrentPlayerTime()
-
-                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                    if playing {
-                        if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-                            Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                        }
-                    }
-                }
-        })
+        }
             
             NotificationView(message: $notificationMessage)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
         }
-        
-        
+    }
+    
+    private func handlePlay() {
+        startedPlaying += 1
+        if startedPlaying == 1 {
+            guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") else {
+                return
+            }
+
+            Player.playAudioClip(url: url)
+            playing = true
+            getCurrentPlayerTime()
+
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+                if playing {
+                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+                    }
+                }
+            }
+        }
         
     }
     
@@ -227,10 +225,7 @@ struct TranscribeView: View {
                 AudioTrim.trimUsingComposition(url: url, start: currentTime, duration: audioClip.duration, pathForFile: "trimmedFile") { (result) in
                     switch result {
                     case .success(let clipUrl):
-                        print(clipUrl)
-
                         let request = SFSpeechURLRecognitionRequest(url: clipUrl)
-
                         speechRecognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
                             if let theError = error {
                                 print("recognition error: \(theError)")
@@ -242,7 +237,7 @@ struct TranscribeView: View {
                             }
                         })
                     default:
-                        print("problem getting clip")
+                        break
                     }
                 }
 
@@ -255,7 +250,9 @@ struct TranscribeView: View {
         let interval = CMTimeMake(value: 1, timescale: 2)
         var durationLabel = ""
         player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
-            self.currentTime = time.toDisplayString()
+            if startedPlaying > 0 {
+                currentTime = time.toDisplayString()
+            }
         }
         guard let durationTime = player.currentItem?.duration else {
             return ("--:--", "--:--")

@@ -167,12 +167,10 @@ struct ControlView: View {
         }
         .animation(.spring())
         .onAppear {
-            print("Episode Playing: \(networkManager.episodePlaying)")
             getCurrentPlayerTime()
             if player.timeControlStatus != .playing {
                 networkManager.episodePlaying = episode.title
                 Player.playEpisode(episode: episode)
-//                getCurrentPlayerTime()
                 playing = true
                 isPlaying = true
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
@@ -183,7 +181,6 @@ struct ControlView: View {
                     }
                 }
             } else {
-//                getCurrentPlayerTime()
                 playing = false
             }
             setupRemoteControl()

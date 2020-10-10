@@ -132,7 +132,6 @@ class FavoritesViewController: UIViewController {
                 fatalError("could not dequeue Podcast Cell")
             }
             cell.imageView.kf.indicatorType = .activity
-            print(episodeArt)
             if episodeArt.count > 12 {
                 cell.imageView.kf.setImage(with: URL(string: episodeArt.components(separatedBy: self.heyNow)[0] ))
             } else {

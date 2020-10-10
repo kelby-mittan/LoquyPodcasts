@@ -81,14 +81,6 @@ struct CardPageView: View {
                             .fontWeight(.heavy)
                             .padding(.leading)
                         
-//                        MultilineTextField("", isSaved: true, text: $transcription, onCommit: {
-//                            print("Final text: \(transcription)")
-//                            loquy.transcription = transcription
-//                        }).onAppear {
-//                            transcription = loquy.transcription
-//                        }
-//                        .padding([.leading,.trailing]).padding(.bottom,72)
-                        
                         Text("\(loquy.transcription)")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
@@ -122,17 +114,12 @@ struct CardPageView: View {
                         .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         .offset(x: -20)
                     }
-                }.padding([.leading,.trailing,.bottom])//.offset(x: -20)
+                }.padding([.leading,.trailing,.bottom])
                 
                 
             }
             .onAppear {
                 networkManager.loadLoquys()
-//                transcription = loquy.transcription
-                
-                dump(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl })
-                print("hello: \(imageUrl)")
-                
             }
             .cornerRadius(12)
             .padding(.top)

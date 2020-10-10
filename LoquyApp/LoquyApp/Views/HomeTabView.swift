@@ -24,9 +24,10 @@ struct HomeView: View {
             AudioClipsTab().tag(3)
             TranscriptsTab().tag(4)
         }
-        .onAppear(perform: {
+        .accentColor(.purple)
+        .onAppear {
             UITabBar.appearance().isHidden = false
-        })
+        }
                 
     }
     
@@ -99,7 +100,9 @@ struct BrowseView: View {
             }
             .navigationBarTitle("")
             .navigationBarHidden(true)
-        }.onAppear {
+        }
+        .accentColor(.purple)
+        .onAppear {
             Player.setupAudioSession()
         }
         .tabItem {
@@ -136,6 +139,7 @@ struct FavoritesTabView: View {
         .onAppear {
             getFavs()
         }
+        .accentColor(.purple)
         .tabItem {
                 Image(systemName: "star.fill")
                     .font(.body)

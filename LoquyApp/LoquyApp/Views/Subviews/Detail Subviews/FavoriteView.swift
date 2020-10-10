@@ -35,7 +35,7 @@ struct FavoriteView: View {
                     try Persistence.episodes.createItem(episode)
                     try Persistence.artWork.createItem(artwork)
                 } catch {
-                    print("could not save episode/ artwork")
+                    print("could not save episode: \(error)")
                 }
 
             } else {
@@ -47,19 +47,17 @@ struct FavoriteView: View {
                     let artWorks = try Persistence.artWork.loadItems()
 
                     guard let validEpsiode = episodes.firstIndex(of: episode) else {
-                        print("couldn't get episode")
                         return
                     }
                     try Persistence.episodes.deleteItem(at: validEpsiode)
 
                     guard let art = artWorks.firstIndex(of: artwork) else {
-                        print("couldn't get art")
                         return
                     }
                     try Persistence.artWork.deleteItem(at: art)
 
                 } catch {
-                    print("error getting episodes or deleting episode/ art")
+                    print("error getting episodes or deleting episode: \(error)")
                 }
             }
             isSaved.toggle()

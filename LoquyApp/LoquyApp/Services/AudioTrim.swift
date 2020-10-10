@@ -47,10 +47,9 @@ struct AudioTrim {
         let trimmedFileURL = documentsDir.appendingPathComponent("\(pathForFile).m4a")
         
         if FileManager.default.fileExists(atPath: trimmedFileURL.path) {
-            print("file exists")
             try? FileManager.default.removeItem(at: trimmedFileURL)
         } else {
-            print("file does not exist")
+
         }
         
         exportSession.outputURL = trimmedFileURL
@@ -65,7 +64,6 @@ struct AudioTrim {
         exportSession.timeRange = CMTimeRange(start: startTime, end: stopTime)
         
         exportSession.exportAsynchronously {
-            print("export complete \(exportSession.status)")
             switch exportSession.status {
             case .cancelled:
                 print("cancelled")
@@ -117,10 +115,9 @@ struct AudioTrim {
         let trimmedFileURL = documentsDir.appendingPathComponent("\(pathForFile).m4a")
         
         if FileManager.default.fileExists(atPath: trimmedFileURL.path) {
-            print("file exists")
             try? FileManager.default.removeItem(at: trimmedFileURL)
         } else {
-            print("file does not exist")
+            
         }
         
         exportSession.outputURL = trimmedFileURL
@@ -165,9 +162,7 @@ struct AudioTrim {
         
         if let dirPath = paths.first {
             let url = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
-            print(url)
             return url
-            
         }
         
         return nil
@@ -179,11 +174,9 @@ struct AudioTrim {
         let fileURL = documentsDir.appendingPathComponent("\(fileName).m4a")
         
         if FileManager.default.fileExists(atPath: fileURL.path) {
-            print("file removed")
             try? FileManager.default.removeItem(at: fileURL)
-            dump(FileManager.default.urls)
         } else {
-            print("file does not exist")
+
         }
     }
 }

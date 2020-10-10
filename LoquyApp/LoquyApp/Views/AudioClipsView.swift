@@ -40,11 +40,9 @@ struct AudioClipsView: View {
                             
                             VStack {
                                 
-                                
-                                
                                 HStack {
                                     RemoteImage(url: clip.episode.imageUrl ?? "")
-                                        .frame(width: 140, height: 140)
+                                        .frame(width: 120, height: 120)
                                         .cornerRadius(6)
                                         .onLongPressGesture {
                                             audioClip = clip
@@ -99,6 +97,7 @@ struct AudioClipsView: View {
                 UITableView.appearance().separatorStyle = .none
                 getAudioClips()
             }
+            .accentColor(.purple)
             
         } else {
             EmptySavedView(emptyType: .audioClip)
@@ -121,7 +120,6 @@ struct AudioClipsView: View {
                     
                     let clips = try Persistence.audioClips.loadItems()
                     guard let clipIndex = clips.firstIndex(of: audioClip) else {
-                        print("couldn't find clip")
                         return
                     }
                     try Persistence.audioClips.deleteItem(at: clipIndex)

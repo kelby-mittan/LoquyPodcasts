@@ -36,15 +36,12 @@ class Player {
     }
     
     static func playEpisodeUsingFileUrl(episode: Episode) {
-        print("Attempt to play episode with file url:", episode.fileUrl ?? "")
-        
         guard let fileURL = URL(string: episode.fileUrl ?? "") else { return }
         let fileName = fileURL.lastPathComponent
         
         guard var trueLocation = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         
         trueLocation.appendPathComponent(fileName)
-        print("True Location of episode:", trueLocation.absoluteString)
         let playerItem = AVPlayerItem(url: trueLocation)
         Player.shared.player.replaceCurrentItem(with: playerItem)
         Player.shared.player.play()
@@ -54,9 +51,6 @@ class Player {
         if episode.fileUrl != nil {
             playEpisodeUsingFileUrl(episode: episode)
         } else {
-            print("Trying to play episode at url:", episode.streamUrl)
-            
-            print("EPISODE STREAM URL: \(episode.streamUrl)")
             guard let url = URL(string: episode.streamUrl) else { return }
             let playerItem = AVPlayerItem(url: url)
             Player.shared.player.replaceCurrentItem(with: playerItem)

@@ -66,8 +66,6 @@ struct ClipAlertView: View {
                 .offset(y: -10)
             
             Button(action: {
-                print(("00:"+selected).toSecDouble())
-                print(titleText)
                 modalShown = false
                 notificationShown = true
                 message = "clip saved"

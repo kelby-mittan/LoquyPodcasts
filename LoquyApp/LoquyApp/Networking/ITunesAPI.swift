@@ -38,15 +38,12 @@ class ITunesAPI {
     func fetchPodcasts(searchText: String, completionHandler: @escaping ([Podcast]) -> ()) {
         
         let baseiTunesSearchURL = "https://itunes.apple.com/search"
-        
-        print("Searching for podcasts...")
-        
+                
         let parameters = ["term": searchText, "media": "podcast"]
         
         AF.request(baseiTunesSearchURL, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseData { (dataResponse) in
             
-            if let err = dataResponse.error {
-                print("Failed to contact iTunes", err)
+            if let _ = dataResponse.error {
                 return
             }
             

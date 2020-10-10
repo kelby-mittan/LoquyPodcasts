@@ -12,7 +12,6 @@ extension Date {
     func dateToString() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "d MMM y" //E, 
-        print(formatter.string(from: self))
         return formatter.string(from: self)
     }
 }
