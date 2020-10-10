@@ -19,10 +19,10 @@ struct CardPageView: View {
     @State var transcription: String = ""
     
     var data: Loquy
-    
+        
     var body: some View {
         Group {
-            
+                        
             let loquy = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.reversed()[page]
             
             
@@ -103,10 +103,10 @@ struct CardPageView: View {
                 VStack {
                     Spacer()
                     HStack {
+                        
                         Spacer()
                         
                         Button(action: {
-                            
                             
                         }) {
                             ZStack {
@@ -120,11 +120,13 @@ struct CardPageView: View {
                         }
                         .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                         .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
+                        .offset(x: -20)
                     }
-                }.padding([.trailing,.bottom]).offset(x: -20)
+                }.padding([.leading,.trailing,.bottom])//.offset(x: -20)
                 
                 
-            }.onAppear {
+            }
+            .onAppear {
                 networkManager.loadLoquys()
 //                transcription = loquy.transcription
                 
@@ -135,5 +137,9 @@ struct CardPageView: View {
             .cornerRadius(12)
             .padding(.top)
         }
+    }
+    
+    func getLoquys() {
+        networkManager.loadLoquys()
     }
 }

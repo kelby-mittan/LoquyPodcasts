@@ -24,7 +24,7 @@ struct ControlView: View {
     let player: AVPlayer
     
     @ObservedObject var networkManager: NetworkingManager
-        
+    
     @Binding var showModal: Bool
     @Binding var clipTime: String
     
@@ -39,14 +39,14 @@ struct ControlView: View {
                 
                 Capsule().fill(Color.purple).frame(width: width, height: 8)
                     .gesture(DragGesture()
-                        .onChanged({ (value) in
-                            handleDraggedCapsule(value)
-                        }).onEnded({ (value) in
-                            player.seek(to: Player.capsuleDragged(value.location.x))
-                            player.play()
-                            playing = true
-                        }))
-                        .padding([.top,.leading,.trailing])
+                                .onChanged({ (value) in
+                                    handleDraggedCapsule(value)
+                                }).onEnded({ (value) in
+                                    player.seek(to: Player.capsuleDragged(value.location.x))
+                                    player.play()
+                                    playing = true
+                                }))
+                    .padding([.top,.leading,.trailing])
             }
             
             HStack {
@@ -145,38 +145,35 @@ struct ControlView: View {
                         .background(NeoButtonView())
                         .clipShape(Capsule())
                         .padding()
-                    }
+                }
                 .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 .animation(.spring())
                 .padding([.trailing],20)
                 Spacer()
-    
+                
             }
             .padding([.leading,.trailing])
             .blur(radius: showAlert ? 30 : 0)
             if showAlert {
                 TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode, networkManager: networkManager)
-                .offset(x: 0, y: -70)
+                    .offset(x: 0, y: -70)
             }
             
         }
         .animation(.spring())
         .onAppear {
             
-            if player.timeControlStatus == .paused {
-                Player.playEpisode(episode: episode)
-                getCurrentPlayerTime()
-                playing = true
-                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                    if playing {
-                        if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-                            Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                        }
+            Player.playEpisode(episode: episode)
+            getCurrentPlayerTime()
+            playing = true
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+                if playing {
+                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                     }
                 }
             }
-            
             
             setupRemoteControl()
         }
@@ -187,7 +184,7 @@ struct ControlView: View {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         let commandCenter = MPRemoteCommandCenter.shared()
-            
+        
         commandCenter.playCommand.isEnabled = true
         commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
             player.play()
@@ -223,7 +220,7 @@ struct ControlView: View {
         let x = dragVal.location.x
         let maxVal = UIScreen.main.bounds.width - 20
         let minVal: CGFloat = 10
-
+        
         if x < minVal {
             width = minVal
         } else if x > maxVal {
@@ -248,7 +245,7 @@ struct ControlView: View {
         durationLabel = "-" + dt.toDisplayString()
         return ("",durationLabel)
     }
-
-
+    
+    
 }
 

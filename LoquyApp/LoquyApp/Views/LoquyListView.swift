@@ -20,28 +20,75 @@ struct LoquyListView: View {
         GridItem(.flexible())
     ]
     
+    @State var showActionSheet: Bool = false
+    
     var body: some View {
-        NavigationView {
-            ScrollView {
-                LazyVGrid(columns: layout, spacing: 10) {
-                    ForEach(Array(Set(networkManager.loquys.map { $0.audioClip.episode.imageUrl })), id: \.self) { imageUrl in
-                        VStack {
-                            NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? "", networkManager: networkManager)) {
+        
+        if !networkManager.loquys.isEmpty {
+            NavigationView {
+                ScrollView {
+                    LazyVGrid(columns: layout, spacing: 10) {
+                        ForEach(Array(Set(networkManager.loquys.map { $0.audioClip.episode.imageUrl })), id: \.self) { imageUrl in
+                            VStack {
+                                NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? "", networkManager: networkManager)) {
                                     
                                     
-                                RemoteImage(url: imageUrl ?? "")
-                                    .frame(width: 170, height: 170)
-                                    .padding(2)
-                                    .cornerRadius(12)
+                                    RemoteImage(url: imageUrl ?? "")
+                                        .frame(width: 170, height: 170)
+                                        .padding(2)
+                                        .cornerRadius(12)
+                                }
                             }
                         }
-                    }
-                }.padding([.leading,.trailing],8)
+                    }.padding([.leading,.trailing],8)
+                }
+                .navigationBarTitle("Loquy List")
+                .navigationBarItems(trailing:
+                                        Button(action: {
+                                            
+                                            showActionSheet.toggle()
+                                            
+                                        }) {
+                                            ZStack {
+                                                NeoButtonView()
+                                                Image(systemName: "minus").font(.title)
+                                                    .foregroundColor(.purple)
+                                            }.background(NeoButtonView())
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Capsule())
+                                            
+                                        }
+                    .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
+                                        .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
+                                        .offset(y: 15.0)
+                )
             }
-            .navigationBarTitle("Loquy List")
-        }.onAppear(perform: {
-            getLoquyTranscriptions()
-        })
+            .actionSheet(isPresented: $showActionSheet, content: {
+                actionSheet
+            })
+            .onAppear(perform: {
+                getLoquyTranscriptions()
+            })
+        } else {
+            EmptySavedView(emptyType: .transcribedLoquy)
+                .onAppear {
+                    getLoquyTranscriptions()
+                }
+        }
+        
+        
+    }
+    
+    var actionSheet: ActionSheet {
+        ActionSheet(title: Text("Remove All Loquys?").font(.largeTitle).fontWeight(.bold), buttons: [
+            .default(Text("Cancel")) {
+            },
+            .destructive(Text("Delete")) {
+                Persistence.loquys.removeAll()
+                networkManager.loadLoquys()
+            }
+            
+        ])
     }
     
     func getLoquyTranscriptions() {
@@ -69,7 +116,7 @@ struct LoquyContentView: View {
     @ObservedObject var networkManager : NetworkingManager
     
     @State var toggled = false
-
+    
     var body: some View {
         
         VStack {
@@ -79,13 +126,13 @@ struct LoquyContentView: View {
                 ZStack {
                     VStack {
                         GeometryReader{ g in
-
+                            
                             Carousel(networkManager: networkManager, imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
                                 .onAppear {
                                     networkManager.loadLoquys()
                                 }
                         }
-
+                        
                         PageControl(page: $page, loquyCount: networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
                             .background(NeoButtonView())
                             .padding([.bottom,.top], 8)
@@ -140,8 +187,8 @@ struct LoquyContentView: View {
                             Spacer()
                             
                             Button(action: {
-                        
-                                self.toggled = true
+                                
+                                toggled = true
                                 
                             }) {
                                 ZStack {
@@ -174,16 +221,16 @@ struct LoquyContentView: View {
             getAudioClips()
             
         })
-
+        
         .navigationBarHidden(false)
         .navigationBarTitle("",displayMode: .inline)
     }
     
-    func getLoquyTranscriptions() {
+    private func getLoquyTranscriptions() {
         networkManager.loadLoquys()
     }
     
-    func getAudioClips() {
+    private func getAudioClips() {
         networkManager.loadAudioClips()
     }
 }

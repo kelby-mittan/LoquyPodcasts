@@ -16,9 +16,7 @@ struct Carousel : UIViewRepresentable {
     }
     
     @ObservedObject var networkManager: NetworkingManager
-    
     var imageUrl: String
-    
     var width: CGFloat
     @Binding var page : Int
     var height: CGFloat
