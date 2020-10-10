@@ -174,10 +174,10 @@ struct AudioClipsTab: View {
         AudioClipsView()
             .tabItem {
                 
-                Image(systemName: "textbox")
+                Image(systemName: "speaker.2.fill")
                     .font(.body)
                     .padding(.top, 16.0)
-                Text("Transcribe")
+                Text("Audio Clips")
         }
     }
 }
