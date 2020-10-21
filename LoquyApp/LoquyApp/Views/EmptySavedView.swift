@@ -28,7 +28,7 @@ struct EmptySavedView: View {
                     .frame(height: 80, alignment: .center)
                     .padding([.leading,.trailing])
                 
-            }.offset(y: -UIScreen.main.bounds.height/5)
+            }.offset(y: -universalSize.height/5)
             ZStack {
                 getSineWave(interval: universalSize.width)
                     .foregroundColor(PaletteColour.purple.colour).opacity(0.6)

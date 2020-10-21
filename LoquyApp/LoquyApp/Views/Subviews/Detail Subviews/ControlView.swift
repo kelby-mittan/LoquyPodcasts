@@ -222,7 +222,6 @@ struct ControlView: View {
         }
         let dt = durationTime - currentTime.getCMTime()
         durationLabel = "-" + dt.toDisplayString()
-        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
         return ("",durationLabel)
     }
     
