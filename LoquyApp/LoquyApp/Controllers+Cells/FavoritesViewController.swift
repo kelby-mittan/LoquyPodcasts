@@ -43,7 +43,6 @@ class FavoritesViewController: UIViewController {
     private func nonDuplicatedCasts() -> [String] {
         var artAndAuthors = [String]()
         var authors = [String]()
-//        let episodes = UserDefaults.standard.savedEpisodes()
         do {
             episodes = try Persistence.episodes.loadItems()
         } catch {
@@ -97,14 +96,12 @@ class FavoritesViewController: UIViewController {
 
             mainItem.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
 
-            // 2
             let pairItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),heightDimension: .fractionalHeight(0.6)))
 
             pairItem.contentInsets = NSDirectionalEdgeInsets(top: 6,leading: 6,bottom: 6,trailing: 6)
 
             let trailingGroup = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)), subitem: pairItem, count: 2)
 
-            // 1
             let mainWithPairGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(5/9)), subitems: [mainItem, trailingGroup])
             
             let tripletItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)))

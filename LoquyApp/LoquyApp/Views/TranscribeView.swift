@@ -218,7 +218,6 @@ struct TranscribeView: View {
     }
     
     private func getTranscriptionOfClippedFile() {
-        
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") {
                 
@@ -230,9 +229,8 @@ struct TranscribeView: View {
                             if let theError = error {
                                 print("recognition error: \(theError)")
                             } else {
-                                
                                 if playing {
-                                    transcription = result?.bestTranscription.formattedString ?? "could not get treanscription"
+                                    transcription = result?.bestTranscription.formattedString ?? "could not get transcription"
                                 }
                             }
                         })
@@ -240,7 +238,6 @@ struct TranscribeView: View {
                         break
                     }
                 }
-
             }
         }
     }
