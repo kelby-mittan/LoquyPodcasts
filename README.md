@@ -1,4 +1,4 @@
-# Loquy Podcasts 
+# Loquy Podcasts - [check out the site](https://kelbymittan.wixsite.com/loquy), -  [app store](https://apps.apple.com/us/app/loquy/id1532251878)
 
 ## About
 Loquy is a podcast application that allows for users to browse, search, and play their favorite podcasts. By calling on the Apple Music API, a user can find any podcast on Apple. This application was built and designed using SwiftUI, parses XML, and uses MediaPlayer to play podcasts.
