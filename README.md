@@ -1,4 +1,5 @@
-# Loquy Podcasts - [check out the site](https://kelbymittan.wixsite.com/loquy), -  [app store](https://apps.apple.com/us/app/loquy/id1532251878)
+# Loquy Podcasts - [check out the site](https://kelbymittan.wixsite.com/loquy) -  [app store](https://apps.apple.com/us/app/loquy/id1532251878)
+[![](Assets/loquyIconBC.png)](https://kelbymittan.wixsite.com/loquy)
 
 ## About
 Loquy is a podcast application that allows for users to browse, search, and play their favorite podcasts. By calling on the Apple Music API, a user can find any podcast on Apple. This application was built and designed using SwiftUI, parses XML, and uses MediaPlayer to play podcasts.
@@ -103,3 +104,5 @@ Button(action: {
 .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
 ```
+[![](Assets/loquyIconBC.png)]
+## Logo by Brendon Cecilio
