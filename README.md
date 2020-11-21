@@ -9,7 +9,7 @@ One problem that often arises when trying to recall something insightful you may
 
 The transcribing of saved audio clips is what sets Loquy apart from all other available podcast applications. In addition to giving the user functionality that is offered in most other podcast applications, Loquy offers something that doesn't really exist yet. While some other applications allow for clips or snippets to be saved, Loquy takes it a step further by transcribing the clip you've saved and allowing you to save this transcription.
 
-This application was built and designed using SwiftUI, implements networking to call on the AppleMusic API, parses XML, and uses the MediaPlayer framework to play podcasts. Additionally, this app uses AVKit in tandem with the Apple Speech framework to transcribe audio clips.
+This application was built and designed using SwiftUI, implements networking to call on the Apple Music API, parses XML, and uses the MediaPlayer framework to play podcasts. Additionally, this app uses AVKit in tandem with the Apple Speech framework to transcribe audio clips.
 
 ### Future Implementations
 - Play podcast in a mini player
