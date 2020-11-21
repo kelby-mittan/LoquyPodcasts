@@ -105,4 +105,4 @@ Button(action: {
 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
 ```
 [![](Assets/loquyIconBC1.1.png)](https://kelbymittan.wixsite.com/loquy)
-## Logo by Brendon Cecilio
+## Logo by Brendon Cecilio - [check out his site](https://brendoncecilio.com/)
