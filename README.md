@@ -2,11 +2,14 @@
 # Loquy Podcasts - [check out the site](https://kelbymittan.wixsite.com/loquy) -  [app store](https://apps.apple.com/us/app/loquy/id1532251878)
 
 ## About
-Loquy is a podcast application that allows for users to browse, search, and play their favorite podcasts. By calling on the Apple Music API, a user can find any podcast on Apple. This application was built and designed using SwiftUI, parses XML, and uses MediaPlayer to play podcasts.
 
-One problem that often arises when trying to recall something insightful you may have heard on one of your favorite podcasts is that you might have forgotten when exactly this observation had taken place. Loquy makes it possible for these points in time to be saved as a timestamp so you can easily find it and seek to that specific play time at a later date. 
+Loquy is a podcast application that allows for users to browse, search, play, and even transcribe audio clips from their favorite podcasts. 
 
-The main feature of Loquy is what sets it apart from all other available podcast applications. In addition to giving the user functionality that is offered in most other podcast applications, Loquy offers something that doesn't really exist yet. While some other applications allow for clips or snippets to be saved, this application takes it a step further by transcribing the clip they've saved and allowing for the user to save this transcription.
+One problem that often arises when trying to recall something insightful you may have heard on one of your favorite podcasts is that you might have forgotten when exactly this observation had taken place. Loquy makes it possible for these points in time to be saved as a timestamp so you can easily find it and seek to that specific play time at a later date. 
+
+The transcribing of saved audio clips is what sets Loquy apart from all other available podcast applications. In addition to giving the user functionality that is offered in most other podcast applications, Loquy offers something that doesn't really exist yet. While some other applications allow for clips or snippets to be saved, Loquy takes it a step further by transcribing the clip you've saved and allowing you to save this transcription.
+
+This application was built and designed using SwiftUI, implements networking to call on the AppleMusic API, parses XML, and uses the MediaPlayer framework to play podcasts. Additionally, this app uses AVKit in tandem with the Apple Speech framework to transcribe audio clips.
 
 ### Future Implementations
 - Play podcast in a mini player
@@ -14,7 +17,7 @@ The main feature of Loquy is what sets it apart from all other available podcast
 - Implement a widget for iOS 14
 
 ## Technologies Used
-Xcode 12, Swift 5, SwiftUI, MediaPlayer, AVFoundation, Combine, CocoaPods, Speech
+Xcode 12, Swift 5, SwiftUI, MediaPlayer, AVFoundation, AVKit, Combine, CocoaPods, Speech
 
 ## Main Player
 ![Loquy](Assets/homeTab.png) ![Loquy](Assets/playingPodcast.png) ![Loquy](Assets/clipView.png)
