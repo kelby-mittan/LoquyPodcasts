@@ -22,6 +22,7 @@
 		02272D8124C9FBF4007548C3 /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8024C9FBF4007548C3 /* RemoteImage.swift */; };
 		02272D8324CA3CD6007548C3 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8224CA3CD6007548C3 /* Episode.swift */; };
 		02272D8524CA82EB007548C3 /* MoreCastsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02272D8424CA82EB007548C3 /* MoreCastsView.swift */; };
+		02312056264D7C5E00A17E4B /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02312055264D7C5E00A17E4B /* ShareView.swift */; };
 		0247E428251D421300E14DEB /* DataPersistence in Frameworks */ = {isa = PBXBuildFile; productRef = 0247E427251D421300E14DEB /* DataPersistence */; };
 		0247E42E251D488A00E14DEB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E42D251D488A00E14DEB /* Persistence.swift */; };
 		0247E432251E582000E14DEB /* NeoViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E431251E582000E14DEB /* NeoViews.swift */; };
@@ -94,6 +95,7 @@
 		02272D8024C9FBF4007548C3 /* RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
 		02272D8224CA3CD6007548C3 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		02272D8424CA82EB007548C3 /* MoreCastsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreCastsView.swift; sourceTree = "<group>"; };
+		02312055264D7C5E00A17E4B /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
 		0247E42D251D488A00E14DEB /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		0247E431251E582000E14DEB /* NeoViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeoViews.swift; sourceTree = "<group>"; };
 		0247E439251FDEF100E14DEB /* SaveLoquyAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveLoquyAlertView.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				02272D8024C9FBF4007548C3 /* RemoteImage.swift */,
 				024F0D77250D758D002B4A5F /* PodcastPosterView.swift */,
 				0247E431251E582000E14DEB /* NeoViews.swift */,
+				02312055264D7C5E00A17E4B /* ShareView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -607,6 +610,7 @@
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
 				02272D8524CA82EB007548C3 /* MoreCastsView.swift in Sources */,
 				02DF72CF25181238006FDC9E /* AudioClip.swift in Sources */,
+				02312056264D7C5E00A17E4B /* ShareView.swift in Sources */,
 				02B568B124C4E3C9004D5C6D /* DummyPodcast.swift in Sources */,
 				027094722502F39F009E0BF5 /* Player.swift in Sources */,
 				0224B56D24CBB8F90062E43F /* AudioClipsView.swift in Sources */,

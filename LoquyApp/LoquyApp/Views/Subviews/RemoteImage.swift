@@ -28,7 +28,6 @@ struct RemoteImage: View {
             
             let newImage = Image(uiImage: image)
                 
-            
             return AnyView(newImage.resizable())
         }
         return AnyView(placeholder)

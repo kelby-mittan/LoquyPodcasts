@@ -16,7 +16,8 @@ struct CardPageView: View {
     
     @ObservedObject var networkManager: NetworkingManager
     
-    @State var transcription: String = ""
+    @State private var transcription: String = ""
+    @State private var shareShown = false
     
     var data: Loquy
         
@@ -24,7 +25,6 @@ struct CardPageView: View {
         Group {
                         
             let loquy = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.reversed()[page]
-            
             
             ZStack {
                 
@@ -95,11 +95,9 @@ struct CardPageView: View {
                 VStack {
                     Spacer()
                     HStack {
-                        
                         Spacer()
-                        
                         Button(action: {
-                            
+                            shareShown = true
                         }) {
                             ZStack {
                                 NeoButtonView()
@@ -113,6 +111,15 @@ struct CardPageView: View {
                         .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                         .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         .offset(x: -20)
+                        .sheet(isPresented: $shareShown) {
+//                            let application = UIApplication.shared
+                            let appPath = "deeplink-test://kelbymittan.com"
+                            let appURL = URL(string: appPath)!
+                            let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
+                            ShareView(items: [appURL])
+//                            application.open(appURL, options: [:], completionHandler: nil)
+                            
+                        }
                     }
                 }.padding([.leading,.trailing,.bottom])
                 

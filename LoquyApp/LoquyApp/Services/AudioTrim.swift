@@ -34,8 +34,8 @@ struct AudioTrim {
         let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition)
         var preset: String = AVAssetExportPresetPassthrough
         if compatiblePresets.contains(AVAssetExportPresetAppleM4A) {
-            preset = AVAssetExportPreset1920x1080 // can change preset here - see doc for more presets
-            //preset = AVAssetExportPresetAppleM4A // does not work
+            preset = AVAssetExportPreset1920x1080
+            
         }
         
         guard let exportSession = AVAssetExportSession(asset: composition, presetName: preset),
