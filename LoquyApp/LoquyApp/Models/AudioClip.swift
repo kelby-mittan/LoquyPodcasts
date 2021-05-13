@@ -9,7 +9,6 @@
 import Foundation
 
 struct AudioClip: Codable, Identifiable, Hashable {
-    
     var id: UUID?
     let episode: Episode
     let title: String
@@ -17,5 +16,4 @@ struct AudioClip: Codable, Identifiable, Hashable {
     let startTime: String
     let endTime: String
     let savedDate: String
-    
 }

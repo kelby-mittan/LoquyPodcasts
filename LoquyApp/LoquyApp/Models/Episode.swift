@@ -12,13 +12,11 @@ import FeedKit
 struct Episode: Codable, Identifiable, Hashable {
     
     var id: UUID?
-    
     let title: String
     let pubDate: Date
     let description: String
     let author: String
     let streamUrl: String
-    
     var fileUrl: String?
     var imageUrl: String?
     

@@ -63,9 +63,7 @@ struct TranscribeView: View {
                     image
                         .frame(width: 100, height: 100)
                         .cornerRadius(6)
-                    
                     Spacer()
-                    
                     Button(action: {
                         playing.toggle()
                         handlePlay()
@@ -88,9 +86,7 @@ struct TranscribeView: View {
                 .padding([.leading,.trailing,.bottom])
                 
                 ZStack(alignment: .leading) {
-                    
                     Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    
                     Capsule().fill(Color.purple).frame(width: width, height: 8)
                         .gesture(DragGesture()
                             .onChanged({ (value) in
@@ -130,12 +126,10 @@ struct TranscribeView: View {
                 
                 Group {
                     if isTranscribing {
-                        
                         VStack(alignment: .leading) {
                             Text("Your Loquy...")
                                 .font(.title)
                                 .fontWeight(.heavy)
-                
                             MultilineTextField("", isSaved: false, text: $transcription, onCommit: {
                                 player.pause()
                                 DispatchQueue.main.async {
@@ -146,13 +140,7 @@ struct TranscribeView: View {
                     }
                 }
                 Button(action: {
-                    
                     isTranscribing.toggle()
-                    
-//                    if player.timeControlStatus != .playing {
-//                        showAlert = true
-//                    }
-                    
                     if isTranscribing {
                         getTranscriptionOfClippedFile()
                         saveText = "save loquy"
@@ -176,19 +164,15 @@ struct TranscribeView: View {
                         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
                         .padding()
                 }
-                
                 Spacer()
-                
                 if showAlert {
                     SaveLoquyAlertView(showAlert: $showAlert, notificationShown: $showNotification, message: $notificationMessage, networkManager: networkManager, audioClip: audioClip, transcription: transcription, isPlaying: player.timeControlStatus == .playing)
                     .offset(x: 0, y: -70)
                 }
-                
             }.onAppear {
                 image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
                 getLoquyTranscriptions()
         }
-            
             NotificationView(message: $notificationMessage)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))

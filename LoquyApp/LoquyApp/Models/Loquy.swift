@@ -9,7 +9,6 @@
 import Foundation
 
 struct Loquy: Codable, Identifiable, Hashable {
-    
     var id: UUID?
     let idInCollection: Int
     let title: String

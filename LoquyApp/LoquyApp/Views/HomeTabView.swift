@@ -28,9 +28,7 @@ struct HomeView: View {
         .onAppear {
             UITabBar.appearance().isHidden = false
         }
-                
     }
-    
 }
 
 struct BrowseView_Previews: PreviewProvider {
@@ -60,28 +58,21 @@ struct BrowseView: View {
                         
                         ScrollView(.vertical) {
                             HeaderView(label: "Listen To")
-                            
                             NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl, isSaved: false, artWork: mindcast.image)) {
                                 ListenToView()
                             }
                             PodcastScrollView()
-                            
                             FeaturedView()
-                            
                             HeaderView(label: "More Cool Casts")
-                            
                             MoreCastsView()
                         }
                         
                     } else {
                         List(networkManager.podcasts, id: \.self) { podcast in
-                            
                             NavigationLink(destination: EpisodesView(title: podcast.trackName ?? "", podcastFeed: podcast.feedUrl ?? "", isSaved: false, artWork: podcast.artworkUrl600 ?? "")) {
-                                
                                 RemoteImage(url: podcast.artworkUrl600 ?? "")
                                     .frame(width: 100, height: 100)
                                     .cornerRadius(8)
-                                
                                 VStack(alignment: .leading) {
                                     Text(podcast.trackName ?? "")
                                         .font(.headline)
@@ -119,7 +110,6 @@ struct BrowseView: View {
         timer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false, block: { (_) in
             networkManager.updatePodcasts(forSearch: searchText)
         })
-        
     }
 }
 

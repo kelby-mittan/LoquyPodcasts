@@ -15,13 +15,10 @@ class ITunesAPI {
     static let shared = ITunesAPI()
     
     func loadPodcasts(searchText: String, completionHandler: @escaping ([Podcast]) -> ())  {
-        
         let text = searchText.replacingOccurrences(of: " ", with: "+")
-        
         guard let url = URL(string: "https://itunes.apple.com/search?term=\(text)&entity=podcast") else {
             return
         }
-        
         let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             
@@ -36,17 +33,12 @@ class ITunesAPI {
     }
     
     func fetchPodcasts(searchText: String, completionHandler: @escaping ([Podcast]) -> ()) {
-        
         let baseiTunesSearchURL = "https://itunes.apple.com/search"
-                
         let parameters = ["term": searchText, "media": "podcast"]
-        
         AF.request(baseiTunesSearchURL, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseData { (dataResponse) in
-            
             if let _ = dataResponse.error {
                 return
             }
-            
             guard let data = dataResponse.data else { return }
             do {
                 let searchResult = try JSONDecoder().decode(SearchResults.self, from: data)
@@ -58,23 +50,16 @@ class ITunesAPI {
     }
     
     func fetchEpisodes(feedUrl: String, completionHandler: @escaping ([Episode]) -> ()) {
-        
         let secureFeedUrl = feedUrl.contains("https") ? feedUrl : feedUrl.replacingOccurrences(of: "http", with: "https")
-        
         guard let url = URL(string: secureFeedUrl) else { return }
-        
         DispatchQueue.global(qos: .background).async {
             let parser = FeedParser(URL: url)
-            
             parser?.parseAsync(result: { (result) in
-                
                 if let error = result.error {
                     print("error parsing: \(error)")
                     return
                 }
-                
                 guard let feed = result.rssFeed else { return }
-                
                 let episodes = feed.toEpisodes()
                 completionHandler(episodes)
             })

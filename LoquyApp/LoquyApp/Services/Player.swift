@@ -120,7 +120,5 @@ class Player {
         let dt = durationTime - currentTime.getCMTime()
         durationLabel = "-" + dt.toDisplayString()
         return ("",durationLabel)
-    }
-    
-    
+    }    
 }

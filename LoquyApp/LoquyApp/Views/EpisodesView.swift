@@ -92,13 +92,11 @@ struct EpisodesView: View {
     
     private func getFavorites() -> [Episode] {
         var episodes: [Episode] = []
-        
         do {
             episodes = try Persistence.episodes.loadItems().filter { $0.author == title }
         } catch {
             print("error getting episodes: \(error)")
         }
-        
         title = episodes.first?.author ?? "NOOOOO"
         return episodes
     }

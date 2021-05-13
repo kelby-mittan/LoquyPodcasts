@@ -83,7 +83,6 @@ struct AudioTrim {
         }
     }
     
-    
     static func trimUsingComposition(url: URL, start: String, duration: String, pathForFile: String, completion: @escaping (Result<URL,Error>) -> ()) {
         
         let asset = AVURLAsset(url: url, options: nil)
@@ -178,13 +177,5 @@ struct AudioTrim {
         } else {
 
         }
-    }
-}
-
-extension FileManager {
-    class func getAppFolderURL() -> URL? {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        return documentsDirectory
     }
 }

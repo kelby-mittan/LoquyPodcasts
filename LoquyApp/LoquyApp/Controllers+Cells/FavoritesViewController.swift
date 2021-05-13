@@ -22,9 +22,8 @@ class FavoritesViewController: UIViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<SectionKind,String>
     private var dataSource: DataSource!
     
-    var episodes: [Episode] = []
-        
-    let heyNow = "hey$now"
+    private var episodes: [Episode] = []
+    private let heyNow = "hey$now"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,7 +117,6 @@ class FavoritesViewController: UIViewController {
             
             return section
         }
-        
         return layout
     }
     
@@ -137,7 +135,6 @@ class FavoritesViewController: UIViewController {
             cell.imageView.contentMode = .scaleToFill
             return cell
         })
-        
         var snapshot = dataSource.snapshot()
         snapshot.appendSections([.main])
         dataSource.apply(snapshot, animatingDifferences: false)
@@ -150,9 +147,7 @@ extension FavoritesViewController: UICollectionViewDelegate {
         guard let episodeArt = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        
         goToEpisodesList(episodeArt: episodeArt.components(separatedBy: heyNow)[1])
-
     }
     
     func goToEpisodesList(episodeArt: String) {

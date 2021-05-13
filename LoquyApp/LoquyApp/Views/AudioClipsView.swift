@@ -130,7 +130,6 @@ struct AudioClipsView: View {
                 AudioTrim.removeUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime)
                 getAudioClips()
             }
-            
         ])
     }
     

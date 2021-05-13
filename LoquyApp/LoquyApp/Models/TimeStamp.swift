@@ -9,9 +9,7 @@
 import Foundation
 
 struct TimeStamp: Codable, Identifiable, Hashable {
-    
     var id: UUID?
     let episode: Episode
     let time: String
-    
 }

@@ -110,20 +110,16 @@ struct LoquyListView_Previews: PreviewProvider {
 
 struct LoquyContentView: View {
     
-    @State var page = 0
-    
     let imageUrl: String
     
     @ObservedObject var networkManager : NetworkingManager
-    
     @State var toggled = false
+    @State var page = 0
     
     var body: some View {
         
         VStack {
-            
             if toggled {
-                
                 ZStack {
                     VStack {
                         GeometryReader{ g in
