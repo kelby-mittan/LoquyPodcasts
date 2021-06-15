@@ -9,31 +9,33 @@
 import SwiftUI
 import Combine
 
-struct HomeView: View {
-    
+@available(iOS 14.0, *)
+
+@main
+struct Home: App {
     @State private var selectedTab = 0
     @ObservedObject private var networkManager = NetworkingManager()
     
     var edges = UIApplication.shared.windows.first?.safeAreaInsets
     
-    var body: some View {
-       
+    var homeView: some View {
         TabView(selection: $selectedTab) {
             BrowseView().tag(1)
             FavoritesTabView().tag(2)
             AudioClipsTab().tag(3)
             TranscriptsTab().tag(4)
         }
-        .accentColor(.purple)
+        .accentColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
         .onAppear {
             UITabBar.appearance().isHidden = false
         }
     }
-}
-
-struct BrowseView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
+    
+    var body: some Scene {
+       
+        WindowGroup {
+            homeView
+        }
     }
 }
 

@@ -37,7 +37,8 @@ struct ControlView: View {
                 Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
                     .padding([.top,.leading,.trailing])
                 
-                Capsule().fill(Color.purple).frame(width: width, height: 8)
+                Capsule().fill(Color.purple)
+                    .frame(width: width, height: 8)
                     .gesture(DragGesture()
                                 .onChanged({ (value) in
                                     handleDraggedCapsule(value)
@@ -171,8 +172,8 @@ struct ControlView: View {
             if player.timeControlStatus != .playing {
                 networkManager.episodePlaying = episode.title
                 Player.playEpisode(episode: episode)
-                playing = true
-                isPlaying = true
+                playing.toggle()
+                isPlaying.toggle()
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                     if playing {
                         if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
@@ -182,7 +183,7 @@ struct ControlView: View {
                 }
             } else {
                 Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                playing = false
+                playing.toggle()
             }
             setupRemoteControl()
         }

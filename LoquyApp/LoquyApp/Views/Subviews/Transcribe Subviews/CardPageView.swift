@@ -115,7 +115,7 @@ struct CardPageView: View {
 //                            let application = UIApplication.shared
                             let appPath = "deeplink-test://kelbymittan.com"
                             let appURL = URL(string: appPath)!
-                            let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
+//                            let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
                             ShareView(items: [appURL])
 //                            application.open(appURL, options: [:], completionHandler: nil)
                             

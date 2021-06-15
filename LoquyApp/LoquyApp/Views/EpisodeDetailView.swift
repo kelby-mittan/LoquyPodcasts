@@ -73,13 +73,13 @@ struct EpisodeDetailView: View {
         .navigationBarTitle("", displayMode: .inline)
     }
     
-    private func getCapsulePosition() -> CGFloat {
-        let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
-        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
-        let percentage = currentTimeSeconds / durationSeconds
-        
-        return CGFloat(percentage)
-    }
+//    private func getCapsulePosition() -> CGFloat {
+//        let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
+//        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
+//        let percentage = currentTimeSeconds / durationSeconds
+//        
+//        return CGFloat(percentage)
+//    }
     
 }
 

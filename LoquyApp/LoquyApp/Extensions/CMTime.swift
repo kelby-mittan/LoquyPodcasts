@@ -48,7 +48,7 @@ extension String {
     
     func toSecDouble() -> Double {
         let secArr = self.components(separatedBy: ":")
-        var sec: Double = 1
+        var sec: Double = 0
         for (i,time) in secArr.enumerated() {
             if time == "00" {
                 continue
