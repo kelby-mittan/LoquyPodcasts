@@ -42,3 +42,38 @@ struct ActivityIndicator: UIViewRepresentable {
         uiView.startAnimating()
     }
 }
+
+struct ImageToText {
+    static func load(str: String, completionHandler: @escaping (UIImage) -> ()) {
+        
+        guard let url = URL(string: str) else { return }
+        
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        completionHandler(image)
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension UIImageView {
+    public func image(fromUrl urlString: String) {
+        guard let url = URL(string: urlString) else {
+            print("Couldn't create URL from \(urlString)")
+            return
+        }
+        let dataTask = URLSession.shared.dataTask(with: url) {
+            data, response, error in
+            if let response = data {
+                DispatchQueue.main.async {
+                    self.image = UIImage(data: response)
+                }
+            }
+        }
+        dataTask.resume()
+    }
+}
