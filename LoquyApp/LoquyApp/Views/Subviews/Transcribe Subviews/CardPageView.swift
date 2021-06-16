@@ -40,7 +40,7 @@ struct CardPageView: View {
                         .foregroundColor(.white)
                         .padding([.leading,.trailing,.top,.bottom])
                     
-                    NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? "")) {
+                    NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? "", feedUrl: loquy.audioClip.feedUrl)) {
                         
                         Text(loquy.audioClip.episode.title)
                             .fontWeight(.heavy)
@@ -115,8 +115,8 @@ struct CardPageView: View {
 //                            let application = UIApplication.shared
 //                            let appPath = "deeplink://kelbymittan.com"
 //                            let appURL = URL(string: appPath)!
-                            let appURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
-                            ShareView(items: [loquy.title,"\n\n",loquy.transcription,"\n\n",appURL])
+                            let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
+                            ShareView(items: [loquy.title,"\n\n",loquy.transcription,"\n\n",appStoreURL])
 //                            application.open(appURL, options: [:], completionHandler: nil)
                             
                         }

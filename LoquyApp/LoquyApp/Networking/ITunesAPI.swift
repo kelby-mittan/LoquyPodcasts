@@ -65,4 +65,25 @@ class ITunesAPI {
             })
         }
     }
+    
+    func fetchSpecificEpisode(feedUrl: String, date: String, completionHandler: @escaping (Episode) -> ()) {
+        let secureFeedUrl = feedUrl.contains("https") ? feedUrl : feedUrl.replacingOccurrences(of: "http", with: "https")
+        guard let url = URL(string: secureFeedUrl) else { return }
+        DispatchQueue.global(qos: .background).async {
+            let parser = FeedParser(URL: url)
+            parser?.parseAsync(result: { (result) in
+                if let error = result.error {
+                    print("error parsing: \(error)")
+                    return
+                }
+                guard let feed = result.rssFeed else { return }
+                let episodes = feed.toEpisodes()
+                let episode = episodes.filter {$0.pubDate.description == date}.first
+                guard let validEpisode = episode else { return }
+                
+                completionHandler(validEpisode)
+                
+            })
+        }
+    }
 }

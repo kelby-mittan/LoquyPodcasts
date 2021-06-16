@@ -51,17 +51,17 @@ class NetworkingManager: ObservableObject {
     }
     
     func updatePodcasts(forSearch: String) {
-        ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { (podcasts) in
+        ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { [weak self] (podcasts) in
             DispatchQueue.main.async {
-                self.podcasts = podcasts
+                self?.podcasts = podcasts
             }
         }
     }
     
     func loadEpisodes(feedUrl: String) {
-        ITunesAPI.shared.fetchEpisodes(feedUrl: feedUrl) { (episodes) in
+        ITunesAPI.shared.fetchEpisodes(feedUrl: feedUrl) { [weak self] (episodes) in
             DispatchQueue.main.async {
-                self.episodes = episodes
+                self?.episodes = episodes
             }
         }
     }

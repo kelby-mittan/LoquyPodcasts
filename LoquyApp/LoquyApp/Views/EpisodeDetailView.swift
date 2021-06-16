@@ -15,6 +15,7 @@ struct EpisodeDetailView: View {
     
     let episode: Episode
     let artwork: String
+    let feedUrl: String?
     
     @ObservedObject private var networkManager = NetworkingManager()
     
@@ -59,27 +60,27 @@ struct EpisodeDetailView: View {
 
             if halfModalShown {
                 HalfModalView(isShown: $halfModalShown, modalHeight: 500){
-                    ClipAlertView(clipTime: clipTime, episode: episode, networkManager: networkManager, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
+                    ClipAlertView(clipTime: clipTime, episode: episode, feedUrl: feedUrl, networkManager: networkManager, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
                 }
             }
 
-        }.onAppear(perform: {
+        }.onAppear {
             image = RemoteImage(url: episode.imageUrl ?? "")
             clipTime = player.currentTime().toDisplayString()
             
-            print("Title")
-            print(episode.title)
-            print("Date")
-            print(episode.pubDate)
-            print("Description")
-            print(episode.description)
-            print("Author")
-            print(episode.author)
-            print("Stream")
-            print(episode.streamUrl)
-            print("Image")
-            print(episode.imageUrl ?? "none")
-        })
+//            print("Title")
+//            print(episode.title)
+//            print("Date")
+//            print(episode.pubDate)
+//            print("Description")
+//            print(episode.description)
+//            print("Author")
+//            print(episode.author)
+//            print("Stream")
+//            print(episode.streamUrl)
+//            print("Image")
+//            print(episode.imageUrl ?? "none")
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.secondarySystemBackground))
         .edgesIgnoringSafeArea(.all)
@@ -90,15 +91,6 @@ struct EpisodeDetailView: View {
             Text("Browse")
         }
     }
-    
-    
-//    private func getCapsulePosition() -> CGFloat {
-//        let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
-//        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
-//        let percentage = currentTimeSeconds / durationSeconds
-//
-//        return CGFloat(percentage)
-//    }
     
 }
 

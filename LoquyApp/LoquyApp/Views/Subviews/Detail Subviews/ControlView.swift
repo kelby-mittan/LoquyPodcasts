@@ -174,6 +174,9 @@ struct ControlView: View {
                 Player.playEpisode(episode: episode)
                 playing.toggle()
                 isPlaying.toggle()
+                if let deepLinkTime = episode.deepLinkTime {
+                    player.seek(to: deepLinkTime.getCMTime())
+                }
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                     if playing {
                         if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {

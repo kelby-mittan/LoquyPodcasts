@@ -16,10 +16,14 @@ struct Home: App {
     @State private var selectedTab = 0
     @ObservedObject private var networkManager = NetworkingManager()
     @State private var isDeepLink = false
+    @State private var hasLoaded = false
     
     var edges = UIApplication.shared.windows.first?.safeAreaInsets
     
-    @State var theEpisode = Episode(url: URL(string: ""))
+    @State var deepLinkEpisode = Episode(url: URL(string: ""))
+    @State var deepLinkEpisodeFeed = ""
+    @State var deepLinkEpisodeDate = ""
+    @State var deepLinkEpisodeTimeStamp = ""
     
     var homeView: some View {
         TabView(selection: $selectedTab) {
@@ -41,8 +45,17 @@ struct Home: App {
                 Group {
                     if !isDeepLink {
                         BrowseView()
+                            .onAppear {
+                                ITunesAPI.shared.fetchSpecificEpisode(feedUrl: "https://originspodcast.libsyn.com/rss", date: "2021-06-02 03:46:05 +0000") { episode in
+                                    DispatchQueue.main.async {
+                                        dump(episode)
+//                                        isDeepLink = true
+                                    }
+                                }
+                            }
                     } else {
-                        EpisodeDetailView(episode: theEpisode, artwork: "origins")
+                        EpisodeDetailView(episode: deepLinkEpisode, artwork: deepLinkEpisode.imageUrl ?? "", feedUrl: deepLinkEpisode.feedUrl)
+                        
                     }
                 }.tag(1)
                 FavoritesTabView().tag(2)
@@ -54,18 +67,35 @@ struct Home: App {
                 UITabBar.appearance().isHidden = false
             }
             .onOpenURL(perform: { url in
-                let episode = Episode(url: url)
-                theEpisode = episode
-                isDeepLink = true
+//                let episode = Episode(url: url)
+//                theEpisode = episode
+                print("URL TO PARSE")
+                print(url.absoluteString)
+                let components = url.absoluteString.components(separatedBy: "loquyApp")
+
+                dump(components)
+                guard components.count == 4 else { return }
+                let feed = components[1].replacingOccurrences(of: "https//", with: "https://")
+                let pubDate = components[2].removingPercentEncoding ?? ""
+                let timeStamp = components[3].removingPercentEncoding ?? ""
+                print(feed)
+                print(pubDate)
+                print(timeStamp)
+                deepLinkEpisodeFeed = feed
+                deepLinkEpisodeDate = pubDate
+                deepLinkEpisodeTimeStamp = timeStamp
+//                isDeepLink = true
+                
+                ITunesAPI.shared.fetchSpecificEpisode(feedUrl: feed, date: pubDate) { episode in
+                    DispatchQueue.main.async {
+                        deepLinkEpisode = episode
+                        deepLinkEpisode.deepLinkTime = timeStamp
+                        dump(deepLinkEpisode)
+//                        hasLoaded = true
+                        isDeepLink = true
+                    }
+                }
             })
-            
-//            homeView
-//                .onOpenURL(perform: { url in
-//                    isDeepLink = true
-//                    print(url)
-////                    selectedTab = 1
-//
-//                })
         }
         
     }

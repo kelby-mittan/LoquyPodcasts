@@ -13,6 +13,8 @@ struct ClipAlertView: View {
     
     var clipTime: String
     let episode: Episode
+    let feedUrl: String?
+    
     @ObservedObject var networkManager: NetworkingManager
     
     @State var selected = "02:00"
@@ -73,7 +75,7 @@ struct ClipAlertView: View {
                     notificationShown = false
                 }
                 
-                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString())
+                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString(), feedUrl: feedUrl ?? "")
                 
                 do {
                     try Persistence.audioClips.createItem(newClip)
