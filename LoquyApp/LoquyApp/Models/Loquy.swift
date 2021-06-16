@@ -16,3 +16,8 @@ struct Loquy: Codable, Identifiable, Hashable {
     let audioClip: AudioClip
     
 }
+
+enum DeepLink: String {
+    case home
+    case episode
+}

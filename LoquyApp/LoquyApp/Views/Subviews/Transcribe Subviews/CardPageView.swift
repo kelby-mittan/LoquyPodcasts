@@ -113,10 +113,10 @@ struct CardPageView: View {
                         .offset(x: -20)
                         .sheet(isPresented: $shareShown) {
 //                            let application = UIApplication.shared
-                            let appPath = "deeplink-test://kelbymittan.com"
-                            let appURL = URL(string: appPath)!
-//                            let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
-                            ShareView(items: [appURL])
+//                            let appPath = "deeplink://kelbymittan.com"
+//                            let appURL = URL(string: appPath)!
+                            let appURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
+                            ShareView(items: [loquy.title,"\n\n",loquy.transcription,"\n\n",appURL])
 //                            application.open(appURL, options: [:], completionHandler: nil)
                             
                         }

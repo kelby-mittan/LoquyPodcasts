@@ -12,13 +12,14 @@ import FeedKit
 struct Episode: Codable, Identifiable, Hashable {
     
     var id: UUID?
-    let title: String
-    let pubDate: Date
-    let description: String
-    let author: String
-    let streamUrl: String
+    var title: String
+    var pubDate: Date
+    var description: String
+    var author: String
+    var streamUrl: String
     var fileUrl: String?
     var imageUrl: String?
+    var timeStamp: Int64?
     
     init(feedItem: RSSFeedItem) {
         self.streamUrl = feedItem.enclosure?.attributes?.url ?? ""
@@ -27,5 +28,17 @@ struct Episode: Codable, Identifiable, Hashable {
         self.description = feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? ""
         self.author = feedItem.iTunes?.iTunesAuthor ?? ""
         self.imageUrl = feedItem.iTunes?.iTunesImage?.attributes?.href
+    }
+}
+
+extension Episode {
+    init(url: URL?) {
+//        guard let url = url else { fatalError() }
+        title = ""
+        pubDate = Date()
+        description = ""
+        author = ""
+        streamUrl = ""
+        imageUrl = ""
     }
 }

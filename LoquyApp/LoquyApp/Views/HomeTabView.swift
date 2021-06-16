@@ -15,8 +15,11 @@ import Combine
 struct Home: App {
     @State private var selectedTab = 0
     @ObservedObject private var networkManager = NetworkingManager()
+    @State private var isDeepLink = false
     
     var edges = UIApplication.shared.windows.first?.safeAreaInsets
+    
+    @State var theEpisode = Episode(url: URL(string: ""))
     
     var homeView: some View {
         TabView(selection: $selectedTab) {
@@ -25,21 +28,53 @@ struct Home: App {
             AudioClipsTab().tag(3)
             TranscriptsTab().tag(4)
         }
-        .accentColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+        .accentColor(.purple)
         .onAppear {
             UITabBar.appearance().isHidden = false
         }
     }
     
     var body: some Scene {
-       
         WindowGroup {
-            homeView
+        
+            TabView(selection: $selectedTab) {
+                Group {
+                    if !isDeepLink {
+                        BrowseView()
+                    } else {
+                        EpisodeDetailView(episode: theEpisode, artwork: "origins")
+                    }
+                }.tag(1)
+                FavoritesTabView().tag(2)
+                AudioClipsTab().tag(3)
+                TranscriptsTab().tag(4)
+            }
+            .accentColor(.purple)
+            .onAppear {
+                UITabBar.appearance().isHidden = false
+            }
+            .onOpenURL(perform: { url in
+                let episode = Episode(url: url)
+                theEpisode = episode
+                isDeepLink = true
+            })
+            
+//            homeView
+//                .onOpenURL(perform: { url in
+//                    isDeepLink = true
+//                    print(url)
+////                    selectedTab = 1
+//
+//                })
         }
+        
     }
 }
 
 struct BrowseView: View {
+    
+//    @Binding var isDeepLink: Bool
+    
     @State private var searchText = ""
     @State private var isPodcastShowing = true
     @State private var isEditing = false
@@ -52,47 +87,52 @@ struct BrowseView: View {
     var body: some View {
         
         NavigationView {
-            VStack {
-                SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
-                    .padding([.leading,.trailing])
-                Group {
-                    if searchText.isEmpty {
-                        
-                        ScrollView(.vertical) {
-                            HeaderView(label: "Listen To")
-                            NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl, isSaved: false, artWork: mindcast.image)) {
-                                ListenToView()
+//            if !isDeepLink {
+                VStack {
+                    SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
+                        .padding([.leading,.trailing])
+                    Group {
+                        if searchText.isEmpty {
+                            
+                            ScrollView(.vertical) {
+                                HeaderView(label: "Listen To")
+                                NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl, isSaved: false, artWork: mindcast.image)) {
+                                    ListenToView()
+                                }
+                                PodcastScrollView()
+                                FeaturedView()
+                                HeaderView(label: "More Cool Casts")
+                                MoreCastsView()
                             }
-                            PodcastScrollView()
-                            FeaturedView()
-                            HeaderView(label: "More Cool Casts")
-                            MoreCastsView()
-                        }
-                        
-                    } else {
-                        List(networkManager.podcasts, id: \.self) { podcast in
-                            NavigationLink(destination: EpisodesView(title: podcast.trackName ?? "", podcastFeed: podcast.feedUrl ?? "", isSaved: false, artWork: podcast.artworkUrl600 ?? "")) {
-                                RemoteImage(url: podcast.artworkUrl600 ?? "")
-                                    .frame(width: 100, height: 100)
-                                    .cornerRadius(8)
-                                VStack(alignment: .leading) {
-                                    Text(podcast.trackName ?? "")
-                                        .font(.headline)
-                                        .fontWeight(.semibold)
-                                    Text(podcast.artistName ?? "")
-                                        .font(.subheadline)
-                                        .fontWeight(.medium)
-                                    Text("\(podcast.trackCount ?? 0) episodes")
-                                        .font(.caption)
-                                        .fontWeight(.light)
+                            
+                        } else {
+                            List(networkManager.podcasts, id: \.self) { podcast in
+                                NavigationLink(destination: EpisodesView(title: podcast.trackName ?? "", podcastFeed: podcast.feedUrl ?? "", isSaved: false, artWork: podcast.artworkUrl600 ?? "")) {
+                                    RemoteImage(url: podcast.artworkUrl600 ?? "")
+                                        .frame(width: 100, height: 100)
+                                        .cornerRadius(8)
+                                    VStack(alignment: .leading) {
+                                        Text(podcast.trackName ?? "")
+                                            .font(.headline)
+                                            .fontWeight(.semibold)
+                                        Text(podcast.artistName ?? "")
+                                            .font(.subheadline)
+                                            .fontWeight(.medium)
+                                        Text("\(podcast.trackCount ?? 0) episodes")
+                                            .font(.caption)
+                                            .fontWeight(.light)
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            .navigationBarTitle("")
-            .navigationBarHidden(true)
+                .navigationBarTitle("")
+                .navigationBarHidden(true)
+//            } else {
+//
+//            }
+            
         }
         .accentColor(.purple)
         .onAppear {
@@ -123,34 +163,34 @@ struct FavoritesTabView: View {
     var body: some View {
         
         if !episodes.isEmpty {
-        NavigationView {
-            FavoritesVCWrapper()
-        .navigationBarTitle("")
-        .navigationBarHidden(true)
-        }
-        .onAppear {
-            getFavs()
-        }
-        .accentColor(.purple)
-        .tabItem {
+            NavigationView {
+                FavoritesVCWrapper()
+                    .navigationBarTitle("")
+                    .navigationBarHidden(true)
+            }
+            .onAppear {
+                getFavs()
+            }
+            .accentColor(.purple)
+            .tabItem {
                 Image(systemName: "star.fill")
                     .font(.body)
                     .padding(.top, 16.0)
                     .foregroundColor(.purple)
                 Text("Favorites")
-        }
+            }
         } else {
             EmptySavedView(emptyType: .favorite)
                 .onAppear {
                     getFavs()
                 }
-            .tabItem {
+                .tabItem {
                     Image(systemName: "star.fill")
                         .font(.body)
                         .padding(.top, 16.0)
                         .foregroundColor(.purple)
                     Text("Favorites")
-            }
+                }
         }
         
     }
@@ -174,7 +214,7 @@ struct AudioClipsTab: View {
                     .font(.body)
                     .padding(.top, 16.0)
                 Text("Audio Clips")
-        }
+            }
     }
 }
 
