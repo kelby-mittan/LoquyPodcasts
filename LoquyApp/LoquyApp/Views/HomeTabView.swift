@@ -15,31 +15,67 @@ import Combine
 struct Home: App {
     @State private var selectedTab = 0
     @ObservedObject private var networkManager = NetworkingManager()
+    @State private var isDeepLink = false
+    @State private var hasLoaded = false
     
     var edges = UIApplication.shared.windows.first?.safeAreaInsets
     
-    var homeView: some View {
-        TabView(selection: $selectedTab) {
-            BrowseView().tag(1)
-            FavoritesTabView().tag(2)
-            AudioClipsTab().tag(3)
-            TranscriptsTab().tag(4)
-        }
-        .accentColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-        .onAppear {
-            UITabBar.appearance().isHidden = false
-        }
-    }
+    @State var deepLinkEpisode = Episode(url: URL(string: ""))
     
     var body: some Scene {
-       
         WindowGroup {
-            homeView
+            TabView(selection: $selectedTab) {
+                Group {
+                    if !isDeepLink {
+                        BrowseView()
+                    } else {
+                        NavigationView {
+                            EpisodeDetailView(episode: deepLinkEpisode, artwork: deepLinkEpisode.imageUrl ?? "", feedUrl: deepLinkEpisode.feedUrl, isDeepLink: true)
+                        }
+                    }
+                }
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                        .font(.body)
+                    Text("Browse")
+                }.tag(1)
+                FavoritesTabView().tag(2)
+                AudioClipsTab().tag(3)
+                TranscriptsTab().tag(4)
+            }
+            .onOpenURL { url in
+                print("URL TO PARSE")
+                print(url.absoluteString)
+                let components = url.absoluteString.components(separatedBy: "loquyApp")
+                
+                dump(components)
+                guard components.count == 4 else { return }
+                let feed = components[1].replacingOccurrences(of: "https//", with: "https://")
+                let pubDate = components[2].removingPercentEncoding ?? ""
+                let timeStamp = components[3].removingPercentEncoding ?? ""
+                print(feed)
+                print(pubDate)
+                print(timeStamp)
+                
+                let deepLinkData = url.getURLComponents()
+                
+                ITunesAPI.shared.fetchSpecificEpisode(feedUrl: deepLinkData.feed, date: deepLinkData.pubDate) { episode in
+                    DispatchQueue.main.async {
+                        deepLinkEpisode = episode
+                        deepLinkEpisode.deepLinkTime = deepLinkData.dlTime
+                        dump(deepLinkEpisode)
+                        isDeepLink = true
+                    }
+                }
+            }
+            .accentColor(.purple)
         }
+        
     }
 }
 
 struct BrowseView: View {
+    
     @State private var searchText = ""
     @State private var isPodcastShowing = true
     @State private var isEditing = false
@@ -94,15 +130,12 @@ struct BrowseView: View {
             .navigationBarTitle("")
             .navigationBarHidden(true)
         }
+        .navigationBarHidden(true)
         .accentColor(.purple)
         .onAppear {
             Player.setupAudioSession()
         }
-        .tabItem {
-            Image(systemName: "magnifyingglass")
-                .font(.body)
-            Text("Browse")
-        }
+        
     }
     
     
@@ -123,34 +156,34 @@ struct FavoritesTabView: View {
     var body: some View {
         
         if !episodes.isEmpty {
-        NavigationView {
-            FavoritesVCWrapper()
-        .navigationBarTitle("")
-        .navigationBarHidden(true)
-        }
-        .onAppear {
-            getFavs()
-        }
-        .accentColor(.purple)
-        .tabItem {
+            NavigationView {
+                FavoritesVCWrapper()
+                    .navigationBarTitle("")
+                    .navigationBarHidden(true)
+            }
+            .onAppear {
+                getFavs()
+            }
+            .accentColor(.purple)
+            .tabItem {
                 Image(systemName: "star.fill")
                     .font(.body)
                     .padding(.top, 16.0)
                     .foregroundColor(.purple)
                 Text("Favorites")
-        }
+            }
         } else {
             EmptySavedView(emptyType: .favorite)
                 .onAppear {
                     getFavs()
                 }
-            .tabItem {
+                .tabItem {
                     Image(systemName: "star.fill")
                         .font(.body)
                         .padding(.top, 16.0)
                         .foregroundColor(.purple)
                     Text("Favorites")
-            }
+                }
         }
         
     }
@@ -174,7 +207,7 @@ struct AudioClipsTab: View {
                     .font(.body)
                     .padding(.top, 16.0)
                 Text("Audio Clips")
-        }
+            }
     }
 }
 

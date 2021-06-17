@@ -20,7 +20,11 @@ struct CardPageView: View {
     @State private var shareShown = false
     
     var data: Loquy
-        
+    
+    let podImage = UIImage(named: "Loquy-Purple")!
+    
+    @State var attString = NSMutableAttributedString()
+    
     var body: some View {
         Group {
                         
@@ -40,7 +44,7 @@ struct CardPageView: View {
                         .foregroundColor(.white)
                         .padding([.leading,.trailing,.top,.bottom])
                     
-                    NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? "")) {
+                    NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? "", feedUrl: loquy.audioClip.feedUrl, isDeepLink: false)) {
                         
                         Text(loquy.audioClip.episode.title)
                             .fontWeight(.heavy)
@@ -51,7 +55,6 @@ struct CardPageView: View {
                     }.padding([.leading,.trailing])
                     
                     HStack {
-                        
                         RemoteImage(url: loquy.audioClip.episode.imageUrl ?? "")
                             .frame(width: 100, height: 100)
                             .cornerRadius(6)
@@ -112,14 +115,16 @@ struct CardPageView: View {
                         .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         .offset(x: -20)
                         .sheet(isPresented: $shareShown) {
-//                            let application = UIApplication.shared
-                            let appPath = "deeplink-test://kelbymittan.com"
+                            let appPath = "deeplink://loquyApp\(loquy.audioClip.feedUrl )loquyApp\(loquy.audioClip.episode.pubDate.description)loquyApp\(loquy.audioClip.startTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "deeplink://"
+                            
                             let appURL = URL(string: appPath)!
+                            
+                            ShareView(items: [loquy.title,"\n","\n",loquy.transcription,"\n","\n",appURL,podImage])
+                            
 //                            let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
-                            ShareView(items: [appURL])
-//                            application.open(appURL, options: [:], completionHandler: nil)
                             
                         }
+                        
                     }
                 }.padding([.leading,.trailing,.bottom])
                 
@@ -127,6 +132,16 @@ struct CardPageView: View {
             }
             .onAppear {
                 networkManager.loadLoquys()
+                
+                let appPath = "deeplink://loquyApp\(loquy.audioClip.feedUrl )loquyApp\(loquy.audioClip.episode.pubDate.description)loquyApp\(loquy.audioClip.startTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "deeplink://"
+                
+                let appURL = URL(string: appPath)!
+                
+                print(appURL.absoluteString)
+                
+                attString = NSMutableAttributedString(string: "Check it out")
+                attString.setAttributes([.link: appURL], range: NSMakeRange(attString.length-12, 12))
+                
             }
             .cornerRadius(12)
             .padding(.top)

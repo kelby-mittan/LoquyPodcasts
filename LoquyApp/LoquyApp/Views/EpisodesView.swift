@@ -37,7 +37,7 @@ struct EpisodesView: View {
         } else {
             List(networkManager.episodes, id: \.self) { episode in
                 
-                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork)) {
+                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork, feedUrl: podcastFeed, isDeepLink: false)) {
                     
                     ZStack(alignment: .leading) {
                         ZStack {
@@ -80,6 +80,14 @@ struct EpisodesView: View {
             }.onAppear {
                 isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
                 UITableView.appearance().separatorStyle = .none
+//                print(artWork)
+//
+//                print("Author")
+//                print(networkManager.episodes.first?.author ?? "none")
+//                print("FILE URL")
+//                print(networkManager.episodes.first?.fileUrl ?? "none")
+//                print(networkManager.episodes.first?.streamUrl ?? "none")
+//                print(networkManager.episodes.first?.description ?? "none")
             }
             .navigationBarTitle(title)
         }
@@ -97,7 +105,7 @@ struct EpisodesView: View {
         } catch {
             print("error getting episodes: \(error)")
         }
-        title = episodes.first?.author ?? "NOOOOO"
+        title = episodes.first?.author ?? ""
         return episodes
     }
     

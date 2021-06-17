@@ -42,7 +42,7 @@ struct TranscribeView: View {
                     .font(.title)
                     .padding(.bottom,6)
                 
-                NavigationLink(destination: EpisodeDetailView(episode: audioClip.episode, artwork: audioClip.episode.imageUrl ?? "")) {
+                NavigationLink(destination: EpisodeDetailView(episode: audioClip.episode, artwork: audioClip.episode.imageUrl ?? "", feedUrl: audioClip.feedUrl, isDeepLink: false)) {
                     
                     Text(audioClip.episode.title)
                         .fontWeight(.heavy)
