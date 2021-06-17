@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct PodcastScrollView: View {
     
     var podcasts = DummyPodcast.podcasts
@@ -29,6 +30,7 @@ struct PodcastScrollView: View {
     }
 }
 
+@available(iOS 14.0, *)
 struct TopPodcastsView: View {
         
     var podcasts: Array<DummyPodcast>.SubSequence
@@ -74,11 +76,5 @@ struct TopPodcastsView: View {
             }
         }
         .padding(.horizontal)
-    }
-}
-
-struct TopPodcastsView_Previews: PreviewProvider {
-    static var previews: some View {
-        TopPodcastsView(podcasts: DummyPodcast.podcasts[0...2])
     }
 }

@@ -107,7 +107,7 @@ struct LoquyListView_Previews: PreviewProvider {
     }
 }
 
-
+@available(iOS 14.0, *)
 struct LoquyContentView: View {
     
     let imageUrl: String

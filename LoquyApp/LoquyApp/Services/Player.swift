@@ -99,7 +99,7 @@ class Player {
     }
     
     static func getCapsuleWidth(width: inout CGFloat, currentTime: String) {
-        let screen = UIScreen.main.bounds.width - 30
+        let screen = UIScreen.main.bounds.width - 20
         let duration = Player.shared.player.currentItem?.duration.toDisplayString() ?? "00:00:00"
         let percent = currentTime.toSecDouble() / duration.toSecDouble()
         width = screen * CGFloat(percent) + 20

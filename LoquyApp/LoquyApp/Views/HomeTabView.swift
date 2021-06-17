@@ -10,7 +10,6 @@ import SwiftUI
 import Combine
 
 @available(iOS 14.0, *)
-
 @main
 struct Home: App {
     @State private var selectedTab = 0
@@ -74,6 +73,7 @@ struct Home: App {
     }
 }
 
+@available(iOS 14.0, *)
 struct BrowseView: View {
     
     @State private var searchText = ""
@@ -148,6 +148,7 @@ struct BrowseView: View {
     }
 }
 
+@available(iOS 14.0, *)
 struct FavoritesTabView: View {
     
     @ObservedObject private var networkManager = NetworkingManager()
@@ -198,6 +199,7 @@ struct FavoritesTabView: View {
     
 }
 
+@available(iOS 14.0, *)
 struct AudioClipsTab: View {
     var body: some View {
         AudioClipsView()

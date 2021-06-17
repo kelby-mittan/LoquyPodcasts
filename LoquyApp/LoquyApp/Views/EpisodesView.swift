@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct EpisodesView: View {
     
     @ObservedObject private var networkManager = NetworkingManager()
@@ -80,14 +81,6 @@ struct EpisodesView: View {
             }.onAppear {
                 isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
                 UITableView.appearance().separatorStyle = .none
-//                print(artWork)
-//
-//                print("Author")
-//                print(networkManager.episodes.first?.author ?? "none")
-//                print("FILE URL")
-//                print(networkManager.episodes.first?.fileUrl ?? "none")
-//                print(networkManager.episodes.first?.streamUrl ?? "none")
-//                print(networkManager.episodes.first?.description ?? "none")
             }
             .navigationBarTitle(title)
         }

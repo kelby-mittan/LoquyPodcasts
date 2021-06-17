@@ -11,6 +11,7 @@ import Alamofire
 import AVKit
 import MediaPlayer
 
+@available(iOS 14.0, *)
 struct EpisodeDetailView: View {
     
     let episode: Episode
@@ -20,14 +21,14 @@ struct EpisodeDetailView: View {
     
     @ObservedObject private var networkManager = NetworkingManager()
     
-    @State var image = RemoteImage(url: "")
+    @State var image = RemoteImageDetail(url: "")
     
     @State var halfModalShown = false
     @State var clipTime = ""
     @State var times = [String]()
     @State var showNotification = false
     @State var notificationMessage = ""
-    @State var playing = false
+    @State var playing = true
     
     let player = Player.shared.player
     
@@ -67,7 +68,7 @@ struct EpisodeDetailView: View {
                 }
                 
             }.onAppear {
-                image = RemoteImage(url: episode.imageUrl ?? "")
+                image = RemoteImageDetail(url: episode.imageUrl ?? "")
                 clipTime = player.currentTime().toDisplayString()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct Carousel : UIViewRepresentable {
     
     func makeCoordinator() -> Coordinator {
@@ -70,6 +71,7 @@ struct Carousel : UIViewRepresentable {
     }
 }
 
+
 struct PageControl: UIViewRepresentable {
     
     @Binding var page: Int
@@ -94,6 +96,7 @@ struct PageControl: UIViewRepresentable {
     }
 }
 
+@available(iOS 14.0, *)
 struct PageList: View {
     
     @Binding var page: Int

@@ -10,6 +10,7 @@ import SwiftUI
 import AVKit
 import Speech
 
+@available(iOS 14.0, *)
 struct TranscribeView: View {
     
     @ObservedObject var networkManager = NetworkingManager()

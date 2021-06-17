@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
+
 struct AudioClipsView: View {
     
     @ObservedObject private var networkManager = NetworkingManager()
@@ -138,6 +140,7 @@ struct AudioClipsView: View {
     }
 }
 
+@available(iOS 14.0, *)
 struct AudioClipsView_Previews: PreviewProvider {
     static var previews: some View {
         AudioClipsView()

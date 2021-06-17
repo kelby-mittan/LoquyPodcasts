@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct CardPageView: View {
     
     @Binding var page: Int
