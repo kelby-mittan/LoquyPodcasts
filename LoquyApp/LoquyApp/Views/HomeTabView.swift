@@ -22,38 +22,26 @@ struct Home: App {
     
     @State var deepLinkEpisode = Episode(url: URL(string: ""))
     
-    //    var homeView: some View {
-    //        TabView(selection: $selectedTab) {
-    //            BrowseView().tag(1)
-    //            FavoritesTabView().tag(2)
-    //            AudioClipsTab().tag(3)
-    //            TranscriptsTab().tag(4)
-    //        }
-    //        .accentColor(.purple)
-    //        .onAppear {
-    //            UITabBar.appearance().isHidden = false
-    //        }
-    //    }
-    
     var body: some Scene {
         WindowGroup {
-            
             TabView(selection: $selectedTab) {
                 Group {
                     if !isDeepLink {
                         BrowseView()
                     } else {
-                        EpisodeDetailView(episode: deepLinkEpisode, artwork: deepLinkEpisode.imageUrl ?? "", feedUrl: deepLinkEpisode.feedUrl)
-                        
+                        NavigationView {
+                            EpisodeDetailView(episode: deepLinkEpisode, artwork: deepLinkEpisode.imageUrl ?? "", feedUrl: deepLinkEpisode.feedUrl, isDeepLink: true)
+                        }
                     }
+                }
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                        .font(.body)
+                    Text("Browse")
                 }.tag(1)
                 FavoritesTabView().tag(2)
                 AudioClipsTab().tag(3)
                 TranscriptsTab().tag(4)
-            }
-            .accentColor(.purple)
-            .onAppear {
-                UITabBar.appearance().isHidden = false
             }
             .onOpenURL { url in
                 print("URL TO PARSE")
@@ -69,15 +57,18 @@ struct Home: App {
                 print(pubDate)
                 print(timeStamp)
                 
-                ITunesAPI.shared.fetchSpecificEpisode(feedUrl: feed, date: pubDate) { episode in
+                let deepLinkData = url.getURLComponents()
+                
+                ITunesAPI.shared.fetchSpecificEpisode(feedUrl: deepLinkData.feed, date: deepLinkData.pubDate) { episode in
                     DispatchQueue.main.async {
                         deepLinkEpisode = episode
-                        deepLinkEpisode.deepLinkTime = timeStamp
+                        deepLinkEpisode.deepLinkTime = deepLinkData.dlTime
                         dump(deepLinkEpisode)
                         isDeepLink = true
                     }
                 }
             }
+            .accentColor(.purple)
         }
         
     }
@@ -138,17 +129,13 @@ struct BrowseView: View {
             }
             .navigationBarTitle("")
             .navigationBarHidden(true)
-            
         }
+        .navigationBarHidden(true)
         .accentColor(.purple)
         .onAppear {
             Player.setupAudioSession()
         }
-        .tabItem {
-            Image(systemName: "magnifyingglass")
-                .font(.body)
-            Text("Browse")
-        }
+        
     }
     
     

@@ -37,7 +37,7 @@ struct EpisodesView: View {
         } else {
             List(networkManager.episodes, id: \.self) { episode in
                 
-                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork, feedUrl: podcastFeed)) {
+                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork, feedUrl: podcastFeed, isDeepLink: false)) {
                     
                     ZStack(alignment: .leading) {
                         ZStack {

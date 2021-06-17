@@ -16,6 +16,7 @@ struct EpisodeDetailView: View {
     let episode: Episode
     let artwork: String
     let feedUrl: String?
+    let isDeepLink: Bool
     
     @ObservedObject private var networkManager = NetworkingManager()
     
@@ -31,64 +32,60 @@ struct EpisodeDetailView: View {
     let player = Player.shared.player
     
     var body: some View {
-        ZStack {
-            ScrollView(.vertical, showsIndicators: true) {
-
-                image
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: playing ? 250 : 200, height: playing ? 250 : 200)
-                    .cornerRadius(12)
-                    .padding(.top, playing ? 100 : 125)
-                    .padding([.leading,.trailing])
-                    .animation(.easeInOut)
-                
-                ControlView(episode: episode, isPlaying: $playing, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
-                    .padding(.top, playing ? 0 : 25)
-                
-                EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
-                
-                DescriptionView(episode: episode)
-                
-                FavoriteView(episode: episode, artwork: artwork, notificationShown: $showNotification, message: $notificationMessage)
-                    .padding(.bottom, 100)
-                
-            }
-            
-            NotificationView(message: $notificationMessage)
-                .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
-                .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
-
-            if halfModalShown {
-                HalfModalView(isShown: $halfModalShown, modalHeight: 500){
-                    ClipAlertView(clipTime: clipTime, episode: episode, feedUrl: feedUrl, networkManager: networkManager, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
+        Group {
+            ZStack {
+                ScrollView(.vertical, showsIndicators: true) {
+                    
+                    image
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: playing ? 250 : 200, height: playing ? 250 : 200)
+                        .cornerRadius(12)
+                        .padding(.top, playing ? 100 : 125)
+                        .padding([.leading,.trailing])
+                        .animation(.easeInOut)
+                    
+                    ControlView(episode: episode, isPlaying: $playing, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
+                        .padding(.top, playing ? 0 : 25)
+                    
+                    EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
+                    
+                    DescriptionView(episode: episode)
+                    
+                    FavoriteView(episode: episode, artwork: artwork, notificationShown: $showNotification, message: $notificationMessage)
+                        .padding(.bottom, 100)
+                    
                 }
+                
+                NotificationView(message: $notificationMessage)
+                    .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
+                    .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
+                
+                if halfModalShown {
+                    HalfModalView(isShown: $halfModalShown, modalHeight: 500){
+                        ClipAlertView(clipTime: clipTime, episode: episode, feedUrl: feedUrl, networkManager: networkManager, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
+                    }
+                }
+                
+            }.onAppear {
+                image = RemoteImage(url: episode.imageUrl ?? "")
+                clipTime = player.currentTime().toDisplayString()
             }
-
-        }.onAppear {
-            image = RemoteImage(url: episode.imageUrl ?? "")
-            clipTime = player.currentTime().toDisplayString()
-            
-//            print("Title")
-//            print(episode.title)
-//            print("Date")
-//            print(episode.pubDate)
-//            print("Description")
-//            print(episode.description)
-//            print("Author")
-//            print(episode.author)
-//            print("Stream")
-//            print(episode.streamUrl)
-//            print("Image")
-//            print(episode.imageUrl ?? "none")
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.secondarySystemBackground))
-        .edgesIgnoringSafeArea(.all)
-        .navigationBarTitle("", displayMode: .inline)
-        .tabItem {
-            Image(systemName: "magnifyingglass")
-                .font(.body)
-            Text("Browse")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(.secondarySystemBackground))
+            .edgesIgnoringSafeArea(.all)
+            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarItems(leading:
+                                    NavigationLink(
+                                        destination: BrowseView(),
+                                        label: {
+                                            Text(isDeepLink ? "Go Browse" : "")
+                                        })
+            )
+            .tabItem {
+                Image(systemName: "magnifyingglass")
+                    .font(.body)
+                Text("Browse")
+            }
         }
     }
     

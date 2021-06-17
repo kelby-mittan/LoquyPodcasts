@@ -44,7 +44,7 @@ struct CardPageView: View {
                         .foregroundColor(.white)
                         .padding([.leading,.trailing,.top,.bottom])
                     
-                    NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? "", feedUrl: loquy.audioClip.feedUrl)) {
+                    NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? "", feedUrl: loquy.audioClip.feedUrl, isDeepLink: false)) {
                         
                         Text(loquy.audioClip.episode.title)
                             .fontWeight(.heavy)
@@ -55,7 +55,6 @@ struct CardPageView: View {
                     }.padding([.leading,.trailing])
                     
                     HStack {
-                        
                         RemoteImage(url: loquy.audioClip.episode.imageUrl ?? "")
                             .frame(width: 100, height: 100)
                             .cornerRadius(6)
@@ -120,13 +119,9 @@ struct CardPageView: View {
                             
                             let appURL = URL(string: appPath)!
                             
-                            ShareView(items: [loquy.title,"\n\n",loquy.transcription,"\n\n",appURL,podImage])
-                            
-                            
+                            ShareView(items: [loquy.title,"\n","\n",loquy.transcription,"\n","\n",appURL,podImage])
                             
 //                            let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
-                            
-                            
                             
                         }
                         
@@ -137,12 +132,7 @@ struct CardPageView: View {
             }
             .onAppear {
                 networkManager.loadLoquys()
-                print("LOQUY FEED")
-                print(loquy.audioClip.feedUrl)
-                print("PUB DATE")
-                print(loquy.audioClip.episode.pubDate.description)
-                print("START TIME")
-                print(loquy.audioClip.startTime)
+                
                 let appPath = "deeplink://loquyApp\(loquy.audioClip.feedUrl )loquyApp\(loquy.audioClip.episode.pubDate.description)loquyApp\(loquy.audioClip.startTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "deeplink://"
                 
                 let appURL = URL(string: appPath)!
