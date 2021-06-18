@@ -43,7 +43,7 @@ struct AudioClipsView: View {
                             VStack {
                                 
                                 HStack {
-                                    RemoteImage(url: clip.episode.imageUrl ?? "")
+                                    RemoteImage(url: clip.episode.imageUrl ?? RepText.empty)
                                         .frame(width: 120, height: 120)
                                         .cornerRadius(6)
                                         .onLongPressGesture {
@@ -94,7 +94,7 @@ struct AudioClipsView: View {
                 .actionSheet(isPresented: $showActionSheet, content: {
                     actionSheet
                 })
-                .navigationBarTitle("Your Audio Clips")
+                .navigationBarTitle(LoquynClipText.yourClips)
             }
             .onAppear {
                 UITableView.appearance().separatorStyle = .none
@@ -111,10 +111,10 @@ struct AudioClipsView: View {
     }
     
     var actionSheet: ActionSheet {
-        ActionSheet(title: Text("Remove Clip").font(.title), buttons: [
-            .default(Text("Cancel")) {
+        ActionSheet(title: Text(LoquynClipText.removeClip).font(.title), buttons: [
+            .default(Text(LoquynClipText.cancel)) {
             },
-            .destructive(Text("Delete")) {
+            .destructive(Text(LoquynClipText.delete)) {
                 guard let audioClip = audioClip else {
                     return
                 }
@@ -127,7 +127,7 @@ struct AudioClipsView: View {
                     }
                     try Persistence.audioClips.deleteItem(at: clipIndex)
                 } catch {
-                    print("error deleting clip: \(error)")
+                    print(error.localizedDescription)
                 }
                 
                 AudioTrim.removeUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime)

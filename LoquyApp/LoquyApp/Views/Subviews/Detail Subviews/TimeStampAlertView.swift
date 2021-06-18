@@ -16,8 +16,8 @@ struct TimeStampAlertView: View {
     @ObservedObject var networkManager: ViewModel
     
     @State var timeStamps = [TimeStamp]()
-    @State var favToSave = ""
-    @State var saveText = ""
+    @State var favToSave = RepText.empty
+    @State var saveText = RepText.empty
     
     
     var body : some View {
@@ -31,7 +31,7 @@ struct TimeStampAlertView: View {
                     Button(action: {
                         self.showAlert.toggle()
                     }, label: {
-                        Image(systemName: "xmark")
+                        Image(systemName: Symbol.xmark)
                             .resizable()
                             .frame(width: 18, height: 18)
                             .foregroundColor(.white)
@@ -44,7 +44,7 @@ struct TimeStampAlertView: View {
                     .padding(.bottom, 5)
                 
                 if !Persistence.episodes.hasItemBeenSaved(episode) {
-                    PCastHeaderLabelView(label: "save this episode")
+                    PCastHeaderLabelView(label: TimeStampText.saveThisEpisode)
                         .padding(.bottom, 5)
                         .padding(.top, -5)
                 }
@@ -59,7 +59,7 @@ struct TimeStampAlertView: View {
                         do {
                             try Persistence.timeStamps.createItem(newTStamp)
                         } catch {
-                            print("error saving timestamp: \(error)")
+                            print(error.localizedDescription)
                         }
                         
                         loadTimes(episode: episode)
@@ -85,11 +85,11 @@ struct TimeStampAlertView: View {
         .onAppear(perform: {
             
             if !Persistence.episodes.hasItemBeenSaved(episode) {
-                favToSave = "To add a timestamp"
-                saveText = "okay"
+                favToSave = TimeStampText.addTimeStamp
+                saveText = TimeStampText.ok
             } else {
-                favToSave = "Save this time?"
-                saveText = "save"
+                favToSave = TimeStampText.saveThisTime
+                saveText = TimeStampText.save
             }
         })
         .frame(width: 300, height: Persistence.episodes.hasItemBeenSaved(episode) ? 200 : 260)

@@ -16,15 +16,15 @@ struct ControlView: View {
     let episode: Episode
     
     @State var width: CGFloat = 20
-    @State var playing = false
-    @State var currentTime: String = "0:00"
+    @State var playing = true
+    @State var currentTime: String = TimeText.zero
     @State var showAlert = false
     
     @Binding var isPlaying: Bool
     
     let player: AVPlayer
     
-    @ObservedObject var networkManager: ViewModel
+    @ObservedObject var viewModel: ViewModel
     
     @Binding var showModal: Bool
     @Binding var clipTime: String
@@ -42,10 +42,16 @@ struct ControlView: View {
                     .frame(width: width.isFinite ? width : 30, height: 8)
                     .gesture(DragGesture()
                                 .onChanged({ (value) in
-                                    handleDraggedCapsule(value)
+                                    player.pause()
+//                                    playing = false
+                                    Player.handleWidth(value, &width, &currentTime)
+//                                    handleDraggedCapsule(value)
                                 }).onEnded({ (value) in
                                     player.seek(to: Player.capsuleDragged(value.location.x))
-                                    !playing ? player.play() : player.pause()
+                                    player.play()
+                                    playing = true
+//                                    !playing ? player.play() : player.pause()
+//                                    viewModel.playing ? player.play() : player.pause()
                                 }))
                     .padding([.top,.leading,.trailing])
                     .onChange(of: currentTime, perform: { value in
@@ -58,7 +64,7 @@ struct ControlView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
-                Text(getCurrentPlayerTime().durationTime)
+                Text(handleTimeDisplayed())
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -72,7 +78,7 @@ struct ControlView: View {
                 }) {
                     ZStack {
                         NeoButtonView()
-                        Image(systemName: "gobackward.15").font(.largeTitle)
+                        Image(systemName: Symbol.back).font(.largeTitle)
                             .foregroundColor(.purple)
                     }.background(NeoButtonView())
                     .frame(width: 60, height: 60)
@@ -83,19 +89,25 @@ struct ControlView: View {
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
                 Button(action: {
-                    if episode.title != networkManager.episodePlaying {
-                        networkManager.episodePlaying = episode.title
+                    if episode.title != viewModel.episodePlaying {
+                        viewModel.episodePlaying = episode.title
                         Player.playEpisode(episode: episode)
                     }
                     
-                    playing ? player.play() : player.pause()
+                    !playing ? player.play() : player.pause()
                     
                     playing.toggle()
                     isPlaying.toggle()
+//                    viewModel.playing ? player.pause() : player.play()
+                                        
+//                    viewModel.handleIsPlaying()
+                    
+                    
+                    
                 }) {
                     ZStack {
                         NeoButtonView()
-                        Image(systemName: playing ? "play.fill" : "pause.fill").font(.largeTitle)
+                        Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
                             .foregroundColor(.purple)
                     }.background(NeoButtonView())
                     .frame(width: 80, height: 80)
@@ -108,11 +120,12 @@ struct ControlView: View {
                 
                 Button(action: {
                     Player.seekToCurrentTime(delta: 15)
+//                    getCurrentPlayerTime()
                     Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                 }) {
                     ZStack {
                         NeoButtonView()
-                        Image(systemName: "goforward.15").font(.largeTitle)
+                        Image(systemName: Symbol.forward).font(.largeTitle)
                             .foregroundColor(.purple)
                     }
                     .background(NeoButtonView())
@@ -129,7 +142,7 @@ struct ControlView: View {
                 Button(action: {
                     showAlert.toggle()
                 }) {
-                    Text("time stamp")
+                    Text(RepText.timeStamp)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: 122,height: 44)
                         .foregroundColor(.purple)
@@ -148,7 +161,7 @@ struct ControlView: View {
                     showModal.toggle()
                     clipTime = currentTime
                 }) {
-                    Text("record clip")
+                    Text(RepText.recordClip)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: 122,height: 44)
                         .foregroundColor(.purple)
@@ -166,7 +179,7 @@ struct ControlView: View {
             .padding([.leading,.trailing])
             .blur(radius: showAlert ? 30 : 0)
             if showAlert {
-                TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode, networkManager: networkManager)
+                TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode, networkManager: viewModel)
                     .offset(x: 0, y: -70)
             }
             
@@ -174,110 +187,86 @@ struct ControlView: View {
         .animation(.spring())
         .onAppear {
             
+            viewModel.handleIsPlaying()
+            isPlaying = viewModel.playing
+            
             if let deepLinkTime = episode.deepLinkTime {
                 player.seek(to: deepLinkTime.getCMTime())
             }
             
-            if player.timeControlStatus == .paused {
-                networkManager.episodePlaying = episode.title
+            if !viewModel.playing {
+                viewModel.episodePlaying = episode.title
                 Player.playEpisode(episode: episode)
                 
                 playing = true
                 isPlaying = true
                 
-            } else if player.timeControlStatus == .playing {
+            } else {
                 Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                if networkManager.episodePlaying != episode.title {
+                if viewModel.episodePlaying != episode.title {
                     playing = true
                 }
                 
             }
-            getCurrentPlayerTime()
+//            getCurrentPlayerTime()
+            
+            Player.getCurrentPlayerTime(currentTime, episode.title == viewModel.episodePlaying) { time in
+                currentTime = time
+            }
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                if playing {
-                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                if viewModel.playing {
+                    if player.currentItem?.duration.toDisplayString() != TimeText.unloaded && width > 0.0 {
                         Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                         
                     }
                 }
             }
-            
-            
-            setupRemoteControl()
+            Player.setupRemoteControl()
         }
                 
     }
     
-    private func handleDraggedCapsule(_ dragVal: DragGesture.Value) {
-        player.pause()
-        let x = dragVal.location.x
-        let maxVal = UIScreen.main.bounds.width - 20
-        let minVal: CGFloat = 10
-        
-        if x < minVal {
-            width = minVal
-        } else if x > maxVal {
-            width = maxVal
-        } else {
-            width = x
+    private func handleTimeDisplayed() -> String {
+        return Player.getCurrentPlayerTime(currentTime, episode.title == viewModel.episodePlaying) { ctime in
+            currentTime = ctime
         }
-        currentTime = Player.capsuleDragged(dragVal.location.x).toDisplayString()
     }
     
-    @discardableResult
-    private func getCurrentPlayerTime() -> (currentTime: String, durationTime: String) {
-        let interval = CMTimeMake(value: 1, timescale: 2)
-        var durationLabel = ""
-        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
-            if episode.title == networkManager.episodePlaying {
-                currentTime = time.toDisplayString()
-            } else {
-                currentTime = "00:00:00"
-            }
-            
-        }
-        guard let durationTime = player.currentItem?.duration else {
-            return ("--:--", "--:--")
-        }
-        let dt = durationTime - currentTime.getCMTime()
-        durationLabel = "-" + dt.toDisplayString()
-        return ("",durationLabel)
-    }
     
-    private func setupRemoteControl() {
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
-        let commandCenter = MPRemoteCommandCenter.shared()
-        
-        commandCenter.playCommand.isEnabled = true
-        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            player.play()
-            playing = true
-            isPlaying = true
-            return .success
-        }
-        
-        commandCenter.pauseCommand.isEnabled = true
-        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            player.pause()
-            playing = false
-            isPlaying = false
-            return .success
-        }
-        
-        commandCenter.togglePlayPauseCommand.isEnabled = true
-        commandCenter.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            
-            if player.timeControlStatus == .playing {
-                player.pause()
-            } else {
-                player.play()
-            }
-            
-            return .success
-        }
-        
-    }
+//    private func setupRemoteControl() {
+//        UIApplication.shared.beginReceivingRemoteControlEvents()
+//
+//        let commandCenter = MPRemoteCommandCenter.shared()
+//
+//        commandCenter.playCommand.isEnabled = true
+//        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+//            player.play()
+//            playing = true
+//            isPlaying = true
+//            return .success
+//        }
+//
+//        commandCenter.pauseCommand.isEnabled = true
+//        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+//            player.pause()
+//            playing = false
+//            isPlaying = false
+//            return .success
+//        }
+//
+//        commandCenter.togglePlayPauseCommand.isEnabled = true
+//        commandCenter.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+//
+//            if player.timeControlStatus == .playing {
+//                player.pause()
+//            } else {
+//                player.play()
+//            }
+//
+//            return .success
+//        }
+//
+//    }
     
 }
 

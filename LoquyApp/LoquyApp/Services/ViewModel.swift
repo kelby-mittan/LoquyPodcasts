@@ -56,6 +56,20 @@ class ViewModel: ObservableObject {
         }
     }
     
+    @Published var playing = Bool() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
+    public func loadSearchPodcasts(search: String) {
+        var timer: Timer?
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false, block: { (_) in
+            self.updatePodcasts(forSearch: search)
+        })
+    }
+    
     public func updatePodcasts(forSearch: String) {
         ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { [weak self] (podcasts) in
             DispatchQueue.main.async {
@@ -76,7 +90,7 @@ class ViewModel: ObservableObject {
         do {
             favorites = try Persistence.episodes.loadItems()
         } catch {
-            print("error getting favorites: \(error)")
+            print(error.localizedDescription)
         }
     }
     
@@ -87,7 +101,7 @@ class ViewModel: ObservableObject {
                 self.timeStamps = timeStamps
             }
         } catch {
-            print("error with timestamps: \(error)")
+            print(error.localizedDescription)
         }
     }
     
@@ -98,7 +112,7 @@ class ViewModel: ObservableObject {
                 self.audioClips = audioClips.reversed()
             }
         } catch {
-            print("error getting clips: \(error)")
+            print(error.localizedDescription)
         }
     }
     
@@ -109,7 +123,7 @@ class ViewModel: ObservableObject {
                 self.loquys = loquys.reversed()
             }
         } catch {
-            print("error getting transcriptions: \(error)")
+            print(error.localizedDescription)
         }
     }
     
@@ -118,10 +132,14 @@ class ViewModel: ObservableObject {
         do {
             episodes = try Persistence.episodes.loadItems().filter { $0.author == title }
         } catch {
-            print("error getting episodes: \(error)")
+            print(error.localizedDescription)
         }
-        title = episodes.first?.author ?? ""
+        title = episodes.first?.author ?? RepText.empty
         return episodes
+    }
+    
+    public func handleIsPlaying() {
+        self.playing = Player.shared.player.timeControlStatus == .playing
     }
     
 }

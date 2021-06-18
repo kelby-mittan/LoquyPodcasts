@@ -43,12 +43,3 @@ struct RemoteImageDetail: View {
         return AnyView(placeholder)
     }
 }
-
-
-
-@available(iOS 14.0, *)
-struct RemoteImage_Previews: PreviewProvider {
-    static var previews: some View {
-        RemoteImage(url: "")
-    }
-}

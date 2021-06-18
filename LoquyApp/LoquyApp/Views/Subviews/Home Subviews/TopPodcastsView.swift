@@ -15,7 +15,7 @@ struct PodcastScrollView: View {
     
     var body: some View {
         VStack {
-            HeaderView(label: "Top Podcasts")
+            HeaderView(label: HomeText.topCasts)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {

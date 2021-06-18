@@ -13,20 +13,20 @@ import Speech
 @available(iOS 14.0, *)
 struct TranscribeView: View {
     
-    @ObservedObject var networkManager = ViewModel()
+    @ObservedObject var viewModel = ViewModel()
     
     let audioClip: AudioClip
     
     @State var width : CGFloat = 30
-    @State var currentTime: String = "0:00"
+    @State var currentTime: String = TimeText.zero
     @State var playing = false
-    @State var transcription: String = ""
-    @State var title: String = ""
+    @State var transcription: String = RepText.empty
+    @State var title: String = RepText.empty
     @State var isTranscribing = false
-    @State var saveText = "transcribe"
-    @State var image = RemoteImageDetail(url: "")
+    @State var saveText = RepText.transcribe
+    @State var image = RemoteImageDetail(url: RepText.empty)
     @State var showNotification = false
-    @State var notificationMessage = ""
+    @State var notificationMessage = RepText.empty
     @State var showAlert = false
     
     let player = Player.shared.player
@@ -43,7 +43,7 @@ struct TranscribeView: View {
                     .font(.title)
                     .padding(.bottom,6)
                 
-                NavigationLink(destination: EpisodeDetailView(episode: audioClip.episode, artwork: audioClip.episode.imageUrl ?? "", feedUrl: audioClip.feedUrl, isDeepLink: false)) {
+                NavigationLink(destination: EpisodeDetailView(episode: audioClip.episode, artwork: audioClip.episode.imageUrl ?? RepText.empty, feedUrl: audioClip.feedUrl, isDeepLink: false)) {
                     
                     Text(audioClip.episode.title)
                         .fontWeight(.heavy)
@@ -54,7 +54,7 @@ struct TranscribeView: View {
                     playing = false
                 })
                 
-                Text(audioClip.startTime + " - " + audioClip.endTime)
+                Text(audioClip.startTime + TimeText.dash + audioClip.endTime)
                     .fontWeight(.heavy)
                     .foregroundColor(Color(.label))
                     .font(.subheadline)
@@ -72,7 +72,7 @@ struct TranscribeView: View {
                     }) {
                         ZStack {
                             NeoButtonView()
-                            Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
+                            Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
                                 .foregroundColor(.purple)
                                 
                         }
@@ -91,21 +91,8 @@ struct TranscribeView: View {
                     Capsule().fill(Color.purple).frame(width: width, height: 8)
                         .gesture(DragGesture()
                             .onChanged({ (value) in
-                                
                                 player.pause()
-                                let x = value.location.x
-                                let maxVal = UIScreen.main.bounds.width - 30
-                                let minVal: CGFloat = 10
-                                
-                                if x < minVal {
-                                    width = minVal
-                                } else if x > maxVal {
-                                    width = maxVal
-                                } else {
-                                    width = x
-                                }
-                                currentTime = Player.capsuleDragged(value.location.x).toDisplayString()
-                                
+                                Player.handleWidth(value, &width, &currentTime)
                             }).onEnded({ (value) in
                                 player.seek(to: Player.capsuleDragged(value.location.x))
                                 player.play()
@@ -119,7 +106,7 @@ struct TranscribeView: View {
                         .foregroundColor(.secondary)
                         .padding(.leading, 4)
                     Spacer()
-                    Text(getCurrentPlayerTime().durationTime)
+                    Text(timeToDisplay())
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.trailing, 4)
@@ -128,10 +115,10 @@ struct TranscribeView: View {
                 Group {
                     if isTranscribing {
                         VStack(alignment: .leading) {
-                            Text("Your Loquy...")
+                            Text(RepText.yourLoquy)
                                 .font(.title)
                                 .fontWeight(.heavy)
-                            MultilineTextField("", isSaved: false, text: $transcription, onCommit: {
+                            MultilineTextField(RepText.empty, isSaved: false, text: $transcription, onCommit: {
                                 player.pause()
                                 DispatchQueue.main.async {
                                     playing = false
@@ -145,10 +132,10 @@ struct TranscribeView: View {
                     if isTranscribing {
                         handlePlay()
                         getTranscriptionOfClippedFile()
-                        saveText = "save loquy"
+                        saveText = RepText.saveLoquy
                         
                     } else {
-                        saveText = "transcribe"
+                        saveText = RepText.transcribe
                         player.pause()
                         playing = false
                         showAlert.toggle()
@@ -168,12 +155,12 @@ struct TranscribeView: View {
                 }
                 Spacer()
                 if showAlert {
-                    SaveLoquyAlertView(showAlert: $showAlert, notificationShown: $showNotification, message: $notificationMessage, networkManager: networkManager, audioClip: audioClip, transcription: transcription, isPlaying: player.timeControlStatus == .playing)
+                    SaveLoquyAlertView(showAlert: $showAlert, notificationShown: $showNotification, message: $notificationMessage, networkManager: viewModel, audioClip: audioClip, transcription: transcription, isPlaying: player.timeControlStatus == .playing)
                     .offset(x: 0, y: -70)
                 }
             }.onAppear {
-                image = RemoteImageDetail(url: audioClip.episode.imageUrl ?? "")
-                getLoquyTranscriptions()
+                image = RemoteImageDetail(url: audioClip.episode.imageUrl ?? RepText.empty)
+                viewModel.loadLoquys()
         }
             NotificationView(message: $notificationMessage)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
@@ -184,17 +171,20 @@ struct TranscribeView: View {
     private func handlePlay() {
         startedPlaying += 1
         if startedPlaying == 1 {
-            guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") else {
+            guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) else {
                 return
             }
 
             Player.playAudioClip(url: url)
             playing = true
-            getCurrentPlayerTime()
+            
+            Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { time in
+                currentTime = time
+            }
 
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                 if playing {
-                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                    if player.currentItem?.duration.toDisplayString() != TimeText.unloaded && width > 0.0 {
                         Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                     }
                 }
@@ -203,20 +193,26 @@ struct TranscribeView: View {
         
     }
     
+    private func timeToDisplay() -> String {
+        return Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { time in
+            currentTime = time
+        }
+    }
+    
     private func getTranscriptionOfClippedFile() {
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
-            if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + ".m4a") {
+            if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) {
                 
-                AudioTrim.trimUsingComposition(url: url, start: currentTime, duration: audioClip.duration, pathForFile: "trimmedFile") { (result) in
+                AudioTrim.trimUsingComposition(url: url, start: currentTime, duration: audioClip.duration, pathForFile: TrimText.trimmedFile) { (result) in
                     switch result {
                     case .success(let clipUrl):
                         let request = SFSpeechURLRecognitionRequest(url: clipUrl)
                         speechRecognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
-                            if let theError = error {
-                                print("recognition error: \(theError)")
+                            if let error = error {
+                                print(ErrorText.recError+error.localizedDescription)
                             } else {
                                 if playing {
-                                    transcription = result?.bestTranscription.formattedString ?? "could not get transcription"
+                                    transcription = result?.bestTranscription.formattedString ?? RepText.noTranscription
                                 }
                             }
                         })
@@ -228,24 +224,4 @@ struct TranscribeView: View {
         }
     }
     
-    @discardableResult
-    private func getCurrentPlayerTime() -> (currentTime: String, durationTime: String) {
-        let interval = CMTimeMake(value: 1, timescale: 2)
-        var durationLabel = ""
-        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
-            if startedPlaying > 0 {
-                currentTime = time.toDisplayString()
-            }
-        }
-        guard let durationTime = player.currentItem?.duration else {
-            return ("--:--", "--:--")
-        }
-        let dt = durationTime - currentTime.getCMTime()
-        durationLabel = "-" + dt.toDisplayString()
-        return ("",durationLabel)
-    }
-    
-    func getLoquyTranscriptions() {
-        networkManager.loadLoquys()
-    }
 }

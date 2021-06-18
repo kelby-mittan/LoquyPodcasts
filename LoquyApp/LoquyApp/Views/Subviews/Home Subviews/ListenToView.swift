@@ -13,7 +13,7 @@ struct ListenToView: View {
     var body: some View {
         HStack {
             ZStack(alignment: .trailing) {
-                Image("mindscape")
+                Image(Assets.mindscape)
                     .resizable()
                     .renderingMode(.original)
                     .frame(width: 150, height: 150, alignment: .center)
@@ -24,14 +24,14 @@ struct ListenToView: View {
                 
                 VStack(alignment: .leading) {
                     
-                    PCastHeaderLabelView(label: "We Think")
+                    PCastHeaderLabelView(label: HomeText.weThink)
                         .offset(x: -10, y: 0)
                     
-                    PCastHeaderLabelView(label: "You'll Like")
+                    PCastHeaderLabelView(label: HomeText.youllLike)
                         .offset(x: -10, y: 0)
-                    PCastBodyLabelView(label: "Mindscape")
+                    PCastBodyLabelView(label: HomeText.mindscape)
                         .offset(x: -10, y: 0)
-                    PCastBodyLabelView(label: "Sean Carroll")
+                    PCastBodyLabelView(label: HomeText.sCarrol)
                     .offset(x: -10, y: 0)
                 }
                 

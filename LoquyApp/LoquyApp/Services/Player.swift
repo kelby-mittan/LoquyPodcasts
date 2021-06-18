@@ -21,17 +21,17 @@ class Player {
         return avPlayer
     }()
     
-    public var isPlaying: Bool = {
-        let playing = Bool()
-        return playing
-    }()
+    //    public var isPlaying: Bool = {
+    //        let playing = Bool()
+    //        return playing
+    //    }()
     
     static func setupAudioSession() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch let sessionErr {
-            print("Failed to activate session:", sessionErr)
+            print(ErrorText.activatingSesh, sessionErr)
         }
     }
     
@@ -106,21 +106,72 @@ class Player {
     }
     
     @discardableResult
-    static func getCurrentPlayerTime2(currentTime: inout String) -> (cTime: String, durationTime: String) {
+    static func getCurrentPlayerTime(_ currentTime: String, _ ctCondition: Bool, completion: @escaping (String) -> ()) -> (String) {
+        
         let interval = CMTimeMake(value: 1, timescale: 2)
         var durationLabel = ""
-        var timeStr = "--:--"
         Player.shared.player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
-            timeStr = time.toDisplayString()
+            if ctCondition {
+                completion(time.toDisplayString())
+            } else {
+                completion("00:00:00")
+            }
+            
         }
-        currentTime = timeStr
         guard let durationTime = Player.shared.player.currentItem?.duration else {
-            return ("--:--", "--:--")
+            return ("--:--")
         }
         let dt = durationTime - currentTime.getCMTime()
         durationLabel = "-" + dt.toDisplayString()
-        return ("",durationLabel)
+        return (durationLabel)
+    }
+    
+    static public func handleWidth(_ value: DragGesture.Value,
+                                   _ width: inout CGFloat,
+                                   _ currentTime: inout String) {
         
+        let x = value.location.x
+        let maxVal = UIScreen.main.bounds.width - 30
+        let minVal: CGFloat = 10
         
-    }    
+        if x < minVal {
+            width = minVal
+        } else if x > maxVal {
+            width = maxVal
+        } else {
+            width = x
+        }
+        currentTime = capsuleDragged(value.location.x).toDisplayString()
+    }
+    
+    static public func setupRemoteControl() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            Player.shared.player.play()
+            return .success
+        }
+        
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            Player.shared.player.pause()
+            return .success
+        }
+        
+        commandCenter.togglePlayPauseCommand.isEnabled = true
+        commandCenter.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            
+            if Player.shared.player.timeControlStatus == .playing {
+                Player.shared.player.pause()
+            } else {
+                Player.shared.player.play()
+            }
+            
+            return .success
+        }
+        
+    }
 }

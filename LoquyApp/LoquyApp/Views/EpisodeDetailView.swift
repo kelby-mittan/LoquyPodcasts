@@ -21,13 +21,13 @@ struct EpisodeDetailView: View {
     
     @ObservedObject private var networkManager = ViewModel()
     
-    @State var image = RemoteImageDetail(url: "")
+    @State var image = RemoteImageDetail(url: RepText.empty)
     
     @State var halfModalShown = false
-    @State var clipTime = ""
+    @State var clipTime = RepText.empty
     @State var times = [String]()
     @State var showNotification = false
-    @State var notificationMessage = ""
+    @State var notificationMessage = RepText.empty
     @State var playing = true
     
     let player = Player.shared.player
@@ -45,7 +45,7 @@ struct EpisodeDetailView: View {
                         .padding([.leading,.trailing])
                         .animation(.easeInOut)
                     
-                    ControlView(episode: episode, isPlaying: $playing, player: player, networkManager: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
+                    ControlView(episode: episode, isPlaying: $playing, player: player, viewModel: networkManager, showModal: $halfModalShown, clipTime: $clipTime)
                         .padding(.top, playing ? 0 : 25)
                     
                     EpisodeTimesView(episode: episode, player: player, networkManager: networkManager)
@@ -68,24 +68,24 @@ struct EpisodeDetailView: View {
                 }
                 
             }.onAppear {
-                image = RemoteImageDetail(url: episode.imageUrl ?? "")
+                image = RemoteImageDetail(url: episode.imageUrl ?? RepText.empty)
                 clipTime = player.currentTime().toDisplayString()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(.secondarySystemBackground))
             .edgesIgnoringSafeArea(.all)
-            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarTitle(RepText.empty, displayMode: .inline)
             .navigationBarItems(leading:
                                     NavigationLink(
                                         destination: BrowseView(),
                                         label: {
-                                            Text(isDeepLink ? "Go Browse" : "")
+                                            Text(isDeepLink ? RepText.goBrowse : RepText.empty)
                                         })
             )
             .tabItem {
-                Image(systemName: "magnifyingglass")
+                Image(systemName: Symbol.magGlass)
                     .font(.body)
-                Text("Browse")
+                Text(HomeText.browse)
             }
         }
     }

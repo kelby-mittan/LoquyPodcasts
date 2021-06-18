@@ -11,7 +11,7 @@ import SwiftUI
 extension Date {
     func makeString() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd, yyyy"
+        dateFormatter.dateFormat = TimeText.mmddyy
         return dateFormatter.string(from: self)
     }
 }

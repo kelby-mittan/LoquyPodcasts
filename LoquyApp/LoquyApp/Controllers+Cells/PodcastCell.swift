@@ -9,11 +9,11 @@
 import UIKit
 
 class PodcastCell: UICollectionViewCell {
-    static let reuseIdentifier = "podcastCell"
+    static let reuseIdentifier = RepText.podCellReuseId
     
     public lazy var imageView: UIImageView = {
       let iv = UIImageView()
-      iv.image = UIImage(systemName: "photo")
+        iv.image = UIImage(systemName: Symbol.photo)
       iv.layer.cornerRadius = 8
       iv.clipsToBounds = true
       return iv

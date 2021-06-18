@@ -14,7 +14,7 @@ struct FavoriteView: View {
     let episode: Episode
     let artwork: String
     @State var isSaved = false
-    @State var saveText = ""
+    @State var saveText = RepText.empty
     @Binding var notificationShown: Bool
     @Binding var message: String
     
@@ -29,18 +29,18 @@ struct FavoriteView: View {
             }
 
             if !Persistence.episodes.hasItemBeenSaved(episode) {
-                saveText = "remove episode"
-                message = "episode saved"
+                saveText = RepText.removeEpisode
+                message = RepText.episodeSaved
                 do {
                     try Persistence.episodes.createItem(episode)
                     try Persistence.artWork.createItem(artwork)
                 } catch {
-                    print("could not save episode: \(error)")
+                    print(error.localizedDescription)
                 }
 
             } else {
-                saveText = "save episode"
-                message = "episode removed"
+                saveText = RepText.saveEpisode
+                message = RepText.episodeRemoved
 
                 do {
                     let episodes = try Persistence.episodes.loadItems()
@@ -57,7 +57,7 @@ struct FavoriteView: View {
                     try Persistence.artWork.deleteItem(at: art)
 
                 } catch {
-                    print("error getting episodes or deleting episode: \(error)")
+                    print(error.localizedDescription)
                 }
             }
             isSaved.toggle()
@@ -78,10 +78,10 @@ struct FavoriteView: View {
         .onAppear {
             if Persistence.episodes.hasItemBeenSaved(episode) {
                 isSaved = true
-                saveText = "remove episode"
+                saveText = RepText.removeEpisode
             } else {
                 isSaved = false
-                saveText = "save episode"
+                saveText = RepText.saveEpisode
             }
             
         }

@@ -31,7 +31,7 @@ struct SaveLoquyAlertView: View {
                         showAlert.toggle()
                         
                     }, label: {
-                        Image(systemName: "xmark")
+                        Image(systemName: Symbol.xmark)
                             .resizable()
                             .frame(width: 18, height: 18)
                             .foregroundColor(.white)
@@ -39,13 +39,10 @@ struct SaveLoquyAlertView: View {
                     }).padding(.all,14)
                     
                 }
-                
-//                Group {
-//                    if isPlaying {
-                    PCastHeaderLabelView(label: "Title for Loquy")
+                PCastHeaderLabelView(label: LoquynClipText.titleForLoquy)
                         .padding(.bottom, 5)
                    
-                    TextField("give this clip a title", text: $titleText)
+                TextField(LoquynClipText.giveTitle, text: $titleText)
                         .font(.headline)
                         .foregroundColor(.purple)
                         .background(Color.white)
@@ -59,7 +56,7 @@ struct SaveLoquyAlertView: View {
                         saveLoquyToList()
                         handleNotification()
                     }) {
-                        Text("save")
+                        Text(LoquynClipText.saveText)
                             .fontWeight(.bold)
                             .frame(width: 120,height: 40)
                             .foregroundColor(Color.purple)
@@ -67,16 +64,9 @@ struct SaveLoquyAlertView: View {
                             .clipShape(Capsule())
                             .padding()
                     }
-//                    } else {
-//                        PCastHeaderLabelView(label: "Play clip to trancribe")
-//                    }
-//                }
-//
                 
                 Spacer()
             }
-//            .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
-//            .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
             
         }
         .onAppear(perform: {
@@ -103,7 +93,7 @@ struct SaveLoquyAlertView: View {
         do {
             try Persistence.loquys.createItem(newLoquy)
         } catch {
-            print("problem creating loquy: \(error)")
+            print(error.localizedDescription)
         }
 
         networkManager.loadLoquys()
@@ -111,7 +101,7 @@ struct SaveLoquyAlertView: View {
     
     private func handleNotification() {
         notificationShown = true
-        message = "loquy saved"
+        message = LoquynClipText.loquySaved
         
         Timer.scheduledTimer(withTimeInterval: 2.5, repeats: false) { (value) in
             notificationShown = false
