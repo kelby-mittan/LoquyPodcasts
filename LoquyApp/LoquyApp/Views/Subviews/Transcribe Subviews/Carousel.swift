@@ -19,26 +19,20 @@ struct Carousel : UIViewRepresentable {
     @ObservedObject var networkManager: NetworkingManager
     var imageUrl: String
     var width: CGFloat
-    @Binding var page : Int
+    @Binding var page: Int
     var height: CGFloat
     
-    
     func makeUIView(context: Context) -> UIScrollView{
-        
-        // ScrollView Content Size...
-        
+                
         let total = width * CGFloat(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
         let view = UIScrollView()
         view.isPagingEnabled = true
-        //1.0  For Disabling Vertical Scroll....
         view.contentSize = CGSize(width: total, height: 1.0)
         view.bounces = true
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.delegate = context.coordinator
-        
-        // Now Going to  embed swiftUI View Into UIView...
-        
+                
         let view1 = UIHostingController(rootView: PageList(page: $page, networkManager: networkManager, imageUrl: imageUrl))
         view1.view.frame = CGRect(x: 0, y: 0, width: total, height: self.height)
         view1.view.backgroundColor = .clear
@@ -46,11 +40,6 @@ struct Carousel : UIViewRepresentable {
         view.addSubview(view1.view)
         
         return view
-        
-    }
-    
-    func updateUIView(_ uiView: UIScrollView, context: Context) {
-        
         
     }
     
@@ -69,6 +58,11 @@ struct Carousel : UIViewRepresentable {
             self.parent.page = page
         }
     }
+    
+    func updateUIView(_ uiView: UIScrollView, context: Context) {
+        
+    }
+
 }
 
 

@@ -12,7 +12,7 @@ import Combine
 @available(iOS 14.0, *)
 
 struct AsyncImage<Placeholder: View>: View {
-    @StateObject private var loader: ImageLoader2
+    @StateObject private var loader: AsyncImageLoader
     private let placeholder: Placeholder
     private let image: (UIImage) -> Image
     
@@ -23,7 +23,7 @@ struct AsyncImage<Placeholder: View>: View {
     ) {
         self.placeholder = placeholder()
         self.image = image
-        _loader = StateObject(wrappedValue: ImageLoader2(url: url, cache: Environment(\.imageCache).wrappedValue))
+        _loader = StateObject(wrappedValue: AsyncImageLoader(url: url, cache: Environment(\.imageCache).wrappedValue))
     }
     
     var body: some View {
@@ -71,7 +71,7 @@ struct TemporaryImageCache: ImageCache {
     }
 }
 
-class ImageLoader2: ObservableObject {
+class AsyncImageLoader: ObservableObject {
     @Published var image: UIImage?
     
     private(set) var isLoading = false

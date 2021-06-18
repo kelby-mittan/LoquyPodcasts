@@ -24,7 +24,7 @@ struct TranscribeView: View {
     @State var title: String = ""
     @State var isTranscribing = false
     @State var saveText = "transcribe"
-    @State var image = RemoteImage(url: "")
+    @State var image = RemoteImageDetail(url: "")
     @State var showNotification = false
     @State var notificationMessage = ""
     @State var showAlert = false
@@ -143,6 +143,7 @@ struct TranscribeView: View {
                 Button(action: {
                     isTranscribing.toggle()
                     if isTranscribing {
+                        handlePlay()
                         getTranscriptionOfClippedFile()
                         saveText = "save loquy"
                         
@@ -171,7 +172,7 @@ struct TranscribeView: View {
                     .offset(x: 0, y: -70)
                 }
             }.onAppear {
-                image = RemoteImage(url: audioClip.episode.imageUrl ?? "")
+                image = RemoteImageDetail(url: audioClip.episode.imageUrl ?? "")
                 getLoquyTranscriptions()
         }
             NotificationView(message: $notificationMessage)

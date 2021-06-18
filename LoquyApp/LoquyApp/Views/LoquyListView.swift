@@ -12,15 +12,14 @@ import SwiftUI
 struct LoquyListView: View {
     
     @ObservedObject var networkManager = NetworkingManager()
-    
-    let podcasts = DummyPodcast.podcasts
-    
+        
     let layout = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
     @State var showActionSheet: Bool = false
+    @State var loquies = [String?]()
     
     var body: some View {
         
@@ -28,10 +27,9 @@ struct LoquyListView: View {
             NavigationView {
                 ScrollView {
                     LazyVGrid(columns: layout, spacing: 10) {
-                        ForEach(Array(Set(networkManager.loquys.map { $0.audioClip.episode.imageUrl })), id: \.self) { imageUrl in
+                        ForEach(loquies, id: \.self) { imageUrl in
                             VStack {
                                 NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? "", networkManager: networkManager)) {
-                                    
                                     
                                     RemoteImage(url: imageUrl ?? "")
                                         .frame(width: 170, height: 170)
@@ -68,6 +66,7 @@ struct LoquyListView: View {
             })
             .onAppear {
                 getLoquyTranscriptions()
+                loquies = Array(Set(networkManager.loquys.map { $0.audioClip.episode.imageUrl }))
             }
             .accentColor(.purple)
         } else {

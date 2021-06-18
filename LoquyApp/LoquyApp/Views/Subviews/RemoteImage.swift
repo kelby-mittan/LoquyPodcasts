@@ -9,6 +9,20 @@
 import SwiftUI
 import Combine
 
+@available(iOS 14.0, *)
+struct RemoteImage: View {
+    
+    var url: String
+    
+    var body: some View {
+        AsyncImage(
+            url: url,
+            placeholder: { ActivityIndicator(style: .medium) },
+            image: { Image(uiImage: $0).resizable() }
+        )
+    }
+}
+
 struct RemoteImageDetail: View {
     
     @ObservedObject var imageLoader = ImageLoader()
@@ -30,21 +44,7 @@ struct RemoteImageDetail: View {
     }
 }
 
-@available(iOS 14.0, *)
-struct RemoteImage: View {
-    
-    var url: String
-    
-    var body: some View {
-        
-        AsyncImage(
-            url: url,
-            placeholder: { ActivityIndicator(style: .medium) },
-            image: { Image(uiImage: $0).resizable() }
-        )
-        
-    }
-}
+
 
 @available(iOS 14.0, *)
 struct RemoteImage_Previews: PreviewProvider {
