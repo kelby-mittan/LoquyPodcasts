@@ -8,9 +8,10 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct EpisodesView: View {
     
-    @ObservedObject private var networkManager = NetworkingManager()
+    @ObservedObject private var networkManager = ViewModel()
     
     @State var title: String
     let podcastFeed: String?
@@ -28,7 +29,9 @@ struct EpisodesView: View {
                 ActivityIndicator(style: .large)
                     .padding(.top,40)
                     .onAppear {
-                        isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
+                        isSaved
+                            ? networkManager.episodes = networkManager.loadFavoriteEpisodes(&title)
+                            : networkManager.loadEpisodes(feedUrl: podcastFeed ?? "")
                         UITableView.appearance().separatorStyle = .none
                 }
                 Spacer()
@@ -76,37 +79,18 @@ struct EpisodesView: View {
                         .padding()
                     }
                 }
-                .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
-            }.onAppear {
-                isSaved ? networkManager.episodes = getFavorites() : getPodcasts()
+                .padding(.trailing, -30)
+                .buttonStyle(PlainButtonStyle())
+            }
+            .onAppear {
+                isSaved
+                    ? networkManager.episodes = networkManager.loadFavoriteEpisodes(&title)
+                    : networkManager.loadEpisodes(feedUrl: podcastFeed ?? "")
                 UITableView.appearance().separatorStyle = .none
-//                print(artWork)
-//
-//                print("Author")
-//                print(networkManager.episodes.first?.author ?? "none")
-//                print("FILE URL")
-//                print(networkManager.episodes.first?.fileUrl ?? "none")
-//                print(networkManager.episodes.first?.streamUrl ?? "none")
-//                print(networkManager.episodes.first?.description ?? "none")
             }
             .navigationBarTitle(title)
         }
         
-    }
-    
-    private func getPodcasts() {
-        networkManager.loadEpisodes(feedUrl: podcastFeed ?? "")
-    }
-    
-    private func getFavorites() -> [Episode] {
-        var episodes: [Episode] = []
-        do {
-            episodes = try Persistence.episodes.loadItems().filter { $0.author == title }
-        } catch {
-            print("error getting episodes: \(error)")
-        }
-        title = episodes.first?.author ?? ""
-        return episodes
     }
     
 }

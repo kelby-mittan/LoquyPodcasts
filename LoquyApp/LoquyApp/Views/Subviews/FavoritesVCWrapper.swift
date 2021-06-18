@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
+
 struct FavoritesVCWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> FavoritesViewController {
         let favoritesVC = FavoritesViewController()

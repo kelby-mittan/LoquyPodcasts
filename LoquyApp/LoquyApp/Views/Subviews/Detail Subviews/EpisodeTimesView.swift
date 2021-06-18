@@ -16,7 +16,7 @@ struct EpisodeTimesView: View {
     
     @State var timeStamps = [String]()
     
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     
     var body: some View {
         Group {

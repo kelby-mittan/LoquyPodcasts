@@ -8,13 +8,14 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct CardPageView: View {
     
     @Binding var page: Int
     
     let imageUrl: String
     
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     
     @State private var transcription: String = ""
     @State private var shareShown = false

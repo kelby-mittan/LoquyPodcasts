@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct MoreCastsView: View {
     
     var podcasts = DummyPodcast.podcasts
@@ -26,12 +27,7 @@ struct MoreCastsView: View {
     }
 }
 
-struct MoreCastsView_Previews: PreviewProvider {
-    static var previews: some View {
-        MoreCastsView()
-    }
-}
-
+@available(iOS 14.0, *)
 struct GridItemView: View {
     
     var cast1: DummyPodcast

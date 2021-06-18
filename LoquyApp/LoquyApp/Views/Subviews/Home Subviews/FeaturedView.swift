@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(iOS 14.0, *)
 struct FeaturedView: View {
     
     var podcasts = DummyPodcast.podcasts[10...14]
@@ -40,8 +41,3 @@ struct FeaturedView: View {
     }
 }
 
-struct FeaturedView_Previews: PreviewProvider {
-    static var previews: some View {
-        FeaturedView()
-    }
-}

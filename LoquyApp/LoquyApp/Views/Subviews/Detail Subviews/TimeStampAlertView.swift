@@ -13,7 +13,7 @@ struct TimeStampAlertView: View {
     @Binding var showAlert: Bool
     @Binding var time: String
     let episode: Episode
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     
     @State var timeStamps = [TimeStamp]()
     @State var favToSave = ""

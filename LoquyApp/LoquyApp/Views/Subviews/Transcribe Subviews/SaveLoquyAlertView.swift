@@ -13,7 +13,7 @@ struct SaveLoquyAlertView: View {
     @Binding var showAlert: Bool
     @Binding var notificationShown: Bool
     @Binding var message: String
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     let audioClip: AudioClip
     let transcription: String
     let isPlaying: Bool

@@ -10,11 +10,12 @@ import SwiftUI
 import AVKit
 import MediaPlayer
 
+@available(iOS 14.0, *)
 struct ControlView: View {
     
     let episode: Episode
     
-    @State var width: CGFloat = 30
+    @State var width: CGFloat = 20
     @State var playing = false
     @State var currentTime: String = "0:00"
     @State var showAlert = false
@@ -23,7 +24,7 @@ struct ControlView: View {
     
     let player: AVPlayer
     
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     
     @Binding var showModal: Bool
     @Binding var clipTime: String
@@ -38,16 +39,18 @@ struct ControlView: View {
                     .padding([.top,.leading,.trailing])
                 
                 Capsule().fill(Color.purple)
-                    .frame(width: width, height: 8)
+                    .frame(width: width.isFinite ? width : 30, height: 8)
                     .gesture(DragGesture()
                                 .onChanged({ (value) in
                                     handleDraggedCapsule(value)
                                 }).onEnded({ (value) in
                                     player.seek(to: Player.capsuleDragged(value.location.x))
-                                    player.play()
-                                    playing = true
+                                    !playing ? player.play() : player.pause()
                                 }))
                     .padding([.top,.leading,.trailing])
+                    .onChange(of: currentTime, perform: { value in
+                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+                    })
             }
             
             HStack {
@@ -84,13 +87,15 @@ struct ControlView: View {
                         networkManager.episodePlaying = episode.title
                         Player.playEpisode(episode: episode)
                     }
+                    
+                    playing ? player.play() : player.pause()
+                    
                     playing.toggle()
                     isPlaying.toggle()
-                    playing ? player.play() : player.pause()
                 }) {
                     ZStack {
                         NeoButtonView()
-                        Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
+                        Image(systemName: playing ? "play.fill" : "pause.fill").font(.largeTitle)
                             .foregroundColor(.purple)
                     }.background(NeoButtonView())
                     .frame(width: 80, height: 80)
@@ -168,29 +173,39 @@ struct ControlView: View {
         }
         .animation(.spring())
         .onAppear {
-            getCurrentPlayerTime()
-            if player.timeControlStatus != .playing {
+            
+            if let deepLinkTime = episode.deepLinkTime {
+                player.seek(to: deepLinkTime.getCMTime())
+            }
+            
+            if player.timeControlStatus == .paused {
                 networkManager.episodePlaying = episode.title
                 Player.playEpisode(episode: episode)
-                playing.toggle()
-                isPlaying.toggle()
-                if let deepLinkTime = episode.deepLinkTime {
-                    player.seek(to: deepLinkTime.getCMTime())
+                
+                playing = true
+                isPlaying = true
+                
+            } else if player.timeControlStatus == .playing {
+                Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+                if networkManager.episodePlaying != episode.title {
+                    playing = true
                 }
-                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                    if playing {
-                        if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-                            Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                        }
+                
+            }
+            getCurrentPlayerTime()
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+                if playing {
+                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+                        
                     }
                 }
-            } else {
-                Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                playing.toggle()
             }
+            
+            
             setupRemoteControl()
         }
-        
+                
     }
     
     private func handleDraggedCapsule(_ dragVal: DragGesture.Value) {

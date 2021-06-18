@@ -10,11 +10,10 @@ import SwiftUI
 import Combine
 
 @available(iOS 14.0, *)
-
 @main
 struct Home: App {
     @State private var selectedTab = 0
-    @ObservedObject private var networkManager = NetworkingManager()
+    @ObservedObject private var networkManager = ViewModel()
     @State private var isDeepLink = false
     @State private var hasLoaded = false
     
@@ -74,12 +73,13 @@ struct Home: App {
     }
 }
 
+@available(iOS 14.0, *)
 struct BrowseView: View {
     
     @State private var searchText = ""
     @State private var isPodcastShowing = true
     @State private var isEditing = false
-    @ObservedObject private var networkManager = NetworkingManager()
+    @ObservedObject private var networkManager = ViewModel()
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -148,21 +148,21 @@ struct BrowseView: View {
     }
 }
 
+@available(iOS 14.0, *)
 struct FavoritesTabView: View {
     
-    @ObservedObject private var networkManager = NetworkingManager()
-    @State var episodes: [Episode] = []
+    @ObservedObject private var networkManager = ViewModel()
     
     var body: some View {
         
-        if !episodes.isEmpty {
+        if !networkManager.favorites.isEmpty {
             NavigationView {
                 FavoritesVCWrapper()
                     .navigationBarTitle("")
                     .navigationBarHidden(true)
             }
             .onAppear {
-                getFavs()
+                networkManager.loadFavorites()
             }
             .accentColor(.purple)
             .tabItem {
@@ -175,7 +175,7 @@ struct FavoritesTabView: View {
         } else {
             EmptySavedView(emptyType: .favorite)
                 .onAppear {
-                    getFavs()
+                    networkManager.loadFavorites()
                 }
                 .tabItem {
                     Image(systemName: "star.fill")
@@ -188,16 +188,9 @@ struct FavoritesTabView: View {
         
     }
     
-    private func getFavs() {
-        do {
-            episodes = try Persistence.episodes.loadItems()
-        } catch {
-            print("error getting episodes: \(error)")
-        }
-    }
-    
 }
 
+@available(iOS 14.0, *)
 struct AudioClipsTab: View {
     var body: some View {
         AudioClipsView()

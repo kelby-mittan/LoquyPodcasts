@@ -15,7 +15,7 @@ struct ClipAlertView: View {
     let episode: Episode
     let feedUrl: String?
     
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     
     @State var selected = "02:00"
     @Binding var modalShown: Bool
