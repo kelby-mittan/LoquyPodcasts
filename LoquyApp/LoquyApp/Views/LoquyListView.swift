@@ -22,10 +22,10 @@ struct LoquyListView: View {
     @State var loquies = [String?]()
     
     var actionSheet: ActionSheet {
-        ActionSheet(title: Text(LoquyText.remove).font(.largeTitle).fontWeight(.bold), buttons: [
-            .default(Text(LoquyText.cancel)) {
+        ActionSheet(title: Text(LoquynClipText.remove).font(.largeTitle).fontWeight(.bold), buttons: [
+            .default(Text(LoquynClipText.cancel)) {
             },
-            .destructive(Text(LoquyText.delete)) {
+            .destructive(Text(LoquynClipText.delete)) {
                 Persistence.loquys.removeAll()
                 networkManager.loadLoquys()
             }
@@ -52,7 +52,7 @@ struct LoquyListView: View {
                         }
                     }.padding([.leading,.trailing],8)
                 }
-                .navigationBarTitle(LoquyText.loquyList)
+                .navigationBarTitle(LoquynClipText.loquyList)
                 .navigationBarItems(trailing:
                                         Button(action: {
                                             showActionSheet.toggle()
@@ -132,17 +132,17 @@ struct LoquyContentView: View {
                         
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("\(LoquyText.youHave) \(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) \(LoquyText.transripts)")
+                                Text("\(LoquynClipText.youHave) \(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) \(LoquynClipText.transripts)")
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)
                                 
-                                Text(LoquyText.from)
+                                Text(LoquynClipText.from)
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)
                                     .padding(.top, 4)
-                                Text("\(networkManager.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) \(LoquyText.savedClips)")
+                                Text("\(networkManager.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) \(LoquynClipText.savedClips)")
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)

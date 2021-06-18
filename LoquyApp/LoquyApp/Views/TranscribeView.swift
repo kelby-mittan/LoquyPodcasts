@@ -132,7 +132,7 @@ struct TranscribeView: View {
                     if isTranscribing {
                         handlePlay()
                         getTranscriptionOfClippedFile()
-                        saveText = RepText.save
+                        saveText = RepText.saveLoquy
                         
                     } else {
                         saveText = RepText.transcribe

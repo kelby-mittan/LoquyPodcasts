@@ -15,7 +15,7 @@ struct FeaturedView: View {
     
     var body: some View {
         VStack {
-            HeaderView(label: "Featured")
+            HeaderView(label: HomeText.featured)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {

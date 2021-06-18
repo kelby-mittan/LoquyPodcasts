@@ -17,7 +17,7 @@ struct ControlView: View {
     
     @State var width: CGFloat = 20
     @State var playing = true
-    @State var currentTime: String = "0:00"
+    @State var currentTime: String = TimeText.zero
     @State var showAlert = false
     
     @Binding var isPlaying: Bool
@@ -78,7 +78,7 @@ struct ControlView: View {
                 }) {
                     ZStack {
                         NeoButtonView()
-                        Image(systemName: "gobackward.15").font(.largeTitle)
+                        Image(systemName: Symbol.back).font(.largeTitle)
                             .foregroundColor(.purple)
                     }.background(NeoButtonView())
                     .frame(width: 60, height: 60)
@@ -107,7 +107,7 @@ struct ControlView: View {
                 }) {
                     ZStack {
                         NeoButtonView()
-                        Image(systemName: playing ? "pause.fill" : "play.fill").font(.largeTitle)
+                        Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
                             .foregroundColor(.purple)
                     }.background(NeoButtonView())
                     .frame(width: 80, height: 80)
@@ -125,7 +125,7 @@ struct ControlView: View {
                 }) {
                     ZStack {
                         NeoButtonView()
-                        Image(systemName: "goforward.15").font(.largeTitle)
+                        Image(systemName: Symbol.forward).font(.largeTitle)
                             .foregroundColor(.purple)
                     }
                     .background(NeoButtonView())
@@ -142,7 +142,7 @@ struct ControlView: View {
                 Button(action: {
                     showAlert.toggle()
                 }) {
-                    Text("time stamp")
+                    Text(RepText.timeStamp)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: 122,height: 44)
                         .foregroundColor(.purple)
@@ -161,7 +161,7 @@ struct ControlView: View {
                     showModal.toggle()
                     clipTime = currentTime
                 }) {
-                    Text("record clip")
+                    Text(RepText.recordClip)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: 122,height: 44)
                         .foregroundColor(.purple)
@@ -215,7 +215,7 @@ struct ControlView: View {
             }
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                 if viewModel.playing {
-                    if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
+                    if player.currentItem?.duration.toDisplayString() != TimeText.unloaded && width > 0.0 {
                         Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                         
                     }

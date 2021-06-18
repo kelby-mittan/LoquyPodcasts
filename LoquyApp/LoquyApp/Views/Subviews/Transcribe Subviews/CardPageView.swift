@@ -17,12 +17,12 @@ struct CardPageView: View {
     
     @ObservedObject var networkManager: ViewModel
     
-    @State private var transcription: String = ""
+    @State private var transcription: String = RepText.empty
     @State private var shareShown = false
     
     var data: Loquy
     
-    let podImage = UIImage(named: "Loquy-Purple")!
+    let podImage = UIImage(named: Assets.loquyImage)!
     
     @State var attString = NSMutableAttributedString()
     
@@ -39,13 +39,13 @@ struct CardPageView: View {
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     
-                    Text("\(loquy.title)")
+                    Text(loquy.title)
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .fontWeight(.heavy)
                         .foregroundColor(.white)
                         .padding([.leading,.trailing,.top,.bottom])
                     
-                    NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? "", feedUrl: loquy.audioClip.feedUrl, isDeepLink: false)) {
+                    NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? RepText.empty, feedUrl: loquy.audioClip.feedUrl, isDeepLink: false)) {
                         
                         Text(loquy.audioClip.episode.title)
                             .fontWeight(.heavy)
@@ -79,7 +79,7 @@ struct CardPageView: View {
                     .padding([.leading,.trailing,.bottom,.top])
                     
                     VStack(alignment: .leading) {
-                        Text("Loquy Transcript:")
+                        Text(LoquynClipText.loquyTranscript)
                             .font(.system(size: 20, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .fontWeight(.heavy)
@@ -105,7 +105,7 @@ struct CardPageView: View {
                         }) {
                             ZStack {
                                 NeoButtonView()
-                                Image(systemName: "square.and.arrow.up").font(.title)
+                                Image(systemName: Symbol.share).font(.title)
                                     .foregroundColor(.purple)
                             }.background(NeoButtonView())
                             .frame(width: 50, height: 50)

@@ -23,7 +23,7 @@ struct EmptySavedView: View {
                     .resizable()
                     .frame(width: 120, height: 120, alignment: .center)
                     .padding([.top],20)
-                Text("\(emptyType.message)")
+                Text(emptyType.message)
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .frame(height: 80, alignment: .center)
                     .padding([.leading,.trailing])
@@ -100,11 +100,11 @@ enum EmptyType {
     func getName() -> (name: String, message: String) {
         switch self {
         case .favorite:
-            return ("favorite", "Looks like you haven't saved any podcasts yet!")
+            return (EmptyViewText.favName, EmptyViewText.favMessage)
         case .audioClip:
-            return ("audioClip", "You don't have any yet... Start saving audio clips from your favorite podcasts!")
+            return (EmptyViewText.clipName, EmptyViewText.clipMessage)
         case .transcribedLoquy:
-            return ("savedLoquy", "Start transcribing some of your saved audio clips!")
+            return (EmptyViewText.loquyName, EmptyViewText.loquyMessage)
         }
     }
 }

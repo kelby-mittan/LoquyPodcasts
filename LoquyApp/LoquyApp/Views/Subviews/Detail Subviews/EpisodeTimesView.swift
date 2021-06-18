@@ -67,7 +67,7 @@ struct EpisodeTimesView: View {
             try Persistence.timeStamps.deleteItem(at: i)
             
         } catch {
-            print("error deleting timestamp \(error)")
+            print(error.localizedDescription)
         }
         loadTimes(episode: episode)
     }
