@@ -11,7 +11,7 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct EpisodesView: View {
     
-    @ObservedObject private var networkManager = ViewModel()
+    @ObservedObject private var viewModel = ViewModel()
     
     @State var title: String
     let podcastFeed: String?
@@ -24,21 +24,21 @@ struct EpisodesView: View {
     let gradColor2 = PaletteColour.colors2.randomElement()
     
     var body: some View {
-        if networkManager.episodes.isEmpty {
+        if viewModel.episodes.isEmpty {
             VStack {
                 ActivityIndicator(style: .large)
                     .padding(.top,40)
                     .onAppear {
                         isSaved
-                            ? networkManager.episodes = networkManager.loadFavoriteEpisodes(&title)
-                            : networkManager.loadEpisodes(feedUrl: podcastFeed ?? "")
+                            ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
+                            : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
                         UITableView.appearance().separatorStyle = .none
                 }
                 Spacer()
             }
             .navigationBarTitle(title)
         } else {
-            List(networkManager.episodes, id: \.self) { episode in
+            List(viewModel.episodes, id: \.self) { episode in
                 
                 NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork, feedUrl: podcastFeed, isDeepLink: false)) {
                     
@@ -56,7 +56,7 @@ struct EpisodesView: View {
                         
                         HStack(alignment: .top) {
                             
-                            RemoteImage(url: episode.imageUrl ?? "")
+                            RemoteImage(url: episode.imageUrl ?? RepText.empty)
                                 .frame(width: 110, height: 110)
                                 .cornerRadius(6)
                                 .padding([.leading,.bottom,.top])
@@ -84,8 +84,8 @@ struct EpisodesView: View {
             }
             .onAppear {
                 isSaved
-                    ? networkManager.episodes = networkManager.loadFavoriteEpisodes(&title)
-                    : networkManager.loadEpisodes(feedUrl: podcastFeed ?? "")
+                    ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
+                    : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
                 UITableView.appearance().separatorStyle = .none
             }
             .navigationBarTitle(title)

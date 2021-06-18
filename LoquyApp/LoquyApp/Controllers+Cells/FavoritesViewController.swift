@@ -24,11 +24,11 @@ class FavoritesViewController: UIViewController {
     private var dataSource: DataSource!
     
     private var episodes: [Episode] = []
-    private let heyNow = "hey$now"
+//    private let heyNow = "hey$now"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Favorite Casts"
+        navigationItem.title = RepText.favCasts
         configureCollectionView()
         configureDataSource()
         updateSnapshot(with: Array(Set(nonDuplicatedCasts())))
@@ -46,11 +46,11 @@ class FavoritesViewController: UIViewController {
         do {
             episodes = try Persistence.episodes.loadItems()
         } catch {
-            print("error getting episodes: \(error)")
+            print(ErrorText.gettingEpisodes+error.localizedDescription)
         }
         for episode in episodes {
             if !authors.contains(episode.author) {
-                artAndAuthors.append((episode.imageUrl ?? "") + heyNow + episode.author)
+                artAndAuthors.append((episode.imageUrl ?? RepText.empty) + RepText.heyNow + episode.author)
                 authors.append(episode.author)
             }
         }
@@ -58,11 +58,11 @@ class FavoritesViewController: UIViewController {
     }
     
     private func getArtArray() -> [String] {
-        return nonDuplicatedCasts().map { $0.components(separatedBy: heyNow)[0] }
+        return nonDuplicatedCasts().map { $0.components(separatedBy: RepText.heyNow)[0] }
     }
     
     private func getAuthorArray() -> [String] {
-        return nonDuplicatedCasts().map { $0.components(separatedBy: heyNow)[1] }
+        return nonDuplicatedCasts().map { $0.components(separatedBy: RepText.heyNow)[1] }
     }
     
     private func updateSnapshot(with episodes: [String]) {
@@ -125,11 +125,11 @@ class FavoritesViewController: UIViewController {
         
         dataSource = DataSource(collectionView: collectionView, cellProvider: { (collectionView, indexPath, episodeArt) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PodcastCell.reuseIdentifier, for: indexPath) as? PodcastCell else {
-                fatalError("could not dequeue Podcast Cell")
+                fatalError(ErrorText.deqPodCell)
             }
             cell.imageView.kf.indicatorType = .activity
             if episodeArt.count > 12 {
-                cell.imageView.kf.setImage(with: URL(string: episodeArt.components(separatedBy: self.heyNow)[0] ))
+                cell.imageView.kf.setImage(with: URL(string: episodeArt.components(separatedBy: RepText.heyNow)[0] ))
             } else {
                 cell.imageView.image = UIImage(named: episodeArt)
             }
@@ -149,11 +149,11 @@ extension FavoritesViewController: UICollectionViewDelegate {
         guard let episodeArt = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        goToEpisodesList(episodeArt: episodeArt.components(separatedBy: heyNow)[1])
+        goToEpisodesList(episodeArt: episodeArt.components(separatedBy: RepText.heyNow)[1])
     }
     
     func goToEpisodesList(episodeArt: String) {
-        let childView = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: "", isSaved: true, artWork: episodeArt))
+        let childView = UIHostingController(rootView: EpisodesView(title: episodeArt, podcastFeed: RepText.empty, isSaved: true, artWork: episodeArt))
         navigationController?.pushViewController(childView, animated: true)
     }
 }

@@ -45,6 +45,7 @@
 		0294B3662514365A0099EC54 /* CustomPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0294B3652514365A0099EC54 /* CustomPicker.swift */; };
 		029955C624F32C0E00479318 /* CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C524F32C0E00479318 /* CMTime.swift */; };
 		029955C824F339D200479318 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C724F339D100479318 /* ControlView.swift */; };
+		02A95744267D13610068B1E4 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A95743267D13610068B1E4 /* GlobalConstants.swift */; };
 		02A966C2267AAE2D003899E0 /* URL+DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A966C1267AAE2D003899E0 /* URL+DeepLink.swift */; };
 		02A966C4267C089D003899E0 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A966C3267C089C003899E0 /* AsyncImage.swift */; };
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
@@ -118,6 +119,7 @@
 		0294B3652514365A0099EC54 /* CustomPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPicker.swift; sourceTree = "<group>"; };
 		029955C524F32C0E00479318 /* CMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTime.swift; sourceTree = "<group>"; };
 		029955C724F339D100479318 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
+		02A95743267D13610068B1E4 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		02A966C1267AAE2D003899E0 /* URL+DeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+DeepLink.swift"; sourceTree = "<group>"; };
 		02A966C3267C089C003899E0 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		02B5687C24C4DBB6004D5C6D /* LoquyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoquyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,6 +190,7 @@
 		0224B56724CBB3390062E43F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				02A95743267D13610068B1E4 /* GlobalConstants.swift */,
 				0224B56824CBB37A0062E43F /* PaletteColour.swift */,
 				0224B56E24CBC1C30062E43F /* RSSFeed.swift */,
 				0224B57024CBC2CB0062E43F /* MakeStrings+exts.swift */,
@@ -595,6 +598,7 @@
 				02B568B724C4F299004D5C6D /* Podcast.swift in Sources */,
 				0270947525030720009E0BF5 /* FavoritesViewController.swift in Sources */,
 				02DE63B9251165DD002B307F /* ClipAlertView.swift in Sources */,
+				02A95744267D13610068B1E4 /* GlobalConstants.swift in Sources */,
 				0247E44B251FF44400E14DEB /* Carousel.swift in Sources */,
 				02A966C4267C089D003899E0 /* AsyncImage.swift in Sources */,
 				0224B56B24CBB7130062E43F /* LoquyListView.swift in Sources */,

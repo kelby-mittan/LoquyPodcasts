@@ -22,10 +22,10 @@ struct LoquyListView: View {
     @State var loquies = [String?]()
     
     var actionSheet: ActionSheet {
-        ActionSheet(title: Text("Remove All Loquys?").font(.largeTitle).fontWeight(.bold), buttons: [
-            .default(Text("Cancel")) {
+        ActionSheet(title: Text(LoquyText.remove).font(.largeTitle).fontWeight(.bold), buttons: [
+            .default(Text(LoquyText.cancel)) {
             },
-            .destructive(Text("Delete")) {
+            .destructive(Text(LoquyText.delete)) {
                 Persistence.loquys.removeAll()
                 networkManager.loadLoquys()
             }
@@ -41,9 +41,9 @@ struct LoquyListView: View {
                     LazyVGrid(columns: layout, spacing: 10) {
                         ForEach(loquies, id: \.self) { imageUrl in
                             VStack {
-                                NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? "", networkManager: networkManager)) {
+                                NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? RepText.empty, networkManager: networkManager)) {
                                     
-                                    RemoteImage(url: imageUrl ?? "")
+                                    RemoteImage(url: imageUrl ?? RepText.empty)
                                         .frame(width: 170, height: 170)
                                         .padding(2)
                                         .cornerRadius(12)
@@ -52,12 +52,12 @@ struct LoquyListView: View {
                         }
                     }.padding([.leading,.trailing],8)
                 }
-                .navigationBarTitle("Loquy List")
+                .navigationBarTitle(LoquyText.loquyList)
                 .navigationBarItems(trailing:
                                         Button(action: {
                                             showActionSheet.toggle()
                                         }) {
-                                            Image(systemName: "minus")
+                                            Image(systemName: Symbol.minus)
                                                 .font(.title)
                                                 .foregroundColor(.purple)
                                         }
@@ -81,16 +81,6 @@ struct LoquyListView: View {
     }
     
     
-}
-
-struct LoquyListView_Previews: PreviewProvider {
-    static var previews: some View {
-        if #available(iOS 14.0, *) {
-            LoquyListView()
-        } else {
-            Text("upgrade to iOS 14")
-        }
-    }
 }
 
 @available(iOS 14.0, *)
@@ -142,17 +132,17 @@ struct LoquyContentView: View {
                         
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("You have \(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) transcripts")
+                                Text("\(LoquyText.youHave) \(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) \(LoquyText.transripts)")
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)
                                 
-                                Text("from")
+                                Text(LoquyText.from)
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)
                                     .padding(.top, 4)
-                                Text("\(networkManager.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) saved audio clips")
+                                Text("\(networkManager.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) \(LoquyText.savedClips)")
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)
@@ -173,7 +163,7 @@ struct LoquyContentView: View {
                             }) {
                                 ZStack {
                                     NeoButtonView()
-                                    Image(systemName: "text.quote").font(.largeTitle)
+                                    Image(systemName: Symbol.quote).font(.largeTitle)
                                         .foregroundColor(.purple)
                                 }.background(NeoButtonView())
                                 .frame(width: 60, height: 60)
@@ -203,6 +193,6 @@ struct LoquyContentView: View {
         }
         
         .navigationBarHidden(false)
-        .navigationBarTitle("",displayMode: .inline)
+        .navigationBarTitle(RepText.empty,displayMode: .inline)
     }
 }

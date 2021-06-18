@@ -12,13 +12,13 @@ extension CMTime {
     
     func toDisplayString() -> String {
         if CMTimeGetSeconds(self).isNaN {
-            return "--:--"
+            return TimeText.unloaded
         }
         let totalSeconds = Int(CMTimeGetSeconds(self))
         let seconds = totalSeconds % 60
         let minutes = totalSeconds % (60 * 60) / 60
         let hours = totalSeconds / 60 / 60
-        let timeFormatString = String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        let timeFormatString = String(format: TimeText.timeFormat, hours, minutes, seconds)
         return timeFormatString
     }
     
@@ -26,10 +26,10 @@ extension CMTime {
 
 extension String {
     func getCMTime() -> CMTime {
-        let secArr = self.components(separatedBy: ":")
+        let secArr = self.components(separatedBy: TimeText.colon)
         var sec: Double = 1
         for (i,time) in secArr.enumerated() {
-            if time == "00" {
+            if time == TimeText.dubZero {
                 continue
             }
             switch i {
@@ -47,10 +47,10 @@ extension String {
     }
     
     func toSecDouble() -> Double {
-        let secArr = self.components(separatedBy: ":")
+        let secArr = self.components(separatedBy: TimeText.colon)
         var sec: Double = 0
         for (i,time) in secArr.enumerated() {
-            if time == "00" {
+            if time == TimeText.dubZero {
                 continue
             }
             switch i {

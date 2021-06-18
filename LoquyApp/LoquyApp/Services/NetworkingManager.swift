@@ -56,7 +56,7 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func updatePodcasts(forSearch: String) {
+    public func updatePodcasts(forSearch: String) {
         ITunesAPI.shared.fetchPodcasts(searchText: forSearch) { [weak self] (podcasts) in
             DispatchQueue.main.async {
                 self?.podcasts = podcasts
@@ -64,7 +64,7 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func loadEpisodes(feedUrl: String) {
+    public func loadEpisodes(feedUrl: String) {
         ITunesAPI.shared.fetchEpisodes(feedUrl: feedUrl) { [weak self] (episodes) in
             DispatchQueue.main.async {
                 self?.episodes = episodes
@@ -80,7 +80,7 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func loadTimeStamps(for episode: Episode) {
+    public func loadTimeStamps(for episode: Episode) {
         do {
             let timeStamps = try Persistence.timeStamps.loadItems().filter { $0.episode == episode }.map { $0.time }
             DispatchQueue.main.async {
@@ -91,7 +91,7 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func loadAudioClips() {
+    public func loadAudioClips() {
         do {
             let audioClips = try Persistence.audioClips.loadItems()
             DispatchQueue.main.async {
@@ -102,7 +102,7 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func loadLoquys() {
+    public func loadLoquys() {
         do {
             let loquys = try Persistence.loquys.loadItems()
             DispatchQueue.main.async {

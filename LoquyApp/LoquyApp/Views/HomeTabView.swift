@@ -19,7 +19,7 @@ struct Home: App {
     
     var edges = UIApplication.shared.windows.first?.safeAreaInsets
     
-    @State var deepLinkEpisode = Episode(url: URL(string: ""))
+    @State var deepLinkEpisode = Episode(url: URL(string: RepText.empty))
     
     var body: some Scene {
         WindowGroup {
@@ -29,32 +29,32 @@ struct Home: App {
                         BrowseView()
                     } else {
                         NavigationView {
-                            EpisodeDetailView(episode: deepLinkEpisode, artwork: deepLinkEpisode.imageUrl ?? "", feedUrl: deepLinkEpisode.feedUrl, isDeepLink: true)
+                            EpisodeDetailView(episode: deepLinkEpisode, artwork: deepLinkEpisode.imageUrl ?? RepText.empty, feedUrl: deepLinkEpisode.feedUrl, isDeepLink: true)
                         }
                     }
                 }
                 .tabItem {
-                    Image(systemName: "magnifyingglass")
+                    Image(systemName: Symbol.magGlass)
                         .font(.body)
-                    Text("Browse")
+                    Text(HomeText.browse)
                 }.tag(1)
                 FavoritesTabView().tag(2)
                 AudioClipsTab().tag(3)
                 TranscriptsTab().tag(4)
             }
             .onOpenURL { url in
-                print("URL TO PARSE")
-                print(url.absoluteString)
-                let components = url.absoluteString.components(separatedBy: "loquyApp")
-                
-                dump(components)
-                guard components.count == 4 else { return }
-                let feed = components[1].replacingOccurrences(of: "https//", with: "https://")
-                let pubDate = components[2].removingPercentEncoding ?? ""
-                let timeStamp = components[3].removingPercentEncoding ?? ""
-                print(feed)
-                print(pubDate)
-                print(timeStamp)
+                //                print("URL TO PARSE")
+                //                print(url.absoluteString)
+                //                let components = url.absoluteString.components(separatedBy: "loquyApp")
+                //
+                //                dump(components)
+                //                guard components.count == 4 else { return }
+                //                let feed = components[1].replacingOccurrences(of: "https//", with: "https://")
+                //                let pubDate = components[2].removingPercentEncoding ?? ""
+                //                let timeStamp = components[3].removingPercentEncoding ?? ""
+                //                print(feed)
+                //                print(pubDate)
+                //                print(timeStamp)
                 
                 let deepLinkData = url.getURLComponents()
                 
@@ -76,10 +76,10 @@ struct Home: App {
 @available(iOS 14.0, *)
 struct BrowseView: View {
     
-    @State private var searchText = ""
+    @State private var searchText = RepText.empty
     @State private var isPodcastShowing = true
     @State private var isEditing = false
-    @ObservedObject private var networkManager = ViewModel()
+    @ObservedObject private var viewModel = ViewModel()
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -89,36 +89,36 @@ struct BrowseView: View {
         
         NavigationView {
             VStack {
-                SearchBar(text: $searchText, onTextChanged: loadPodcasts(search:), isEditing: $isEditing)
+                SearchBar(text: $searchText, onTextChanged: viewModel.loadSearchPodcasts(search:), isEditing: $isEditing)
                     .padding([.leading,.trailing])
                 Group {
                     if searchText.isEmpty {
                         
                         ScrollView(.vertical) {
-                            HeaderView(label: "Listen To")
+                            HeaderView(label: HomeText.listenTo)
                             NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl, isSaved: false, artWork: mindcast.image)) {
                                 ListenToView()
                             }
                             PodcastScrollView()
                             FeaturedView()
-                            HeaderView(label: "More Cool Casts")
+                            HeaderView(label: HomeText.moreCasts)
                             MoreCastsView()
                         }
                         
                     } else {
-                        List(networkManager.podcasts, id: \.self) { podcast in
-                            NavigationLink(destination: EpisodesView(title: podcast.trackName ?? "", podcastFeed: podcast.feedUrl ?? "", isSaved: false, artWork: podcast.artworkUrl600 ?? "")) {
-                                RemoteImage(url: podcast.artworkUrl600 ?? "")
+                        List(viewModel.podcasts, id: \.self) { podcast in
+                            NavigationLink(destination: EpisodesView(title: podcast.trackName ?? RepText.empty, podcastFeed: podcast.feedUrl ?? RepText.empty, isSaved: false, artWork: podcast.artworkUrl600 ?? RepText.empty)) {
+                                RemoteImage(url: podcast.artworkUrl600 ?? RepText.empty)
                                     .frame(width: 100, height: 100)
                                     .cornerRadius(8)
                                 VStack(alignment: .leading) {
-                                    Text(podcast.trackName ?? "")
+                                    Text(podcast.trackName ?? RepText.empty)
                                         .font(.headline)
                                         .fontWeight(.semibold)
-                                    Text(podcast.artistName ?? "")
+                                    Text(podcast.artistName ?? RepText.empty)
                                         .font(.subheadline)
                                         .fontWeight(.medium)
-                                    Text("\(podcast.trackCount ?? 0) episodes")
+                                    Text("\(podcast.trackCount ?? 0)"+HomeText.episodes)
                                         .font(.caption)
                                         .fontWeight(.light)
                                 }
@@ -127,7 +127,7 @@ struct BrowseView: View {
                     }
                 }
             }
-            .navigationBarTitle("")
+            .navigationBarTitle(RepText.empty)
             .navigationBarHidden(true)
         }
         .navigationBarHidden(true)
@@ -136,15 +136,6 @@ struct BrowseView: View {
             Player.setupAudioSession()
         }
         
-    }
-    
-    
-    private func loadPodcasts(search: String) {
-        var timer: Timer?
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false, block: { (_) in
-            networkManager.updatePodcasts(forSearch: searchText)
-        })
     }
 }
 
@@ -158,7 +149,6 @@ struct FavoritesTabView: View {
         if !networkManager.favorites.isEmpty {
             NavigationView {
                 FavoritesVCWrapper()
-                    .navigationBarTitle("")
                     .navigationBarHidden(true)
             }
             .onAppear {
@@ -166,11 +156,11 @@ struct FavoritesTabView: View {
             }
             .accentColor(.purple)
             .tabItem {
-                Image(systemName: "star.fill")
+                Image(systemName: Symbol.star)
                     .font(.body)
                     .padding(.top, 16.0)
                     .foregroundColor(.purple)
-                Text("Favorites")
+                Text(HomeText.favorites)
             }
         } else {
             EmptySavedView(emptyType: .favorite)
@@ -178,11 +168,11 @@ struct FavoritesTabView: View {
                     networkManager.loadFavorites()
                 }
                 .tabItem {
-                    Image(systemName: "star.fill")
+                    Image(systemName: Symbol.star)
                         .font(.body)
                         .padding(.top, 16.0)
                         .foregroundColor(.purple)
-                    Text("Favorites")
+                    Text(HomeText.favorites)
                 }
         }
         
@@ -196,33 +186,24 @@ struct AudioClipsTab: View {
         AudioClipsView()
             .tabItem {
                 
-                Image(systemName: "speaker.2.fill")
+                Image(systemName: Symbol.speaker)
                     .font(.body)
                     .padding(.top, 16.0)
-                Text("Audio Clips")
+                Text(HomeText.clips)
             }
     }
 }
 
+@available(iOS 14.0, *)
 struct TranscriptsTab: View {
     var body: some View {
-        if #available(iOS 14.0, *) {
-            LoquyListView()
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                        .font(.body)
-                        .padding(.top, 16.0)
-                    Text("Loquies")
-                }
-        } else {
-            Text("Upgrade to iOS 14")
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                        .font(.body)
-                        .padding(.top, 16.0)
-                    Text("Loquies")
-                }
-        }
+        LoquyListView()
+            .tabItem {
+                Image(systemName: Symbol.bullet)
+                    .font(.body)
+                    .padding(.top, 16.0)
+                Text(HomeText.loquies)
+            }
     }
 }
 

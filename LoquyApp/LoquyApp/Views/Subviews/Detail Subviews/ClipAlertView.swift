@@ -17,11 +17,11 @@ struct ClipAlertView: View {
     
     @ObservedObject var networkManager: ViewModel
     
-    @State var selected = "02:00"
+    @State var selected = ClipText.selected
     @Binding var modalShown: Bool
     @Binding var notificationShown: Bool
     @Binding var message: String
-    @State var titleText = ""
+    @State var titleText = RepText.empty
     
     var body: some View {
         
@@ -29,14 +29,14 @@ struct ClipAlertView: View {
             Spacer()
             
             HStack {
-                Text("Title: ")
+                Text(ClipText.titleLabel)
                     .font(.title)
                     .fontWeight(.heavy)
                     .foregroundColor(.white)
                     .padding(.leading)
                 
                     
-                    TextField("give this clip a title", text: $titleText)
+                TextField(ClipText.giveTitle, text: $titleText)
                         .font(.headline)
                         .foregroundColor(.purple)
                         .background(Color.white)
@@ -53,7 +53,7 @@ struct ClipAlertView: View {
             .cornerRadius(12)
             .offset(y: -8)
             
-            Text("start  \(clipTime)")
+            Text(ClipText.start+clipTime)
                 .font(.headline)
                 .fontWeight(.heavy)
                 .foregroundColor(.purple)
@@ -61,7 +61,7 @@ struct ClipAlertView: View {
             
             CustomPicker(selected: $selected, currentTime: clipTime)
             
-            Text("end  \(getEndTime())")
+            Text(ClipText.end+getEndTime())
                 .font(.headline)
                 .fontWeight(.heavy)
                 .foregroundColor(.purple)
@@ -70,25 +70,25 @@ struct ClipAlertView: View {
             Button(action: {
                 modalShown = false
                 notificationShown = true
-                message = "clip saved"
+                message = ClipText.clipSaved
                 Timer.scheduledTimer(withTimeInterval: 2.5, repeats: false) { (value) in
                     notificationShown = false
                 }
                 
-                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString(), feedUrl: feedUrl ?? "")
+                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString(), feedUrl: feedUrl ?? RepText.empty)
                 
                 do {
                     try Persistence.audioClips.createItem(newClip)
                 } catch {
-                    print("error saving clip: \(error)")
+                    print(ErrorText.savingClip+error.localizedDescription)
                 }
                 
-                AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, duration: "00:"+selected, pathForFile:  episode.title+clipTime)
+                AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, duration: ClipText.dubZero+selected, pathForFile:  episode.title+clipTime)
                 
-                titleText = ""
+                titleText = RepText.empty
                 networkManager.loadAudioClips()
             }) {
-                    Text("Save Clip")
+                Text(ClipText.saveClip)
                         .fontWeight(.heavy)
                         .frame(width: 240,height: 60)
                         .foregroundColor(Color.purple)
@@ -109,7 +109,7 @@ struct ClipAlertView: View {
     
     func getEndTime() -> String {
     
-        let timeSec = clipTime.toSecDouble() + ("00:"+selected).toSecDouble()
+        let timeSec = clipTime.toSecDouble() + (ClipText.dubZero+selected).toSecDouble()
         
         return CMTime(seconds: timeSec, preferredTimescale: 1).toDisplayString()
     }
@@ -130,7 +130,6 @@ struct HalfModalView<Content: View> : View {
     
     var modalHeight:CGFloat = 300
     
-    
     var content: () -> Content
     var body: some View {
         
@@ -141,7 +140,7 @@ struct HalfModalView<Content: View> : View {
         .onEnded(onDragEnded)
         return Group {
             ZStack {
-                //Background
+
                 Spacer()
                     .edgesIgnoringSafeArea(.all)
                     .frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
@@ -154,7 +153,6 @@ struct HalfModalView<Content: View> : View {
                         }
                 )
                 
-                //Foreground
                 VStack{
                     Spacer()
                     ZStack{
@@ -230,7 +228,6 @@ struct SuperCustomTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<_Label>) -> some View {
         configuration
             .padding()
-//            .border(Color.purple)
             .frame(height: 34)
     }
 }

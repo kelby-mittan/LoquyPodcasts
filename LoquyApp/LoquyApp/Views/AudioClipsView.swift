@@ -43,7 +43,7 @@ struct AudioClipsView: View {
                             VStack {
                                 
                                 HStack {
-                                    RemoteImage(url: clip.episode.imageUrl ?? "")
+                                    RemoteImage(url: clip.episode.imageUrl ?? RepText.empty)
                                         .frame(width: 120, height: 120)
                                         .cornerRadius(6)
                                         .onLongPressGesture {
