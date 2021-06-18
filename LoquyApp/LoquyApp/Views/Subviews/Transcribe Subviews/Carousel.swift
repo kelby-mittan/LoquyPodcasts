@@ -16,7 +16,7 @@ struct Carousel : UIViewRepresentable {
         return Carousel.Coordinator(parent1: self)
     }
     
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     var imageUrl: String
     var width: CGFloat
     @Binding var page: Int
@@ -95,7 +95,7 @@ struct PageList: View {
     
     @Binding var page: Int
     
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     
     var imageUrl: String
     

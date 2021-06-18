@@ -11,8 +11,8 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct LoquyListView: View {
     
-    @ObservedObject var networkManager = NetworkingManager()
-        
+    @ObservedObject var networkManager = ViewModel()
+    
     let layout = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -20,6 +20,18 @@ struct LoquyListView: View {
     
     @State var showActionSheet: Bool = false
     @State var loquies = [String?]()
+    
+    var actionSheet: ActionSheet {
+        ActionSheet(title: Text("Remove All Loquys?").font(.largeTitle).fontWeight(.bold), buttons: [
+            .default(Text("Cancel")) {
+            },
+            .destructive(Text("Delete")) {
+                Persistence.loquys.removeAll()
+                networkManager.loadLoquys()
+            }
+            
+        ])
+    }
     
     var body: some View {
         
@@ -43,57 +55,32 @@ struct LoquyListView: View {
                 .navigationBarTitle("Loquy List")
                 .navigationBarItems(trailing:
                                         Button(action: {
-                                            
                                             showActionSheet.toggle()
-                                            
                                         }) {
-                                            ZStack {
-                                                NeoButtonView()
-                                                Image(systemName: "minus").font(.title)
-                                                    .foregroundColor(.purple)
-                                            }.background(NeoButtonView())
-                                            .frame(width: 50, height: 50)
-                                            .clipShape(Capsule())
-                                            
+                                            Image(systemName: "minus")
+                                                .font(.title)
+                                                .foregroundColor(.purple)
                                         }
-                    .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
-                                        .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
-                                        .offset(y: 15.0)
                 )
             }
             .actionSheet(isPresented: $showActionSheet, content: {
                 actionSheet
             })
             .onAppear {
-                getLoquyTranscriptions()
+                networkManager.loadLoquys()
                 loquies = Array(Set(networkManager.loquys.map { $0.audioClip.episode.imageUrl }))
             }
             .accentColor(.purple)
         } else {
             EmptySavedView(emptyType: .transcribedLoquy)
                 .onAppear {
-                    getLoquyTranscriptions()
+                    networkManager.loadLoquys()
                 }
         }
         
-        
     }
     
-    var actionSheet: ActionSheet {
-        ActionSheet(title: Text("Remove All Loquys?").font(.largeTitle).fontWeight(.bold), buttons: [
-            .default(Text("Cancel")) {
-            },
-            .destructive(Text("Delete")) {
-                Persistence.loquys.removeAll()
-                networkManager.loadLoquys()
-            }
-            
-        ])
-    }
     
-    func getLoquyTranscriptions() {
-        networkManager.loadLoquys()
-    }
 }
 
 struct LoquyListView_Previews: PreviewProvider {
@@ -111,7 +98,7 @@ struct LoquyContentView: View {
     
     let imageUrl: String
     
-    @ObservedObject var networkManager : NetworkingManager
+    @ObservedObject var networkManager : ViewModel
     @State var toggled = false
     @State var page = 0
     
@@ -122,7 +109,6 @@ struct LoquyContentView: View {
                 ZStack {
                     VStack {
                         GeometryReader{ g in
-                            
                             Carousel(networkManager: networkManager, imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
                                 .onAppear {
                                     networkManager.loadLoquys()
@@ -183,9 +169,7 @@ struct LoquyContentView: View {
                             Spacer()
                             
                             Button(action: {
-                                
                                 toggled = true
-                                
                             }) {
                                 ZStack {
                                     NeoButtonView()
@@ -212,21 +196,13 @@ struct LoquyContentView: View {
                 .animation(Animation.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5))
             }
             
-        }.onAppear(perform: {
-            getLoquyTranscriptions()
-            getAudioClips()
-            
-        })
+        }
+        .onAppear {
+            networkManager.loadLoquys()
+            networkManager.loadAudioClips()
+        }
         
         .navigationBarHidden(false)
         .navigationBarTitle("",displayMode: .inline)
-    }
-    
-    private func getLoquyTranscriptions() {
-        networkManager.loadLoquys()
-    }
-    
-    private func getAudioClips() {
-        networkManager.loadAudioClips()
     }
 }

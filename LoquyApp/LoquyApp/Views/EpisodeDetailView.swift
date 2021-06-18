@@ -19,7 +19,7 @@ struct EpisodeDetailView: View {
     let feedUrl: String?
     let isDeepLink: Bool
     
-    @ObservedObject private var networkManager = NetworkingManager()
+    @ObservedObject private var networkManager = ViewModel()
     
     @State var image = RemoteImageDetail(url: "")
     

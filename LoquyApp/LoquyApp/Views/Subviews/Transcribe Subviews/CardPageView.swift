@@ -15,7 +15,7 @@ struct CardPageView: View {
     
     let imageUrl: String
     
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     
     @State private var transcription: String = ""
     @State private var shareShown = false

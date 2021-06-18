@@ -12,7 +12,7 @@ import SwiftUI
 
 struct AudioClipsView: View {
     
-    @ObservedObject private var networkManager = NetworkingManager()
+    @ObservedObject private var networkManager = ViewModel()
     
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
@@ -85,10 +85,11 @@ struct AudioClipsView: View {
                     }
                     .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
                     
-                }.onAppear(perform: {
-                    UITableView.appearance().separatorStyle = .none
-                })
-                .background(Color(.blue))
+                }
+//                .onAppear(perform: {
+//                    UITableView.appearance().separatorStyle = .none
+//                })
+//                .background(Color(.blue))
                 
                 .actionSheet(isPresented: $showActionSheet, content: {
                     actionSheet

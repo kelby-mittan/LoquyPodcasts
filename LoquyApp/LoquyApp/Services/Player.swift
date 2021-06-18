@@ -106,7 +106,7 @@ class Player {
     }
     
     @discardableResult
-    static func getCurrentPlayerTime(currentTime: inout String) -> (cTime: String, durationTime: String) {
+    static func getCurrentPlayerTime2(currentTime: inout String) -> (cTime: String, durationTime: String) {
         let interval = CMTimeMake(value: 1, timescale: 2)
         var durationLabel = ""
         var timeStr = "--:--"
@@ -120,5 +120,7 @@ class Player {
         let dt = durationTime - currentTime.getCMTime()
         durationLabel = "-" + dt.toDisplayString()
         return ("",durationLabel)
+        
+        
     }    
 }

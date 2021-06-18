@@ -24,7 +24,7 @@ struct ControlView: View {
     
     let player: AVPlayer
     
-    @ObservedObject var networkManager: NetworkingManager
+    @ObservedObject var networkManager: ViewModel
     
     @Binding var showModal: Bool
     @Binding var clipTime: String
@@ -185,15 +185,6 @@ struct ControlView: View {
                 playing = true
                 isPlaying = true
                 
-                
-//                Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-//                    if playing {
-//                        if player.currentItem?.duration.toDisplayString() != "--:--" && width > 0.0 {
-//                            Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-//
-//                        }
-//                    }
-//                }
             } else if player.timeControlStatus == .playing {
                 Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                 if networkManager.episodePlaying != episode.title {

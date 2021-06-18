@@ -13,7 +13,7 @@ import Speech
 @available(iOS 14.0, *)
 struct TranscribeView: View {
     
-    @ObservedObject var networkManager = NetworkingManager()
+    @ObservedObject var networkManager = ViewModel()
     
     let audioClip: AudioClip
     
