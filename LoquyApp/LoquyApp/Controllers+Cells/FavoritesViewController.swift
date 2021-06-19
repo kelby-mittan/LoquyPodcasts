@@ -19,12 +19,10 @@ class FavoritesViewController: UIViewController {
     }
         
     private var collectionView: UICollectionView!
-    
     typealias DataSource = UICollectionViewDiffableDataSource<SectionKind,String>
     private var dataSource: DataSource!
     
     private var episodes: [Episode] = []
-//    private let heyNow = "hey$now"
     
     override func viewDidLoad() {
         super.viewDidLoad()

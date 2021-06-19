@@ -17,14 +17,9 @@ class Player {
     
     public var player: AVPlayer = {
         let avPlayer = AVPlayer()
-        avPlayer.automaticallyWaitsToMinimizeStalling = false
+        avPlayer.automaticallyWaitsToMinimizeStalling = true
         return avPlayer
     }()
-    
-    //    public var isPlaying: Bool = {
-    //        let playing = Bool()
-    //        return playing
-    //    }()
     
     static func setupAudioSession() {
         do {
@@ -84,8 +79,7 @@ class Player {
     /// - Parameter xVal: CGFloat determined from a Capsules x location
     /// - Returns: A CMTime to be used when seeking a certain time in a podcast
     @discardableResult
-    static func capsuleDragged(_ xVal: CGFloat) -> CMTime {
-        //        let x = value.location.x
+    static public func capsuleDragged(_ xVal: CGFloat) -> CMTime {
         let screen = UIScreen.main.bounds.width - 30
         let percentage = xVal / screen
         
@@ -98,7 +92,7 @@ class Player {
         return seekTime
     }
     
-    static func getCapsuleWidth(width: inout CGFloat, currentTime: String) {
+    static public func getCapsuleWidth(width: inout CGFloat, currentTime: String) {
         let screen = UIScreen.main.bounds.width - 20
         let duration = Player.shared.player.currentItem?.duration.toDisplayString() ?? "00:00:00"
         let percent = currentTime.toSecDouble() / duration.toSecDouble()
@@ -106,7 +100,7 @@ class Player {
     }
     
     @discardableResult
-    static func getCurrentPlayerTime(_ currentTime: String, _ ctCondition: Bool, completion: @escaping (String) -> ()) -> (String) {
+    static public func getCurrentPlayerTime(_ currentTime: String, _ ctCondition: Bool, completion: @escaping (String) -> ()) -> (String) {
         
         let interval = CMTimeMake(value: 1, timescale: 2)
         var durationLabel = ""
