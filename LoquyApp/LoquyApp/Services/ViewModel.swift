@@ -12,6 +12,8 @@ import Combine
 
 class ViewModel: ObservableObject {
     
+    static let shared = ViewModel()
+    
     var didChange = PassthroughSubject<ViewModel, Never>()
     
     @Published var podcasts = [Podcast]() {
@@ -140,6 +142,10 @@ class ViewModel: ObservableObject {
     
     public func handleIsPlaying() {
         self.playing = Player.shared.player.timeControlStatus == .playing
+    }
+    
+    public func trackCurrentEpisode(_ episode: String) {
+        self.episodePlaying = episode
     }
     
 }

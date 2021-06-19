@@ -83,7 +83,7 @@ struct BrowseView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    let mindcast = DummyPodcast.podcasts[6]
+    let mindspace = DummyPodcast.mindspace
     
     var body: some View {
         
@@ -96,7 +96,7 @@ struct BrowseView: View {
                         
                         ScrollView(.vertical) {
                             HeaderView(label: HomeText.listenTo)
-                            NavigationLink(destination: EpisodesView(title: mindcast.title, podcastFeed: mindcast.feedUrl, isSaved: false, artWork: mindcast.image)) {
+                            NavigationLink(destination: EpisodesView(title: mindspace.title, podcastFeed: mindspace.feedUrl, isSaved: false, artWork: mindspace.image)) {
                                 ListenToView()
                             }
                             PodcastScrollView()
@@ -185,7 +185,6 @@ struct AudioClipsTab: View {
     var body: some View {
         AudioClipsView()
             .tabItem {
-                
                 Image(systemName: Symbol.speaker)
                     .font(.body)
                     .padding(.top, 16.0)

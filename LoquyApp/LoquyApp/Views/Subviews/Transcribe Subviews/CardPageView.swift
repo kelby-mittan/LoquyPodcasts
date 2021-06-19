@@ -120,7 +120,7 @@ struct CardPageView: View {
                             
                             let appURL = URL(string: appPath)!
                             
-                            ShareView(items: [loquy.title,"\n","\n",loquy.transcription,"\n","\n",appURL,podImage])
+                            ShareView(items: [loquy.title,"\n","\n",loquy.transcription,"\n","\n",appURL,"\n",attString,podImage])
                             
 //                            let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
                             

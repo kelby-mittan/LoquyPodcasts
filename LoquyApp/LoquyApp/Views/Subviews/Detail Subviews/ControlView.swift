@@ -24,7 +24,7 @@ struct ControlView: View {
     
     let player: AVPlayer
     
-    @ObservedObject var viewModel: ViewModel
+    @ObservedObject var viewModel = ViewModel.shared
     
     @Binding var showModal: Bool
     @Binding var clipTime: String
@@ -43,13 +43,12 @@ struct ControlView: View {
                     .gesture(DragGesture()
                                 .onChanged({ (value) in
                                     player.pause()
-//                                    playing = false
                                     Player.handleWidth(value, &width, &currentTime)
-//                                    handleDraggedCapsule(value)
                                 }).onEnded({ (value) in
                                     player.seek(to: Player.capsuleDragged(value.location.x))
                                     player.play()
                                     playing = true
+                                    isPlaying = true
 //                                    !playing ? player.play() : player.pause()
 //                                    viewModel.playing ? player.play() : player.pause()
                                 }))
@@ -89,18 +88,16 @@ struct ControlView: View {
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
                 Button(action: {
-                    if episode.title != viewModel.episodePlaying {
+                    
+                    if episode.title == viewModel.episodePlaying {
+                        !playing ? player.play() : player.pause()
+                        playing.toggle()
+                        isPlaying.toggle()
+                    } else {
                         viewModel.episodePlaying = episode.title
                         Player.playEpisode(episode: episode)
+                        playing = true
                     }
-                    
-                    !playing ? player.play() : player.pause()
-                    
-                    playing.toggle()
-                    isPlaying.toggle()
-//                    viewModel.playing ? player.pause() : player.play()
-                                        
-//                    viewModel.handleIsPlaying()
                     
                     
                     
@@ -190,25 +187,24 @@ struct ControlView: View {
             viewModel.handleIsPlaying()
             isPlaying = viewModel.playing
             
-            if let deepLinkTime = episode.deepLinkTime {
-                player.seek(to: deepLinkTime.getCMTime())
-            }
-            
             if !viewModel.playing {
                 viewModel.episodePlaying = episode.title
                 Player.playEpisode(episode: episode)
-                
+                if let deepLinkTime = episode.deepLinkTime {
+                    player.seek(to: deepLinkTime.getCMTime())
+                }
                 playing = true
                 isPlaying = true
                 
             } else {
                 Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                 if viewModel.episodePlaying != episode.title {
-                    playing = true
+                    playing = false
+                    
+                    
                 }
                 
             }
-//            getCurrentPlayerTime()
             
             Player.getCurrentPlayerTime(currentTime, episode.title == viewModel.episodePlaying) { time in
                 currentTime = time
@@ -221,8 +217,11 @@ struct ControlView: View {
                     }
                 }
             }
-            Player.setupRemoteControl()
+//            Player.setupRemoteControl()
         }
+//        .onDisappear {
+//            viewModel.trackCurrentEpisode(episode.title)
+//        }
                 
     }
     
