@@ -27,7 +27,6 @@
 		0247E42E251D488A00E14DEB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E42D251D488A00E14DEB /* Persistence.swift */; };
 		0247E432251E582000E14DEB /* NeoViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E431251E582000E14DEB /* NeoViews.swift */; };
 		0247E43A251FDEF100E14DEB /* SaveLoquyAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E439251FDEF100E14DEB /* SaveLoquyAlertView.swift */; };
-		0247E44B251FF44400E14DEB /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E44A251FF44400E14DEB /* Carousel.swift */; };
 		0247E44F2520161600E14DEB /* CardPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E44E2520161500E14DEB /* CardPageView.swift */; };
 		024F0D78250D758D002B4A5F /* PodcastPosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024F0D77250D758D002B4A5F /* PodcastPosterView.swift */; };
 		027094722502F39F009E0BF5 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094712502F39E009E0BF5 /* Player.swift */; };
@@ -104,7 +103,6 @@
 		0247E42D251D488A00E14DEB /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		0247E431251E582000E14DEB /* NeoViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeoViews.swift; sourceTree = "<group>"; };
 		0247E439251FDEF100E14DEB /* SaveLoquyAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveLoquyAlertView.swift; sourceTree = "<group>"; };
-		0247E44A251FF44400E14DEB /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		0247E44E2520161500E14DEB /* CardPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPageView.swift; sourceTree = "<group>"; };
 		024F0D77250D758D002B4A5F /* PodcastPosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPosterView.swift; sourceTree = "<group>"; };
 		027094712502F39E009E0BF5 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -250,7 +248,6 @@
 			isa = PBXGroup;
 			children = (
 				0247E439251FDEF100E14DEB /* SaveLoquyAlertView.swift */,
-				0247E44A251FF44400E14DEB /* Carousel.swift */,
 				0247E44E2520161500E14DEB /* CardPageView.swift */,
 			);
 			path = "Transcribe Subviews";
@@ -607,7 +604,6 @@
 				0270947525030720009E0BF5 /* FavoritesViewController.swift in Sources */,
 				02DE63B9251165DD002B307F /* ClipAlertView.swift in Sources */,
 				02A95744267D13610068B1E4 /* GlobalConstants.swift in Sources */,
-				0247E44B251FF44400E14DEB /* Carousel.swift in Sources */,
 				02A966C4267C089D003899E0 /* AsyncImage.swift in Sources */,
 				0224B56B24CBB7130062E43F /* LoquyListView.swift in Sources */,
 				029955C824F339D200479318 /* ControlView.swift in Sources */,
