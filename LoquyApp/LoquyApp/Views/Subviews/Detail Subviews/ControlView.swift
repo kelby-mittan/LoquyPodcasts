@@ -7,27 +7,24 @@
 //
 
 import SwiftUI
-import AVKit
 import MediaPlayer
 
 @available(iOS 14.0, *)
 struct ControlView: View {
     
     let episode: Episode
+    @Binding var isPlaying: Bool
+    @Binding var showModal: Bool
+    @Binding var clipTime: String
     
     @State var width: CGFloat = 20
     @State var playing = true
     @State var currentTime: String = TimeText.zero
     @State var showAlert = false
     
-    @Binding var isPlaying: Bool
-    
-    let player: AVPlayer
+    let player = Player.shared.player
     
     @ObservedObject var viewModel = ViewModel.shared
-    
-    @Binding var showModal: Bool
-    @Binding var clipTime: String
         
     var body: some View {
         
@@ -45,12 +42,10 @@ struct ControlView: View {
                                     player.pause()
                                     Player.handleWidth(value, &width, &currentTime)
                                 }).onEnded({ (value) in
-                                    player.seek(to: Player.capsuleDragged(value.location.x))
-                                    player.play()
-                                    playing = true
-                                    isPlaying = true
-//                                    !playing ? player.play() : player.pause()
-//                                    viewModel.playing ? player.play() : player.pause()
+                                            player.seek(to: Player.capsuleDragged(value.location.x))
+                                            player.play()
+                                            playing = true
+                                            isPlaying = true
                                 }))
                     .padding([.top,.leading,.trailing])
                     .onChange(of: currentTime, perform: { value in
@@ -88,19 +83,7 @@ struct ControlView: View {
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
                 Button(action: {
-                    
-                    if episode.title == viewModel.episodePlaying {
-                        !playing ? player.play() : player.pause()
-                        playing.toggle()
-                        isPlaying.toggle()
-                    } else {
-                        viewModel.episodePlaying = episode.title
-                        Player.playEpisode(episode: episode)
-                        playing = true
-                    }
-                    
-                    
-                    
+                    handlePlayPausePressed()
                 }) {
                     ZStack {
                         NeoButtonView()
@@ -117,7 +100,6 @@ struct ControlView: View {
                 
                 Button(action: {
                     Player.seekToCurrentTime(delta: 15)
-//                    getCurrentPlayerTime()
                     Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                 }) {
                     ZStack {
@@ -176,53 +158,67 @@ struct ControlView: View {
             .padding([.leading,.trailing])
             .blur(radius: showAlert ? 30 : 0)
             if showAlert {
-                TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode, networkManager: viewModel)
+                TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode)
                     .offset(x: 0, y: -70)
             }
             
         }
         .animation(.spring())
         .onAppear {
-            
-            viewModel.handleIsPlaying()
-            isPlaying = viewModel.playing
-            
-            if !viewModel.playing {
-                viewModel.episodePlaying = episode.title
-                Player.playEpisode(episode: episode)
-                if let deepLinkTime = episode.deepLinkTime {
-                    player.seek(to: deepLinkTime.getCMTime())
-                }
-                playing = true
-                isPlaying = true
-                
-            } else {
-                Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                if viewModel.episodePlaying != episode.title {
-                    playing = false
-                    
-                    
-                }
-                
-            }
-            
-            Player.getCurrentPlayerTime(currentTime, episode.title == viewModel.episodePlaying) { time in
-                currentTime = time
-            }
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                if viewModel.playing {
-                    if player.currentItem?.duration.toDisplayString() != TimeText.unloaded && width > 0.0 {
-                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                        
-                    }
-                }
-            }
-//            Player.setupRemoteControl()
+            handlePlayOnAppear()
+            setupRemoteControl()
         }
-//        .onDisappear {
-//            viewModel.trackCurrentEpisode(episode.title)
-//        }
-                
+        
+    }
+    
+}
+
+extension ControlView {
+    
+    private func handlePlayOnAppear() {
+        viewModel.handleIsPlaying()
+        isPlaying = viewModel.playing
+        
+        if !viewModel.playing {
+            viewModel.episodePlaying = episode.title
+            Player.playEpisode(episode: episode)
+            if let deepLinkTime = episode.deepLinkTime {
+                player.seek(to: deepLinkTime.getCMTime())
+            }
+            playing = true
+            isPlaying = true
+            
+        } else {
+            Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+            if viewModel.episodePlaying != episode.title {
+                playing = false
+            }
+        }
+        
+        Player.getCurrentPlayerTime(currentTime, episode.title == viewModel.episodePlaying) { time in
+            currentTime = time
+        }
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
+            if viewModel.playing {
+                if player.currentItem?.duration.toDisplayString() != TimeText.unloaded && width > 0.0 {
+                    Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+                    
+                }
+            }
+        }
+    }
+    
+    private func handlePlayPausePressed() {
+        if episode.title == viewModel.episodePlaying {
+            !playing ? player.play() : player.pause()
+            playing.toggle()
+            isPlaying.toggle()
+        } else {
+            viewModel.episodePlaying = episode.title
+            Player.playEpisode(episode: episode)
+            playing = true
+        }
     }
     
     private func handleTimeDisplayed() -> String {
@@ -231,41 +227,38 @@ struct ControlView: View {
         }
     }
     
-    
-//    private func setupRemoteControl() {
-//        UIApplication.shared.beginReceivingRemoteControlEvents()
-//
-//        let commandCenter = MPRemoteCommandCenter.shared()
-//
-//        commandCenter.playCommand.isEnabled = true
-//        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-//            player.play()
-//            playing = true
-//            isPlaying = true
-//            return .success
-//        }
-//
-//        commandCenter.pauseCommand.isEnabled = true
-//        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-//            player.pause()
-//            playing = false
-//            isPlaying = false
-//            return .success
-//        }
-//
-//        commandCenter.togglePlayPauseCommand.isEnabled = true
-//        commandCenter.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-//
-//            if player.timeControlStatus == .playing {
-//                player.pause()
-//            } else {
-//                player.play()
-//            }
-//
-//            return .success
-//        }
-//
-//    }
-    
-}
+    private func setupRemoteControl() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
 
+        let commandCenter = MPRemoteCommandCenter.shared()
+
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            player.play()
+            playing = true
+            isPlaying = true
+            return .success
+        }
+
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            player.pause()
+            playing = false
+            isPlaying = false
+            return .success
+        }
+
+        commandCenter.togglePlayPauseCommand.isEnabled = true
+        commandCenter.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+
+            if player.timeControlStatus == .playing {
+                player.pause()
+            } else {
+                player.play()
+            }
+
+            return .success
+        }
+
+    }
+}

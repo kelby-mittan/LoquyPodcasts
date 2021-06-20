@@ -12,7 +12,7 @@ import SwiftUI
 
 struct AudioClipsView: View {
     
-    @ObservedObject private var networkManager = ViewModel()
+    @ObservedObject var viewModel = ViewModel.shared
     
     let gradColor1 = PaletteColour.colors1.randomElement()
     let gradColor2 = PaletteColour.colors2.randomElement()
@@ -22,9 +22,9 @@ struct AudioClipsView: View {
     
     var body: some View {
         
-        if !networkManager.audioClips.isEmpty {
+        if !viewModel.audioClips.isEmpty {
             NavigationView {
-                List(networkManager.audioClips, id: \.self) { clip in
+                List(viewModel.audioClips, id: \.self) { clip in
                     
                     NavigationLink(destination: TranscribeView(audioClip: clip)) {
                         
@@ -137,7 +137,7 @@ struct AudioClipsView: View {
     }
     
     func getAudioClips() {
-        networkManager.loadAudioClips()
+        viewModel.loadAudioClips()
     }
 }
 

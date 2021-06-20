@@ -12,18 +12,17 @@ import AVKit
 struct EpisodeTimesView: View {
     
     let episode: Episode
-    let player: AVPlayer
     
+    let player = Player.shared.player
+    @ObservedObject var viewModel = ViewModel.shared
     @State var timeStamps = [String]()
-    
-    @ObservedObject var networkManager: ViewModel
     
     var body: some View {
         Group {
             if Persistence.episodes.hasItemBeenSaved(episode) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        ForEach(networkManager.timeStamps.sorted(), id:\.self) { time in
+                        ForEach(viewModel.timeStamps.sorted(), id:\.self) { time in
                             ZStack {
                                 Text(time)
                                     .font(.subheadline)
@@ -73,7 +72,7 @@ struct EpisodeTimesView: View {
     }
     
     private func loadTimes(episode: Episode) {
-        networkManager.loadTimeStamps(for: episode)
+        viewModel.loadTimeStamps(for: episode)
     }
     
 }

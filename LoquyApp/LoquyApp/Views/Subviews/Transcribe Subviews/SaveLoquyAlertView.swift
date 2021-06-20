@@ -13,11 +13,12 @@ struct SaveLoquyAlertView: View {
     @Binding var showAlert: Bool
     @Binding var notificationShown: Bool
     @Binding var message: String
-    @ObservedObject var networkManager: ViewModel
+    
     let audioClip: AudioClip
     let transcription: String
     let isPlaying: Bool
     
+    @ObservedObject var viewModel = ViewModel.shared
     @State var timeStamps = [TimeStamp]()
     @State var titleText = ""
     
@@ -71,7 +72,7 @@ struct SaveLoquyAlertView: View {
         }
         .onAppear(perform: {
             
-            networkManager.loadLoquys()
+            viewModel.loadLoquys()
             
         })
         .frame(width: 300, height: 200)
@@ -83,7 +84,7 @@ struct SaveLoquyAlertView: View {
     
     private func saveLoquyToList() {
         var id = 1
-        let filteredLoquys = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
+        let filteredLoquys = viewModel.loquys.filter { $0.audioClip.episode.imageUrl == audioClip.episode.imageUrl }
         
         if !filteredLoquys.isEmpty {
             id = filteredLoquys.count + 1
@@ -96,7 +97,7 @@ struct SaveLoquyAlertView: View {
             print(error.localizedDescription)
         }
 
-        networkManager.loadLoquys()
+        viewModel.loadLoquys()
     }
     
     private func handleNotification() {

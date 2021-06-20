@@ -11,23 +11,23 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct LoquyListView: View {
     
-    @ObservedObject var networkManager = ViewModel()
+    @ObservedObject var viewModel = ViewModel.shared
     
-    let layout = [
+    private let layout = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
-    @State var showActionSheet: Bool = false
-    @State var loquies = [String?]()
+    @State private var showActionSheet: Bool = false
+    @State private var loquies = [String?]()
     
-    var actionSheet: ActionSheet {
+    private var actionSheet: ActionSheet {
         ActionSheet(title: Text(LoquynClipText.remove).font(.largeTitle).fontWeight(.bold), buttons: [
             .default(Text(LoquynClipText.cancel)) {
             },
             .destructive(Text(LoquynClipText.delete)) {
                 Persistence.loquys.removeAll()
-                networkManager.loadLoquys()
+                viewModel.loadLoquys()
             }
             
         ])
@@ -35,13 +35,13 @@ struct LoquyListView: View {
     
     var body: some View {
         
-        if !networkManager.loquys.isEmpty {
+        if !viewModel.loquys.isEmpty {
             NavigationView {
                 ScrollView {
                     LazyVGrid(columns: layout, spacing: 10) {
                         ForEach(loquies, id: \.self) { imageUrl in
                             VStack {
-                                NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? RepText.empty, networkManager: networkManager)) {
+                                NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? RepText.empty)) {
                                     
                                     RemoteImage(url: imageUrl ?? RepText.empty)
                                         .frame(width: 170, height: 170)
@@ -67,14 +67,14 @@ struct LoquyListView: View {
                 actionSheet
             })
             .onAppear {
-                networkManager.loadLoquys()
-                loquies = Array(Set(networkManager.loquys.map { $0.audioClip.episode.imageUrl }))
+                viewModel.loadLoquys()
+                loquies = Array(Set(viewModel.loquys.map { $0.audioClip.episode.imageUrl }))
             }
             .accentColor(.purple)
         } else {
             EmptySavedView(emptyType: .transcribedLoquy)
                 .onAppear {
-                    networkManager.loadLoquys()
+                    viewModel.loadLoquys()
                 }
         }
         
@@ -88,9 +88,9 @@ struct LoquyContentView: View {
     
     let imageUrl: String
     
-    @ObservedObject var networkManager : ViewModel
-    @State var toggled = false
-    @State var page = 0
+    @ObservedObject private var viewModel = ViewModel.shared
+    @State private var toggled = false
+    @State private var page = 0
     
     var body: some View {
         
@@ -99,13 +99,13 @@ struct LoquyContentView: View {
                 ZStack {
                     VStack {
                         GeometryReader{ g in
-                            Carousel(networkManager: networkManager, imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
+                            Carousel(networkManager: viewModel, imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
                                 .onAppear {
-                                    networkManager.loadLoquys()
+                                    viewModel.loadLoquys()
                                 }
                         }
                         
-                        PageControl(page: $page, loquyCount: networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
+                        PageControl(page: $page, loquyCount: viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
                             .background(NeoButtonView())
                             .padding([.bottom,.top], 8)
                         Spacer()
@@ -120,7 +120,7 @@ struct LoquyContentView: View {
                 ZStack {
                     VStack {
                         Spacer()
-                        Text("\(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.first?.audioClip.episode.author ?? "")")
+                        Text("\(viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.first?.audioClip.episode.author ?? "")")
                             .font(.system(size: 24, weight: .bold, design: .rounded))
                             .fontWeight(.heavy)
                             .foregroundColor(.white)
@@ -132,7 +132,7 @@ struct LoquyContentView: View {
                         
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("\(LoquynClipText.youHave) \(networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) \(LoquynClipText.transripts)")
+                                Text("\(LoquynClipText.youHave) \(viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) \(LoquynClipText.transripts)")
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)
@@ -142,7 +142,7 @@ struct LoquyContentView: View {
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)
                                     .padding(.top, 4)
-                                Text("\(networkManager.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) \(LoquynClipText.savedClips)")
+                                Text("\(viewModel.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) \(LoquynClipText.savedClips)")
                                     .font(.system(size: 18, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                                     .fontWeight(.heavy)
@@ -188,8 +188,8 @@ struct LoquyContentView: View {
             
         }
         .onAppear {
-            networkManager.loadLoquys()
-            networkManager.loadAudioClips()
+            viewModel.loadLoquys()
+            viewModel.loadAudioClips()
         }
         
         .navigationBarHidden(false)

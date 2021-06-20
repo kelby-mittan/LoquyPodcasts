@@ -13,10 +13,11 @@ struct FavoriteView: View {
     
     let episode: Episode
     let artwork: String
-    @State var isSaved = false
-    @State var saveText = RepText.empty
     @Binding var notificationShown: Bool
     @Binding var message: String
+    
+    @State var isSaved = false
+    @State var saveText = RepText.empty
     
     var body: some View {
         

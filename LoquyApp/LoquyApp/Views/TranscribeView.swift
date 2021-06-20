@@ -13,25 +13,16 @@ import Speech
 @available(iOS 14.0, *)
 struct TranscribeView: View {
     
-    @ObservedObject var viewModel = ViewModel()
-    
     let audioClip: AudioClip
     
-    @State var width : CGFloat = 30
-    @State var currentTime: String = TimeText.zero
-    @State var playing = false
-    @State var transcription: String = RepText.empty
-    @State var title: String = RepText.empty
-    @State var isTranscribing = false
-    @State var saveText = RepText.transcribe
+    @ObservedObject var viewModel = ViewModel.shared
+    @ObservedObject var scribeViewModel = TranscriptionViewModel.shared
+    
     @State var image = RemoteImageDetail(url: RepText.empty)
     @State var showNotification = false
     @State var notificationMessage = RepText.empty
-    @State var showAlert = false
     
     let player = Player.shared.player
-    var speechRecognizer = SFSpeechRecognizer()
-    @State var startedPlaying = 0
     
     var body: some View {
         ZStack {
@@ -51,7 +42,7 @@ struct TranscribeView: View {
                         .font(.headline)
                         .padding([.leading,.trailing])
                 }.onTapGesture(perform: {
-                    playing = false
+                    scribeViewModel.playing = false
                 })
                 
                 Text(audioClip.startTime + TimeText.dash + audioClip.endTime)
@@ -66,13 +57,15 @@ struct TranscribeView: View {
                         .cornerRadius(6)
                     Spacer()
                     Button(action: {
-                        playing.toggle()
-                        handlePlay()
-                        playing ? player.play() : player.pause()
+                        scribeViewModel.playing.toggle()
+                        
+                        scribeViewModel.handlePlay(audioClip)
+                        
+                        scribeViewModel.playing ? player.play() : player.pause()
                     }) {
                         ZStack {
                             NeoButtonView()
-                            Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
+                            Image(systemName: scribeViewModel.playing ? Symbol.pause : Symbol.play).font(.largeTitle)
                                 .foregroundColor(.purple)
                                 
                         }
@@ -88,61 +81,53 @@ struct TranscribeView: View {
                 
                 ZStack(alignment: .leading) {
                     Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    Capsule().fill(Color.purple).frame(width: width, height: 8)
+                    Capsule().fill(Color.purple).frame(width: scribeViewModel.width, height: 8)
                         .gesture(DragGesture()
                             .onChanged({ (value) in
                                 player.pause()
-                                Player.handleWidth(value, &width, &currentTime)
+                                Player.handleWidth(value, &scribeViewModel.width, &scribeViewModel.currentTime)
+                                
                             }).onEnded({ (value) in
                                 player.seek(to: Player.capsuleDragged(value.location.x))
                                 player.play()
-                                playing = true
+                                scribeViewModel.playing = true
                             }))
                 }.padding([.leading,.trailing])
                 
                 HStack {
-                    Text(currentTime)
+                    Text(scribeViewModel.currentTime)
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 4)
                     Spacer()
-                    Text(timeToDisplay())
+                    Text(scribeViewModel.timeToDisplay())
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.trailing, 4)
                 }
                 
                 Group {
-                    if isTranscribing {
+                    if scribeViewModel.isTranscribing {
                         VStack(alignment: .leading) {
                             Text(RepText.yourLoquy)
                                 .font(.title)
                                 .fontWeight(.heavy)
-                            MultilineTextField(RepText.empty, isSaved: false, text: $transcription, onCommit: {
+                            MultilineTextField(RepText.empty, isSaved: false, text: $scribeViewModel.transcription, onCommit: {
                                 player.pause()
                                 DispatchQueue.main.async {
-                                    playing = false
+                                    scribeViewModel.playing = false
                                 }
                             })
                         }.padding()
                     }
                 }
                 Button(action: {
-                    isTranscribing.toggle()
-                    if isTranscribing {
-                        handlePlay()
-                        getTranscriptionOfClippedFile()
-                        saveText = RepText.saveLoquy
-                        
-                    } else {
-                        saveText = RepText.transcribe
-                        player.pause()
-                        playing = false
-                        showAlert.toggle()
-                    }
+                    scribeViewModel.handleIsTranscribing(audioClip)
                     
                 }) {
-                    Text(saveText)
+                    Text(scribeViewModel.isTranscribing
+                            ? RepText.saveLoquy
+                            : RepText.transcribe)
                         .fontWeight(.heavy)
                         .padding()
                         .frame(width: UIScreen.main.bounds.width - 88)
@@ -154,8 +139,8 @@ struct TranscribeView: View {
                         .padding()
                 }
                 Spacer()
-                if showAlert {
-                    SaveLoquyAlertView(showAlert: $showAlert, notificationShown: $showNotification, message: $notificationMessage, networkManager: viewModel, audioClip: audioClip, transcription: transcription, isPlaying: player.timeControlStatus == .playing)
+                if scribeViewModel.showAlert {
+                    SaveLoquyAlertView(showAlert: $scribeViewModel.showAlert, notificationShown: $showNotification, message: $notificationMessage, audioClip: audioClip, transcription: scribeViewModel.transcription, isPlaying: scribeViewModel.playing)
                     .offset(x: 0, y: -70)
                 }
             }.onAppear {
@@ -165,62 +150,6 @@ struct TranscribeView: View {
             NotificationView(message: $notificationMessage)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
-        }
-    }
-    
-    private func handlePlay() {
-        startedPlaying += 1
-        if startedPlaying == 1 {
-            guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) else {
-                return
-            }
-
-            Player.playAudioClip(url: url)
-            playing = true
-            
-            Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { time in
-                currentTime = time
-            }
-
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-                if playing {
-                    if player.currentItem?.duration.toDisplayString() != TimeText.unloaded && width > 0.0 {
-                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                    }
-                }
-            }
-        }
-        
-    }
-    
-    private func timeToDisplay() -> String {
-        return Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { time in
-            currentTime = time
-        }
-    }
-    
-    private func getTranscriptionOfClippedFile() {
-        SFSpeechRecognizer.requestAuthorization { (authStatus) in
-            if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) {
-                
-                AudioTrim.trimUsingComposition(url: url, start: currentTime, duration: audioClip.duration, pathForFile: TrimText.trimmedFile) { (result) in
-                    switch result {
-                    case .success(let clipUrl):
-                        let request = SFSpeechURLRecognitionRequest(url: clipUrl)
-                        speechRecognizer?.recognitionTask(with: request, resultHandler: { (result, error) in
-                            if let error = error {
-                                print(ErrorText.recError+error.localizedDescription)
-                            } else {
-                                if playing {
-                                    transcription = result?.bestTranscription.formattedString ?? RepText.noTranscription
-                                }
-                            }
-                        })
-                    default:
-                        break
-                    }
-                }
-            }
         }
     }
     

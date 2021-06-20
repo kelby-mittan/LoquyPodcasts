@@ -19,10 +19,9 @@ struct EpisodeDetailView: View {
     let feedUrl: String?
     let isDeepLink: Bool
     
-    @ObservedObject private var viewModel = ViewModel.shared
+    @ObservedObject var viewModel = ViewModel.shared
     
     @State var image = RemoteImageDetail(url: RepText.empty)
-    
     @State var halfModalShown = false
     @State var clipTime = RepText.empty
     @State var times = [String]()
@@ -45,10 +44,10 @@ struct EpisodeDetailView: View {
                         .padding([.leading,.trailing])
                         .animation(.easeInOut)
                     
-                    ControlView(episode: episode, isPlaying: $playing, player: player, viewModel: viewModel, showModal: $halfModalShown, clipTime: $clipTime)
+                    ControlView(episode: episode, isPlaying: $playing, showModal: $halfModalShown, clipTime: $clipTime)
                         .padding(.top, playing ? 0 : 25)
                     
-                    EpisodeTimesView(episode: episode, player: player, networkManager: viewModel)
+                    EpisodeTimesView(episode: episode)
                     
                     DescriptionView(episode: episode)
                     
@@ -63,7 +62,7 @@ struct EpisodeDetailView: View {
                 
                 if halfModalShown {
                     HalfModalView(isShown: $halfModalShown, modalHeight: 500){
-                        ClipAlertView(clipTime: clipTime, episode: episode, feedUrl: feedUrl, networkManager: viewModel, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
+                        ClipAlertView(clipTime: clipTime, episode: episode, feedUrl: feedUrl, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
                     }
                 }
                 

@@ -15,12 +15,12 @@ struct ClipAlertView: View {
     let episode: Episode
     let feedUrl: String?
     
-    @ObservedObject var networkManager: ViewModel
-    
-    @State var selected = ClipText.selected
     @Binding var modalShown: Bool
     @Binding var notificationShown: Bool
     @Binding var message: String
+    
+    @ObservedObject var viewModel = ViewModel.shared
+    @State var selected = ClipText.selected
     @State var titleText = RepText.empty
     
     var body: some View {
@@ -86,7 +86,7 @@ struct ClipAlertView: View {
                 AudioTrim.exportUsingComposition(streamUrl: episode.streamUrl, start: clipTime, duration: ClipText.dubZero+selected, pathForFile:  episode.title+clipTime)
                 
                 titleText = RepText.empty
-                networkManager.loadAudioClips()
+                viewModel.loadAudioClips()
             }) {
                 Text(ClipText.saveClip)
                         .fontWeight(.heavy)
@@ -107,7 +107,7 @@ struct ClipAlertView: View {
         Spacer()
     }
     
-    func getEndTime() -> String {
+    private func getEndTime() -> String {
     
         let timeSec = clipTime.toSecDouble() + (ClipText.dubZero+selected).toSecDouble()
         
@@ -177,6 +177,25 @@ struct HalfModalView<Content: View> : View {
         }
         
     }
+    
+    private func fractionProgress(lowerLimit: Double = 0, upperLimit:Double, current:Double, inverted:Bool = false) -> Double{
+        var val:Double = 0
+        if current >= upperLimit {
+            val = 1
+        } else if current <= lowerLimit {
+            val = 0
+        } else {
+            val = (current - lowerLimit)/(upperLimit - lowerLimit)
+        }
+        
+        if inverted {
+            return (1 - val)
+            
+        } else {
+            return val
+        }
+        
+    }
 }
 
 enum DragState {
@@ -200,27 +219,6 @@ enum DragState {
             return true
         }
     }
-}
-
-
-
-func fractionProgress(lowerLimit: Double = 0, upperLimit:Double, current:Double, inverted:Bool = false) -> Double{
-    var val:Double = 0
-    if current >= upperLimit {
-        val = 1
-    } else if current <= lowerLimit {
-        val = 0
-    } else {
-        val = (current - lowerLimit)/(upperLimit - lowerLimit)
-    }
-    
-    if inverted {
-        return (1 - val)
-        
-    } else {
-        return val
-    }
-    
 }
 
 

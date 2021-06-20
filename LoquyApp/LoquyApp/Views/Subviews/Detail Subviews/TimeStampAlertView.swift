@@ -13,7 +13,8 @@ struct TimeStampAlertView: View {
     @Binding var showAlert: Bool
     @Binding var time: String
     let episode: Episode
-    @ObservedObject var networkManager: ViewModel
+    
+    @ObservedObject var viewModel = ViewModel.shared
     
     @State var timeStamps = [TimeStamp]()
     @State var favToSave = RepText.empty
@@ -100,7 +101,7 @@ struct TimeStampAlertView: View {
     }
     
     private func loadTimes(episode: Episode) {
-        networkManager.loadTimeStamps(for: episode)
+        viewModel.loadTimeStamps(for: episode)
     }
 }
 
