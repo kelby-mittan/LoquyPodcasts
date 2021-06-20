@@ -12,14 +12,11 @@ import Combine
 @available(iOS 14.0, *)
 @main
 struct Home: App {
+    
     @State private var selectedTab = 0
-    @ObservedObject private var networkManager = ViewModel()
     @State private var isDeepLink = false
     @State private var hasLoaded = false
-    
-    var edges = UIApplication.shared.windows.first?.safeAreaInsets
-    
-    @State var deepLinkEpisode = Episode(url: URL(string: RepText.empty))
+    @State private var deepLinkEpisode = Episode(url: URL(string: RepText.empty))
     
     var body: some Scene {
         WindowGroup {
@@ -79,7 +76,7 @@ struct BrowseView: View {
     @State private var searchText = RepText.empty
     @State private var isPodcastShowing = true
     @State private var isEditing = false
-    @ObservedObject private var viewModel = ViewModel()
+    @ObservedObject private var viewModel = ViewModel.shared
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -142,17 +139,17 @@ struct BrowseView: View {
 @available(iOS 14.0, *)
 struct FavoritesTabView: View {
     
-    @ObservedObject private var networkManager = ViewModel()
+    @ObservedObject private var viewModel = ViewModel.shared
     
     var body: some View {
         
-        if !networkManager.favorites.isEmpty {
+        if !viewModel.favorites.isEmpty {
             NavigationView {
                 FavoritesVCWrapper()
                     .navigationBarHidden(true)
             }
             .onAppear {
-                networkManager.loadFavorites()
+                viewModel.loadFavorites()
             }
             .accentColor(.purple)
             .tabItem {
@@ -165,7 +162,7 @@ struct FavoritesTabView: View {
         } else {
             EmptySavedView(emptyType: .favorite)
                 .onAppear {
-                    networkManager.loadFavorites()
+                    viewModel.loadFavorites()
                 }
                 .tabItem {
                     Image(systemName: Symbol.star)

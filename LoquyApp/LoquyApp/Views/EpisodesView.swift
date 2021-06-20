@@ -11,17 +11,15 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct EpisodesView: View {
     
-    @ObservedObject private var viewModel = ViewModel()
-    
-    @State var title: String
-    let podcastFeed: String?
-    let isSaved: Bool
-    let artWork: String
-    
-    @State var halfModalShown = false
-    
-    let gradColor1 = PaletteColour.colors1.randomElement()
-    let gradColor2 = PaletteColour.colors2.randomElement()
+    @ObservedObject var viewModel = ViewModel.shared
+        
+    @State public var title: String
+    public let podcastFeed: String?
+    public let isSaved: Bool
+    public let artWork: String
+        
+    private let gradColor1 = PaletteColour.colors1.randomElement()
+    private let gradColor2 = PaletteColour.colors2.randomElement()
     
     var body: some View {
         if viewModel.episodes.isEmpty {

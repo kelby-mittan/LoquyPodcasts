@@ -11,7 +11,7 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct PodcastScrollView: View {
     
-    var podcasts = DummyPodcast.podcasts
+    private let podcasts = DummyPodcast.podcasts
     
     var body: some View {
         VStack {
@@ -33,7 +33,7 @@ struct PodcastScrollView: View {
 @available(iOS 14.0, *)
 struct TopPodcastsView: View {
         
-    var podcasts: Array<DummyPodcast>.SubSequence
+    public var podcasts: Array<DummyPodcast>.SubSequence
     
     var body: some View {
         VStack(alignment: .leading) {

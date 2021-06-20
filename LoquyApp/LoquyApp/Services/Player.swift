@@ -6,8 +6,6 @@
 //  Copyright © 2020 Kelby Mittan. All rights reserved.
 //
 
-import Foundation
-import AVKit
 import MediaPlayer
 import SwiftUI
 
@@ -83,7 +81,7 @@ class Player {
         let screen = UIScreen.main.bounds.width - 30
         let percentage = xVal / screen
         
-        guard let duration = Player.shared.player.currentItem?.duration else { return CMTime(value: 0, timescale: 0) }
+        guard let duration = shared.player.currentItem?.duration else { return CMTime(value: 0, timescale: 0) }
         let durationInSeconds = CMTimeGetSeconds(duration)
         let seekTimeInSeconds = Float64(percentage) * durationInSeconds
         let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
@@ -138,34 +136,4 @@ class Player {
         currentTime = capsuleDragged(value.location.x).toDisplayString()
     }
     
-    static public func setupRemoteControl() {
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
-        let commandCenter = MPRemoteCommandCenter.shared()
-        
-        commandCenter.playCommand.isEnabled = true
-        commandCenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            Player.shared.player.play()
-            return .success
-        }
-        
-        commandCenter.pauseCommand.isEnabled = true
-        commandCenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            Player.shared.player.pause()
-            return .success
-        }
-        
-        commandCenter.togglePlayPauseCommand.isEnabled = true
-        commandCenter.togglePlayPauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            
-            if Player.shared.player.timeControlStatus == .playing {
-                Player.shared.player.pause()
-            } else {
-                Player.shared.player.play()
-            }
-            
-            return .success
-        }
-        
-    }
 }
