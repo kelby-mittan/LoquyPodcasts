@@ -15,7 +15,7 @@ struct CardPageView: View {
     
     let imageUrl: String
     
-    @ObservedObject var networkManager: ViewModel
+    @ObservedObject var viewModel = ViewModel.shared
     
     @State private var transcription: String = RepText.empty
     @State private var shareShown = false
@@ -29,7 +29,7 @@ struct CardPageView: View {
     var body: some View {
         Group {
                         
-            let loquy = networkManager.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.reversed()[page]
+            let loquy = viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.reversed()[page]
             
             ZStack {
                 
@@ -132,7 +132,7 @@ struct CardPageView: View {
                 
             }
             .onAppear {
-                networkManager.loadLoquys()
+                viewModel.loadLoquys()
                 
                 let appPath = "deeplink://loquyApp\(loquy.audioClip.feedUrl )loquyApp\(loquy.audioClip.episode.pubDate.description)loquyApp\(loquy.audioClip.startTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "deeplink://"
                 
@@ -150,6 +150,9 @@ struct CardPageView: View {
     }
     
     func getLoquys() {
-        networkManager.loadLoquys()
+        viewModel.loadLoquys()
     }
 }
+
+
+
