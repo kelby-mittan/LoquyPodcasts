@@ -84,17 +84,6 @@ struct ControlView: View {
                 
                 Button(action: {
                     handlePlayPausePressed()
-//                    if episode.title == viewModel.episodePlaying {
-//                        !playing ? player.play() : player.pause()
-//                        playing.toggle()
-//                        isPlaying.toggle()
-//                    } else {
-//                        viewModel.episodePlaying = episode.title
-//                        Player.playEpisode(episode: episode)
-//                        playing = true
-//                    }
-                    
-                    
                 }) {
                     ZStack {
                         NeoButtonView()
@@ -177,39 +166,6 @@ struct ControlView: View {
         .animation(.spring())
         .onAppear {
             handlePlayOnAppear()
-//            viewModel.handleIsPlaying()
-//            isPlaying = viewModel.playing
-//
-//            if !viewModel.playing {
-//                viewModel.episodePlaying = episode.title
-//                Player.playEpisode(episode: episode)
-//                if let deepLinkTime = episode.deepLinkTime {
-//                    player.seek(to: deepLinkTime.getCMTime())
-//                }
-//                playing = true
-//                isPlaying = true
-//
-//            } else {
-//                Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-//                if viewModel.episodePlaying != episode.title {
-//                    playing = false
-//
-//
-//                }
-//
-//            }
-//
-//            Player.getCurrentPlayerTime(currentTime, episode.title == viewModel.episodePlaying) { time in
-//                currentTime = time
-//            }
-//            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
-//                if viewModel.playing {
-//                    if player.currentItem?.duration.toDisplayString() != TimeText.unloaded && width > 0.0 {
-//                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-//
-//                    }
-//                }
-//            }
             setupRemoteControl()
         }
         

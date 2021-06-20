@@ -13,27 +13,16 @@ import Speech
 @available(iOS 14.0, *)
 struct TranscribeView: View {
     
-    @ObservedObject var viewModel = ViewModel.shared
-    @ObservedObject var transcriptionViewModel = TranscriptionViewModel.shared
-    
     let audioClip: AudioClip
     
-//    @State var width : CGFloat = 30
-//    @State var currentTime: String = TimeText.zero
-//    @State var playing = false
-//    @State var transcription: String = RepText.empty
+    @ObservedObject var viewModel = ViewModel.shared
+    @ObservedObject var scribeViewModel = TranscriptionViewModel.shared
     
-//    @State var title: String = RepText.empty
-//    @State var isTranscribing = false
-    @State var saveText = RepText.transcribe
     @State var image = RemoteImageDetail(url: RepText.empty)
     @State var showNotification = false
     @State var notificationMessage = RepText.empty
-    @State var showAlert = false
     
     let player = Player.shared.player
-//    var speechRecognizer = SFSpeechRecognizer()
-//    @State var startedPlaying = 0
     
     var body: some View {
         ZStack {
@@ -53,8 +42,7 @@ struct TranscribeView: View {
                         .font(.headline)
                         .padding([.leading,.trailing])
                 }.onTapGesture(perform: {
-//                    playing = false
-                    transcriptionViewModel.playing = false
+                    scribeViewModel.playing = false
                 })
                 
                 Text(audioClip.startTime + TimeText.dash + audioClip.endTime)
@@ -69,17 +57,15 @@ struct TranscribeView: View {
                         .cornerRadius(6)
                     Spacer()
                     Button(action: {
-                        transcriptionViewModel.playing.toggle()
+                        scribeViewModel.playing.toggle()
                         
-                        transcriptionViewModel.handlePlay(audioClip)
+                        scribeViewModel.handlePlay(audioClip)
                         
-//                        handlePlay()
-                        
-                            transcriptionViewModel.playing ? player.play() : player.pause()
+                        scribeViewModel.playing ? player.play() : player.pause()
                     }) {
                         ZStack {
                             NeoButtonView()
-                            Image(systemName: transcriptionViewModel.playing ? Symbol.pause : Symbol.play).font(.largeTitle)
+                            Image(systemName: scribeViewModel.playing ? Symbol.pause : Symbol.play).font(.largeTitle)
                                 .foregroundColor(.purple)
                                 
                         }
@@ -95,51 +81,51 @@ struct TranscribeView: View {
                 
                 ZStack(alignment: .leading) {
                     Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    Capsule().fill(Color.purple).frame(width: transcriptionViewModel.width, height: 8)
+                    Capsule().fill(Color.purple).frame(width: scribeViewModel.width, height: 8)
                         .gesture(DragGesture()
                             .onChanged({ (value) in
-//                                player.pause()
-                                Player.handleWidth(value, &transcriptionViewModel.width, &transcriptionViewModel.currentTime)
+                                player.pause()
+                                Player.handleWidth(value, &scribeViewModel.width, &scribeViewModel.currentTime)
                                 
                             }).onEnded({ (value) in
                                 player.seek(to: Player.capsuleDragged(value.location.x))
                                 player.play()
-                                    transcriptionViewModel.playing = true
+                                scribeViewModel.playing = true
                             }))
                 }.padding([.leading,.trailing])
                 
                 HStack {
-                    Text(transcriptionViewModel.currentTime)
+                    Text(scribeViewModel.currentTime)
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.leading, 4)
                     Spacer()
-                    Text(transcriptionViewModel.timeToDisplay())
+                    Text(scribeViewModel.timeToDisplay())
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .padding(.trailing, 4)
                 }
                 
                 Group {
-                    if transcriptionViewModel.isTranscribing {
+                    if scribeViewModel.isTranscribing {
                         VStack(alignment: .leading) {
                             Text(RepText.yourLoquy)
                                 .font(.title)
                                 .fontWeight(.heavy)
-                            MultilineTextField(RepText.empty, isSaved: false, text: $transcriptionViewModel.transcription, onCommit: {
+                            MultilineTextField(RepText.empty, isSaved: false, text: $scribeViewModel.transcription, onCommit: {
                                 player.pause()
                                 DispatchQueue.main.async {
-                                    transcriptionViewModel.playing = false
+                                    scribeViewModel.playing = false
                                 }
                             })
                         }.padding()
                     }
                 }
                 Button(action: {
-                    transcriptionViewModel.handleIsTranscribing(audioClip)
+                    scribeViewModel.handleIsTranscribing(audioClip)
                     
                 }) {
-                    Text(transcriptionViewModel.isTranscribing
+                    Text(scribeViewModel.isTranscribing
                             ? RepText.saveLoquy
                             : RepText.transcribe)
                         .fontWeight(.heavy)
@@ -153,8 +139,8 @@ struct TranscribeView: View {
                         .padding()
                 }
                 Spacer()
-                if showAlert {
-                    SaveLoquyAlertView(showAlert: $showAlert, notificationShown: $showNotification, message: $notificationMessage, audioClip: audioClip, transcription: transcriptionViewModel.transcription, isPlaying: viewModel.playing)
+                if scribeViewModel.showAlert {
+                    SaveLoquyAlertView(showAlert: $scribeViewModel.showAlert, notificationShown: $showNotification, message: $notificationMessage, audioClip: audioClip, transcription: scribeViewModel.transcription, isPlaying: scribeViewModel.playing)
                     .offset(x: 0, y: -70)
                 }
             }.onAppear {
