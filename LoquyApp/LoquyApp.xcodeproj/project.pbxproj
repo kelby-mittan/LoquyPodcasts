@@ -46,6 +46,7 @@
 		029955C824F339D200479318 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C724F339D100479318 /* ControlView.swift */; };
 		029AE2F1267ECBA30022F813 /* TranscriptionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029AE2F0267ECBA30022F813 /* TranscriptionViewModel.swift */; };
 		029AE2F3267ECBCC0022F813 /* ControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029AE2F2267ECBCC0022F813 /* ControllerViewModel.swift */; };
+		029AE2F5267FDF0D0022F813 /* CardScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029AE2F4267FDF0D0022F813 /* CardScrollView.swift */; };
 		02A95744267D13610068B1E4 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A95743267D13610068B1E4 /* GlobalConstants.swift */; };
 		02A966C2267AAE2D003899E0 /* URL+DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A966C1267AAE2D003899E0 /* URL+DeepLink.swift */; };
 		02A966C4267C089D003899E0 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A966C3267C089C003899E0 /* AsyncImage.swift */; };
@@ -121,6 +122,7 @@
 		029955C724F339D100479318 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
 		029AE2F0267ECBA30022F813 /* TranscriptionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionViewModel.swift; sourceTree = "<group>"; };
 		029AE2F2267ECBCC0022F813 /* ControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerViewModel.swift; sourceTree = "<group>"; };
+		029AE2F4267FDF0D0022F813 /* CardScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardScrollView.swift; sourceTree = "<group>"; };
 		02A95743267D13610068B1E4 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		02A966C1267AAE2D003899E0 /* URL+DeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+DeepLink.swift"; sourceTree = "<group>"; };
 		02A966C3267C089C003899E0 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 			children = (
 				0247E439251FDEF100E14DEB /* SaveLoquyAlertView.swift */,
 				0247E44E2520161500E14DEB /* CardPageView.swift */,
+				029AE2F4267FDF0D0022F813 /* CardScrollView.swift */,
 			);
 			path = "Transcribe Subviews";
 			sourceTree = "<group>";
@@ -574,6 +577,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				029AE2F5267FDF0D0022F813 /* CardScrollView.swift in Sources */,
 				0224B57124CBC2CB0062E43F /* MakeStrings+exts.swift in Sources */,
 				02B568AA24C4DD7D004D5C6D /* EpisodesView.swift in Sources */,
 				029AE2F3267ECBCC0022F813 /* ControllerViewModel.swift in Sources */,

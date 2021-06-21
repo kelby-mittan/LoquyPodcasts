@@ -116,7 +116,7 @@ class TranscriptionViewModel: ObservableObject {
                                 print(ErrorText.recError+error.localizedDescription)
                             } else {
                                 if self?.playing == true {
-                                    self?.transcription = result?.bestTranscription.formattedString ?? RepText.noTranscription
+                                    self?.transcription = result?.bestTranscription.formattedString ?? RepText.empty
                                 }
                             }
                         })

@@ -103,7 +103,7 @@ struct LoquyContentView: View {
 //                                .onAppear {
 //                                    viewModel.loadLoquys()
 //                                }
-                            CardPageView2(imageUrl: imageUrl)
+                            PagingCardView(imageUrl: imageUrl)
 //                        }
 
 //                        PageControl(page: $page, loquyCount: viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
