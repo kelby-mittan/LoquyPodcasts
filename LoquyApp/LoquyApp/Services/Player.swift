@@ -41,33 +41,33 @@ class Player {
     }
     
     static func playEpisode(episode: Episode) {
-        if episode.fileUrl != nil {
+        if let _ = episode.fileUrl {
             playEpisodeUsingFileUrl(episode: episode)
         } else {
             guard let url = URL(string: episode.streamUrl) else { return }
             let playerItem = AVPlayerItem(url: url)
-            Player.shared.player.replaceCurrentItem(with: playerItem)
-            Player.shared.player.play()
+            shared.player.replaceCurrentItem(with: playerItem)
+            shared.player.play()
         }
     }
     
     static func seekToCurrentTime(delta: Int64) {
         let fifteenSeconds = CMTimeMake(value: delta, timescale: 1)
         let seekTime = CMTimeAdd(Player.shared.player.currentTime(), fifteenSeconds)
-        Player.shared.player.seek(to: seekTime)
+        shared.player.seek(to: seekTime)
     }
     
     static func playAudioClip(url: URL) {
         let playerItem = AVPlayerItem(url: url)
-        Player.shared.player.replaceCurrentItem(with: playerItem)
-        Player.shared.player.play()
+        shared.player.replaceCurrentItem(with: playerItem)
+        shared.player.play()
     }
     
     /// Function determines the AVPlayer's current playing time and its percentage of the full podcast duration
     /// - Returns: CGFloat representing where the Capsule should be on the screen
     static func updateTimeCapsule() -> CGFloat {
-        let currentTimeSeconds = CMTimeGetSeconds(Player.shared.player.currentTime())
-        let durationSeconds = CMTimeGetSeconds(Player.shared.player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
+        let currentTimeSeconds = CMTimeGetSeconds(shared.player.currentTime())
+        let durationSeconds = CMTimeGetSeconds(shared.player.currentItem?.duration ?? CMTimeMake(value: 1, timescale: 1))
         let percentage = currentTimeSeconds / durationSeconds
         
         return CGFloat(percentage)
@@ -90,19 +90,27 @@ class Player {
         return seekTime
     }
     
+    /// Function calculates and updates the width for a capsule view depending on the current player time
+    /// - Parameter width: CGFloat of the width of a capsule that will be updated
+    /// - Parameter currentTime: String for the current time being played of a podcast
     static public func getCapsuleWidth(width: inout CGFloat, currentTime: String) {
         let screen = UIScreen.main.bounds.width - 20
-        let duration = Player.shared.player.currentItem?.duration.toDisplayString() ?? "00:00:00"
+        let duration = shared.player.currentItem?.duration.toDisplayString() ?? "00:00:00"
         let percent = currentTime.toSecDouble() / duration.toSecDouble()
         width = screen * CGFloat(percent) + 20
     }
     
+    /// Function gets the current time for a podcast being played using a completion handler
+    /// - Parameter currentTime: String for current time of podcast being played
+    /// - Parameter ctCondition: Bool for a current time condition to be met to display a new string for start time, otherwise start from 00:00:00
+    /// - Parameter completion: Closure for capturing the start time of a clip or podcast
+    /// - Returns: A discardable result for the length of a clip or podcast
     @discardableResult
     static public func getCurrentPlayerTime(_ currentTime: String, _ ctCondition: Bool, completion: @escaping (String) -> ()) -> (String) {
         
         let interval = CMTimeMake(value: 1, timescale: 2)
         var durationLabel = ""
-        Player.shared.player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { (time) in
+        shared.player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
             if ctCondition {
                 completion(time.toDisplayString())
             } else {
@@ -115,7 +123,7 @@ class Player {
         }
         let dt = durationTime - currentTime.getCMTime()
         durationLabel = "-" + dt.toDisplayString()
-        return (durationLabel)
+        return durationLabel
     }
     
     static public func handleWidth(_ value: DragGesture.Value,

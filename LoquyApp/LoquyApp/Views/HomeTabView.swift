@@ -7,26 +7,24 @@
 //
 
 import SwiftUI
-import Combine
 
 @available(iOS 14.0, *)
 @main
 struct Home: App {
     
+    @ObservedObject private var viewModel = DeepLinkViewModel()
+    
     @State private var selectedTab = 0
-    @State private var isDeepLink = false
-    @State private var hasLoaded = false
-    @State private var deepLinkEpisode = Episode(url: URL(string: RepText.empty))
     
     var body: some Scene {
         WindowGroup {
             TabView(selection: $selectedTab) {
                 Group {
-                    if !isDeepLink {
+                    if !viewModel.isDeepLink {
                         BrowseView()
                     } else {
                         NavigationView {
-                            EpisodeDetailView(episode: deepLinkEpisode, artwork: deepLinkEpisode.imageUrl ?? RepText.empty, feedUrl: deepLinkEpisode.feedUrl, isDeepLink: true)
+                            EpisodeDetailView(episode: viewModel.deepLinkEpisode, artwork: viewModel.deepLinkEpisode.imageUrl ?? RepText.empty, feedUrl: viewModel.deepLinkEpisode.feedUrl, isDeepLink: true)
                         }
                     }
                 }
@@ -40,16 +38,7 @@ struct Home: App {
                 TranscriptsTab().tag(4)
             }
             .onOpenURL { url in
-                let deepLinkData = url.getURLComponents()
-                
-                ITunesAPI.shared.fetchSpecificEpisode(feedUrl: deepLinkData.feed, date: deepLinkData.pubDate) { episode in
-                    DispatchQueue.main.async {
-                        deepLinkEpisode = episode
-                        deepLinkEpisode.deepLinkTime = deepLinkData.dlTime
-                        dump(deepLinkEpisode)
-                        isDeepLink = true
-                    }
-                }
+                viewModel.loadDeepLinkEpisode(url: url)
             }
             .accentColor(.purple)
             
@@ -65,9 +54,7 @@ struct BrowseView: View {
     @State private var isPodcastShowing = true
     @State private var isEditing = false
     @ObservedObject private var viewModel = ViewModel.shared
-    
-    @Environment(\.presentationMode) var presentationMode
-    
+        
     let mindspace = DummyPodcast.mindspace
     
     var body: some View {

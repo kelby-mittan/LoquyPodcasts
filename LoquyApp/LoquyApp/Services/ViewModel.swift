@@ -8,7 +8,6 @@
 
 import SwiftUI
 import Combine
-import MediaPlayer
 
 class ViewModel: ObservableObject {
     
@@ -59,6 +58,18 @@ class ViewModel: ObservableObject {
     }
     
     @Published var playing = Bool() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
+    @Published var deepLinkEpisode = Episode(url: URL(string: RepText.empty)) {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
+    @Published var isDeepLink = Bool() {
         didSet {
             didChange.send(self)
         }
@@ -144,4 +155,15 @@ class ViewModel: ObservableObject {
         self.playing = Player.shared.player.timeControlStatus == .playing
     }
     
+    public func loadDeepLinkEpisode(url: URL) {
+        let deepLinkData = url.getURLComponents()
+        
+        ITunesAPI.shared.fetchSpecificEpisode(feedUrl: deepLinkData.feed, date: deepLinkData.pubDate) { [weak self] episode in
+            DispatchQueue.main.async {
+                self?.deepLinkEpisode = episode
+                self?.deepLinkEpisode.deepLinkTime = deepLinkData.dlTime
+                self?.isDeepLink = true
+            }
+        }
+    }
 }

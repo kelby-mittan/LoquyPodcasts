@@ -15,14 +15,10 @@ struct PagingCardView: View {
     let imageUrl: String
     
     @ObservedObject var viewModel = ViewModel.shared
+    @ObservedObject var deepLinkViewModel = DeepLinkViewModel()
     
-    @State private var transcription: String = RepText.empty
     @State private var shareShown = false
-        
-    let podImage = UIImage(named: Assets.loquyImage)!
     
-    @State var appURLL = URL(string: "")
-    @State var attString = NSMutableAttributedString()
     var body: some View {
         
         ZStack {
@@ -39,20 +35,13 @@ struct PagingCardView: View {
                         CardScrollView(loquy: loquy, shareShown: $shareShown)
                     }
                     .sheet(isPresented: $shareShown) {
-                        let appStoreURL = URL(string: "https://apps.apple.com/us/app/loquy/id1532251878")!
                         
-                        if let url = appURLL {
-                            ShareView(items: ["\n Something cool I heard on Loquy\n\n",loquy.title+"\n\n ",loquy.transcription+"\n \n ",url,appStoreURL,podImage])
+                        if let url = deepLinkViewModel.appURL {
+                            ShareView(items: ["\n Something cool I heard on Loquy\n\n",loquy.title+"\n\n ",loquy.transcription+"\n \n ",url,deepLinkViewModel.appStoreURL,deepLinkViewModel.podImage])
                         }
                     }
                     .onAppear {
-                        
-                        let appPath = "deeplink://loquyApp\(loquy.audioClip.feedUrl )loquyApp\(loquy.audioClip.episode.pubDate.description)loquyApp\(loquy.audioClip.startTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "deeplink://"
-                        
-                        appURLL = URL(string: appPath)
-                        
-                        attString = NSMutableAttributedString(string: "Check it out")
-                        attString.setAttributes([.link: appURLL!], range: NSMakeRange(attString.length-12, 12))
+                        deepLinkViewModel.prepareDeepLinkURL(loquy)
                     }
                     .cornerRadius(8)
                     .padding()
@@ -60,26 +49,10 @@ struct PagingCardView: View {
             }.tabViewStyle(PageTabViewStyle())
             
         }
-        .onAppear {
-            viewModel.loadLoquys()
-            
-    //                let appPath = "deeplink://loquyApp\(loquy.audioClip.feedUrl )loquyApp\(loquy.audioClip.episode.pubDate.description)loquyApp\(loquy.audioClip.startTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "deeplink://"
-    //
-    //                let appURL = URL(string: appPath)!
-    //
-    //                print(appURL.absoluteString)
-    //
-//                    attString = NSMutableAttributedString(string: "Check it out")
-//                    attString.setAttributes([.link: appURL], range: NSMakeRange(attString.length-12, 12))
-            
-        }
         .cornerRadius(12)
         
     }
     
-    func getLoquys() {
-        viewModel.loadLoquys()
-    }
 }
 
 

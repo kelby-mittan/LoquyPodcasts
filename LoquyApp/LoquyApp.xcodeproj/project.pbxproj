@@ -41,6 +41,7 @@
 		027094882506ADB5009E0BF5 /* EpisodeTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094872506ADB5009E0BF5 /* EpisodeTimesView.swift */; };
 		0270948A2506AE36009E0BF5 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094892506AE36009E0BF5 /* DescriptionView.swift */; };
 		0270948C2506AE73009E0BF5 /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270948B2506AE73009E0BF5 /* FavoriteView.swift */; };
+		0285E4EC2699086B005B863A /* DeepLinkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0285E4EB2699086B005B863A /* DeepLinkViewModel.swift */; };
 		0294B3662514365A0099EC54 /* CustomPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0294B3652514365A0099EC54 /* CustomPicker.swift */; };
 		029955C624F32C0E00479318 /* CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C524F32C0E00479318 /* CMTime.swift */; };
 		029955C824F339D200479318 /* ControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029955C724F339D100479318 /* ControlView.swift */; };
@@ -117,6 +118,7 @@
 		027094872506ADB5009E0BF5 /* EpisodeTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeTimesView.swift; sourceTree = "<group>"; };
 		027094892506AE36009E0BF5 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
 		0270948B2506AE73009E0BF5 /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
+		0285E4EB2699086B005B863A /* DeepLinkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkViewModel.swift; sourceTree = "<group>"; };
 		0294B3652514365A0099EC54 /* CustomPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPicker.swift; sourceTree = "<group>"; };
 		029955C524F32C0E00479318 /* CMTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTime.swift; sourceTree = "<group>"; };
 		029955C724F339D100479318 /* ControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlView.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				02B568B824C4FA8D004D5C6D /* ViewModel.swift */,
+				0285E4EB2699086B005B863A /* DeepLinkViewModel.swift */,
 				029AE2F2267ECBCC0022F813 /* ControllerViewModel.swift */,
 				029AE2F0267ECBA30022F813 /* TranscriptionViewModel.swift */,
 				02272D7E24C9FA69007548C3 /* ImageLoader.swift */,
@@ -625,6 +628,7 @@
 				027094882506ADB5009E0BF5 /* EpisodeTimesView.swift in Sources */,
 				0270947725030889009E0BF5 /* PodcastCell.swift in Sources */,
 				0270947C25031152009E0BF5 /* FavoritesVCWrapper.swift in Sources */,
+				0285E4EC2699086B005B863A /* DeepLinkViewModel.swift in Sources */,
 				0270948225058952009E0BF5 /* TimeStampAlertView.swift in Sources */,
 				0247E44F2520161600E14DEB /* CardPageView.swift in Sources */,
 				02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */,
