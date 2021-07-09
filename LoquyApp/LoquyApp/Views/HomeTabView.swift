@@ -40,19 +40,6 @@ struct Home: App {
                 TranscriptsTab().tag(4)
             }
             .onOpenURL { url in
-                //                print("URL TO PARSE")
-                //                print(url.absoluteString)
-                //                let components = url.absoluteString.components(separatedBy: "loquyApp")
-                //
-                //                dump(components)
-                //                guard components.count == 4 else { return }
-                //                let feed = components[1].replacingOccurrences(of: "https//", with: "https://")
-                //                let pubDate = components[2].removingPercentEncoding ?? ""
-                //                let timeStamp = components[3].removingPercentEncoding ?? ""
-                //                print(feed)
-                //                print(pubDate)
-                //                print(timeStamp)
-                
                 let deepLinkData = url.getURLComponents()
                 
                 ITunesAPI.shared.fetchSpecificEpisode(feedUrl: deepLinkData.feed, date: deepLinkData.pubDate) { episode in
@@ -65,6 +52,7 @@ struct Home: App {
                 }
             }
             .accentColor(.purple)
+            
         }
         
     }

@@ -98,17 +98,19 @@ struct LoquyContentView: View {
             if toggled {
                 ZStack {
                     VStack {
-                        GeometryReader{ g in
-                            Carousel(networkManager: viewModel, imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
-                                .onAppear {
-                                    viewModel.loadLoquys()
-                                }
-                        }
-                        
-                        PageControl(page: $page, loquyCount: viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
-                            .background(NeoButtonView())
-                            .padding([.bottom,.top], 8)
-                        Spacer()
+//                        GeometryReader{ g in
+//                            Carousel(imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
+//                                .onAppear {
+//                                    viewModel.loadLoquys()
+//                                }
+                            PagingCardView(imageUrl: imageUrl)
+//                        }
+
+//                        PageControl(page: $page, loquyCount: viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
+//                            .background(NeoButtonView())
+//                            .padding([.bottom,.top], 8)
+//                        Spacer()
+//                    CardPageView2(imageUrl: imageUrl)
                     }
                 }
                 .transition(
