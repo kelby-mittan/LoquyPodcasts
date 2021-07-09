@@ -92,7 +92,7 @@ struct TranscribeView: View {
                 
                 ZStack(alignment: .leading) {
                     Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    Capsule().fill(Color.purple).frame(width: scribeViewModel.width, height: 8)
+                    Capsule().fill(Color.purple).frame(width: playedWidth, height: 8)
                         .gesture(DragGesture()
                             .onChanged({ (value) in
                                 player.pause()
