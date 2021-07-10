@@ -7,7 +7,6 @@
 //
 
 import SwiftUI
-import AVKit
 import Speech
 
 @available(iOS 14.0, *)
@@ -16,9 +15,9 @@ struct TranscribeView: View {
     let audioClip: AudioClip
     
     @ObservedObject var viewModel = ViewModel.shared
-    @ObservedObject var scribeViewModel = TranscriptionViewModel.shared
+//    @ObservedObject var scribeViewModel = TranscriptionViewModel.shared
     
-    @State var image = RemoteImageDetail(url: RepText.empty)
+    @State var remoteImage = RemoteImageDetail(url: RepText.empty)
     @State var showNotification = false
     @State var notificationMessage = RepText.empty
     
@@ -54,7 +53,6 @@ struct TranscribeView: View {
                         .font(.headline)
                         .padding([.leading,.trailing])
                 }.onTapGesture(perform: {
-                    scribeViewModel.playing = false
                     playing = false
                 })
                 
@@ -65,7 +63,7 @@ struct TranscribeView: View {
                     .padding(.top,4)
                 
                 HStack {
-                    image
+                    remoteImage
                         .frame(width: 100, height: 100)
                         .cornerRadius(6)
                     Spacer()
@@ -153,7 +151,7 @@ struct TranscribeView: View {
                     .offset(x: 0, y: -70)
                 }
             }.onAppear {
-                image = RemoteImageDetail(url: audioClip.episode.imageUrl ?? RepText.empty)
+                remoteImage = RemoteImageDetail(url: audioClip.episode.imageUrl ?? RepText.empty)
                 viewModel.loadLoquys()
         }
             NotificationView(message: $notificationMessage)

@@ -104,14 +104,14 @@ class TranscriptionViewModel: ObservableObject {
     }
     
     public func getTranscriptionOfClippedFile(_ audioClip: AudioClip) {
-        SFSpeechRecognizer.requestAuthorization { (authStatus) in
+        SFSpeechRecognizer.requestAuthorization { [weak self] (authStatus) in
             if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) {
                 
-                AudioTrim.trimUsingComposition(url: url, start: self.currentTime, duration: audioClip.duration, pathForFile: TrimText.trimmedFile) { (result) in
+                AudioTrim.trimUsingComposition(url: url, start: self?.currentTime ?? "00:00:00", duration: audioClip.duration, pathForFile: TrimText.trimmedFile) { (result) in
                     switch result {
                     case .success(let clipUrl):
                         let request = SFSpeechURLRecognitionRequest(url: clipUrl)
-                        self.speechRecognizer?.recognitionTask(with: request, resultHandler: { [weak self] (result, error) in
+                        self?.speechRecognizer?.recognitionTask(with: request, resultHandler: { [weak self] (result, error) in
                             if let error = error {
                                 print(ErrorText.recError+error.localizedDescription)
                             } else {

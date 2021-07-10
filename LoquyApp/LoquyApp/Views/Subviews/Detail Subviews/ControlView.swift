@@ -168,9 +168,7 @@ struct ControlView: View {
             handlePlayOnAppear()
             setupRemoteControl()
         }
-        
     }
-    
 }
 
 extension ControlView {

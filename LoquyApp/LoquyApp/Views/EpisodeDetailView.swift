@@ -19,9 +19,7 @@ struct EpisodeDetailView: View {
     let feedUrl: String?
     let isDeepLink: Bool
     
-    @ObservedObject var viewModel = ViewModel.shared
-    
-    @State var image = RemoteImageDetail(url: RepText.empty)
+    @State var remoteImage = RemoteImageDetail(url: RepText.empty)
     @State var halfModalShown = false
     @State var clipTime = RepText.empty
     @State var times = [String]()
@@ -36,7 +34,7 @@ struct EpisodeDetailView: View {
             ZStack {
                 ScrollView(.vertical, showsIndicators: true) {
                     
-                    image
+                    remoteImage
                         .aspectRatio(contentMode: .fit)
                         .frame(width: playing ? 250 : 200, height: playing ? 250 : 200)
                         .cornerRadius(12)
@@ -67,7 +65,7 @@ struct EpisodeDetailView: View {
                 }
                 
             }.onAppear {
-                image = RemoteImageDetail(url: episode.imageUrl ?? RepText.empty)
+                remoteImage = RemoteImageDetail(url: episode.imageUrl ?? RepText.empty)
                 clipTime = player.currentTime().toDisplayString()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
