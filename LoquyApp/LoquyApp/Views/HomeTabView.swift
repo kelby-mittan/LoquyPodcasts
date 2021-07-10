@@ -12,7 +12,7 @@ import SwiftUI
 @main
 struct Home: App {
     
-    @ObservedObject private var viewModel = DeepLinkViewModel()
+    @ObservedObject private var deepLinkViewModel = DeepLinkViewModel()
     
     @State private var selectedTab = 0
     
@@ -20,11 +20,11 @@ struct Home: App {
         WindowGroup {
             TabView(selection: $selectedTab) {
                 Group {
-                    if !viewModel.isDeepLink {
+                    if !deepLinkViewModel.isDeepLink {
                         BrowseView()
                     } else {
                         NavigationView {
-                            EpisodeDetailView(episode: viewModel.deepLinkEpisode, artwork: viewModel.deepLinkEpisode.imageUrl ?? RepText.empty, feedUrl: viewModel.deepLinkEpisode.feedUrl, isDeepLink: true)
+                            EpisodeDetailView(episode: deepLinkViewModel.deepLinkEpisode, artwork: deepLinkViewModel.deepLinkEpisode.imageUrl ?? RepText.empty, feedUrl: deepLinkViewModel.deepLinkEpisode.feedUrl, isDeepLink: true)
                         }
                     }
                 }
@@ -38,7 +38,7 @@ struct Home: App {
                 TranscriptsTab().tag(4)
             }
             .onOpenURL { url in
-                viewModel.loadDeepLinkEpisode(url: url)
+                deepLinkViewModel.loadDeepLinkEpisode(url: url)
             }
             .accentColor(.purple)
             

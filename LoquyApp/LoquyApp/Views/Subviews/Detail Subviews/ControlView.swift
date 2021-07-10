@@ -52,15 +52,18 @@ struct ControlView: View {
                         Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                     })
             }
+            .padding([.leading,.trailing],8)
             
             HStack {
                 Text(currentTime)
                     .font(.caption)
                     .foregroundColor(.secondary)
+                    .padding(.leading,8)
                 Spacer()
                 Text(handleTimeDisplayed())
                     .font(.caption)
                     .foregroundColor(.secondary)
+                    .padding(.trailing,8)
             }
             .padding([.leading,.trailing])
             
@@ -116,14 +119,30 @@ struct ControlView: View {
                 .offset(x: -20)
                 
             }
-            HStack {
-                Spacer()
+            VStack {
+                Button(action: {
+                    showModal.toggle()
+                    clipTime = currentTime
+                }) {
+                    Text(RepText.recordClip)
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .frame(width: UIScreen.main.bounds.width - 88,height: 44)
+                        .foregroundColor(.purple)
+                        .background(NeoButtonView())
+                        .clipShape(Capsule())
+                        .padding()
+                }
+                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
+                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
+                .animation(.spring())
+//                .padding(.bottom,16)
+
                 Button(action: {
                     showAlert.toggle()
                 }) {
                     Text(RepText.timeStamp)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .frame(width: 122,height: 44)
+                        .frame(width: UIScreen.main.bounds.width - 88,height: 44)
                         .foregroundColor(.purple)
                         .background(NeoButtonView())
                         .clipShape(Capsule())
@@ -133,27 +152,7 @@ struct ControlView: View {
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 .animation(.spring())
                 .buttonStyle(PlainButtonStyle())
-                .padding([.leading],20)
-                Spacer()
-                
-                Button(action: {
-                    showModal.toggle()
-                    clipTime = currentTime
-                }) {
-                    Text(RepText.recordClip)
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .frame(width: 122,height: 44)
-                        .foregroundColor(.purple)
-                        .background(NeoButtonView())
-                        .clipShape(Capsule())
-                        .padding()
-                }
-                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
-                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
-                .animation(.spring())
-                .padding([.trailing],20)
-                Spacer()
-                
+                .offset(y: -10)
             }
             .padding([.leading,.trailing])
             .blur(radius: showAlert ? 30 : 0)

@@ -30,7 +30,6 @@ class FavoritesViewController: UIViewController {
         configureCollectionView()
         configureDataSource()
         updateSnapshot(with: Array(Set(nonDuplicatedCasts())))
-        dump(getAuthorArray())
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,14 +52,6 @@ class FavoritesViewController: UIViewController {
             }
         }
         return artAndAuthors
-    }
-    
-    private func getArtArray() -> [String] {
-        return nonDuplicatedCasts().map { $0.components(separatedBy: RepText.heyNow)[0] }
-    }
-    
-    private func getAuthorArray() -> [String] {
-        return nonDuplicatedCasts().map { $0.components(separatedBy: RepText.heyNow)[1] }
     }
     
     private func updateSnapshot(with episodes: [String]) {

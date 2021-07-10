@@ -46,8 +46,10 @@ struct EpisodeDetailView: View {
                         .padding(.top, playing ? 0 : 25)
                     
                     EpisodeTimesView(episode: episode)
+                        .padding([.leading,.trailing],8)
                     
                     DescriptionView(episode: episode)
+                        .padding([.leading,.trailing], 8)
                     
                     FavoriteView(episode: episode, artwork: artwork, notificationShown: $showNotification, message: $notificationMessage)
                         .padding(.bottom, 100)

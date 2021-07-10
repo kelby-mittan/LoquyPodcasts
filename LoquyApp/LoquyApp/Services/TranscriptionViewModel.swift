@@ -8,17 +8,16 @@
 
 import SwiftUI
 import Combine
-import MediaPlayer
 import Speech
 
 class TranscriptionViewModel: ObservableObject {
     
     static let shared = TranscriptionViewModel()
-        
+    
     var speechRecognizer = SFSpeechRecognizer()
     
     var didChange = PassthroughSubject<TranscriptionViewModel, Never>()
-        
+    
     @Published var startedPlaying = 0 {
         didSet {
             didChange.send(self)
@@ -67,14 +66,14 @@ class TranscriptionViewModel: ObservableObject {
             guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) else {
                 return
             }
-
+            
             Player.playAudioClip(url: url)
             playing = true
             
             Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { [weak self] time in
                 self?.currentTime = time
             }
-
+            
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                 if self.playing {
                     if Player.shared.player.currentItem?.duration.toDisplayString() != TimeText.unloaded && self.width > 0.0 {
