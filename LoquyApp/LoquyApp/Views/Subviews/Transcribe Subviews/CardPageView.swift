@@ -37,7 +37,7 @@ struct PagingCardView: View {
                     .sheet(isPresented: $shareShown) {
                         
                         if let url = deepLinkViewModel.appURL {
-                            ShareView(items: ["\n Something cool I heard on Loquy\n\n",loquy.title+"\n\n ",loquy.transcription+"\n \n ",url,deepLinkViewModel.appStoreURL,deepLinkViewModel.podImage])
+                            ShareView(items: ["\n Something cool I heard on Loquy\n\n",loquy.title+"\n\n ",loquy.transcription+"\n \n ",url,deepLinkViewModel.appStoreURL,deepLinkViewModel.metaData,deepLinkViewModel.podImage])
                         }
                     }
                     .onAppear {

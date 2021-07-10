@@ -14,9 +14,12 @@ struct ShareView: UIViewControllerRepresentable {
     let items: [Any]
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<ShareView>) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
+        let activityController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        activityController.excludedActivityTypes = [.saveToCameraRoll,.airDrop,.assignToContact,.openInIBooks]
+        return activityController
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ShareView>) {
+        
     }
 }

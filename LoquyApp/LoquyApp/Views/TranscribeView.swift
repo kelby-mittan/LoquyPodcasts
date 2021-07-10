@@ -21,6 +21,16 @@ struct TranscribeView: View {
     @State var showNotification = false
     @State var notificationMessage = RepText.empty
     
+//
+//    @State var playedWidth = TranscriptionViewModel.shared.width
+//    @State var currentTime = TranscriptionViewModel.shared.currentTime
+//    @State var playing = TranscriptionViewModel.shared.playing
+//    @State var transcription = TranscriptionViewModel.shared.transcription
+//    @State var isTranscribing = TranscriptionViewModel.shared.isTranscribing
+//    @State var showAlert = TranscriptionViewModel.shared.showAlert
+//    var speechRecognizer = TranscriptionViewModel.shared.speechRecognizer
+//    @State var startedPlaying = TranscriptionViewModel.shared.startedPlaying
+    
     @State var playedWidth : CGFloat = 30
     @State var currentTime: String = TimeText.zero
     @State var playing = false
@@ -172,7 +182,7 @@ extension TranscribeView {
 
             Player.playAudioClip(url: url)
             playing = true
-            
+
             Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { time in
                 currentTime = time
             }
@@ -185,15 +195,15 @@ extension TranscribeView {
                 }
             }
         }
-        
+
     }
-    
+
     private func timeToDisplay() -> String {
         return Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { time in
             currentTime = time
         }
     }
-    
+
     private func handleIsTranscribing() {
         isTranscribing.toggle()
         if isTranscribing {
@@ -205,11 +215,11 @@ extension TranscribeView {
             showAlert.toggle()
         }
     }
-    
+
     private func getTranscriptionOfClippedFile() {
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) {
-                
+
                 AudioTrim.trimUsingComposition(url: url, start: currentTime, duration: audioClip.duration, pathForFile: TrimText.trimmedFile) { (result) in
                     switch result {
                     case .success(let clipUrl):

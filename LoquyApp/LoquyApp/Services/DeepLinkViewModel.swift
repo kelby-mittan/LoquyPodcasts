@@ -8,12 +8,19 @@
 
 import SwiftUI
 import Combine
+import LinkPresentation
 
 class DeepLinkViewModel: ObservableObject {
         
     var didChange = PassthroughSubject<DeepLinkViewModel, Never>()
     
     @Published var appURL = URL(string: RepText.empty) {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
+    @Published var metaData = LPLinkMetadata() {
         didSet {
             didChange.send(self)
         }
@@ -48,6 +55,10 @@ class DeepLinkViewModel: ObservableObject {
         let appPath = "deeplink://loquyApp\(loquy.audioClip.feedUrl )loquyApp\(loquy.audioClip.episode.pubDate.description)loquyApp\(loquy.audioClip.startTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "deeplink://"
         
         appURL = URL(string: appPath)
+        metaData.originalURL = URL(string: appPath)
+        metaData.url = metaData.originalURL
+        metaData.title = "Check It Out"
+        
     }
     
     public func loadDeepLinkEpisode(url: URL) {
