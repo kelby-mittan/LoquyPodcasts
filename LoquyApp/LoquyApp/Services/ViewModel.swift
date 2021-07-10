@@ -63,18 +63,6 @@ class ViewModel: ObservableObject {
         }
     }
     
-    @Published var deepLinkEpisode = Episode(url: URL(string: RepText.empty)) {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
-    @Published var isDeepLink = Bool() {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
     public func loadSearchPodcasts(search: String) {
         var timer: Timer?
         timer?.invalidate()
@@ -155,15 +143,4 @@ class ViewModel: ObservableObject {
         self.playing = Player.shared.player.timeControlStatus == .playing
     }
     
-    public func loadDeepLinkEpisode(url: URL) {
-        let deepLinkData = url.getURLComponents()
-        
-        ITunesAPI.shared.fetchSpecificEpisode(feedUrl: deepLinkData.feed, date: deepLinkData.pubDate) { [weak self] episode in
-            DispatchQueue.main.async {
-                self?.deepLinkEpisode = episode
-                self?.deepLinkEpisode.deepLinkTime = deepLinkData.dlTime
-                self?.isDeepLink = true
-            }
-        }
-    }
 }
