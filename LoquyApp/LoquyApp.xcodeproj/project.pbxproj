@@ -50,6 +50,7 @@
 		02A95744267D13610068B1E4 /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A95743267D13610068B1E4 /* GlobalConstants.swift */; };
 		02A966C2267AAE2D003899E0 /* URL+DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A966C1267AAE2D003899E0 /* URL+DeepLink.swift */; };
 		02A966C4267C089D003899E0 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A966C3267C089C003899E0 /* AsyncImage.swift */; };
+		02AD420E26A0F4D6000C6F6C /* UIImage+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AD420D26A0F4D6000C6F6C /* UIImage+UIColor.swift */; };
 		02B5688024C4DBB6004D5C6D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */; };
 		02B5688224C4DBB6004D5C6D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */; };
 		02B5688524C4DBB6004D5C6D /* LoquyApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02B5688324C4DBB6004D5C6D /* LoquyApp.xcdatamodeld */; };
@@ -126,6 +127,7 @@
 		02A95743267D13610068B1E4 /* GlobalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		02A966C1267AAE2D003899E0 /* URL+DeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+DeepLink.swift"; sourceTree = "<group>"; };
 		02A966C3267C089C003899E0 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		02AD420D26A0F4D6000C6F6C /* UIImage+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+UIColor.swift"; sourceTree = "<group>"; };
 		02B5687C24C4DBB6004D5C6D /* LoquyApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoquyApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02B5687F24C4DBB6004D5C6D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02B5688124C4DBB6004D5C6D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				0270947D250403F9009E0BF5 /* UserDefaults.swift */,
 				02DF72D7251826C6006FDC9E /* Date.swift */,
 				02A966C1267AAE2D003899E0 /* URL+DeepLink.swift */,
+				02AD420D26A0F4D6000C6F6C /* UIImage+UIColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -608,6 +611,7 @@
 				02DE63B9251165DD002B307F /* ClipAlertView.swift in Sources */,
 				02A95744267D13610068B1E4 /* GlobalConstants.swift in Sources */,
 				0247E44B251FF44400E14DEB /* Carousel.swift in Sources */,
+				02AD420E26A0F4D6000C6F6C /* UIImage+UIColor.swift in Sources */,
 				02A966C4267C089D003899E0 /* AsyncImage.swift in Sources */,
 				0224B56B24CBB7130062E43F /* LoquyListView.swift in Sources */,
 				029955C824F339D200479318 /* ControlView.swift in Sources */,

@@ -64,6 +64,20 @@ class ViewModel: ObservableObject {
         }
     }
     
+    @Published var domImgColor = UIColor() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
+    @Published var imageColor: UIColor? = nil {
+        didSet {
+            if imageColor != nil {
+                didChange.send(self)
+            }
+        }
+    }
+    
     public func loadSearchPodcasts(search: String) {
         var timer: Timer?
         timer?.invalidate()
@@ -144,4 +158,7 @@ class ViewModel: ObservableObject {
         self.playing = Player.shared.player.timeControlStatus == .playing
     }
     
+    public func handleImageColor() {
+        
+    }
 }

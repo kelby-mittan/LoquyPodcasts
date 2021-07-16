@@ -73,7 +73,7 @@ struct TemporaryImageCache: ImageCache {
 
 class AsyncImageLoader: ObservableObject {
     @Published var image: UIImage?
-    
+    @ObservedObject var viewModel = ViewModel.shared
     private(set) var isLoading = false
     
     private let url: String
@@ -100,6 +100,9 @@ class AsyncImageLoader: ObservableObject {
         
         if let image = cache?[imageUrl] {
             self.image = image
+            if let clr = image.averageColor {
+                viewModel.imageColor = clr
+            }
             return
         }
         

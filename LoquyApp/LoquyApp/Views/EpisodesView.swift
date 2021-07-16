@@ -20,6 +20,7 @@ struct EpisodesView: View {
         
     private let gradColor1 = PaletteColour.colors1.randomElement()
     private let gradColor2 = PaletteColour.colors2.randomElement()
+    @State var imgColor = UIColor(.gray)
     
     var body: some View {
         if viewModel.episodes.isEmpty {
@@ -44,7 +45,7 @@ struct EpisodesView: View {
                         ZStack {
                             Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
                                 .offset(x: -10, y: -10)
-                            LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                            LinearGradient(gradient: Gradient(colors: [Color(imgColor), Color(imgColor)]), startPoint: .topLeading, endPoint: .bottomTrailing)
                                 .padding(2)
                                 .blur(radius: 4)
                         }
@@ -58,6 +59,9 @@ struct EpisodesView: View {
                                 .frame(width: 110, height: 110)
                                 .cornerRadius(6)
                                 .padding([.leading,.bottom,.top])
+                                .onReceive(viewModel.$imageColor, perform: { clr in
+                                    imgColor = clr ?? .clear
+                                })
                             
                             VStack(alignment: .leading) {
                                 
