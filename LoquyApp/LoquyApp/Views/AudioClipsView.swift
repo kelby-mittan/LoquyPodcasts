@@ -19,6 +19,7 @@ struct AudioClipsView: View {
     
     @State var showActionSheet: Bool = false
     @State var audioClip: AudioClip?
+    @State var imgColor = UIColor(.gray)
     
     var body: some View {
         

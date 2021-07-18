@@ -64,17 +64,23 @@ class ViewModel: ObservableObject {
         }
     }
     
-    @Published var domImgColor = UIColor() {
-        didSet {
-            didChange.send(self)
-        }
-    }
+//    @Published var domImgColor = UIColor() {
+//        didSet {
+//            didChange.send(self)
+//        }
+//    }
     
     @Published var imageColor: UIColor? = nil {
         didSet {
             if imageColor != nil {
                 didChange.send(self)
             }
+        }
+    }
+    
+    @Published var clipDomColor: UIColor? = nil {
+        didSet {
+            didChange.send(self)
         }
     }
     
@@ -158,7 +164,10 @@ class ViewModel: ObservableObject {
         self.playing = Player.shared.player.timeControlStatus == .playing
     }
     
-    public func handleImageColor() {
+    public func handleImageColor(_ clip: AudioClip) {
+        guard let clp = audioClips.filter {$0.episode.title == clip.episode.title}.first else {
+            return
+        }
         
     }
 }
