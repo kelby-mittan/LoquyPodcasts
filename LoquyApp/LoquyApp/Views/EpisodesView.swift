@@ -17,9 +17,9 @@ struct EpisodesView: View {
     public let podcastFeed: String?
     public let isSaved: Bool
     public let artWork: String
-        
-    private let gradColor1 = PaletteColour.colors1.randomElement()
-    private let gradColor2 = PaletteColour.colors2.randomElement()
+
+    @State var episode: Episode?
+    @State var color = UIColor(Color.gray)
     
     var body: some View {
         if viewModel.episodes.isEmpty {
@@ -40,16 +40,11 @@ struct EpisodesView: View {
                 
                 NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork, feedUrl: podcastFeed, isDeepLink: false)) {
                     
-                    ZStack(alignment: .leading) {
+                    ZStack(alignment: .center) {
                         ZStack {
-                            Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
-                                .offset(x: -10, y: -10)
-                            LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                                .padding(2)
-                                .blur(radius: 4)
+                            Color(viewModel.imageColor ?? UIColor(Color.gray))
                         }
                         .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
                         .padding(.trailing)
                         
                         HStack(alignment: .top) {
@@ -76,7 +71,18 @@ struct EpisodesView: View {
                         }
                         .padding()
                     }
+                    .padding(.horizontal)
+                    .cornerRadius(12)
+                    .onAppear {
+//                        viewModel.getDomColor(episode.imageUrl ?? RepText.empty) { color in
+//                            DispatchQueue.main.async {
+//                                self.color = color
+//                            }
+//                        }
+                    }
+                    
                 }
+//                .frame(height: UIScreen.main.bounds.height/6)
                 .padding(.trailing, -30)
                 .buttonStyle(PlainButtonStyle())
             }
@@ -84,6 +90,9 @@ struct EpisodesView: View {
                 isSaved
                     ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                     : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
+                                
+                viewModel.getEpisodeForDomColor()
+                
                 UITableView.appearance().separatorStyle = .none
             }
             .navigationBarTitle(title)
