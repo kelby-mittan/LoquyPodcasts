@@ -11,9 +11,12 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct CardScrollView: View {
     
+    @ObservedObject var viewModel = ViewModel.shared
+    
     let loquy: Loquy
     
     @Binding var shareShown: Bool
+    @State var domColor: UIColor?
     
     var body: some View {
         ZStack {
@@ -37,7 +40,7 @@ struct CardScrollView: View {
                 .padding([.leading,.trailing])
                 
                 HStack {
-                    RemoteImage(url: loquy.audioClip.episode.imageUrl ?? "")
+                    RemoteImage(url: loquy.audioClip.episode.imageUrl ?? "", domColorReporter: $viewModel.domColorReporter)
                         .frame(width: 100, height: 100)
                         .cornerRadius(6)
                         .padding(.trailing)
@@ -97,5 +100,6 @@ struct CardScrollView: View {
             }
             .padding([.leading,.trailing,.bottom])
         }
+        .background(Color(domColor ?? .lightGray))
     }
 }

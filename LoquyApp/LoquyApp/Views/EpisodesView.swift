@@ -19,7 +19,7 @@ struct EpisodesView: View {
     public let artWork: String
 
     @State var episode: Episode?
-    @State var color = UIColor(Color.gray)
+    @State var domColor: UIColor?
     
     var body: some View {
         if viewModel.episodes.isEmpty {
@@ -42,14 +42,14 @@ struct EpisodesView: View {
                     
                     ZStack(alignment: .center) {
                         ZStack {
-                            Color(viewModel.imageColor ?? UIColor(Color.gray))
+                            Color(domColor ?? UIColor(Color.gray))
                         }
                         .cornerRadius(12)
                         .padding(.trailing)
                         
                         HStack(alignment: .top) {
                             
-                            RemoteImage(url: episode.imageUrl ?? RepText.empty)
+                            RemoteImage(url: episode.imageUrl ?? RepText.empty, domColorReporter: $viewModel.domColorReporter)
                                 .frame(width: 110, height: 110)
                                 .cornerRadius(6)
                                 .padding([.leading,.bottom,.top])
@@ -73,16 +73,13 @@ struct EpisodesView: View {
                     }
                     .padding(.horizontal)
                     .cornerRadius(12)
-                    .onAppear {
-//                        viewModel.getDomColor(episode.imageUrl ?? RepText.empty) { color in
-//                            DispatchQueue.main.async {
-//                                self.color = color
-//                            }
+//                    .background(Color(domColor ?? .lightGray))
+//                    .onAppear {
+//                        viewModel.getDomColor(episode.imageUrl ?? RepText.empty) { clr in
+//                            domColor = clr
 //                        }
-                    }
-                    
+//                    }
                 }
-//                .frame(height: UIScreen.main.bounds.height/6)
                 .padding(.trailing, -30)
                 .buttonStyle(PlainButtonStyle())
             }
@@ -91,7 +88,7 @@ struct EpisodesView: View {
                     ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                     : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
                                 
-                viewModel.getEpisodeForDomColor()
+//                viewModel.getEpisodeForDomColor()
                 
                 UITableView.appearance().separatorStyle = .none
             }

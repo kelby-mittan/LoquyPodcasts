@@ -21,6 +21,7 @@ struct SaveLoquyAlertView: View {
     @ObservedObject var viewModel = ViewModel.shared
     @State var timeStamps = [TimeStamp]()
     @State var titleText = ""
+    @State var domColor: UIColor?
     
     var body : some View {
         
@@ -36,8 +37,10 @@ struct SaveLoquyAlertView: View {
                             .resizable()
                             .frame(width: 18, height: 18)
                             .foregroundColor(.white)
-                            .offset(y: 8)
-                    }).padding(.all,14)
+                            .font(.headline)
+                            .offset(x: -8, y: 16)
+                    })
+                    .padding(.all,14)
                     
                 }
                 PCastHeaderLabelView(label: LoquynClipText.titleForLoquy)
@@ -70,16 +73,17 @@ struct SaveLoquyAlertView: View {
             }
             
         }
-        .onAppear(perform: {
-            
-            viewModel.loadLoquys()
-            
-        })
         .frame(width: 300, height: 200)
-        .background(CardNeoView(isRan: true))
+        .background(Color(domColor ?? .lightGray))
         .cornerRadius(20)
         .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
+        .onAppear {
+            viewModel.loadLoquys()
+            viewModel.getDomColor(audioClip.episode.imageUrl ?? RepText.empty) { clr in
+                domColor = clr
+            }
+        }
     }
     
     private func saveLoquyToList() {

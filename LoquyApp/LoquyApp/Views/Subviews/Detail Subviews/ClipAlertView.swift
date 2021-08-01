@@ -22,6 +22,7 @@ struct ClipAlertView: View {
     @ObservedObject var viewModel = ViewModel.shared
     @State var selected = ClipText.selected
     @State var titleText = RepText.empty
+    @State var domColor: UIColor?
     
     var body: some View {
         

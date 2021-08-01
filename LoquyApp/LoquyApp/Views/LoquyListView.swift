@@ -43,7 +43,7 @@ struct LoquyListView: View {
                             VStack {
                                 NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? RepText.empty)) {
                                     
-                                    RemoteImage(url: imageUrl ?? RepText.empty)
+                                    RemoteImage(url: imageUrl ?? RepText.empty, domColorReporter: $viewModel.domColorReporter)
                                         .frame(width: 170, height: 170)
                                         .padding(2)
                                         .cornerRadius(12)
@@ -91,6 +91,7 @@ struct LoquyContentView: View {
     @ObservedObject private var viewModel = ViewModel.shared
     @State private var toggled = false
     @State private var page = 0
+    @State var domColor: UIColor?
     
     var body: some View {
         
@@ -98,19 +99,7 @@ struct LoquyContentView: View {
             if toggled {
                 ZStack {
                     VStack {
-//                        GeometryReader{ g in
-//                            Carousel(imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
-//                                .onAppear {
-//                                    viewModel.loadLoquys()
-//                                }
-                            PagingCardView(imageUrl: imageUrl)
-//                        }
-
-//                        PageControl(page: $page, loquyCount: viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
-//                            .background(NeoButtonView())
-//                            .padding([.bottom,.top], 8)
-//                        Spacer()
-//                    CardPageView2(imageUrl: imageUrl)
+                        PagingCardView(imageUrl: imageUrl)
                     }
                 }
                 .transition(
@@ -128,7 +117,7 @@ struct LoquyContentView: View {
                             .foregroundColor(.white)
                             .padding([.leading,.trailing,.top,.bottom])
                         
-                        RemoteImage(url: imageUrl)
+                        RemoteImage(url: imageUrl, domColorReporter: $viewModel.domColorReporter)
                             .frame(width: 200, height: 200)
                             .cornerRadius(8)
                         
@@ -176,9 +165,15 @@ struct LoquyContentView: View {
                             .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         }
                         
-                    }.padding([.leading,.bottom,.trailing])
-                    .background(CardNeoView(isRan: true))
+                    }
+                    .padding([.leading,.bottom,.trailing])
                     .cornerRadius(12)
+                    .background(Color(domColor ?? .lightGray).cornerRadius(12))
+                    .onAppear {
+                        viewModel.getDomColor(imageUrl) { clr in
+                            domColor = clr
+                        }
+                    }
                 }
                 .padding([.leading,.trailing],12)
                 .frame(height: UIScreen.main.bounds.height*2/3)

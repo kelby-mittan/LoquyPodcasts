@@ -18,6 +18,7 @@ struct PagingCardView: View {
     @ObservedObject var deepLinkViewModel = DeepLinkViewModel()
     
     @State private var shareShown = false
+    @State var domColor: UIColor?
     
     var body: some View {
         
@@ -25,31 +26,31 @@ struct PagingCardView: View {
             TabView {
                 ForEach(viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }, id: \.self) { loquy in
                     
-                    let gradColor1 = PaletteColour.colors1.randomElement()
-                    let gradColor2 = PaletteColour.colors2.randomElement()
+                    if domColor != nil {
+                        CardScrollView(loquy: loquy, shareShown: $shareShown, domColor: domColor)
+                            .sheet(isPresented: $shareShown) {
+                                if let url = deepLinkViewModel.appURL {
+                                    ShareView(items: ["\n Something cool I heard on Loquy\n\n",loquy.title+"\n\n ",loquy.transcription+"\n \n ",url,deepLinkViewModel.appStoreURL,deepLinkViewModel.metaData,deepLinkViewModel.podImage])
+                                }
+                            }
+                            .onAppear {
+                                deepLinkViewModel.prepareDeepLinkURL(loquy)
+                            }
+                        .cornerRadius(8)
+                        .padding()
+                    }
                     
-                    ZStack {
-                        
-                        LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                        
-                        CardScrollView(loquy: loquy, shareShown: $shareShown)
-                    }
-                    .sheet(isPresented: $shareShown) {
-                        
-                        if let url = deepLinkViewModel.appURL {
-                            ShareView(items: ["\n Something cool I heard on Loquy\n\n",loquy.title+"\n\n ",loquy.transcription+"\n \n ",url,deepLinkViewModel.appStoreURL,deepLinkViewModel.metaData,deepLinkViewModel.podImage])
-                        }
-                    }
-                    .onAppear {
-                        deepLinkViewModel.prepareDeepLinkURL(loquy)
-                    }
-                    .cornerRadius(8)
-                    .padding()
                 }
-            }.tabViewStyle(PageTabViewStyle())
+            }
+            .tabViewStyle(PageTabViewStyle())
             
         }
         .cornerRadius(12)
+        .onAppear {
+            viewModel.getDomColor(imageUrl) { clr in
+                domColor = clr
+            }
+        }
         
     }
     

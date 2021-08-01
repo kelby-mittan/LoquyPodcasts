@@ -80,7 +80,7 @@ struct BrowseView: View {
                     } else {
                         List(viewModel.podcasts, id: \.self) { podcast in
                             NavigationLink(destination: EpisodesView(title: podcast.trackName ?? RepText.empty, podcastFeed: podcast.feedUrl ?? RepText.empty, isSaved: false, artWork: podcast.artworkUrl600 ?? RepText.empty)) {
-                                RemoteImage(url: podcast.artworkUrl600 ?? RepText.empty)
+                                RemoteImage(url: podcast.artworkUrl600 ?? RepText.empty, domColorReporter: $viewModel.domColorReporter)
                                     .frame(width: 100, height: 100)
                                     .cornerRadius(8)
                                 VStack(alignment: .leading) {

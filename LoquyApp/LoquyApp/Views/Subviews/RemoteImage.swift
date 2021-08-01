@@ -12,14 +12,25 @@ import Combine
 @available(iOS 14.0, *)
 struct RemoteImage: View {
     
+    
+    
     var url: String
     
+    @Binding var domColorReporter: PassthroughSubject<UIColor?, Never>
+    
+//    @Binding var domColor: UIColor?
+    
+    
     var body: some View {
-        AsyncImage(
-            url: url,
-            placeholder: { ActivityIndicator(style: .medium) },
-            image: { Image(uiImage: $0).resizable() }
-        )
+//        AsyncImage(
+//            url: url,
+//            placeholder: { ActivityIndicator(style: .medium) },
+//            image: { Image(uiImage: $0).resizable() }
+//        )
+        AsyncImage(url: url,
+                   placeholder: { ActivityIndicator(style: .medium) },
+                   image: { Image(uiImage: $0).resizable() },
+                   domColorReporter: domColorReporter)
     }
 }
 

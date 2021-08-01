@@ -24,6 +24,30 @@ extension UIImage {
     }
 }
 
+/*
+ func load(url: URL) {
+         DispatchQueue.global().async { [weak self] in
+             if let data = try? Data(contentsOf: url) {
+                 if let image = UIImage(data: data) {
+                     DispatchQueue.main.async {
+                         self?.image = image
+                     }
+                 }
+             }
+         }
+     }
+ */
+
+//extension String {
+//    func loadDominantColor(url: URL) -> UIColor {
+//        guard let imageUrl = URL(string: self) else {
+//            return .lightGray
+//        }
+//        
+//        
+//    }
+//}
+
 extension UIColor {
     func maxBright() -> UIColor {
         var r:CGFloat = 0.0; var g:CGFloat = 0.0; var b:CGFloat = 0.0; var a:CGFloat = 0.0;
