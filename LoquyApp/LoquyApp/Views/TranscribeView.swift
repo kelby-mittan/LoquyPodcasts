@@ -14,22 +14,11 @@ struct TranscribeView: View {
     
     let audioClip: AudioClip
     
-    @ObservedObject var viewModel = ViewModel.shared
-//    @ObservedObject var scribeViewModel = TranscriptionViewModel.shared
+    @EnvironmentObject var viewModel: ViewModel
     
     @State var remoteImage = RemoteImageDetail(url: RepText.empty)
     @State var showNotification = false
     @State var notificationMessage = RepText.empty
-    
-//
-//    @State var playedWidth = TranscriptionViewModel.shared.width
-//    @State var currentTime = TranscriptionViewModel.shared.currentTime
-//    @State var playing = TranscriptionViewModel.shared.playing
-//    @State var transcription = TranscriptionViewModel.shared.transcription
-//    @State var isTranscribing = TranscriptionViewModel.shared.isTranscribing
-//    @State var showAlert = TranscriptionViewModel.shared.showAlert
-//    var speechRecognizer = TranscriptionViewModel.shared.speechRecognizer
-//    @State var startedPlaying = TranscriptionViewModel.shared.startedPlaying
     
     @State var playedWidth : CGFloat = 30
     @State var currentTime: String = TimeText.zero
@@ -55,7 +44,13 @@ struct TranscribeView: View {
                     .font(.title)
                     .padding(.bottom,6)
                 
-                NavigationLink(destination: EpisodeDetailView(episode: audioClip.episode, artwork: audioClip.episode.imageUrl ?? RepText.empty, feedUrl: audioClip.feedUrl, isDeepLink: false)) {
+                NavigationLink(
+                    destination: EpisodeDetailView(episode: audioClip.episode,
+                                                   artwork: audioClip.episode.imageUrl ?? RepText.empty,
+                                                   feedUrl: audioClip.feedUrl,
+                                                   isDeepLink: false)
+                        .environmentObject(viewModel)
+                ) {
                     
                     Text(audioClip.episode.title)
                         .fontWeight(.heavy)
@@ -86,7 +81,7 @@ struct TranscribeView: View {
                             NeoButtonView()
                             Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
                                 .foregroundColor(.purple)
-                                
+                            
                         }
                         .background(NeoButtonView())
                         .frame(width: 64, height: 64)
@@ -102,14 +97,14 @@ struct TranscribeView: View {
                     Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
                     Capsule().fill(Color.purple).frame(width: playedWidth, height: 8)
                         .gesture(DragGesture()
-                            .onChanged({ (value) in
-                                player.pause()
-                                Player.handleWidth(value, &playedWidth, &currentTime)
-                            }).onEnded({ (value) in
-                                player.seek(to: Player.capsuleDragged(value.location.x))
-                                player.play()
-                                playing = true
-                            }))
+                                    .onChanged({ (value) in
+                                        player.pause()
+                                        Player.handleWidth(value, &playedWidth, &currentTime)
+                                    }).onEnded({ (value) in
+                                        player.seek(to: Player.capsuleDragged(value.location.x))
+                                        player.play()
+                                        playing = true
+                                    }))
                 }.padding([.leading,.trailing])
                 
                 HStack {
@@ -157,13 +152,19 @@ struct TranscribeView: View {
                 }
                 Spacer()
                 if showAlert {
-                    SaveLoquyAlertView(showAlert: $showAlert, notificationShown: $showNotification, message: $notificationMessage, audioClip: audioClip, transcription: transcription, isPlaying: player.timeControlStatus == .playing)
-                    .offset(x: 0, y: -70)
+                    SaveLoquyAlertView(showAlert: $showAlert,
+                                       notificationShown: $showNotification,
+                                       message: $notificationMessage,
+                                       audioClip: audioClip,
+                                       transcription: transcription,
+                                       isPlaying: player.timeControlStatus == .playing)
+                        .offset(x: 0, y: -70)
+                        .environmentObject(viewModel)
                 }
             }.onAppear {
                 remoteImage = RemoteImageDetail(url: audioClip.episode.imageUrl ?? RepText.empty)
                 viewModel.loadLoquys()
-        }
+            }
             NotificationView(message: $notificationMessage)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
@@ -179,14 +180,14 @@ extension TranscribeView {
             guard let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) else {
                 return
             }
-
+            
             Player.playAudioClip(url: url)
             playing = true
-
+            
             Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { time in
                 currentTime = time
             }
-
+            
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (value) in
                 if playing {
                     if player.currentItem?.duration.toDisplayString() != TimeText.unloaded && playedWidth > 0.0 {
@@ -195,15 +196,15 @@ extension TranscribeView {
                 }
             }
         }
-
+        
     }
-
+    
     private func timeToDisplay() -> String {
         return Player.getCurrentPlayerTime(currentTime, startedPlaying > 0) { time in
             currentTime = time
         }
     }
-
+    
     private func handleIsTranscribing() {
         isTranscribing.toggle()
         if isTranscribing {
@@ -215,12 +216,16 @@ extension TranscribeView {
             showAlert.toggle()
         }
     }
-
+    
     private func getTranscriptionOfClippedFile() {
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             if let url = AudioTrim.loadUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime + TrimText.m4a) {
-
-                AudioTrim.trimUsingComposition(url: url, start: currentTime, duration: audioClip.duration, pathForFile: TrimText.trimmedFile) { (result) in
+                
+                AudioTrim.trimUsingComposition(url: url,
+                                               start: currentTime,
+                                               duration: audioClip.duration,
+                                               pathForFile: TrimText.trimmedFile) { (result) in
+                    
                     switch result {
                     case .success(let clipUrl):
                         let request = SFSpeechURLRecognitionRequest(url: clipUrl)

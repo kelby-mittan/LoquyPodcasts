@@ -11,15 +11,13 @@ import Combine
 
 @available(iOS 14.0, *)
 struct RemoteImage: View {
-    
+        
     var url: String
     
     var body: some View {
-        AsyncImage(
-            url: url,
-            placeholder: { ActivityIndicator(style: .medium) },
-            image: { Image(uiImage: $0).resizable() }
-        )
+        AsyncImage(url: url,
+                   placeholder: { ActivityIndicator(style: .medium) },
+                   image: { Image(uiImage: $0).resizable() })
     }
 }
 

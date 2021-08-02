@@ -14,6 +14,8 @@ import MediaPlayer
 @available(iOS 14.0, *)
 struct EpisodeDetailView: View {
     
+    @EnvironmentObject var viewModel: ViewModel
+    
     let episode: Episode
     let artwork: String
     let feedUrl: String?
@@ -33,7 +35,6 @@ struct EpisodeDetailView: View {
         Group {
             ZStack {
                 ScrollView(.vertical, showsIndicators: true) {
-                    
                     remoteImage
                         .aspectRatio(contentMode: .fit)
                         .frame(width: playing ? 250 : 200, height: playing ? 250 : 200)
@@ -44,9 +45,11 @@ struct EpisodeDetailView: View {
                     
                     ControlView(episode: episode, isPlaying: $playing, showModal: $halfModalShown, clipTime: $clipTime)
                         .padding(.top, playing ? 0 : 25)
+                        .environmentObject(viewModel)
                     
-                    EpisodeTimesView(episode: episode)
+                    EpisodeTimesView(episode: episode, isPlaying: $playing)
                         .padding([.leading,.trailing],8)
+                        .environmentObject(viewModel)
                     
                     DescriptionView(episode: episode)
                         .padding([.leading,.trailing], 8)
@@ -62,7 +65,13 @@ struct EpisodeDetailView: View {
                 
                 if halfModalShown {
                     HalfModalView(isShown: $halfModalShown, modalHeight: 500){
-                        ClipAlertView(clipTime: clipTime, episode: episode, feedUrl: feedUrl, modalShown: $halfModalShown, notificationShown: $showNotification, message: $notificationMessage)
+                        ClipAlertView(clipTime: clipTime,
+                                      episode: episode,
+                                      feedUrl: feedUrl,
+                                      modalShown: $halfModalShown,
+                                      notificationShown: $showNotification,
+                                      message: $notificationMessage)
+                            .environmentObject(viewModel)
                     }
                 }
                 

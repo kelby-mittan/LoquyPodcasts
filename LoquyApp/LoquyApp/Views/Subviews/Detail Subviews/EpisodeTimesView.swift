@@ -12,9 +12,10 @@ import AVKit
 struct EpisodeTimesView: View {
     
     let episode: Episode
+    @Binding var isPlaying: Bool
     
     let player = Player.shared.player
-    @ObservedObject var viewModel = ViewModel.shared
+    @EnvironmentObject var viewModel: ViewModel
     @State var timeStamps = [String]()
     
     var body: some View {
@@ -31,9 +32,11 @@ struct EpisodeTimesView: View {
                                     .multilineTextAlignment(.center)
                                     .padding(.top, 2)
                                 
-                            }.onTapGesture {
+                            }
+                            .onTapGesture {
                                 player.seek(to: time.getCMTime())
                                 player.play()
+                                isPlaying = true
                             }
                             .onLongPressGesture {
                                 deleteTimeStamp(time)
@@ -42,7 +45,8 @@ struct EpisodeTimesView: View {
                             .background(Color(.systemGray5))
                             .cornerRadius(10)
                         }
-                    }.padding([.leading,.trailing])
+                    }
+                    .padding(.horizontal)
                 }
                 .onAppear {
                     loadTimes(episode: episode)

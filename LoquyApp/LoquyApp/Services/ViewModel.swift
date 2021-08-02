@@ -10,10 +10,9 @@ import SwiftUI
 import Combine
 
 class ViewModel: ObservableObject {
-    
-    static let shared = ViewModel()
-    
+        
     var didChange = PassthroughSubject<ViewModel, Never>()
+    var domColorReporter = PassthroughSubject<UIColor?, Never>()
     
     @Published var podcasts = [Podcast]() {
         didSet {
@@ -58,6 +57,26 @@ class ViewModel: ObservableObject {
     }
     
     @Published var playing = Bool() {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
+    @Published var imageColor: UIColor? = nil {
+        didSet {
+            if imageColor != nil {
+                didChange.send(self)
+            }
+        }
+    }
+    
+    @Published var clipDomColor: UIColor? = nil {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
+    @Published var episodeDomColor: Episode? {
         didSet {
             didChange.send(self)
         }
@@ -143,4 +162,25 @@ class ViewModel: ObservableObject {
         self.playing = Player.shared.player.timeControlStatus == .playing
     }
     
+    public func getEpisodeForDomColor() {
+        guard let episode = episodes.first else {
+            return
+        }
+//        self.episodeDomColor = episode
+        
+        getDomColor(episode.imageUrl ?? RepText.empty) { [weak self] clr in
+            DispatchQueue.main.async {
+                self?.imageColor = clr
+            }
+        }
+    }
+    
+    public func getDomColor(_ urlStr: String, completion: @escaping (UIColor) -> ()) {
+        guard let url = URL(string: urlStr) else { return }
+        if let data = try? Data(contentsOf: url) {
+            if let image = UIImage(data: data), let clr = image.averageColor {
+                    completion(clr)
+            }
+        }
+    }
 }

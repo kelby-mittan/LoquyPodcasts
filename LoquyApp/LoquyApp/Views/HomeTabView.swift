@@ -12,7 +12,8 @@ import SwiftUI
 @main
 struct Home: App {
     
-    @ObservedObject private var deepLinkViewModel = DeepLinkViewModel()
+    @StateObject var viewModel = ViewModel()
+    @StateObject private var deepLinkViewModel = DeepLinkViewModel()
     
     @State private var selectedTab = 0
     
@@ -22,9 +23,13 @@ struct Home: App {
                 Group {
                     if !deepLinkViewModel.isDeepLink {
                         BrowseView()
+                            .environmentObject(viewModel)
                     } else {
                         NavigationView {
-                            EpisodeDetailView(episode: deepLinkViewModel.deepLinkEpisode, artwork: deepLinkViewModel.deepLinkEpisode.imageUrl ?? RepText.empty, feedUrl: deepLinkViewModel.deepLinkEpisode.feedUrl, isDeepLink: true)
+                            EpisodeDetailView(episode: deepLinkViewModel.deepLinkEpisode,
+                                              artwork: deepLinkViewModel.deepLinkEpisode.imageUrl ?? RepText.empty,
+                                              feedUrl: deepLinkViewModel.deepLinkEpisode.feedUrl, isDeepLink: true)
+                                .environmentObject(viewModel)
                         }
                     }
                 }
@@ -32,17 +37,33 @@ struct Home: App {
                     Image(systemName: Symbol.magGlass)
                         .font(.body)
                     Text(HomeText.browse)
-                }.tag(1)
-                FavoritesTabView().tag(2)
-                AudioClipsTab().tag(3)
-                TranscriptsTab().tag(4)
+                }
+                .tag(1)
+                
+                FavoritesTabView()
+                    .environmentObject(viewModel)
+                    .tag(2)
+                AudioClipsTab()
+                    .environmentObject(viewModel)
+                    .tag(3)
+                TranscriptsTab()
+                    .environmentObject(viewModel)
+                    .tag(4)
+            }
+            .onAppear {
+                viewModel.loadLoquys()
+                viewModel.loadFavorites()
+                viewModel.loadAudioClips()
             }
             .onOpenURL { url in
                 deepLinkViewModel.loadDeepLinkEpisode(url: url)
             }
             .accentColor(.purple)
-            
+            .onAppear {
+                Player.setupAudioSession()
+            }
         }
+        
         
     }
 }
@@ -50,11 +71,11 @@ struct Home: App {
 @available(iOS 14.0, *)
 struct BrowseView: View {
     
+    @EnvironmentObject var viewModel: ViewModel
     @State private var searchText = RepText.empty
     @State private var isPodcastShowing = true
     @State private var isEditing = false
-    @ObservedObject private var viewModel = ViewModel.shared
-        
+    
     let mindspace = DummyPodcast.mindspace
     
     var body: some View {
@@ -68,7 +89,10 @@ struct BrowseView: View {
                         
                         ScrollView(.vertical) {
                             HeaderView(label: HomeText.listenTo)
-                            NavigationLink(destination: EpisodesView(title: mindspace.title, podcastFeed: mindspace.feedUrl, isSaved: false, artWork: mindspace.image)) {
+                            NavigationLink(destination: EpisodesView(title: mindspace.title,
+                                                                     podcastFeed: mindspace.feedUrl,
+                                                                     isSaved: false,
+                                                                     artWork: mindspace.image).environmentObject(viewModel)) {
                                 ListenToView()
                             }
                             PodcastScrollView()
@@ -79,7 +103,14 @@ struct BrowseView: View {
                         
                     } else {
                         List(viewModel.podcasts, id: \.self) { podcast in
-                            NavigationLink(destination: EpisodesView(title: podcast.trackName ?? RepText.empty, podcastFeed: podcast.feedUrl ?? RepText.empty, isSaved: false, artWork: podcast.artworkUrl600 ?? RepText.empty)) {
+                            NavigationLink(destination:
+                                            EpisodesView(title: podcast.trackName ?? RepText.empty,
+                                                         podcastFeed: podcast.feedUrl ?? RepText.empty,
+                                                         isSaved: false,
+                                                         artWork: podcast.artworkUrl600 ?? RepText.empty)
+                                            .environmentObject(viewModel)
+                            )
+                            {
                                 RemoteImage(url: podcast.artworkUrl600 ?? RepText.empty)
                                     .frame(width: 100, height: 100)
                                     .cornerRadius(8)
@@ -104,9 +135,6 @@ struct BrowseView: View {
         }
         .navigationBarHidden(true)
         .accentColor(.purple)
-        .onAppear {
-            Player.setupAudioSession()
-        }
         
     }
 }
@@ -114,7 +142,7 @@ struct BrowseView: View {
 @available(iOS 14.0, *)
 struct FavoritesTabView: View {
     
-    @ObservedObject private var viewModel = ViewModel.shared
+    @EnvironmentObject private var viewModel: ViewModel
     
     var body: some View {
         
@@ -154,8 +182,10 @@ struct FavoritesTabView: View {
 
 @available(iOS 14.0, *)
 struct AudioClipsTab: View {
+    @EnvironmentObject var viewModel: ViewModel
     var body: some View {
         AudioClipsView()
+            .environmentObject(viewModel)
             .tabItem {
                 Image(systemName: Symbol.speaker)
                     .font(.body)
@@ -167,8 +197,10 @@ struct AudioClipsTab: View {
 
 @available(iOS 14.0, *)
 struct TranscriptsTab: View {
+    @EnvironmentObject var viewModel: ViewModel
     var body: some View {
         LoquyListView()
+            .environmentObject(viewModel)
             .tabItem {
                 Image(systemName: Symbol.bullet)
                     .font(.body)

@@ -12,13 +12,11 @@ import SwiftUI
 
 struct AudioClipsView: View {
     
-    @ObservedObject var viewModel = ViewModel.shared
-    
-    let gradColor1 = PaletteColour.colors1.randomElement()
-    let gradColor2 = PaletteColour.colors2.randomElement()
+    @EnvironmentObject var viewModel: ViewModel
     
     @State var showActionSheet: Bool = false
     @State var audioClip: AudioClip?
+    @State var showEmptyView = false
     
     var body: some View {
         
@@ -26,71 +24,18 @@ struct AudioClipsView: View {
             NavigationView {
                 List(viewModel.audioClips, id: \.self) { clip in
                     
-                    NavigationLink(destination: TranscribeView(audioClip: clip)) {
+                    NavigationLink(
+                        destination: TranscribeView(audioClip: clip)
+                            .environmentObject(viewModel)
+                    ) {
                         
-                        ZStack(alignment: .center) {
-                            ZStack {
-                                Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
-                                    .offset(x: -10, y: -10)
-                                LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                                    .padding(2)
-                                    .blur(radius: 4)
-                            }
-                            .cornerRadius(12)
-                            .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
-                            .padding(.trailing)
-                            
-                            VStack {
-                                
-                                HStack {
-                                    RemoteImage(url: clip.episode.imageUrl ?? RepText.empty)
-                                        .frame(width: 120, height: 120)
-                                        .cornerRadius(6)
-                                        .onLongPressGesture {
-                                            audioClip = clip
-                                            showActionSheet.toggle()
-                                        }
-                                    
-                                    Spacer()
-                                    
-                                    VStack(alignment:.center) {
-                                        
-                                        Text(clip.title)
-                                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                                            .fontWeight(.heavy)
-                                            .foregroundColor(Color.white)
-                                            .padding([.top,.bottom],8)
-                                        
-                                        Text(clip.savedDate)
-                                            .font(.headline)
-                                            .foregroundColor(Color.white)
-                                            .fontWeight(.semibold)
-                                        
-                                        Spacer()
-                                        
-                                    }
-                                    .padding(.trailing)
-                                    Spacer()
-                                }
-                                
-                                Text(clip.episode.title)
-                                    .font(.subheadline)
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.semibold)
-                                
-                                
-                            }.padding()
-                            
-                        }
+                        ClipListItem(clip: clip, showActionSheet: $showActionSheet, audioClip: $audioClip)
+                            .environmentObject(viewModel)
+                        
                     }
                     .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
                     
                 }
-//                .onAppear(perform: {
-//                    UITableView.appearance().separatorStyle = .none
-//                })
-//                .background(Color(.blue))
-                
                 .actionSheet(isPresented: $showActionSheet, content: {
                     actionSheet
                 })
@@ -98,16 +43,15 @@ struct AudioClipsView: View {
             }
             .onAppear {
                 UITableView.appearance().separatorStyle = .none
-                getAudioClips()
+                viewModel.loadAudioClips()
             }
             .accentColor(.purple)
             
         } else {
             EmptySavedView(emptyType: .audioClip)
-                .onAppear {
-                    getAudioClips()
-                }
         }
+        
+        
     }
     
     var actionSheet: ActionSheet {
@@ -120,7 +64,6 @@ struct AudioClipsView: View {
                 }
                 
                 do {
-                    
                     let clips = try Persistence.audioClips.loadItems()
                     guard let clipIndex = clips.firstIndex(of: audioClip) else {
                         return
@@ -131,13 +74,73 @@ struct AudioClipsView: View {
                 }
                 
                 AudioTrim.removeUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime)
-                getAudioClips()
+                viewModel.loadAudioClips()
             }
         ])
     }
+}
+
+struct ClipListItem: View {
     
-    func getAudioClips() {
-        viewModel.loadAudioClips()
+    @EnvironmentObject var viewModel: ViewModel
+    @State var clip: AudioClip
+    @Binding var showActionSheet: Bool
+    @Binding var audioClip: AudioClip?
+        
+    var body: some View {
+        ZStack(alignment: .center) {
+            ZStack {
+                Color(UIColor.color(withCodedString: clip.domColor ?? "") ?? .lightGray)
+                
+            }
+            .cornerRadius(12)
+            .padding(.trailing)
+            
+            VStack {
+                
+                HStack {
+                    RemoteImage(url: clip.episode.imageUrl ?? RepText.empty)
+                        .frame(width: 120, height: 120)
+                        .cornerRadius(6)
+                        .onLongPressGesture {
+                            audioClip = clip
+                            showActionSheet.toggle()
+                        }
+                    
+                    Spacer()
+                    
+                    VStack(alignment:.center) {
+                        
+                        Text(clip.title)
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                            .fontWeight(.heavy)
+                            .foregroundColor(Color.white)
+                            .padding([.top,.bottom],8)
+                        
+                        Text(clip.savedDate)
+                            .font(.headline)
+                            .foregroundColor(Color.white)
+                            .fontWeight(.semibold)
+                        
+                        Spacer()
+                        
+                    }
+                    .padding(.trailing)
+                    Spacer()
+                }
+                
+                Text(clip.episode.title)
+                    .font(.subheadline)
+                    .foregroundColor(Color.white)
+                    .fontWeight(.semibold)
+                
+                
+            }
+            .padding()
+            
+            
+        }
+
     }
 }
 

@@ -32,7 +32,7 @@ struct DescriptionView: View {
             
             
         }
-        .padding([.leading,.trailing])
+        .padding(.horizontal)
     }
     
     func getOnlyDescription(_ str: String) -> String {

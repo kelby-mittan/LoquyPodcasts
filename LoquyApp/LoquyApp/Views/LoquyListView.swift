@@ -11,7 +11,7 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct LoquyListView: View {
     
-    @ObservedObject var viewModel = ViewModel.shared
+    @EnvironmentObject var viewModel: ViewModel
     
     private let layout = [
         GridItem(.flexible()),
@@ -22,15 +22,18 @@ struct LoquyListView: View {
     @State private var loquies = [String?]()
     
     private var actionSheet: ActionSheet {
-        ActionSheet(title: Text(LoquynClipText.remove).font(.largeTitle).fontWeight(.bold), buttons: [
-            .default(Text(LoquynClipText.cancel)) {
-            },
-            .destructive(Text(LoquynClipText.delete)) {
-                Persistence.loquys.removeAll()
-                viewModel.loadLoquys()
-            }
-            
-        ])
+        ActionSheet(title: Text(LoquynClipText.remove)
+                        .font(.largeTitle)
+                        .fontWeight(.bold),
+                    buttons: [
+                        .default(Text(LoquynClipText.cancel)) {
+                        },
+                        .destructive(Text(LoquynClipText.delete)) {
+                            Persistence.loquys.removeAll()
+                            viewModel.loadLoquys()
+                        }
+                        
+                    ])
     }
     
     var body: some View {
@@ -41,8 +44,11 @@ struct LoquyListView: View {
                     LazyVGrid(columns: layout, spacing: 10) {
                         ForEach(loquies, id: \.self) { imageUrl in
                             VStack {
-                                NavigationLink(destination: LoquyContentView(imageUrl: imageUrl ?? RepText.empty)) {
+                                NavigationLink(
+                                    destination: LoquyContentView(imageUrl: imageUrl ?? RepText.empty)
+                                        .environmentObject(viewModel)
                                     
+                                ) {
                                     RemoteImage(url: imageUrl ?? RepText.empty)
                                         .frame(width: 170, height: 170)
                                         .padding(2)
@@ -66,6 +72,9 @@ struct LoquyListView: View {
             .actionSheet(isPresented: $showActionSheet, content: {
                 actionSheet
             })
+            .onChange(of: viewModel.loquys, perform: { value in
+                loquies = Array(Set(value.map { $0.audioClip.episode.imageUrl }))
+            })
             .onAppear {
                 viewModel.loadLoquys()
                 loquies = Array(Set(viewModel.loquys.map { $0.audioClip.episode.imageUrl }))
@@ -87,10 +96,10 @@ struct LoquyListView: View {
 struct LoquyContentView: View {
     
     let imageUrl: String
-    
-    @ObservedObject private var viewModel = ViewModel.shared
+    @EnvironmentObject var viewModel: ViewModel
     @State private var toggled = false
     @State private var page = 0
+    @State var domColor: UIColor?
     
     var body: some View {
         
@@ -98,21 +107,11 @@ struct LoquyContentView: View {
             if toggled {
                 ZStack {
                     VStack {
-//                        GeometryReader{ g in
-//                            Carousel(imageUrl: imageUrl, width: UIScreen.main.bounds.width, page: $page, height: g.frame(in: .global).height)
-//                                .onAppear {
-//                                    viewModel.loadLoquys()
-//                                }
-                            PagingCardView(imageUrl: imageUrl)
-//                        }
-
-//                        PageControl(page: $page, loquyCount: viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count)
-//                            .background(NeoButtonView())
-//                            .padding([.bottom,.top], 8)
-//                        Spacer()
-//                    CardPageView2(imageUrl: imageUrl)
+                        PagingCardView(imageUrl: imageUrl)
+                            .environmentObject(viewModel)
                     }
                 }
+                .onAppear(perform: viewModel.loadLoquys)
                 .transition(
                     AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
                 )
@@ -131,6 +130,9 @@ struct LoquyContentView: View {
                         RemoteImage(url: imageUrl)
                             .frame(width: 200, height: 200)
                             .cornerRadius(8)
+                            .onReceive(viewModel.domColorReporter, perform: { clr in
+                                domColor = clr
+                            })
                         
                         HStack {
                             VStack(alignment: .leading) {
@@ -176,9 +178,10 @@ struct LoquyContentView: View {
                             .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         }
                         
-                    }.padding([.leading,.bottom,.trailing])
-                    .background(CardNeoView(isRan: true))
+                    }
+                    .padding([.leading,.bottom,.trailing])
                     .cornerRadius(12)
+                    .background(Color(domColor ?? .lightGray).cornerRadius(12))
                 }
                 .padding([.leading,.trailing],12)
                 .frame(height: UIScreen.main.bounds.height*2/3)
@@ -189,9 +192,14 @@ struct LoquyContentView: View {
             }
             
         }
+        .onChange(of: viewModel.loquys, perform: { _ in
+            viewModel.loadLoquys()
+        })
         .onAppear {
             viewModel.loadLoquys()
             viewModel.loadAudioClips()
+            domColor = UIColor.color(withCodedString:
+                                        viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.first?.audioClip.domColor ?? "")
         }
         
         .navigationBarHidden(false)

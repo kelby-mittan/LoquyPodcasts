@@ -12,6 +12,8 @@ import MediaPlayer
 @available(iOS 14.0, *)
 struct ControlView: View {
     
+    @EnvironmentObject var viewModel: ViewModel
+    
     let episode: Episode
     @Binding var isPlaying: Bool
     @Binding var showModal: Bool
@@ -23,9 +25,7 @@ struct ControlView: View {
     @State var showAlert = false
     
     let player = Player.shared.player
-    
-    @ObservedObject var viewModel = ViewModel.shared
-        
+            
     var body: some View {
         
         VStack {
@@ -33,7 +33,7 @@ struct ControlView: View {
             ZStack(alignment: .leading) {
                 
                 Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    .padding([.top,.leading,.trailing])
+                    .padding([.top,.horizontal])
                 
                 Capsule().fill(Color.purple)
                     .frame(width: width.isFinite ? width : 30, height: 8)
@@ -47,7 +47,7 @@ struct ControlView: View {
                                             playing = true
                                             isPlaying = true
                                 }))
-                    .padding([.top,.leading,.trailing])
+                    .padding([.top,.horizontal])
                     .onChange(of: currentTime, perform: { value in
                         Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                     })
@@ -65,7 +65,7 @@ struct ControlView: View {
                     .foregroundColor(.secondary)
                     .padding(.trailing,8)
             }
-            .padding([.leading,.trailing])
+            .padding(.horizontal)
             
             HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
                 
@@ -81,7 +81,8 @@ struct ControlView: View {
                     .frame(width: 60, height: 60)
                     .clipShape(Capsule())
                     
-                }.offset(x: 20)
+                }
+                .offset(x: 20)
                 .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
@@ -90,9 +91,12 @@ struct ControlView: View {
                 }) {
                     ZStack {
                         NeoButtonView()
-                        Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
+                        Image(systemName: playing ? Symbol.pause : Symbol.play)
+                            .font(.largeTitle)
                             .foregroundColor(.purple)
-                    }.background(NeoButtonView())
+                        
+                    }
+                    .background(NeoButtonView())
                     .frame(width: 80, height: 80)
                     .clipShape(Capsule())
                     .animation(.spring())
@@ -126,7 +130,7 @@ struct ControlView: View {
                 }) {
                     Text(RepText.recordClip)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .frame(width: UIScreen.main.bounds.width - 88,height: 44)
+                        .frame(width: UIScreen.main.bounds.width - 88, height: 44)
                         .foregroundColor(.purple)
                         .background(NeoButtonView())
                         .clipShape(Capsule())
@@ -135,7 +139,6 @@ struct ControlView: View {
                 .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
                 .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 .animation(.spring())
-//                .padding(.bottom,16)
 
                 Button(action: {
                     showAlert.toggle()
@@ -154,11 +157,12 @@ struct ControlView: View {
                 .buttonStyle(PlainButtonStyle())
                 .offset(y: -10)
             }
-            .padding([.leading,.trailing])
+            .padding(.horizontal)
             .blur(radius: showAlert ? 30 : 0)
             if showAlert {
                 TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode)
                     .offset(x: 0, y: -70)
+                    .environmentObject(viewModel)
             }
             
         }

@@ -11,15 +11,14 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct EpisodesView: View {
     
-    @ObservedObject var viewModel = ViewModel.shared
-        
+    @EnvironmentObject var viewModel: ViewModel    
     @State public var title: String
     public let podcastFeed: String?
     public let isSaved: Bool
     public let artWork: String
-        
-    private let gradColor1 = PaletteColour.colors1.randomElement()
-    private let gradColor2 = PaletteColour.colors2.randomElement()
+
+    @State var episode: Episode?
+    @State var domColor: UIColor?
     
     var body: some View {
         if viewModel.episodes.isEmpty {
@@ -31,25 +30,23 @@ struct EpisodesView: View {
                             ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                             : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
                         UITableView.appearance().separatorStyle = .none
-                }
+                    }
                 Spacer()
             }
             .navigationBarTitle(title)
         } else {
             List(viewModel.episodes, id: \.self) { episode in
                 
-                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork, feedUrl: podcastFeed, isDeepLink: false)) {
+                NavigationLink(destination: EpisodeDetailView(episode: episode,
+                                                              artwork: artWork,
+                                                              feedUrl: podcastFeed,
+                                                              isDeepLink: false).environmentObject(viewModel)) {
                     
-                    ZStack(alignment: .leading) {
+                    ZStack(alignment: .center) {
                         ZStack {
-                            Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
-                                .offset(x: -10, y: -10)
-                            LinearGradient(gradient: Gradient(colors: [gradColor1!, gradColor2!]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                                .padding(2)
-                                .blur(radius: 4)
+                            Color(domColor ?? UIColor(Color.gray))
                         }
                         .cornerRadius(12)
-                        .shadow(color: Color.black.opacity(0.4), radius: 6, x: 0, y: 6)
                         .padding(.trailing)
                         
                         HStack(alignment: .top) {
@@ -76,6 +73,8 @@ struct EpisodesView: View {
                         }
                         .padding()
                     }
+                    .padding(.horizontal)
+                    .cornerRadius(12)
                 }
                 .padding(.trailing, -30)
                 .buttonStyle(PlainButtonStyle())
@@ -84,9 +83,24 @@ struct EpisodesView: View {
                 isSaved
                     ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                     : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
+                      
+                if let firstEpisodeImg = viewModel.episodes.first?.imageUrl {
+                    viewModel.getDomColor(firstEpisodeImg) { clr in
+                        if clr.isDark() {
+                            domColor = clr
+                        } else {
+                            domColor = .lightGray
+                        }
+                        
+                    }
+                }
+                
                 UITableView.appearance().separatorStyle = .none
             }
             .navigationBarTitle(title)
+            .onDisappear {
+                viewModel.episodes = []
+            }
         }
         
     }

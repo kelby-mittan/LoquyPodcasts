@@ -48,12 +48,10 @@ struct CustomPicker: UIViewRepresentable {
         }
         
         func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-//            return getEndTimeArr(currentTime).count
             return TimeText.timeIntervals.count
         }
         
         func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-//            return getEndTimeArr(currentTime)[row]
             return TimeText.timeIntervals[row]
         }
         
