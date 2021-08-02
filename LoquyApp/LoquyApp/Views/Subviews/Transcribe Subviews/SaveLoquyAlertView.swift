@@ -10,6 +10,8 @@ import SwiftUI
 
 struct SaveLoquyAlertView: View {
     
+    @EnvironmentObject var viewModel: ViewModel
+    
     @Binding var showAlert: Bool
     @Binding var notificationShown: Bool
     @Binding var message: String
@@ -17,8 +19,7 @@ struct SaveLoquyAlertView: View {
     let audioClip: AudioClip
     let transcription: String
     let isPlaying: Bool
-    
-    @ObservedObject var viewModel = ViewModel.shared
+
     @State var timeStamps = [TimeStamp]()
     @State var titleText = ""
     @State var domColor: UIColor?
@@ -51,7 +52,7 @@ struct SaveLoquyAlertView: View {
                         .foregroundColor(.purple)
                         .background(Color.white)
                         .cornerRadius(8)
-                        .padding([.leading,.trailing])
+                    .padding(.horizontal)
                         .frame(height: 44)
                         .textFieldStyle(SuperCustomTextFieldStyle())
                     
@@ -74,7 +75,7 @@ struct SaveLoquyAlertView: View {
             
         }
         .frame(width: 300, height: 200)
-        .background(Color(domColor ?? .lightGray))
+        .background(Color(domColor ?? .clear))
         .cornerRadius(20)
         .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)

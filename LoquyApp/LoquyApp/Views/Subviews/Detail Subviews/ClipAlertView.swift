@@ -11,6 +11,8 @@ import AVKit
 
 struct ClipAlertView: View {
     
+    @EnvironmentObject var viewModel: ViewModel
+    
     var clipTime: String
     let episode: Episode
     let feedUrl: String?
@@ -19,7 +21,7 @@ struct ClipAlertView: View {
     @Binding var notificationShown: Bool
     @Binding var message: String
     
-    @ObservedObject var viewModel = ViewModel.shared
+    
     @State var selected = ClipText.selected
     @State var titleText = RepText.empty
     @State var domColor: UIColor?
@@ -42,7 +44,7 @@ struct ClipAlertView: View {
                         .foregroundColor(.purple)
                         .background(Color.white)
                         .cornerRadius(8)
-                        .padding([.leading,.trailing])
+                        .padding(.horizontal)
                         .frame(height: 44)
                         .textFieldStyle(SuperCustomTextFieldStyle())
                 
@@ -76,7 +78,9 @@ struct ClipAlertView: View {
                     notificationShown = false
                 }
                 
-                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString(), feedUrl: feedUrl ?? RepText.empty)
+                let clr = domColor?.codedString
+                
+                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString(), feedUrl: feedUrl ?? RepText.empty, domColor: clr)
                 
                 do {
                     try Persistence.audioClips.createItem(newClip)
@@ -105,6 +109,11 @@ struct ClipAlertView: View {
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         
         .background(Color(.secondarySystemBackground))
+        .onAppear {
+            viewModel.getDomColor(episode.imageUrl ?? "") { clr in
+                domColor = clr
+            }
+        }
         Spacer()
     }
     
@@ -124,7 +133,7 @@ struct HalfModalView<Content: View> : View {
     
     private func onDragEnded(drag: DragGesture.Value) {
         let dragThreshold = modalHeight * (2/3)
-        if drag.predictedEndTranslation.height > dragThreshold || drag.translation.height > dragThreshold{
+        if drag.predictedEndTranslation.height > dragThreshold || drag.translation.height > dragThreshold {
             isShown = false
         }
     }

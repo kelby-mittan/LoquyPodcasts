@@ -7,7 +7,9 @@
 //
 
 import XCTest
+@available(iOS 14.0, *)
 @testable import LoquyApp
+
 
 class LoquyAppTests: XCTestCase {
 

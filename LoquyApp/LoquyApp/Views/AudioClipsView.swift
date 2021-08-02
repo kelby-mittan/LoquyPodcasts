@@ -12,11 +12,11 @@ import SwiftUI
 
 struct AudioClipsView: View {
     
-    @ObservedObject var viewModel = ViewModel.shared
-    
+    @EnvironmentObject var viewModel: ViewModel
     
     @State var showActionSheet: Bool = false
     @State var audioClip: AudioClip?
+    @State var showEmptyView = false
     
     var body: some View {
         
@@ -24,11 +24,13 @@ struct AudioClipsView: View {
             NavigationView {
                 List(viewModel.audioClips, id: \.self) { clip in
                     
-                    NavigationLink(destination: TranscribeView(audioClip: clip)) {
-                        
+                    NavigationLink(
+                        destination: TranscribeView(audioClip: clip)
+                            .environmentObject(viewModel)
+                    ) {
                         
                         ClipListItem(clip: clip, showActionSheet: $showActionSheet, audioClip: $audioClip)
-                        
+                            .environmentObject(viewModel)
                         
                     }
                     .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
@@ -41,16 +43,15 @@ struct AudioClipsView: View {
             }
             .onAppear {
                 UITableView.appearance().separatorStyle = .none
-                getAudioClips()
+                viewModel.loadAudioClips()
             }
             .accentColor(.purple)
             
         } else {
             EmptySavedView(emptyType: .audioClip)
-                .onAppear {
-                    getAudioClips()
-                }
         }
+        
+        
     }
     
     var actionSheet: ActionSheet {
@@ -63,7 +64,6 @@ struct AudioClipsView: View {
                 }
                 
                 do {
-                    
                     let clips = try Persistence.audioClips.loadItems()
                     guard let clipIndex = clips.firstIndex(of: audioClip) else {
                         return
@@ -74,29 +74,23 @@ struct AudioClipsView: View {
                 }
                 
                 AudioTrim.removeUrlFromDiskWith(fileName: audioClip.episode.title + audioClip.startTime)
-                getAudioClips()
+                viewModel.loadAudioClips()
             }
         ])
-    }
-    
-    func getAudioClips() {
-        viewModel.loadAudioClips()
     }
 }
 
 struct ClipListItem: View {
     
-    @ObservedObject var viewModel = ViewModel.shared
+    @EnvironmentObject var viewModel: ViewModel
     @State var clip: AudioClip
     @Binding var showActionSheet: Bool
     @Binding var audioClip: AudioClip?
-    
-    @State var domColor: UIColor?
-    
+        
     var body: some View {
         ZStack(alignment: .center) {
             ZStack {
-                Color(domColor ?? .lightGray)
+                Color(UIColor.color(withCodedString: clip.domColor ?? "") ?? .lightGray)
                 
             }
             .cornerRadius(12)
@@ -105,7 +99,7 @@ struct ClipListItem: View {
             VStack {
                 
                 HStack {
-                    RemoteImage(url: clip.episode.imageUrl ?? RepText.empty, domColorReporter: $viewModel.domColorReporter)
+                    RemoteImage(url: clip.episode.imageUrl ?? RepText.empty)
                         .frame(width: 120, height: 120)
                         .cornerRadius(6)
                         .onLongPressGesture {
@@ -145,11 +139,6 @@ struct ClipListItem: View {
             .padding()
             
             
-        }
-        .onAppear {
-            viewModel.getDomColor(clip.episode.imageUrl ?? RepText.empty) { clr in
-                domColor = clr
-            }
         }
 
     }

@@ -15,18 +15,15 @@ struct AsyncImage<Placeholder: View>: View {
     @StateObject private var loader: AsyncImageLoader
     private let placeholder: Placeholder
     private let image: (UIImage) -> Image
-    var domColorReporter: PassthroughSubject<UIColor?, Never>
     
     init(
         url: String,
         @ViewBuilder placeholder: () -> Placeholder,
-        @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:),
-        domColorReporter: PassthroughSubject<UIColor?, Never>
+        @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:)
     ) {
         self.placeholder = placeholder()
         self.image = image
         _loader = StateObject(wrappedValue: AsyncImageLoader(url: url, cache: Environment(\.imageCache).wrappedValue))
-        self.domColorReporter = domColorReporter
     }
     
     var body: some View {
@@ -38,10 +35,6 @@ struct AsyncImage<Placeholder: View>: View {
         Group {
             if loader.image != nil {
                 image(loader.image!)
-                    .onAppear {
-                        let color = loader.image!.averageColor
-                        domColorReporter.send(color)
-                    }
                
             } else {
                 placeholder

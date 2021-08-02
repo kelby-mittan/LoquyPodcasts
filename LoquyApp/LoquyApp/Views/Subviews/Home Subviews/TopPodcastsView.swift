@@ -32,13 +32,16 @@ struct PodcastScrollView: View {
 
 @available(iOS 14.0, *)
 struct TopPodcastsView: View {
-        
+    
     public var podcasts: Array<DummyPodcast>.SubSequence
     
     var body: some View {
         VStack(alignment: .leading) {
             ForEach(podcasts, id: \.id) { pcast in
-                NavigationLink(destination: EpisodesView(title: pcast.title, podcastFeed: pcast.feedUrl, isSaved: false, artWork: pcast.image)) {
+                NavigationLink(destination: EpisodesView(title: pcast.title,
+                                                         podcastFeed: pcast.feedUrl,
+                                                         isSaved: false,
+                                                         artWork: pcast.image)) {
                     
                     HStack(alignment: .top) {
                         Image(pcast.image)

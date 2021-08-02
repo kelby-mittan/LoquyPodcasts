@@ -10,9 +10,7 @@ import SwiftUI
 import Combine
 
 class ViewModel: ObservableObject {
-    
-    static let shared = ViewModel()
-    
+        
     var didChange = PassthroughSubject<ViewModel, Never>()
     var domColorReporter = PassthroughSubject<UIColor?, Never>()
     

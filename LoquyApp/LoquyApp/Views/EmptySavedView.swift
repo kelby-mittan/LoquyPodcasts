@@ -37,20 +37,27 @@ struct EmptySavedView: View {
                         Animation.linear(duration: 2.5)
                             .repeatForever(autoreverses: false)
                     )
-                getSineWave(interval: universalSize.width*1.4, amplitude: 165, baseLine: 50+universalSize.width/1.2)
+                
+                getSineWave(interval: universalSize.width*1.4,
+                            amplitude: 165,
+                            baseLine: 50+universalSize.width/1.2)
+                    
                     .foregroundColor(PaletteColour.lighterPurple.colour).opacity(0.6)
                     .offset(x: isAnimated ? -universalSize.width*1.4 : 0)
                     .animation(
                         Animation.linear(duration: 4.5)
                             .repeatForever(autoreverses: false)
                     )
+                
                 getSineWave(interval: universalSize.width*1.1, amplitude: 130)
+                    
                     .foregroundColor(PaletteColour.lightPurple.colour).opacity(0.6)
                     .offset(x: isAnimated ? -universalSize.width*1.1 : 0)
                     .animation(
                         Animation.linear(duration: 3.5)
                             .repeatForever(autoreverses: false)
                     )
+                
             }.onAppear {
                 isAnimated = true
             }

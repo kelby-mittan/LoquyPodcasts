@@ -10,11 +10,11 @@ import SwiftUI
 
 struct TimeStampAlertView: View {
     
+    @EnvironmentObject var viewModel: ViewModel
+    
     @Binding var showAlert: Bool
     @Binding var time: String
     let episode: Episode
-    
-    @ObservedObject var viewModel = ViewModel.shared
     
     @State var timeStamps = [TimeStamp]()
     @State var favToSave = RepText.empty
@@ -24,9 +24,7 @@ struct TimeStampAlertView: View {
     var body : some View {
         
         ZStack {
-            
             VStack {
-                
                 HStack {
                     Spacer()
                     Button(action: {
@@ -37,7 +35,8 @@ struct TimeStampAlertView: View {
                             .frame(width: 18, height: 18)
                             .foregroundColor(.white)
                             .offset(y: 8)
-                    }).padding(.all,14)
+                    })
+                    .padding(.all,14)
                     
                 }
                 
@@ -79,8 +78,6 @@ struct TimeStampAlertView: View {
                 }                
                 Spacer()
             }
-//            .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
-//            .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
             
         }
         .onAppear(perform: {

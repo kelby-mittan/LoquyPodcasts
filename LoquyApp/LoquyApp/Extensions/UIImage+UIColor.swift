@@ -24,30 +24,6 @@ extension UIImage {
     }
 }
 
-/*
- func load(url: URL) {
-         DispatchQueue.global().async { [weak self] in
-             if let data = try? Data(contentsOf: url) {
-                 if let image = UIImage(data: data) {
-                     DispatchQueue.main.async {
-                         self?.image = image
-                     }
-                 }
-             }
-         }
-     }
- */
-
-//extension String {
-//    func loadDominantColor(url: URL) -> UIColor {
-//        guard let imageUrl = URL(string: self) else {
-//            return .lightGray
-//        }
-//        
-//        
-//    }
-//}
-
 extension UIColor {
     func maxBright() -> UIColor {
         var r:CGFloat = 0.0; var g:CGFloat = 0.0; var b:CGFloat = 0.0; var a:CGFloat = 0.0;
@@ -70,3 +46,28 @@ extension UIColor {
     }
 }
 
+// www.stackoverflow.com/questions/36341358/how-to-convert-uicolor-to-string-and-string-to-uicolor-using-swift
+public extension UIColor {
+
+    var codedString: String? {
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true)
+
+            return data.base64EncodedString()
+
+        } catch {
+            print("Error converting color to coded string: \(error)")
+            return nil
+        }
+    }
+
+
+    static func color(withCodedString string: String) -> UIColor? {
+        guard let data = Data(base64Encoded: string) else{
+            return .blue
+        }
+
+        return try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data)
+
+    }
+}

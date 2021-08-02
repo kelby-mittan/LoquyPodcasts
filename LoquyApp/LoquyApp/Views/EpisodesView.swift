@@ -11,8 +11,7 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct EpisodesView: View {
     
-    @ObservedObject var viewModel = ViewModel.shared
-        
+    @EnvironmentObject var viewModel: ViewModel    
     @State public var title: String
     public let podcastFeed: String?
     public let isSaved: Bool
@@ -31,14 +30,17 @@ struct EpisodesView: View {
                             ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                             : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
                         UITableView.appearance().separatorStyle = .none
-                }
+                    }
                 Spacer()
             }
             .navigationBarTitle(title)
         } else {
             List(viewModel.episodes, id: \.self) { episode in
                 
-                NavigationLink(destination: EpisodeDetailView(episode: episode, artwork: artWork, feedUrl: podcastFeed, isDeepLink: false)) {
+                NavigationLink(destination: EpisodeDetailView(episode: episode,
+                                                              artwork: artWork,
+                                                              feedUrl: podcastFeed,
+                                                              isDeepLink: false).environmentObject(viewModel)) {
                     
                     ZStack(alignment: .center) {
                         ZStack {
@@ -49,7 +51,7 @@ struct EpisodesView: View {
                         
                         HStack(alignment: .top) {
                             
-                            RemoteImage(url: episode.imageUrl ?? RepText.empty, domColorReporter: $viewModel.domColorReporter)
+                            RemoteImage(url: episode.imageUrl ?? RepText.empty)
                                 .frame(width: 110, height: 110)
                                 .cornerRadius(6)
                                 .padding([.leading,.bottom,.top])
@@ -73,12 +75,6 @@ struct EpisodesView: View {
                     }
                     .padding(.horizontal)
                     .cornerRadius(12)
-//                    .background(Color(domColor ?? .lightGray))
-//                    .onAppear {
-//                        viewModel.getDomColor(episode.imageUrl ?? RepText.empty) { clr in
-//                            domColor = clr
-//                        }
-//                    }
                 }
                 .padding(.trailing, -30)
                 .buttonStyle(PlainButtonStyle())
@@ -87,12 +83,24 @@ struct EpisodesView: View {
                 isSaved
                     ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                     : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
-                                
-//                viewModel.getEpisodeForDomColor()
+                      
+                if let firstEpisodeImg = viewModel.episodes.first?.imageUrl {
+                    viewModel.getDomColor(firstEpisodeImg) { clr in
+                        if clr.isDark() {
+                            domColor = clr
+                        } else {
+                            domColor = .lightGray
+                        }
+                        
+                    }
+                }
                 
                 UITableView.appearance().separatorStyle = .none
             }
             .navigationBarTitle(title)
+            .onDisappear {
+                viewModel.episodes = []
+            }
         }
         
     }

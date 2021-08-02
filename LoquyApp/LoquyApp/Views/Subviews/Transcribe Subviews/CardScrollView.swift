@@ -11,12 +11,9 @@ import SwiftUI
 @available(iOS 14.0, *)
 struct CardScrollView: View {
     
-    @ObservedObject var viewModel = ViewModel.shared
-    
+    @EnvironmentObject var viewModel: ViewModel
     let loquy: Loquy
-    
     @Binding var shareShown: Bool
-    @State var domColor: UIColor?
     
     var body: some View {
         ZStack {
@@ -26,21 +23,26 @@ struct CardScrollView: View {
                     .font(.system(size: 24, weight: .bold, design: .rounded))
                     .fontWeight(.heavy)
                     .foregroundColor(.white)
-                    .padding([.leading,.trailing,.top,.bottom])
+                    .padding([.vertical,.horizontal])
                 
-                NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode, artwork: loquy.audioClip.episode.imageUrl ?? RepText.empty, feedUrl: loquy.audioClip.feedUrl, isDeepLink: false)) {
+                NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode,
+                                                              artwork: loquy.audioClip.episode.imageUrl ?? RepText.empty,
+                                                              feedUrl: loquy.audioClip.feedUrl,
+                                                              isDeepLink: false)
+                                .environmentObject(viewModel)
+                ) {
                     
                     Text(loquy.audioClip.episode.title)
                         .fontWeight(.heavy)
                         .foregroundColor(Color.white)
                         .font(.headline)
                         .underline()
-                        .padding([.leading,.trailing])
+                        .padding(.horizontal)
                 }
                 .padding([.leading,.trailing])
                 
                 HStack {
-                    RemoteImage(url: loquy.audioClip.episode.imageUrl ?? "", domColorReporter: $viewModel.domColorReporter)
+                    RemoteImage(url: loquy.audioClip.episode.imageUrl ?? RepText.empty)
                         .frame(width: 100, height: 100)
                         .cornerRadius(6)
                         .padding(.trailing)
@@ -73,7 +75,8 @@ struct CardScrollView: View {
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                         .fontWeight(.heavy)
-                        .padding([.top,.leading,.trailing]).padding(.bottom,72)
+                        .padding([.top,.horizontal])
+                        .padding(.bottom,72)
                 }
                 Spacer()
                 
@@ -87,9 +90,11 @@ struct CardScrollView: View {
                     }) {
                         ZStack {
                             NeoButtonView()
-                            Image(systemName: Symbol.share).font(.title)
+                            Image(systemName: Symbol.share)
+                                .font(.title)
                                 .foregroundColor(.purple)
-                        }.background(NeoButtonView())
+                        }
+                        .background(NeoButtonView())
                         .frame(width: 50, height: 50)
                         .clipShape(Capsule())
                     }
@@ -98,8 +103,10 @@ struct CardScrollView: View {
                     .offset(x: -20)
                 }
             }
-            .padding([.leading,.trailing,.bottom])
+            .padding([.horizontal,.bottom])
         }
-        .background(Color(domColor ?? .lightGray))
+        .background(
+            Color(UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty) ?? .clear)
+        )
     }
 }
