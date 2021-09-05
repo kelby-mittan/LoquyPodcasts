@@ -24,19 +24,6 @@ struct AudioClipsView: View {
             NavigationView {
                 List(viewModel.audioClips, id: \.self) { clip in
                     
-//                    NavigationLink(
-//                        destination: TranscribeView(audioClip: clip)
-//                            .environmentObject(viewModel)
-//                    ) {
-//
-//                        ClipListItem(clip: clip, showActionSheet: $showActionSheet, audioClip: $audioClip)
-//                            .environmentObject(viewModel)
-//
-//                    }
-//                    .padding(.trailing, -30)
-//                    .buttonStyle(PlainButtonStyle())
-                    
-                    
                     ZStack {
                         NavigationLink(destination: TranscribeView(audioClip: clip)
                                         .environmentObject(viewModel)) {

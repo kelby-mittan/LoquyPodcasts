@@ -22,32 +22,40 @@ struct EpisodeTimesView: View {
     var body: some View {
         Group {
             if Persistence.episodes.hasItemBeenSaved(episode) {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(viewModel.timeStamps.sorted(), id:\.self) { time in
-                            ZStack {
-                                Text(time)
-                                    .font(.subheadline)
-                                    .fontWeight(.heavy)
-                                    .foregroundColor(Color.white)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.top, 2)
-                                
+//                ScrollView(.horizontal, showsIndicators: false) {
+                    VStack(alignment: .leading) {
+                        Text("Saved time stamps")
+                            .foregroundColor(.secondary)
+                            .font(.subheadline.bold())
+                            .padding(.bottom, 4)
+                            .padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(viewModel.timeStamps.sorted(), id:\.self) { time in
+                                ZStack {
+                                    Text(time)
+                                        .font(.subheadline)
+                                        .fontWeight(.heavy)
+                                        .foregroundColor(Color.white)
+                                        .multilineTextAlignment(.center)
+                                        .padding(.top, 2)
+                                    
+                                }
+                                .onTapGesture {
+                                    player.seek(to: time.getCMTime())
+                                    player.play()
+                                    isPlaying = true
+                                }
+                                .onLongPressGesture {
+                                    deleteTimeStamp(time)
+                                }
+                                .frame(width: 84, height: 40)
+                                .background(Color(domColor ?? .lightGray))
+                                .cornerRadius(10)
                             }
-                            .onTapGesture {
-                                player.seek(to: time.getCMTime())
-                                player.play()
-                                isPlaying = true
-                            }
-                            .onLongPressGesture {
-                                deleteTimeStamp(time)
-                            }
-                            .frame(width: 84, height: 40)
-                            .background(Color(domColor ?? .lightGray))
-                            .cornerRadius(10)
                         }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 }
                 .onAppear {
                     loadTimes(episode: episode)

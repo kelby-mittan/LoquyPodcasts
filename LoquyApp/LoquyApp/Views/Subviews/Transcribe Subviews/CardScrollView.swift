@@ -95,13 +95,11 @@ struct CardScrollView: View {
                             NeoButtonView(domColor: $domColor)
                             Image(systemName: Symbol.share)
                                 .font(.title)
-                                .foregroundColor(.purple)
+                                .foregroundColor(Color(domColor ?? .white))
                         }
-//                        .background(NeoButtonView())
                         .frame(width: 50, height: 50)
                         .clipShape(Capsule())
                     }
-                    .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
                     .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                     .offset(x: -20)
                 }

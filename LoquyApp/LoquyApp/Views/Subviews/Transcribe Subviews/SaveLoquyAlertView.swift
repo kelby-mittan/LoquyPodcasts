@@ -49,7 +49,7 @@ struct SaveLoquyAlertView: View {
                    
                 TextField(LoquynClipText.giveTitle, text: $titleText)
                         .font(.headline)
-                        .foregroundColor(.purple)
+                        .foregroundColor(Color(domColor ?? .lightGray))
                         .background(Color.white)
                         .cornerRadius(8)
                     .padding(.horizontal)
@@ -64,7 +64,7 @@ struct SaveLoquyAlertView: View {
                         Text(LoquynClipText.saveText)
                             .fontWeight(.bold)
                             .frame(width: 120,height: 40)
-                            .foregroundColor(Color.purple)
+                            .foregroundColor(Color(domColor ?? .lightGray))
                             .background(NeoButtonView(domColor: $domColor))
                             .clipShape(Capsule())
                             .padding()
