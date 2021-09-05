@@ -20,7 +20,7 @@ This application was built and designed using SwiftUI, implements networking to 
 Xcode 12, Swift 5, SwiftUI, MediaPlayer, AVFoundation, AVKit, Combine, CocoaPods, Speech
 
 ## Main Player
-![Loquy](Assets/browseTatoLQpng) ![Loquy](Assets/playingPodcast.png) ![Loquy](Assets/clipView.png)
+![Loquy](Assets/browseTatoLQ.png) ![Loquy](Assets/playerVTato.png) ![Loquy](Assets/recordClipsVTato.png)
 
 ## Transcribing
 ![Loquy](Assets/transcribeView.png) ![Loquy](Assets/savedTView.png) ![Loquy](Assets/pageView.png)
