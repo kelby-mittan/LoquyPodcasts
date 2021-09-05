@@ -9,9 +9,13 @@
 import SwiftUI
 
 struct NeoButtonView: View {
+    
+    @Binding var domColor: UIColor?
+    
     var body: some View {
         ZStack {
-            Color(#colorLiteral(red: 0.8638685346, green: 0.8565297723, blue: 1, alpha: 1))
+            
+            Color(domColor?.lighter(componentDelta: 0.45) ?? .black)
             
             Capsule()
                 .foregroundColor(.white)
@@ -19,7 +23,7 @@ struct NeoButtonView: View {
                 .offset(x: -8, y: -8)
             Capsule()
                 .fill(
-                    LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.9536944032, green: 0.9129546285, blue: 1, alpha: 1)), Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    LinearGradient(gradient: Gradient(colors: [Color(domColor?.lighter(componentDelta: 0.35) ?? #colorLiteral(red: 0.8638685346, green: 0.8565297723, blue: 1, alpha: 1)), Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 )
                 .padding(2)
                 .blur(radius: 2)
@@ -31,14 +35,14 @@ struct CardNeoView: View {
     
     let isRan: Bool
     
-    let gradColor1 = PaletteColour.colors1.randomElement()
-    let gradColor2 = PaletteColour.colors2.randomElement()
+    let gradColor1 = PaletteColour.darkBlue.colour
+    let gradColor2 = PaletteColour.peach.colour
     
     var body: some View {
         ZStack {
             Color(#colorLiteral(red: 0.9889873862, green: 0.9497770667, blue: 1, alpha: 1))
                 .offset(x: -10, y: -10)
-            LinearGradient(gradient: Gradient(colors: isRan ? [gradColor1!, gradColor2!] : [Color.purple,Color(#colorLiteral(red: 0.8037956357, green: 0.7081945539, blue: 1, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing)
+            LinearGradient(gradient: Gradient(colors: isRan ? [gradColor1, gradColor2] : [Color.purple,Color(#colorLiteral(red: 0.8037956357, green: 0.7081945539, blue: 1, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 .padding(2)
                 .blur(radius: 4)
         }

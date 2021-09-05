@@ -34,38 +34,48 @@ struct TranscribeView: View {
     
     let player = Player.shared.player
     
+    @State var domColor: UIColor?
+    
     var body: some View {
         ZStack {
             ScrollView(.vertical, showsIndicators: false) {
                 
-                Text(audioClip.title)
-                    .fontWeight(.heavy)
-                    .foregroundColor(Color(.label))
-                    .font(.title)
-                    .padding(.bottom,6)
-                
-                NavigationLink(
-                    destination: EpisodeDetailView(episode: audioClip.episode,
-                                                   artwork: audioClip.episode.imageUrl ?? RepText.empty,
-                                                   feedUrl: audioClip.feedUrl,
-                                                   isDeepLink: false)
-                        .environmentObject(viewModel)
-                ) {
-                    
-                    Text(audioClip.episode.title)
-                        .fontWeight(.heavy)
-                        .foregroundColor(Color.purple)
-                        .font(.headline)
-                        .padding([.leading,.trailing])
-                }.onTapGesture(perform: {
-                    playing = false
-                })
-                
-                Text(audioClip.startTime + TimeText.dash + audioClip.endTime)
-                    .fontWeight(.heavy)
-                    .foregroundColor(Color(.label))
-                    .font(.subheadline)
-                    .padding(.top,4)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(audioClip.title)
+                            .fontWeight(.heavy)
+                            .foregroundColor(Color(.label))
+                            .font(.title)
+                            .padding(.bottom,6)
+                        
+                        NavigationLink(
+                            destination: EpisodeDetailView(episode: audioClip.episode,
+                                                           artwork: audioClip.episode.imageUrl ?? RepText.empty,
+                                                           feedUrl: audioClip.feedUrl,
+                                                           isDeepLink: false,
+                                                           domColor: domColor ?? .lightGray)
+                                .environmentObject(viewModel)
+                        ) {
+                            
+                            Text(audioClip.episode.title)
+                                .fontWeight(.heavy)
+                                .foregroundColor(Color(domColor ?? .systemBackground))
+                                .font(.headline)
+                                .underline()
+                        }.onTapGesture(perform: {
+                            playing = false
+                        })
+                        
+                        Text(audioClip.startTime + TimeText.dash + audioClip.endTime)
+                            .fontWeight(.heavy)
+                            .foregroundColor(Color(.label))
+                            .font(.subheadline)
+                            .padding(.top,4)
+                            .padding(.bottom)
+                    }
+                    .padding(.leading)
+                    Spacer()
+                }
                 
                 HStack {
                     remoteImage
@@ -78,15 +88,11 @@ struct TranscribeView: View {
                         playing ? player.play() : player.pause()
                     }) {
                         ZStack {
-                            NeoButtonView()
+                            NeoButtonView(domColor: $domColor)
                             Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
-                                .foregroundColor(.purple)
-                            
+                                .foregroundColor(Color(domColor ?? .placeholderText))
                         }
-                        .background(NeoButtonView())
                         .frame(width: 64, height: 64)
-                        .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
-                        .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         .clipShape(Capsule())
                         .padding(.trailing)
                     }
@@ -95,7 +101,7 @@ struct TranscribeView: View {
                 
                 ZStack(alignment: .leading) {
                     Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    Capsule().fill(Color.purple).frame(width: playedWidth, height: 8)
+                    Capsule().fill(Color(domColor ?? .placeholderText)).frame(width: playedWidth, height: 8)
                         .gesture(DragGesture()
                                     .onChanged({ (value) in
                                         player.pause()
@@ -118,6 +124,7 @@ struct TranscribeView: View {
                         .foregroundColor(.secondary)
                         .padding(.trailing, 4)
                 }
+                .padding(.horizontal)
                 
                 Group {
                     if isTranscribing {
@@ -143,11 +150,9 @@ struct TranscribeView: View {
                         .fontWeight(.heavy)
                         .padding()
                         .frame(width: UIScreen.main.bounds.width - 88)
-                        .foregroundColor(.purple)
-                        .background(NeoButtonView())
+                        .foregroundColor(Color(domColor ?? .placeholderText))
+                        .background(NeoButtonView(domColor: $domColor))
                         .clipShape(Capsule())
-                        .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
-                        .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
                         .padding()
                 }
                 Spacer()
@@ -161,11 +166,13 @@ struct TranscribeView: View {
                         .offset(x: 0, y: -70)
                         .environmentObject(viewModel)
                 }
-            }.onAppear {
+            }
+            .onAppear {
                 remoteImage = RemoteImageDetail(url: audioClip.episode.imageUrl ?? RepText.empty)
                 viewModel.loadLoquys()
+                getDomColor()
             }
-            NotificationView(message: $notificationMessage)
+            NotificationView(message: $notificationMessage, domColor: $domColor)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
         }
@@ -242,6 +249,19 @@ extension TranscribeView {
                         break
                     }
                 }
+            }
+        }
+    }
+    
+    private func getDomColor() {
+        if let episodeImg = audioClip.episode.imageUrl {
+            viewModel.getDomColor(episodeImg) { clr in
+                if clr.isDark() {
+                    domColor = clr
+                } else {
+                    domColor = .lightGray
+                }
+                
             }
         }
     }

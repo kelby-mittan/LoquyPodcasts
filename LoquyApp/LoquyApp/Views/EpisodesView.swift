@@ -37,24 +37,30 @@ struct EpisodesView: View {
         } else {
             List(viewModel.episodes, id: \.self) { episode in
                 
-                NavigationLink(destination: EpisodeDetailView(episode: episode,
-                                                              artwork: artWork,
-                                                              feedUrl: podcastFeed,
-                                                              isDeepLink: false).environmentObject(viewModel)) {
+                ZStack {
+                    NavigationLink(destination: EpisodeDetailView(episode: episode,
+                                                                  artwork: artWork,
+                                                                  feedUrl: podcastFeed,
+                                                                  isDeepLink: false,
+                                                                  domColor: domColor ?? .lightGray)
+                                    .environmentObject(viewModel)) {
+                        EmptyView()
+                    }
+                    .padding()
+                    .hidden()
                     
-                    ZStack(alignment: .center) {
+                    ZStack {
                         ZStack {
-                            Color(domColor ?? UIColor(Color.gray))
+                            Color(domColor ?? .systemBackground)
                         }
                         .cornerRadius(12)
-                        .padding(.trailing)
                         
-                        HStack(alignment: .top) {
+                        HStack {
                             
                             RemoteImage(url: episode.imageUrl ?? RepText.empty)
-                                .frame(width: 110, height: 110)
+                                .frame(width: 120, height: 120)
                                 .cornerRadius(6)
-                                .padding([.leading,.bottom,.top])
+                                .padding(.vertical)
                             
                             VStack(alignment: .leading) {
                                 
@@ -62,22 +68,25 @@ struct EpisodesView: View {
                                     .font(.headline)
                                     .fontWeight(.heavy)
                                     .foregroundColor(Color.white)
-                                    .padding()
+                                    .padding(.bottom,4)
                                 
                                 Text(episode.title)
                                     .font(.subheadline)
                                     .foregroundColor(Color.white)
                                     .fontWeight(.semibold)
-                                    .padding([.horizontal])
+                                    .lineLimit(4)
+                                
+                                Spacer()
+                                
                             }
+                            .padding()
                         }
                         .padding()
+                        
                     }
-                    .padding(.horizontal)
                     .cornerRadius(12)
                 }
-                .padding(.trailing, -30)
-                .buttonStyle(PlainButtonStyle())
+                
             }
             .onAppear {
                 isSaved

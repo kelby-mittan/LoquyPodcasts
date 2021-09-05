@@ -14,6 +14,7 @@ struct CardScrollView: View {
     @EnvironmentObject var viewModel: ViewModel
     let loquy: Loquy
     @Binding var shareShown: Bool
+    @State var domColor: UIColor?
     
     var body: some View {
         ZStack {
@@ -28,7 +29,9 @@ struct CardScrollView: View {
                 NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode,
                                                               artwork: loquy.audioClip.episode.imageUrl ?? RepText.empty,
                                                               feedUrl: loquy.audioClip.feedUrl,
-                                                              isDeepLink: false)
+                                                              isDeepLink: false,
+                                                              domColor: domColor ?? .lightGray)
+                                
                                 .environmentObject(viewModel)
                 ) {
                     
@@ -89,12 +92,12 @@ struct CardScrollView: View {
                         shareShown = true
                     }) {
                         ZStack {
-                            NeoButtonView()
+                            NeoButtonView(domColor: $domColor)
                             Image(systemName: Symbol.share)
                                 .font(.title)
                                 .foregroundColor(.purple)
                         }
-                        .background(NeoButtonView())
+//                        .background(NeoButtonView())
                         .frame(width: 50, height: 50)
                         .clipShape(Capsule())
                     }
@@ -104,6 +107,9 @@ struct CardScrollView: View {
                 }
             }
             .padding([.horizontal,.bottom])
+        }
+        .onAppear {
+            domColor = UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty)
         }
         .background(
             Color(UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty) ?? .clear)

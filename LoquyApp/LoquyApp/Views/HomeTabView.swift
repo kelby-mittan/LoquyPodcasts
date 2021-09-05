@@ -16,6 +16,7 @@ struct Home: App {
     @StateObject private var deepLinkViewModel = DeepLinkViewModel()
     
     @State private var selectedTab = 0
+    @State var deepLinkDomColor: UIColor?
     
     var body: some Scene {
         WindowGroup {
@@ -28,8 +29,21 @@ struct Home: App {
                         NavigationView {
                             EpisodeDetailView(episode: deepLinkViewModel.deepLinkEpisode,
                                               artwork: deepLinkViewModel.deepLinkEpisode.imageUrl ?? RepText.empty,
-                                              feedUrl: deepLinkViewModel.deepLinkEpisode.feedUrl, isDeepLink: true)
+                                              feedUrl: deepLinkViewModel.deepLinkEpisode.feedUrl,
+                                              isDeepLink: true,
+                                              domColor: deepLinkDomColor ?? .lightGray)
                                 .environmentObject(viewModel)
+                        }
+                        .onAppear {
+                            if let deepLinkImg = deepLinkViewModel.deepLinkEpisode.imageUrl {
+                                viewModel.getDomColor(deepLinkImg) { clr in
+                                    if clr.isDark() {
+                                        deepLinkDomColor = clr
+                                    } else {
+                                        deepLinkDomColor = .lightGray
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -134,7 +148,7 @@ struct BrowseView: View {
             .navigationBarHidden(true)
         }
         .navigationBarHidden(true)
-        .accentColor(.purple)
+        .accentColor(.secondary)
         
     }
 }
@@ -154,7 +168,7 @@ struct FavoritesTabView: View {
             .onAppear {
                 viewModel.loadFavorites()
             }
-            .accentColor(.purple)
+            .accentColor(.secondary)
             .tabItem {
                 Image(systemName: Symbol.star)
                     .font(.body)
