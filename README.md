@@ -1,3 +1,5 @@
+
+
 [![](Assets/loquyIconBC1.1.png)](https://kelbymittan.wixsite.com/loquy)
 # Loquy Podcasts - [check out the site](https://kelbymittan.wixsite.com/loquy) -  [app store](https://apps.apple.com/us/app/loquy/id1532251878)
 
@@ -24,7 +26,7 @@ Xcode 12, Swift 5, SwiftUI, MediaPlayer, AVFoundation, AVKit, Combine, CocoaPods
 ![Loquy](Assets/homeLQV2.png) ![Loquy](Assets/lqPlayerV2Tato.png) ![Loquy](Assets/rcrd1.png)
 
 ## Transcribing
-![gif](Assets/rotatoMovieGIF.gif)
+https://user-images.githubusercontent.com/55465058/132142760-d888cd79-d8b1-4c3a-9be1-4d3b450570c8.mp4
 
 ## Code Snippets
 
