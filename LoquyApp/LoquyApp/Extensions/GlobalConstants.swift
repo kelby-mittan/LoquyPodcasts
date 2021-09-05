@@ -58,7 +58,7 @@ public struct TimeText {
 
 public struct RepText {
     static let empty = ""
-    static let timeStamp = "Timestamp"
+    static let timeStamp = "Time Stamp"
     static let recordClip = "Record Clip"
     static let transcribe = "Transcribe"
     static let saveLoquy = "Save Loquy"
@@ -94,7 +94,7 @@ public struct LoquynClipText {
 
 public struct TimeStampText {
     static let saveThisEpisode = "Save this episode"
-    static let addTimeStamp = "To add a timestamp"
+    static let addTimeStamp = "To add a time stamp"
     static let ok = "Okay"
     static let saveThisTime = "Save this time?"
     static let save = "Save"
