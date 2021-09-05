@@ -68,13 +68,13 @@ struct TimeStampAlertView: View {
                     }
                     
                 }) {
-                        Text(saveText)
-                            .fontWeight(.bold)
-                            .frame(width: 120,height: 40)
-                            .foregroundColor(Color.purple)
-                            .background(NeoButtonView())
-                            .clipShape(Capsule())
-                            .padding()
+                    Text(saveText)
+                        .fontWeight(.bold)
+                        .frame(width: 120,height: 40)
+                        .foregroundColor(Color(domColor ?? .lightGray))
+                        .background(NeoButtonView(domColor: $domColor))
+                        .clipShape(Capsule())
+                        .padding()
                 }                
                 Spacer()
             }
@@ -93,7 +93,7 @@ struct TimeStampAlertView: View {
         .frame(width: 300, height: Persistence.episodes.hasItemBeenSaved(episode) ? 200 : 260)
         .background(Color(domColor ?? .lightGray))
         .cornerRadius(20)
-        .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 16, x: 10, y: 10)
+        .shadow(color: Color(domColor ?? .lightGray), radius: 16, x: 10, y: 10)
         .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
         .onAppear {
             viewModel.getDomColor(episode.imageUrl ?? RepText.empty) { clr in

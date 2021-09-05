@@ -24,16 +24,30 @@ struct AudioClipsView: View {
             NavigationView {
                 List(viewModel.audioClips, id: \.self) { clip in
                     
-                    NavigationLink(
-                        destination: TranscribeView(audioClip: clip)
-                            .environmentObject(viewModel)
-                    ) {
+//                    NavigationLink(
+//                        destination: TranscribeView(audioClip: clip)
+//                            .environmentObject(viewModel)
+//                    ) {
+//
+//                        ClipListItem(clip: clip, showActionSheet: $showActionSheet, audioClip: $audioClip)
+//                            .environmentObject(viewModel)
+//
+//                    }
+//                    .padding(.trailing, -30)
+//                    .buttonStyle(PlainButtonStyle())
+                    
+                    
+                    ZStack {
+                        NavigationLink(destination: TranscribeView(audioClip: clip)
+                                        .environmentObject(viewModel)) {
+                            EmptyView()
+                        }
+                        .padding()
+                        .hidden()
                         
                         ClipListItem(clip: clip, showActionSheet: $showActionSheet, audioClip: $audioClip)
                             .environmentObject(viewModel)
-                        
                     }
-                    .padding(.trailing, -30).buttonStyle(PlainButtonStyle())
                     
                 }
                 .actionSheet(isPresented: $showActionSheet, content: {
@@ -45,7 +59,7 @@ struct AudioClipsView: View {
                 UITableView.appearance().separatorStyle = .none
                 viewModel.loadAudioClips()
             }
-            .accentColor(.purple)
+            .accentColor(.secondary)
             
         } else {
             EmptySavedView(emptyType: .audioClip)
@@ -94,7 +108,6 @@ struct ClipListItem: View {
                 
             }
             .cornerRadius(12)
-            .padding(.trailing)
             
             VStack {
                 
@@ -106,38 +119,39 @@ struct ClipListItem: View {
                             audioClip = clip
                             showActionSheet.toggle()
                         }
+                        .padding(.vertical)
                     
                     Spacer()
                     
-                    VStack(alignment:.center) {
+                    VStack(alignment: .leading) {
                         
                         Text(clip.title)
                             .font(.system(size: 20, weight: .bold, design: .rounded))
                             .fontWeight(.heavy)
                             .foregroundColor(Color.white)
-                            .padding([.top,.bottom],8)
+                            .padding(.bottom, 4)
                         
                         Text(clip.savedDate)
                             .font(.headline)
                             .foregroundColor(Color.white)
                             .fontWeight(.semibold)
+                            .padding(.bottom, 4)
+                        
+                        Text(clip.episode.title)
+                            .font(.subheadline)
+                            .foregroundColor(Color.white)
+                            .fontWeight(.semibold)
+                            .lineLimit(3)
                         
                         Spacer()
                         
                     }
-                    .padding(.trailing)
+                    .padding(.vertical)
                     Spacer()
                 }
                 
-                Text(clip.episode.title)
-                    .font(.subheadline)
-                    .foregroundColor(Color.white)
-                    .fontWeight(.semibold)
-                
-                
             }
-            .padding()
-            
+            .padding(.horizontal)
             
         }
 

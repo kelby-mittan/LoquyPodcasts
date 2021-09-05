@@ -41,7 +41,7 @@ struct ClipAlertView: View {
                     
                 TextField(ClipText.giveTitle, text: $titleText)
                         .font(.headline)
-                        .foregroundColor(.purple)
+                    .foregroundColor(Color(domColor?.darker() ?? .darkGray))
                         .background(Color.white)
                         .cornerRadius(8)
                         .padding(.horizontal)
@@ -50,24 +50,22 @@ struct ClipAlertView: View {
                 
             }
             .frame(width: UIScreen.main.bounds.width)
-            .background(CardNeoView(isRan: false))
-            .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
-            .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
+            .background(Color(domColor ?? .lightGray))
             .cornerRadius(12)
             .offset(y: -8)
             
             Text(ClipText.start+clipTime)
                 .font(.headline)
                 .fontWeight(.heavy)
-                .foregroundColor(.purple)
+                .foregroundColor(Color(domColor ?? .lightGray))
                 .offset(y: 10)
             
-            CustomPicker(selected: $selected, currentTime: clipTime)
+            CustomPicker(selected: $selected, currentTime: clipTime, domColor: $domColor)
             
             Text(ClipText.end+getEndTime())
                 .font(.headline)
                 .fontWeight(.heavy)
-                .foregroundColor(.purple)
+                .foregroundColor(Color(domColor ?? .lightGray))
                 .offset(y: -10)
             
             Button(action: {
@@ -96,14 +94,13 @@ struct ClipAlertView: View {
                 Text(ClipText.saveClip)
                         .fontWeight(.heavy)
                         .frame(width: 240,height: 60)
-                        .foregroundColor(Color.purple)
-                        .background(NeoButtonView())
+                        .foregroundColor(Color(domColor ?? .lightGray))
+                        .background(NeoButtonView(domColor: $domColor))
                         .clipShape(Capsule())
                         .padding()
                         .offset(y: -10)
             }
-            .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
-            .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
+            
             Spacer()
         }
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)

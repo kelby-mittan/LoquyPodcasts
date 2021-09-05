@@ -13,6 +13,7 @@ struct EpisodeTimesView: View {
     
     let episode: Episode
     @Binding var isPlaying: Bool
+    @Binding var domColor: UIColor?
     
     let player = Player.shared.player
     @EnvironmentObject var viewModel: ViewModel
@@ -28,7 +29,7 @@ struct EpisodeTimesView: View {
                                 Text(time)
                                     .font(.subheadline)
                                     .fontWeight(.heavy)
-                                    .foregroundColor(Color.black)
+                                    .foregroundColor(Color.white)
                                     .multilineTextAlignment(.center)
                                     .padding(.top, 2)
                                 
@@ -42,7 +43,7 @@ struct EpisodeTimesView: View {
                                 deleteTimeStamp(time)
                             }
                             .frame(width: 84, height: 40)
-                            .background(Color(.systemGray5))
+                            .background(Color(domColor ?? .lightGray))
                             .cornerRadius(10)
                         }
                     }

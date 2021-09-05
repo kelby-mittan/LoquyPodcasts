@@ -18,6 +18,7 @@ struct ControlView: View {
     @Binding var isPlaying: Bool
     @Binding var showModal: Bool
     @Binding var clipTime: String
+    @Binding var domColor: UIColor?
     
     @State var width: CGFloat = 20
     @State var playing = true
@@ -35,7 +36,7 @@ struct ControlView: View {
                 Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
                     .padding([.top,.horizontal])
                 
-                Capsule().fill(Color.purple)
+                Capsule().fill(Color(domColor ?? .lightGray))
                     .frame(width: width.isFinite ? width : 30, height: 8)
                     .gesture(DragGesture()
                                 .onChanged({ (value) in
@@ -74,52 +75,43 @@ struct ControlView: View {
                     Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                 }) {
                     ZStack {
-                        NeoButtonView()
+                        NeoButtonView(domColor: $domColor)
                         Image(systemName: Symbol.back).font(.largeTitle)
-                            .foregroundColor(.purple)
-                    }.background(NeoButtonView())
+                            .foregroundColor(Color(domColor ?? .lightGray))
+                    }
                     .frame(width: 60, height: 60)
                     .clipShape(Capsule())
                     
                 }
                 .offset(x: 20)
-                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
-                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
                 Button(action: {
                     handlePlayPausePressed()
                 }) {
                     ZStack {
-                        NeoButtonView()
+                        NeoButtonView(domColor: $domColor)
                         Image(systemName: playing ? Symbol.pause : Symbol.play)
                             .font(.largeTitle)
-                            .foregroundColor(.purple)
+                            .foregroundColor(Color(domColor ?? .lightGray))
                         
                     }
-                    .background(NeoButtonView())
                     .frame(width: 80, height: 80)
                     .clipShape(Capsule())
                     .animation(.spring())
                 }
-                
-                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
-                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 
                 Button(action: {
                     Player.seekToCurrentTime(delta: 15)
                     Player.getCapsuleWidth(width: &width, currentTime: currentTime)
                 }) {
                     ZStack {
-                        NeoButtonView()
+                        NeoButtonView(domColor: $domColor)
                         Image(systemName: Symbol.forward).font(.largeTitle)
-                            .foregroundColor(.purple)
+                            .foregroundColor(Color(domColor ?? .lightGray))
                     }
-                    .background(NeoButtonView())
                     .frame(width: 60, height: 60)
                     .clipShape(Capsule())
                 }
-                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
-                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 .offset(x: -20)
                 
             }
@@ -131,13 +123,11 @@ struct ControlView: View {
                     Text(RepText.recordClip)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: UIScreen.main.bounds.width - 88, height: 44)
-                        .foregroundColor(.purple)
-                        .background(NeoButtonView())
+                        .foregroundColor(Color(domColor ?? .lightGray))
+                        .background(NeoButtonView(domColor: $domColor))
                         .clipShape(Capsule())
                         .padding()
                 }
-                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 10, x: 6, y: 6)
-                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 .animation(.spring())
 
                 Button(action: {
@@ -146,26 +136,24 @@ struct ControlView: View {
                     Text(RepText.timeStamp)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: UIScreen.main.bounds.width - 88,height: 44)
-                        .foregroundColor(.purple)
-                        .background(NeoButtonView())
+                        .foregroundColor(Color(domColor ?? .lightGray))
+                        .background(NeoButtonView(domColor: $domColor))
                         .clipShape(Capsule())
                         .padding()
                 }
-                .shadow(color: Color(#colorLiteral(red: 0.748958528, green: 0.7358155847, blue: 0.9863374829, alpha: 1)), radius: 8, x: 6, y: 6)
-                .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                 .animation(.spring())
                 .buttonStyle(PlainButtonStyle())
                 .offset(y: -10)
             }
             .padding(.horizontal)
             .blur(radius: showAlert ? 30 : 0)
-            if showAlert {
-                TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode)
-                    .offset(x: 0, y: -70)
-                    .environmentObject(viewModel)
-            }
-            
         }
+        .sheet(isPresented: $showAlert, content: {
+            TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode)
+                .offset(y: 80)
+                .background(BackgroundClearView())
+                .environmentObject(viewModel)
+        })
         .animation(.spring())
         .onAppear {
             handlePlayOnAppear()
@@ -262,4 +250,17 @@ extension ControlView {
         }
 
     }
+}
+
+struct BackgroundClearView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = .clear
+        }
+        
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }

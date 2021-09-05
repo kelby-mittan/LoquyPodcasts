@@ -65,7 +65,7 @@ struct SaveLoquyAlertView: View {
                             .fontWeight(.bold)
                             .frame(width: 120,height: 40)
                             .foregroundColor(Color.purple)
-                            .background(NeoButtonView())
+                            .background(NeoButtonView(domColor: $domColor))
                             .clipShape(Capsule())
                             .padding()
                     }

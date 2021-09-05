@@ -20,6 +20,7 @@ struct EpisodeDetailView: View {
     let artwork: String
     let feedUrl: String?
     let isDeepLink: Bool
+    @State var domColor: UIColor?
     
     @State var remoteImage = RemoteImageDetail(url: RepText.empty)
     @State var halfModalShown = false
@@ -43,23 +44,23 @@ struct EpisodeDetailView: View {
                         .padding([.leading,.trailing])
                         .animation(.easeInOut)
                     
-                    ControlView(episode: episode, isPlaying: $playing, showModal: $halfModalShown, clipTime: $clipTime)
+                    ControlView(episode: episode, isPlaying: $playing, showModal: $halfModalShown, clipTime: $clipTime, domColor: $domColor)
                         .padding(.top, playing ? 0 : 25)
                         .environmentObject(viewModel)
                     
-                    EpisodeTimesView(episode: episode, isPlaying: $playing)
+                    EpisodeTimesView(episode: episode, isPlaying: $playing, domColor: $domColor)
                         .padding([.leading,.trailing],8)
                         .environmentObject(viewModel)
                     
                     DescriptionView(episode: episode)
                         .padding([.leading,.trailing], 8)
                     
-                    FavoriteView(episode: episode, artwork: artwork, notificationShown: $showNotification, message: $notificationMessage)
+                    FavoriteView(episode: episode, artwork: artwork, notificationShown: $showNotification, message: $notificationMessage, domColor: $domColor)
                         .padding(.bottom, 100)
                     
                 }
                 
-                NotificationView(message: $notificationMessage)
+                NotificationView(message: $notificationMessage, domColor: $domColor)
                     .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                     .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
                 
@@ -75,7 +76,8 @@ struct EpisodeDetailView: View {
                     }
                 }
                 
-            }.onAppear {
+            }
+            .onAppear {
                 remoteImage = RemoteImageDetail(url: episode.imageUrl ?? RepText.empty)
                 clipTime = player.currentTime().toDisplayString()
             }
@@ -103,6 +105,7 @@ struct EpisodeDetailView: View {
 struct NotificationView: View {
     
     @Binding var message: String
+    @Binding var domColor: UIColor?
     
     var body: some View {
         Text(message)
@@ -110,8 +113,8 @@ struct NotificationView: View {
             .padding()
             .font(.title)
             .foregroundColor(Color.white)
-            .frame(width: UIScreen.main.bounds.width - 40, height: 40)
-            .background(Color.purple)
+            .frame(width: UIScreen.main.bounds.width - 40, height: 60)
+            .background(Color(domColor ?? .lightGray))
             .cornerRadius(20)
         
     }

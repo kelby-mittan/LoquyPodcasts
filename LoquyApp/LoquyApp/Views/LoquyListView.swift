@@ -79,7 +79,7 @@ struct LoquyListView: View {
                 viewModel.loadLoquys()
                 loquies = Array(Set(viewModel.loquys.map { $0.audioClip.episode.imageUrl }))
             }
-            .accentColor(.purple)
+            .accentColor(.secondary)
         } else {
             EmptySavedView(emptyType: .transcribedLoquy)
                 .onAppear {
@@ -166,10 +166,11 @@ struct LoquyContentView: View {
                                 toggled = true
                             }) {
                                 ZStack {
-                                    NeoButtonView()
+                                    NeoButtonView(domColor: $domColor)
                                     Image(systemName: Symbol.quote).font(.largeTitle)
                                         .foregroundColor(.purple)
-                                }.background(NeoButtonView())
+                                }
+//                                .background(NeoButtonView())
                                 .frame(width: 60, height: 60)
                                 .clipShape(Capsule())
                                 
