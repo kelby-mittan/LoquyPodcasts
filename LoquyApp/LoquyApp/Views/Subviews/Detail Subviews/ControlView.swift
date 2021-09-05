@@ -139,7 +139,7 @@ struct ControlView: View {
                         .foregroundColor(Color(domColor ?? .lightGray))
                         .background(NeoButtonView(domColor: $domColor))
                         .clipShape(Capsule())
-                        .padding()
+                        .padding([.horizontal,.bottom])
                 }
                 .animation(.spring())
                 .buttonStyle(PlainButtonStyle())
