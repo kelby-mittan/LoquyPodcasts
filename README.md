@@ -24,7 +24,7 @@ Xcode 12, Swift 5, SwiftUI, MediaPlayer, AVFoundation, AVKit, Combine, CocoaPods
 ![Loquy](Assets/homeLQV2.png) ![Loquy](Assets/lqPlayerV2Tato.png) ![Loquy](Assets/rcrd1.png)
 
 ## Transcribing
-![gif](Assets/rotatoMovieGIF.gif)
+![gif](Assets/gifLQ.gif)
 
 ## Code Snippets
 
