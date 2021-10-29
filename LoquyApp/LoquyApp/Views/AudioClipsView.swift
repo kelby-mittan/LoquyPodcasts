@@ -30,7 +30,6 @@ struct AudioClipsView: View {
                             EmptyView()
                         }
                         .padding()
-                        .hidden()
                         
                         ClipListItem(clip: clip, showActionSheet: $showActionSheet, audioClip: $audioClip)
                             .environmentObject(viewModel)

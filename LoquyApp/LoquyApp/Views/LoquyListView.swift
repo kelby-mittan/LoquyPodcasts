@@ -174,7 +174,6 @@ struct LoquyContentView: View {
                                 .clipShape(Capsule())
                                 
                             }
-                            .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                         }
                         
                     }

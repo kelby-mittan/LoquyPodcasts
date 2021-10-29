@@ -67,19 +67,22 @@ struct CardScrollView: View {
                 }
                 .padding([.leading,.trailing,.bottom,.top])
                 
-                VStack(alignment: .leading) {
-                    Text(LoquynClipText.loquyTranscript)
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                        .fontWeight(.heavy)
-                        .padding(.leading)
-                    
-                    Text("\(loquy.transcription)")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                        .fontWeight(.heavy)
-                        .padding([.top,.horizontal])
-                        .padding(.bottom,72)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(LoquynClipText.loquyTranscript)
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .fontWeight(.heavy)
+                            .padding(.leading)
+                        
+                        Text("\(loquy.transcription)")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .fontWeight(.heavy)
+                            .padding([.top,.horizontal])
+                            .padding(.bottom,72)
+                    }
+                    Spacer()
                 }
                 Spacer()
                 
@@ -100,7 +103,6 @@ struct CardScrollView: View {
                         .frame(width: 50, height: 50)
                         .clipShape(Capsule())
                     }
-                    .shadow(color: Color(.white), radius: 10, x: -6, y: -6)
                     .offset(x: -20)
                 }
             }
