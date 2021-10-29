@@ -36,116 +36,57 @@ struct EpisodesView: View {
             .navigationBarTitle(title)
         } else {
             
-            ScrollView {
-                ForEach(viewModel.episodes, id: \.self) { episode in
-//                    ZStack {
-                        NavigationLink(destination: EpisodeDetailView(episode: episode,
-                                                                      artwork: artWork,
-                                                                      feedUrl: podcastFeed,
-                                                                      isDeepLink: false,
-                                                                      domColor: domColor ?? .lightGray)
-                                        .environmentObject(viewModel)) {
-                            
-//                            EmptyView()
-                            
-                            ZStack {
-                                Color(domColor ?? .systemBackground)
-                                
-                                HStack {
-                                    
-                                    RemoteImage(url: episode.imageUrl ?? RepText.empty)
-                                        .frame(width: 120, height: 120)
-                                        .cornerRadius(6)
-                                        .padding(.vertical)
-                                    
-                                    VStack(alignment: .leading) {
-                                        
-                                        Text(episode.pubDate.makeString())
-                                            .font(.headline)
-                                            .fontWeight(.heavy)
-                                            .foregroundColor(Color.white)
-                                            .padding(.bottom,4)
-                                        
-                                        Text(episode.title)
-                                            .font(.subheadline)
-                                            .foregroundColor(Color.white)
-                                            .fontWeight(.semibold)
-                                            .lineLimit(4)
-                                        
-                                        Spacer()
-                                        
-                                    }
-                                    .padding()
-                                }
-                                .padding()
+            List(viewModel.episodes, id: \.self) { episode in
+
+                ZStack {
+                    NavigationLink(destination: EpisodeDetailView(episode: episode,
+                                                                  artwork: artWork,
+                                                                  feedUrl: podcastFeed,
+                                                                  isDeepLink: false,
+                                                                  domColor: domColor ?? .lightGray)
+                                    .environmentObject(viewModel)) {
+
+                        EmptyView()
+                    }
+                    .padding()
+
+                    ZStack(alignment: .leading) {
+                        Color(domColor ?? .systemBackground)
+
+                        HStack {
+
+                            RemoteImage(url: episode.imageUrl ?? RepText.empty)
+                                .frame(width: 120, height: 120)
+                                .cornerRadius(6)
+                                .padding(.vertical)
+
+                            VStack(alignment: .leading) {
+
+                                Text(episode.pubDate.makeString())
+                                    .font(.headline)
+                                    .fontWeight(.heavy)
+                                    .foregroundColor(Color.white)
+                                    .padding(.bottom,4)
+
+                                Text(episode.title)
+                                    .font(.subheadline)
+                                    .foregroundColor(Color.white)
+                                    .fontWeight(.semibold)
+                                    .lineLimit(4)
+
+                                Spacer()
+
                             }
-                            .cornerRadius(12)
+                            .padding()
                         }
-                                        .background(Color.yellow)
                         .padding()
-                        //                    .hidden()
-                        
-                        
-                        
-//                    }
+                    }
+                    .cornerRadius(12)
+
                 }
+                                
             }
             
-            
-            
-            
-//            List(viewModel.episodes, id: \.self) { episode in
-//
-//                ZStack {
-//                    NavigationLink(destination: EpisodeDetailView(episode: episode,
-//                                                                  artwork: artWork,
-//                                                                  feedUrl: podcastFeed,
-//                                                                  isDeepLink: false,
-//                                                                  domColor: domColor ?? .lightGray)
-//                                    .environmentObject(viewModel)) {
-//
-//                        EmptyView()
-//                    }
-//                                    .background(Color.yellow)
-//                    .padding()
-//                    //                    .hidden()
-//
-//                    ZStack {
-//                        Color(domColor ?? .systemBackground)
-//
-//                        HStack {
-//
-//                            RemoteImage(url: episode.imageUrl ?? RepText.empty)
-//                                .frame(width: 120, height: 120)
-//                                .cornerRadius(6)
-//                                .padding(.vertical)
-//
-//                            VStack(alignment: .leading) {
-//
-//                                Text(episode.pubDate.makeString())
-//                                    .font(.headline)
-//                                    .fontWeight(.heavy)
-//                                    .foregroundColor(Color.white)
-//                                    .padding(.bottom,4)
-//
-//                                Text(episode.title)
-//                                    .font(.subheadline)
-//                                    .foregroundColor(Color.white)
-//                                    .fontWeight(.semibold)
-//                                    .lineLimit(4)
-//
-//                                Spacer()
-//
-//                            }
-//                            .padding()
-//                        }
-//                        .padding()
-//                    }
-//                    .cornerRadius(12)
-//
-//                }
-                                
-//            }
             .onAppear {
                 isSaved
                 ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
