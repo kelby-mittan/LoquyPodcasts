@@ -84,7 +84,6 @@ struct EpisodesView: View {
                     .cornerRadius(12)
 
                 }
-                                
             }
             
             .onAppear {

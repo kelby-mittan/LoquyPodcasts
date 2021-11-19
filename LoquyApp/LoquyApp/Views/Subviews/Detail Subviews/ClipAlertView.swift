@@ -37,7 +37,7 @@ struct ClipAlertView: View {
                     .fontWeight(.heavy)
                     .foregroundColor(.white)
                     .padding(.leading)
-                
+                    .padding(.vertical,8)
                     
                 TextField(ClipText.giveTitle, text: $titleText)
                         .font(.headline)
@@ -52,7 +52,6 @@ struct ClipAlertView: View {
             .frame(width: UIScreen.main.bounds.width)
             .background(Color(domColor ?? .lightGray))
             .cornerRadius(12)
-            .offset(y: -8)
             
             Text(ClipText.start+clipTime)
                 .font(.headline)

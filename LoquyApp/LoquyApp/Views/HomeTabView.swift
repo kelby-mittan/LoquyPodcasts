@@ -87,7 +87,6 @@ struct BrowseView: View {
     
     @EnvironmentObject var viewModel: ViewModel
     @State private var searchText = RepText.empty
-    @State private var isPodcastShowing = true
     @State private var isEditing = false
     
     let mindspace = DummyPodcast.mindspace
