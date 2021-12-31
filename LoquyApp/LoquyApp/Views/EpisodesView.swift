@@ -48,7 +48,6 @@ struct EpisodesView: View {
 
                         EmptyView()
                     }
-                    .padding()
 
                     ZStack(alignment: .leading) {
                         Color(domColor ?? .systemBackground)
@@ -84,6 +83,7 @@ struct EpisodesView: View {
                     .cornerRadius(12)
 
                 }
+                .listRowBackground(Color.clear)
             }
             
             .onAppear {
@@ -98,7 +98,7 @@ struct EpisodesView: View {
                         } else {
                             domColor = .lightGray
                         }
-                        
+
                     }
                 }
                 
