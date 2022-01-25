@@ -12,6 +12,7 @@ import SwiftUI
 struct LoquyListView: View {
     
     @EnvironmentObject var viewModel: ViewModel
+    @EnvironmentObject var deepLinkViewModel: DeepLinkViewModel
     
     private let layout = [
         GridItem(.flexible()),
@@ -47,6 +48,7 @@ struct LoquyListView: View {
                                 NavigationLink(
                                     destination: LoquyContentView(imageUrl: imageUrl ?? RepText.empty)
                                         .environmentObject(viewModel)
+                                        .environmentObject(deepLinkViewModel)
                                     
                                 ) {
                                     RemoteImage(url: imageUrl ?? RepText.empty)
@@ -69,6 +71,7 @@ struct LoquyListView: View {
                                         }
                 )
             }
+            .navigationViewStyle(.stack)
             .actionSheet(isPresented: $showActionSheet, content: {
                 actionSheet
             })
@@ -97,6 +100,7 @@ struct LoquyContentView: View {
     
     let imageUrl: String
     @EnvironmentObject var viewModel: ViewModel
+    @EnvironmentObject var deepLinkViewModel: DeepLinkViewModel
     @State private var toggled = false
     @State private var page = 0
     @State var domColor: UIColor?
@@ -109,13 +113,12 @@ struct LoquyContentView: View {
                     VStack {
                         PagingCardView(imageUrl: imageUrl)
                             .environmentObject(viewModel)
+                            .environmentObject(deepLinkViewModel)
                     }
                 }
-                .onAppear(perform: viewModel.loadLoquys)
                 .transition(
                     AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
                 )
-                .animation(Animation.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5))
                 
             } else {
                 ZStack {
@@ -161,9 +164,10 @@ struct LoquyContentView: View {
                         Spacer()
                         HStack {
                             Spacer()
-                            
                             Button(action: {
-                                toggled = true
+                                withAnimation(.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5)) {
+                                    toggled = true
+                                }
                             }) {
                                 ZStack {
                                     NeoButtonView(domColor: $domColor)
@@ -177,16 +181,15 @@ struct LoquyContentView: View {
                         }
                         
                     }
-                    .padding([.leading,.bottom,.trailing])
+                    .padding([.horizontal,.bottom])
                     .cornerRadius(12)
                     .background(Color(domColor ?? .lightGray).cornerRadius(12))
                 }
-                .padding([.leading,.trailing],12)
+                .padding([.horizontal],12)
                 .frame(height: UIScreen.main.bounds.height*2/3)
                 .transition(
-                    AnyTransition.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing))
+                    .asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing))
                 )
-                .animation(Animation.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5))
             }
             
         }
@@ -194,8 +197,6 @@ struct LoquyContentView: View {
             viewModel.loadLoquys()
         })
         .onAppear {
-            viewModel.loadLoquys()
-            viewModel.loadAudioClips()
             domColor = UIColor.color(withCodedString:
                                         viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.first?.audioClip.domColor ?? "")
         }

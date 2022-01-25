@@ -37,6 +37,7 @@ struct TranscribeView: View {
     @State var domColor: UIColor?
     
     var body: some View {
+        
         ZStack {
             ScrollView(.vertical, showsIndicators: false) {
                 
@@ -55,23 +56,31 @@ struct TranscribeView: View {
                                                            isDeepLink: false,
                                                            domColor: domColor ?? .lightGray)
                                 .environmentObject(viewModel)
+
                         ) {
-                            
+
                             Text(audioClip.episode.title)
                                 .fontWeight(.heavy)
                                 .foregroundColor(Color(domColor ?? .systemBackground))
                                 .font(.headline)
                                 .underline()
-                        }.onTapGesture(perform: {
+
+                        }
+                        .onTapGesture(perform: {
                             playing = false
                         })
                         
-                        Text(audioClip.startTime + TimeText.dash + audioClip.endTime)
-                            .fontWeight(.heavy)
-                            .foregroundColor(Color(.label))
-                            .font(.subheadline)
-                            .padding(.top,4)
-                            .padding(.bottom)
+//                        goToEpisodeLink
+                        
+//                        Text(audioClip.startTime + TimeText.dash + audioClip.endTime)
+//                            .fontWeight(.heavy)
+//                            .foregroundColor(Color(.label))
+//                            .font(.subheadline)
+//                            .padding(.top,4)
+//                            .padding(.bottom)
+                        
+                        
+                        
                     }
                     .padding(.leading)
                     Spacer()
@@ -174,8 +183,52 @@ struct TranscribeView: View {
             }
             NotificationView(message: $notificationMessage, domColor: $domColor)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
-                .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0))
+                .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0), value: showNotification)
+            
+                
         }
+            
+        
+        
+    }
+    
+    @ViewBuilder var goToEpisodeLink: some View {
+        HStack {
+            Spacer()
+            NavigationLink(
+                destination: EpisodeDetailView(episode: audioClip.episode,
+                                               artwork: audioClip.episode.imageUrl ?? RepText.empty,
+                                               feedUrl: audioClip.feedUrl,
+                                               isDeepLink: false,
+                                               domColor: domColor ?? .lightGray)
+                    .environmentObject(viewModel)
+            ) {
+//                Text(audioClip.episode.title + "(\(audioClip.startTime + TimeText.dash + audioClip.endTime))")
+//                    .fontWeight(.heavy)
+//                    .foregroundColor(Color(domColor ?? .systemBackground))
+//                    .font(.headline)
+//                    .underline()
+                
+                Text(audioClip.episode.title) +
+                    Text("(\(audioClip.startTime + TimeText.dash + audioClip.endTime))")
+        
+//                Label(
+//                    title: {
+//                        Text(audioClip.episode.title) +
+//                            Text("(\(audioClip.startTime + TimeText.dash + audioClip.endTime))")
+////                            .font(.custom("Poppins-Bold", size: 18, relativeTo: .largeTitle))
+////                            .foregroundColor(Theme.slate)
+//
+//                    },
+//                    icon: { Image(systemName: "42.circle") }
+//
+//                )
+            }
+            Spacer()
+        }
+        .onTapGesture(perform: {
+            playing = false
+        })
     }
     
 }

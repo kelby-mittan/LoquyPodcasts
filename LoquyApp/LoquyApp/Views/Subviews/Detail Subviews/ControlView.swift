@@ -22,143 +22,154 @@ struct ControlView: View {
     
     @State var width: CGFloat = 20
     @State var playing = true
-    @State var currentTime: String = TimeText.zero
-    @State var showAlert = false
+    
+    @Binding var currentTime: String
+    @Binding var showAlert: Bool
+    @Binding var timestampTime: String
     
     let player = Player.shared.player
             
     var body: some View {
         
         VStack {
-            
-            ZStack(alignment: .leading) {
-                
-                Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    .padding([.top,.horizontal])
-                
-                Capsule().fill(Color(domColor ?? .lightGray))
-                    .frame(width: width.isFinite ? width : 30, height: 8)
-                    .gesture(DragGesture()
-                                .onChanged({ (value) in
-                                    player.pause()
-                                    Player.handleWidth(value, &width, &currentTime)
-                                }).onEnded({ (value) in
-                                            player.seek(to: Player.capsuleDragged(value.location.x))
-                                            player.play()
-                                            playing = true
-                                            isPlaying = true
-                                }))
-                    .padding([.top,.horizontal])
-                    .onChange(of: currentTime, perform: { value in
-                        Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                    })
-            }
-            .padding([.leading,.trailing],8)
-            
-            HStack {
-                Text(currentTime)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.leading,8)
-                Spacer()
-                Text(handleTimeDisplayed())
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .padding(.trailing,8)
-            }
-            .padding(.horizontal)
-            
-            HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
-                
-                Button(action: {
-                    Player.seekToCurrentTime(delta: -15)
-                    Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                }) {
-                    ZStack {
-                        NeoButtonView(domColor: $domColor)
-                        Image(systemName: Symbol.back).font(.largeTitle)
-                            .foregroundColor(Color(domColor ?? .lightGray))
-                    }
-                    .frame(width: 60, height: 60)
-                    .clipShape(Capsule())
-                    
-                }
-                .offset(x: 20)
-                
-                Button(action: {
-                    handlePlayPausePressed()
-                }) {
-                    ZStack {
-                        NeoButtonView(domColor: $domColor)
-                        Image(systemName: playing ? Symbol.pause : Symbol.play)
-                            .font(.largeTitle)
-                            .foregroundColor(Color(domColor ?? .lightGray))
-                        
-                    }
-                    .frame(width: 80, height: 80)
-                    .clipShape(Capsule())
-                    .animation(.spring())
-                }
-                
-                Button(action: {
-                    Player.seekToCurrentTime(delta: 15)
-                    Player.getCapsuleWidth(width: &width, currentTime: currentTime)
-                }) {
-                    ZStack {
-                        NeoButtonView(domColor: $domColor)
-                        Image(systemName: Symbol.forward).font(.largeTitle)
-                            .foregroundColor(Color(domColor ?? .lightGray))
-                    }
-                    .frame(width: 60, height: 60)
-                    .clipShape(Capsule())
-                }
-                .offset(x: -20)
-                
-            }
-            VStack {
-                Button(action: {
-                    showModal.toggle()
-                    clipTime = currentTime
-                }) {
-                    Text(RepText.recordClip)
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .frame(width: UIScreen.main.bounds.width - 88, height: 44)
-                        .foregroundColor(Color(domColor ?? .lightGray))
-                        .background(NeoButtonView(domColor: $domColor))
-                        .clipShape(Capsule())
-                        .padding()
-                }
-                .animation(.spring())
-
-                Button(action: {
-                    showAlert.toggle()
-                }) {
-                    Text(RepText.timeStamp)
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .frame(width: UIScreen.main.bounds.width - 88,height: 44)
-                        .foregroundColor(Color(domColor ?? .lightGray))
-                        .background(NeoButtonView(domColor: $domColor))
-                        .clipShape(Capsule())
-                        .padding([.horizontal,.bottom])
-                }
-                .animation(.spring())
-                .buttonStyle(PlainButtonStyle())
-                .offset(y: -10)
-            }
-            .padding(.horizontal)
-            .blur(radius: showAlert ? 30 : 0)
+            durationCapsules
+            durationTimes
+            controlButtons
+            clipAndTimestampButtons
         }
-        .sheet(isPresented: $showAlert, content: {
-            TimeStampAlertView(showAlert: $showAlert, time: $currentTime, episode: episode)
-                .offset(y: 80)
-                .background(BackgroundClearView())
-                .environmentObject(viewModel)
-        })
-        .animation(.spring())
         .onAppear {
             handlePlayOnAppear()
             setupRemoteControl()
         }
+    }
+    
+    @ViewBuilder var durationCapsules: some View {
+        ZStack(alignment: .leading) {
+            
+            Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
+                .padding([.top,.horizontal])
+            
+            Capsule().fill(Color(domColor ?? .lightGray))
+                .frame(width: width.isFinite ? width : 30, height: 8)
+                .gesture(DragGesture()
+                            .onChanged({ (value) in
+                                player.pause()
+                                Player.handleWidth(value, &width, &currentTime)
+                            }).onEnded({ (value) in
+                                        player.seek(to: Player.capsuleDragged(value.location.x))
+                                        player.play()
+                                        playing = true
+                                        isPlaying = true
+                            }))
+                .padding([.top,.horizontal])
+                .onChange(of: currentTime, perform: { value in
+                    Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+                })
+        }
+        .padding([.leading,.trailing],8)
+    }
+    
+    @ViewBuilder var durationTimes: some View {
+        HStack {
+            Text(currentTime)
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.leading,8)
+            Spacer()
+            Text(handleTimeDisplayed())
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.trailing,8)
+        }
+        .padding(.horizontal)
+    }
+    
+    @ViewBuilder var controlButtons: some View {
+        HStack(spacing: UIScreen.main.bounds.width / 5 - 10) {
+            
+            Button(action: {
+                Player.seekToCurrentTime(delta: -15)
+                Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+            }) {
+                ZStack {
+                    NeoButtonView(domColor: $domColor)
+                    Image(systemName: Symbol.back).font(.largeTitle)
+                        .foregroundColor(Color(domColor ?? .lightGray))
+                }
+                .frame(width: 60, height: 60)
+                .clipShape(Capsule())
+                
+            }
+            .offset(x: 20)
+            
+            Button(action: {
+                handlePlayPausePressed()
+            }) {
+                ZStack {
+                    NeoButtonView(domColor: $domColor)
+                    Image(systemName: playing ? Symbol.pause : Symbol.play)
+                        .font(.largeTitle)
+                        .foregroundColor(Color(domColor ?? .lightGray))
+                    
+                }
+                .frame(width: 80, height: 80)
+                .clipShape(Capsule())
+                .animation(.spring(), value: playing)
+            }
+            
+            Button(action: {
+                Player.seekToCurrentTime(delta: 15)
+                Player.getCapsuleWidth(width: &width, currentTime: currentTime)
+            }) {
+                ZStack {
+                    NeoButtonView(domColor: $domColor)
+                    Image(systemName: Symbol.forward).font(.largeTitle)
+                        .foregroundColor(Color(domColor ?? .lightGray))
+                }
+                .frame(width: 60, height: 60)
+                .clipShape(Capsule())
+            }
+            .offset(x: -20)
+            
+        }
+    }
+    
+    @ViewBuilder var clipAndTimestampButtons: some View {
+        VStack {
+            Button(action: {
+                withAnimation(.spring()) {
+                    showModal.toggle()
+                }
+                clipTime = currentTime
+            }) {
+                Text(RepText.recordClip)
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .frame(width: UIScreen.main.bounds.width - 88, height: 44)
+                    .foregroundColor(Color(domColor ?? .lightGray))
+                    .background(NeoButtonView(domColor: $domColor))
+                    .clipShape(Capsule())
+                    .padding()
+            }
+
+            Button(action: {
+                withAnimation {
+                    showAlert.toggle()
+                }
+                timestampTime = currentTime
+            }) {
+                Text(RepText.timeStamp)
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .frame(width: UIScreen.main.bounds.width - 88,height: 44)
+                    .foregroundColor(Color(domColor ?? .lightGray))
+                    .background(NeoButtonView(domColor: $domColor))
+                    .clipShape(Capsule())
+                    .padding([.horizontal,.bottom])
+            }
+            .buttonStyle(PlainButtonStyle())
+            .offset(y: -10)
+        }
+        .padding(.horizontal)
+        .blur(radius: showAlert ? 30 : 0)
     }
 }
 
@@ -167,6 +178,8 @@ extension ControlView {
     private func handlePlayOnAppear() {
         viewModel.handleIsPlaying()
         isPlaying = viewModel.playing
+        
+        
         
         if !viewModel.playing {
             viewModel.episodePlaying = episode.title

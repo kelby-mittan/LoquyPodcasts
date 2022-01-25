@@ -28,13 +28,13 @@
 		0247E432251E582000E14DEB /* NeoViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E431251E582000E14DEB /* NeoViews.swift */; };
 		0247E43A251FDEF100E14DEB /* SaveLoquyAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E439251FDEF100E14DEB /* SaveLoquyAlertView.swift */; };
 		0247E44F2520161600E14DEB /* CardPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0247E44E2520161500E14DEB /* CardPageView.swift */; };
+		024959AF27A06E04004D87F8 /* View+exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024959AE27A06E04004D87F8 /* View+exts.swift */; };
 		024F0D78250D758D002B4A5F /* PodcastPosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 024F0D77250D758D002B4A5F /* PodcastPosterView.swift */; };
 		027094722502F39F009E0BF5 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094712502F39E009E0BF5 /* Player.swift */; };
 		0270947525030720009E0BF5 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947425030720009E0BF5 /* FavoritesViewController.swift */; };
 		0270947725030889009E0BF5 /* PodcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947625030889009E0BF5 /* PodcastCell.swift */; };
 		0270947A25030A3D009E0BF5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 0270947925030A3D009E0BF5 /* Kingfisher */; };
 		0270947C25031152009E0BF5 /* FavoritesVCWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947B25031152009E0BF5 /* FavoritesVCWrapper.swift */; };
-		0270947E250403F9009E0BF5 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947D250403F9009E0BF5 /* UserDefaults.swift */; };
 		0270948025054A75009E0BF5 /* AudioTrim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270947F25054A75009E0BF5 /* AudioTrim.swift */; };
 		0270948225058952009E0BF5 /* TimeStampAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0270948125058952009E0BF5 /* TimeStampAlertView.swift */; };
 		027094842505AF2D009E0BF5 /* TimeStamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027094832505AF2D009E0BF5 /* TimeStamp.swift */; };
@@ -107,12 +107,12 @@
 		0247E431251E582000E14DEB /* NeoViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeoViews.swift; sourceTree = "<group>"; };
 		0247E439251FDEF100E14DEB /* SaveLoquyAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveLoquyAlertView.swift; sourceTree = "<group>"; };
 		0247E44E2520161500E14DEB /* CardPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPageView.swift; sourceTree = "<group>"; };
+		024959AE27A06E04004D87F8 /* View+exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+exts.swift"; sourceTree = "<group>"; };
 		024F0D77250D758D002B4A5F /* PodcastPosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPosterView.swift; sourceTree = "<group>"; };
 		027094712502F39E009E0BF5 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		0270947425030720009E0BF5 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		0270947625030889009E0BF5 /* PodcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastCell.swift; sourceTree = "<group>"; };
 		0270947B25031152009E0BF5 /* FavoritesVCWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesVCWrapper.swift; sourceTree = "<group>"; };
-		0270947D250403F9009E0BF5 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		0270947F25054A75009E0BF5 /* AudioTrim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTrim.swift; sourceTree = "<group>"; };
 		0270948125058952009E0BF5 /* TimeStampAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStampAlertView.swift; sourceTree = "<group>"; };
 		027094832505AF2D009E0BF5 /* TimeStamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeStamp.swift; sourceTree = "<group>"; };
@@ -203,10 +203,10 @@
 				0224B56E24CBC1C30062E43F /* RSSFeed.swift */,
 				0224B57024CBC2CB0062E43F /* MakeStrings+exts.swift */,
 				029955C524F32C0E00479318 /* CMTime.swift */,
-				0270947D250403F9009E0BF5 /* UserDefaults.swift */,
 				02DF72D7251826C6006FDC9E /* Date.swift */,
 				02A966C1267AAE2D003899E0 /* URL+DeepLink.swift */,
 				0277671F26A4D1E9006A94F7 /* UIImage+UIColor.swift */,
+				024959AE27A06E04004D87F8 /* View+exts.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -615,13 +615,13 @@
 				0270947525030720009E0BF5 /* FavoritesViewController.swift in Sources */,
 				02DE63B9251165DD002B307F /* ClipAlertView.swift in Sources */,
 				02A95744267D13610068B1E4 /* GlobalConstants.swift in Sources */,
+				024959AF27A06E04004D87F8 /* View+exts.swift in Sources */,
 				02A966C4267C089D003899E0 /* AsyncImage.swift in Sources */,
 				0224B56B24CBB7130062E43F /* LoquyListView.swift in Sources */,
 				029955C824F339D200479318 /* ControlView.swift in Sources */,
 				029955C624F32C0E00479318 /* CMTime.swift in Sources */,
 				02B568AC24C4DD9D004D5C6D /* TranscribeView.swift in Sources */,
 				0294B3662514365A0099EC54 /* CustomPicker.swift in Sources */,
-				0270947E250403F9009E0BF5 /* UserDefaults.swift in Sources */,
 				0247E43A251FDEF100E14DEB /* SaveLoquyAlertView.swift in Sources */,
 				0226FCCA24D2300300B5B03A /* Loquy.swift in Sources */,
 				02272D7F24C9FA69007548C3 /* ImageLoader.swift in Sources */,
@@ -797,16 +797,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"LoquyApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 87F72Z6LFG;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LoquyApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kelbymittan.LoquyApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -820,16 +822,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_ASSET_PATHS = "\"LoquyApp/Preview Content\"";
 				DEVELOPMENT_TEAM = 87F72Z6LFG;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = LoquyApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kelbymittan.LoquyApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

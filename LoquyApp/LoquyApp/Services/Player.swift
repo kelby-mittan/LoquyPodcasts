@@ -19,7 +19,11 @@ class Player {
         return avPlayer
     }()
     
-    static func setupAudioSession() {
+    init() {
+        setupAudioSession()
+    }
+    
+    private func setupAudioSession() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -28,27 +32,13 @@ class Player {
         }
     }
     
-    static func playEpisodeUsingFileUrl(episode: Episode) {
-        guard let fileURL = URL(string: episode.fileUrl ?? "") else { return }
-        let fileName = fileURL.lastPathComponent
-        
-        guard var trueLocation = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        
-        trueLocation.appendPathComponent(fileName)
-        let playerItem = AVPlayerItem(url: trueLocation)
-        Player.shared.player.replaceCurrentItem(with: playerItem)
-        Player.shared.player.play()
-    }
-    
     static func playEpisode(episode: Episode) {
-        if let _ = episode.fileUrl {
-            playEpisodeUsingFileUrl(episode: episode)
-        } else {
-            guard let url = URL(string: episode.streamUrl) else { return }
-            let playerItem = AVPlayerItem(url: url)
-            shared.player.replaceCurrentItem(with: playerItem)
-            shared.player.play()
-        }
+        
+        guard let url = URL(string: episode.streamUrl) else { return }
+        let playerItem = AVPlayerItem(url: url)
+        shared.player.replaceCurrentItem(with: playerItem)
+        
+        shared.player.play()
     }
     
     static func seekToCurrentTime(delta: Int64) {

@@ -25,6 +25,7 @@ struct AudioClipsView: View {
                 List(viewModel.audioClips, id: \.self) { clip in
                     
                     ZStack {
+                        
                         NavigationLink(destination: TranscribeView(audioClip: clip)
                                         .environmentObject(viewModel)) {
                             EmptyView()
@@ -34,13 +35,17 @@ struct AudioClipsView: View {
                         ClipListItem(clip: clip, showActionSheet: $showActionSheet, audioClip: $audioClip)
                             .environmentObject(viewModel)
                     }
-                    
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
                 }
+                .listStyle(.grouped)
                 .actionSheet(isPresented: $showActionSheet, content: {
                     actionSheet
                 })
                 .navigationBarTitle(LoquynClipText.yourClips)
+                
             }
+            .navigationViewStyle(.stack)
             .onAppear {
                 UITableView.appearance().separatorStyle = .none
                 viewModel.loadAudioClips()
@@ -95,7 +100,7 @@ struct ClipListItem: View {
             }
             .cornerRadius(12)
             
-            VStack {
+            VStack(alignment: .leading) {
                 
                 HStack {
                     RemoteImage(url: clip.episode.imageUrl ?? RepText.empty)
@@ -107,7 +112,7 @@ struct ClipListItem: View {
                         }
                         .padding(.vertical)
                     
-                    Spacer()
+//                    Spacer()
                     
                     VStack(alignment: .leading) {
                         
@@ -132,7 +137,7 @@ struct ClipListItem: View {
                         Spacer()
                         
                     }
-                    .padding(.vertical)
+                    .padding([.vertical,.leading])
                     Spacer()
                 }
                 

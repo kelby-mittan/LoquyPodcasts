@@ -24,7 +24,7 @@ struct CardScrollView: View {
                     .font(.system(size: 24, weight: .bold, design: .rounded))
                     .fontWeight(.heavy)
                     .foregroundColor(.white)
-                    .padding([.vertical,.horizontal])
+                    .padding()
                 
                 NavigationLink(destination: EpisodeDetailView(episode: loquy.audioClip.episode,
                                                               artwork: loquy.audioClip.episode.imageUrl ?? RepText.empty,
@@ -42,7 +42,7 @@ struct CardScrollView: View {
                         .underline()
                         .padding(.horizontal)
                 }
-                .padding([.leading,.trailing])
+                .padding(.horizontal)
                 
                 HStack {
                     RemoteImage(url: loquy.audioClip.episode.imageUrl ?? RepText.empty)
@@ -65,7 +65,7 @@ struct CardScrollView: View {
                     }
                     
                 }
-                .padding([.leading,.trailing,.bottom,.top])
+                .padding()
                 
                 HStack {
                     VStack(alignment: .leading) {
@@ -85,34 +85,13 @@ struct CardScrollView: View {
                     Spacer()
                 }
                 Spacer()
-                
             }
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        shareShown = true
-                    }) {
-                        ZStack {
-                            NeoButtonView(domColor: $domColor)
-                            Image(systemName: Symbol.share)
-                                .font(.title)
-                                .foregroundColor(Color(domColor ?? .white))
-                        }
-                        .frame(width: 50, height: 50)
-                        .clipShape(Capsule())
-                    }
-                    .offset(x: -20)
-                }
-            }
-            .padding([.horizontal,.bottom])
         }
         .onAppear {
             domColor = UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty)
         }
         .background(
-            Color(UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty) ?? .clear)
+            Color(domColor ?? .clear)
         )
     }
 }

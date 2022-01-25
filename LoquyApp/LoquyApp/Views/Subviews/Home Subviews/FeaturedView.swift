@@ -37,7 +37,7 @@ struct FeaturedView: View {
                         }
                                                 
                     }
-                    .padding([.leading,.trailing])
+                    .padding(.horizontal)
                 }
             }
             .padding(.bottom)

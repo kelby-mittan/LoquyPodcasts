@@ -151,7 +151,7 @@ struct HalfModalView<Content: View> : View {
                     .edgesIgnoringSafeArea(.all)
                     .frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
                     .background(isShown ? Color.black.opacity( 0.5 * fractionProgress(lowerLimit: 0, upperLimit: Double(modalHeight), current: Double(dragState.translation.height), inverted: true)) : Color.clear)
-                    .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
+                    .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0), value: isShown)
                     .gesture(
                         TapGesture()
                             .onEnded { _ in
@@ -174,12 +174,13 @@ struct HalfModalView<Content: View> : View {
                     }
                     .cornerRadius(12)
                     .offset(y: isShown ? ((dragState.isDragging && dragState.translation.height >= 1) ? dragState.translation.height : 0) : modalHeight)
-                    .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
+                    .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0), value: isShown)
                     .gesture(drag)
                     
                     
                 }
-            }.edgesIgnoringSafeArea(.all)
+            }
+            .edgesIgnoringSafeArea(.all)
         }
         
     }

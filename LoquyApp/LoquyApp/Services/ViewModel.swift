@@ -26,6 +26,12 @@ class ViewModel: ObservableObject {
         }
     }
     
+    @Published var selectedTab: Int = 0 {
+        didSet {
+            didChange.send(self)
+        }
+    }
+    
     @Published var favorites = [Episode]() {
         didSet {
             didChange.send(self)
@@ -82,10 +88,16 @@ class ViewModel: ObservableObject {
         }
     }
     
+    init() {
+        loadLoquys()
+        loadFavorites()
+        loadAudioClips()
+    }
+    
     public func loadSearchPodcasts(search: String) {
         var timer: Timer?
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false, block: { (_) in
+        timer = Timer.scheduledTimer(withTimeInterval: 1.75, repeats: false, block: { (_) in
             self.updatePodcasts(forSearch: search)
         })
     }
@@ -166,7 +178,6 @@ class ViewModel: ObservableObject {
         guard let episode = episodes.first else {
             return
         }
-//        self.episodeDomColor = episode
         
         getDomColor(episode.imageUrl ?? RepText.empty) { [weak self] clr in
             DispatchQueue.main.async {

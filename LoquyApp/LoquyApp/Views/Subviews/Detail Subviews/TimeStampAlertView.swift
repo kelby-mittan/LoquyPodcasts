@@ -13,7 +13,8 @@ struct TimeStampAlertView: View {
     @EnvironmentObject var viewModel: ViewModel
     
     @Binding var showAlert: Bool
-    @Binding var time: String
+    
+    let time: String
     let episode: Episode
     
     @State var timeStamps = [TimeStamp]()
@@ -28,7 +29,9 @@ struct TimeStampAlertView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        self.showAlert.toggle()
+                        withAnimation(.easeOut(duration: 0.25)) {
+                            showAlert.toggle()
+                        }
                     }, label: {
                         Image(systemName: Symbol.xmark)
                             .resizable()
@@ -53,7 +56,7 @@ struct TimeStampAlertView: View {
                 
                 Button(action: {
                     if Persistence.episodes.hasItemBeenSaved(episode) {
-                        showAlert.toggle()
+                        
                         let newTStamp = TimeStamp(episode: episode, time: time)
                         
                         do {
@@ -63,8 +66,10 @@ struct TimeStampAlertView: View {
                         }
                         
                         loadTimes(episode: episode)
-                    } else {
-                        self.showAlert.toggle()
+                    }
+                    
+                    withAnimation(.easeOut(duration: 0.25)) {
+                        showAlert.toggle()
                     }
                     
                 }) {
@@ -78,6 +83,11 @@ struct TimeStampAlertView: View {
                 }                
                 Spacer()
             }
+            .frame(width: 300, height: Persistence.episodes.hasItemBeenSaved(episode) ? 200 : 260)
+            .background(Color(domColor ?? .lightGray))
+            .cornerRadius(20)
+            .shadow(color: Color(domColor ?? .lightGray), radius: 16, x: 10, y: 10)
+            .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
             
         }
         .onAppear(perform: {
@@ -89,17 +99,19 @@ struct TimeStampAlertView: View {
                 favToSave = TimeStampText.saveThisTime
                 saveText = TimeStampText.save
             }
-        })
-        .frame(width: 300, height: Persistence.episodes.hasItemBeenSaved(episode) ? 200 : 260)
-        .background(Color(domColor ?? .lightGray))
-        .cornerRadius(20)
-        .shadow(color: Color(domColor ?? .lightGray), radius: 16, x: 10, y: 10)
-        .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
-        .onAppear {
+            
             viewModel.getDomColor(episode.imageUrl ?? RepText.empty) { clr in
                 domColor = clr
             }
-        }
+        })
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .edgesIgnoringSafeArea(.all)
+        .background(.ultraThinMaterial)
+//        .frame(width: 300, height: Persistence.episodes.hasItemBeenSaved(episode) ? 200 : 260)
+//        .background(Color(domColor ?? .lightGray))
+//        .cornerRadius(20)
+//        .shadow(color: Color(domColor ?? .lightGray), radius: 16, x: 10, y: 10)
+//        .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
     }
     
     private func loadTimes(episode: Episode) {

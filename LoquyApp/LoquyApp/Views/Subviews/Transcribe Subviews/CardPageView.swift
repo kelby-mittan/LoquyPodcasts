@@ -14,10 +14,11 @@ struct PagingCardView: View {
         
     let imageUrl: String
     @EnvironmentObject var viewModel: ViewModel
-    @ObservedObject var deepLinkViewModel = DeepLinkViewModel()
-    
+    @EnvironmentObject var deepLinkViewModel: DeepLinkViewModel
+        
     @State private var shareShown = false
     @State var imgToShare: UIImage = UIImage(systemName: "photo")!
+    @State var domColor: UIColor?
     
     var body: some View {
         
@@ -25,33 +26,56 @@ struct PagingCardView: View {
             TabView {
                 ForEach(viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }, id: \.self) { loquy in
                     
-                        CardScrollView(loquy: loquy, shareShown: $shareShown)
-                            .sheet(isPresented: $shareShown) {
-                                                                
-                                if let url = deepLinkViewModel.appURL {
-                                    ShareView(items: [imgToShare,
-                                                      url])
-                                }
+                    CardScrollView(loquy: loquy, shareShown: $shareShown)
+                        .sheet(isPresented: $shareShown) {
+                                                            
+                            ShareView(items: [imgToShare])
+                            
+                        }
+                        .cornerRadius(8)
+                        .padding()
+                        .onAppear {
+                            domColor = UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty)
+                            deepLinkViewModel.prepareDeepLinkURL(loquy)
+                            DispatchQueue.main.async {
+                                imgToShare = LoquyToShareView(loquy: loquy)
+                                    .edgesIgnoringSafeArea(.all)
+                                    .snapshot()
                             }
-                            .cornerRadius(8)
-                            .padding()
-                            .onAppear {
-                                deepLinkViewModel.prepareDeepLinkURL(loquy)
-                                DispatchQueue.main.async {
-                                    imgToShare = LoquyToShareView(loquy: loquy)
-                                        .edgesIgnoringSafeArea(.all)
-                                        .snapshot()
-                                }
-                            }
-                            .environmentObject(viewModel)
+                        }
+                        .environmentObject(viewModel)
                                                 
                 }
             }
             .tabViewStyle(PageTabViewStyle())
             
+            shareButton
         }
         .cornerRadius(12)
         
+    }
+    
+    @ViewBuilder var shareButton: some View {
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                Button(action: {
+                    shareShown = true
+                }) {
+                    ZStack {
+                        NeoButtonView(domColor: $domColor)
+                        Image(systemName: Symbol.share)
+                            .font(.title)
+                            .foregroundColor(Color(domColor ?? .white))
+                    }
+                    .frame(width: 50, height: 50)
+                    .clipShape(Capsule())
+                }
+                .padding([.trailing,.bottom])
+            }
+        }
+        .padding([.horizontal,.bottom])
     }
     
 }
@@ -93,7 +117,6 @@ struct LoquyToShareView: View {
                 .foregroundColor(.white)
                 .padding()
             
-//            Spacer()
         }
         .padding()
         .frame(width: 400, height: 400)
@@ -128,23 +151,4 @@ struct LoquyToShareView: View {
             return 4
         }
     }
-}
-
-extension View {
-
-    func snapshot() -> UIImage {
-        let controller = UIHostingController(rootView: self)
-        let view = controller.view
-
-        let targetSize = controller.view.intrinsicContentSize
-        view?.bounds = CGRect(origin: .zero, size: targetSize)
-        view?.backgroundColor = .clear
-
-        let renderer = UIGraphicsImageRenderer(size: targetSize)
-
-        return renderer.image { _ in
-            view?.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
-        }
-    }
-    
 }

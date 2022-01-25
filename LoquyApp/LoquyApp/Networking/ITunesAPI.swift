@@ -14,24 +14,6 @@ class ITunesAPI {
     
     static let shared = ITunesAPI()
     
-    func loadPodcasts(searchText: String, completionHandler: @escaping ([Podcast]) -> ())  {
-        let text = searchText.replacingOccurrences(of: " ", with: "+")
-        guard let url = URL(string: "https://itunes.apple.com/search?term=\(text)&entity=podcast") else {
-            return
-        }
-        let request = URLRequest(url: url)
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            if let data = data {
-                let results = try? JSONDecoder().decode(SearchResults.self, from: data)
-                let podcasts = results?.results
-                DispatchQueue.main.async {
-                    completionHandler(podcasts ?? [])
-                }
-            }
-        }.resume()
-    }
-    
     func fetchPodcasts(searchText: String, completionHandler: @escaping ([Podcast]) -> ()) {
         let baseiTunesSearchURL = "https://itunes.apple.com/search"
         let parameters = ["term": searchText, "media": "podcast"]

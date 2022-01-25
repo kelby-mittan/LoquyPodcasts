@@ -20,6 +20,8 @@ struct EpisodesView: View {
     @State var episode: Episode?
     @State var domColor: UIColor?
     
+    @State var navigateToDetail = false
+    
     var body: some View {
         if viewModel.episodes.isEmpty {
             VStack {
@@ -29,7 +31,6 @@ struct EpisodesView: View {
                         isSaved
                         ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                         : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
-                        UITableView.appearance().separatorStyle = .none
                     }
                 Spacer()
             }
@@ -39,52 +40,38 @@ struct EpisodesView: View {
             List(viewModel.episodes, id: \.self) { episode in
 
                 ZStack {
-                    NavigationLink(destination: EpisodeDetailView(episode: episode,
-                                                                  artwork: artWork,
-                                                                  feedUrl: podcastFeed,
-                                                                  isDeepLink: false,
-                                                                  domColor: domColor ?? .lightGray)
-                                    .environmentObject(viewModel)) {
-
+                    
+                    NavigationLink(isActive: $navigateToDetail) {
+                        EpisodeDetailView(episode: episode,
+                                          artwork: artWork,
+                                          feedUrl: podcastFeed,
+                                          isDeepLink: false,
+                                          domColor: domColor ?? .lightGray)
+                            .environmentObject(viewModel)
+                    } label: {
                         EmptyView()
                     }
 
-                    ZStack(alignment: .leading) {
-                        Color(domColor ?? .systemBackground)
-
-                        HStack {
-
-                            RemoteImage(url: episode.imageUrl ?? RepText.empty)
-                                .frame(width: 120, height: 120)
-                                .cornerRadius(6)
-                                .padding(.vertical)
-
-                            VStack(alignment: .leading) {
-
-                                Text(episode.pubDate.makeString())
-                                    .font(.headline)
-                                    .fontWeight(.heavy)
-                                    .foregroundColor(Color.white)
-                                    .padding(.bottom,4)
-
-                                Text(episode.title)
-                                    .font(.subheadline)
-                                    .foregroundColor(Color.white)
-                                    .fontWeight(.semibold)
-                                    .lineLimit(4)
-
-                                Spacer()
-
-                            }
-                            .padding()
-                        }
-                        .padding()
-                    }
-                    .cornerRadius(12)
+                    EpisodeListItemView(episode: episode, domColor: domColor ?? .lightGray)
 
                 }
                 .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                
             }
+            .listStyle(.grouped)
+            .onChange(of: viewModel.episodes, perform: { _ in
+                if let firstEpisodeImg = viewModel.episodes.first?.imageUrl {
+                    viewModel.getDomColor(firstEpisodeImg) { clr in
+                        if clr.isDark() {
+                            domColor = clr
+                        } else {
+                            domColor = .lightGray
+                        }
+
+                    }
+                }
+            })
             
             .onAppear {
                 isSaved
@@ -98,15 +85,16 @@ struct EpisodesView: View {
                         } else {
                             domColor = .lightGray
                         }
-
                     }
                 }
-                
-                UITableView.appearance().separatorStyle = .none
+                                
             }
             .navigationBarTitle(title)
             .onDisappear {
-                viewModel.episodes = []
+                if !navigateToDetail && viewModel.selectedTab == 0 {
+                    viewModel.episodes = []
+                }
+                
             }
         }
         
@@ -114,3 +102,42 @@ struct EpisodesView: View {
     
 }
 
+struct EpisodeListItemView: View {
+    @State var episode: Episode
+    @State var domColor: UIColor
+    
+    var body: some View {
+        ZStack(alignment: .leading) {
+            Color(domColor)
+
+            HStack {
+
+                RemoteImage(url: episode.imageUrl ?? RepText.empty)
+                    .frame(width: 120, height: 120)
+                    .cornerRadius(6)
+                    .padding(.vertical)
+
+                VStack(alignment: .leading) {
+
+                    Text(episode.pubDate.makeString())
+                        .font(.headline)
+                        .fontWeight(.heavy)
+                        .foregroundColor(Color.white)
+                        .padding(.bottom,4)
+
+                    Text(episode.title)
+                        .font(.subheadline)
+                        .foregroundColor(Color.white)
+                        .fontWeight(.semibold)
+                        .lineLimit(4)
+
+                    Spacer()
+
+                }
+                .padding()
+            }
+            .padding()
+        }
+        .cornerRadius(12)
+    }
+}

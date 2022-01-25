@@ -33,10 +33,7 @@ struct EmptySavedView: View {
                 getSineWave(interval: universalSize.width)
                     .foregroundColor(PaletteColour.purple.colour).opacity(0.6)
                     .offset(x: isAnimated ? -universalSize.width : 0)
-                    .animation(
-                        Animation.linear(duration: 2.5)
-                            .repeatForever(autoreverses: false)
-                    )
+                    .animation(.linear(duration: 2.5).repeatForever(autoreverses: false), value: isAnimated)
                 
                 getSineWave(interval: universalSize.width*1.4,
                             amplitude: 165,
@@ -44,20 +41,13 @@ struct EmptySavedView: View {
                     
                     .foregroundColor(PaletteColour.lighterPurple.colour).opacity(0.6)
                     .offset(x: isAnimated ? -universalSize.width*1.4 : 0)
-                    .animation(
-                        Animation.linear(duration: 4.5)
-                            .repeatForever(autoreverses: false)
-                    )
+                    .animation(.linear(duration: 4.5).repeatForever(autoreverses: false), value: isAnimated)
                 
                 getSineWave(interval: universalSize.width*1.1, amplitude: 130)
                     
                     .foregroundColor(PaletteColour.lightPurple.colour).opacity(0.6)
                     .offset(x: isAnimated ? -universalSize.width*1.1 : 0)
-                    .animation(
-                        Animation.linear(duration: 3.5)
-                            .repeatForever(autoreverses: false)
-                    )
-                
+                    .animation(.linear(duration: 3.5).repeatForever(autoreverses: false), value: isAnimated)
             }.onAppear {
                 isAnimated = true
             }

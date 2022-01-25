@@ -8,19 +8,21 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 @main
 struct Home: App {
     
     @StateObject var viewModel = ViewModel()
-    @StateObject private var deepLinkViewModel = DeepLinkViewModel()
+    @StateObject var deepLinkViewModel = DeepLinkViewModel()
     
-    @State private var selectedTab = 0
     @State var deepLinkDomColor: UIColor?
+    
+    init() {
+        UITabBar.appearance().scrollEdgeAppearance = UITabBarAppearance()
+    }
     
     var body: some Scene {
         WindowGroup {
-            TabView(selection: $selectedTab) {
+            TabView(selection: $viewModel.selectedTab) {
                 Group {
                     if !deepLinkViewModel.isDeepLink {
                         BrowseView()
@@ -34,6 +36,7 @@ struct Home: App {
                                               domColor: deepLinkDomColor ?? .lightGray)
                                 .environmentObject(viewModel)
                         }
+                        .navigationViewStyle(.stack)
                         .onAppear {
                             if let deepLinkImg = deepLinkViewModel.deepLinkEpisode.imageUrl {
                                 viewModel.getDomColor(deepLinkImg) { clr in
@@ -62,27 +65,19 @@ struct Home: App {
                     .tag(3)
                 TranscriptsTab()
                     .environmentObject(viewModel)
+                    .environmentObject(deepLinkViewModel)
                     .tag(4)
-            }
-            .onAppear {
-                viewModel.loadLoquys()
-                viewModel.loadFavorites()
-                viewModel.loadAudioClips()
             }
             .onOpenURL { url in
                 deepLinkViewModel.loadDeepLinkEpisode(url: url)
             }
             .accentColor(.purple)
-            .onAppear {
-                Player.setupAudioSession()
-            }
         }
         
         
     }
 }
 
-@available(iOS 14.0, *)
 struct BrowseView: View {
     
     @EnvironmentObject var viewModel: ViewModel
@@ -95,8 +90,6 @@ struct BrowseView: View {
         
         NavigationView {
             VStack {
-                SearchBar(text: $searchText, onTextChanged: viewModel.loadSearchPodcasts(search:), isEditing: $isEditing)
-                    .padding([.leading,.trailing])
                 Group {
                     if searchText.isEmpty {
                         
@@ -143,16 +136,20 @@ struct BrowseView: View {
                     }
                 }
             }
+            .navigationViewStyle(.stack)
+            .navigationBarTitleDisplayMode(.inline)
+            .searchable(text: $searchText)
+            .onChange(of: searchText, perform: { newValue in
+                viewModel.loadSearchPodcasts(search: newValue)
+            })
             .navigationBarTitle(RepText.empty)
-            .navigationBarHidden(true)
         }
-        .navigationBarHidden(true)
+        .animation(.default, value: searchText.isEmpty)
         .accentColor(.secondary)
         
     }
 }
 
-@available(iOS 14.0, *)
 struct FavoritesTabView: View {
     
     @EnvironmentObject private var viewModel: ViewModel
@@ -164,6 +161,7 @@ struct FavoritesTabView: View {
                 FavoritesVCWrapper()
                     .navigationBarHidden(true)
             }
+            .navigationViewStyle(.stack)
             .onAppear {
                 viewModel.loadFavorites()
             }
@@ -193,7 +191,6 @@ struct FavoritesTabView: View {
     
 }
 
-@available(iOS 14.0, *)
 struct AudioClipsTab: View {
     @EnvironmentObject var viewModel: ViewModel
     var body: some View {
@@ -208,12 +205,13 @@ struct AudioClipsTab: View {
     }
 }
 
-@available(iOS 14.0, *)
 struct TranscriptsTab: View {
     @EnvironmentObject var viewModel: ViewModel
+    @EnvironmentObject var deepLinkViewModel: DeepLinkViewModel
     var body: some View {
         LoquyListView()
             .environmentObject(viewModel)
+            .environmentObject(deepLinkViewModel)
             .tabItem {
                 Image(systemName: Symbol.bullet)
                     .font(.body)
