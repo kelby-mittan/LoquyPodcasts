@@ -10,12 +10,12 @@ import SwiftUI
 
 struct NeoButtonView: View {
     
-    @Binding var domColor: UIColor?
+    @Binding var dominantColor: UIColor?
     
     var body: some View {
         ZStack {
             
-            Color(domColor?.lighter(componentDelta: 0.45) ?? .black)
+            Color(dominantColor?.lighter(componentDelta: 0.45) ?? .black)
             
             Capsule()
                 .foregroundColor(.white)
@@ -23,7 +23,7 @@ struct NeoButtonView: View {
                 .offset(x: -8, y: -8)
             Capsule()
                 .fill(
-                    LinearGradient(gradient: Gradient(colors: [Color(domColor?.lighter(componentDelta: 0.35) ?? #colorLiteral(red: 0.8638685346, green: 0.8565297723, blue: 1, alpha: 1)), Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                    LinearGradient(gradient: Gradient(colors: [Color(dominantColor?.lighter(componentDelta: 0.35) ?? #colorLiteral(red: 0.8638685346, green: 0.8565297723, blue: 1, alpha: 1)), Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)
                 )
                 .padding(2)
                 .blur(radius: 2)

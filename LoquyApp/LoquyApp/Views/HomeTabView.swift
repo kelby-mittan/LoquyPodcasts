@@ -14,7 +14,7 @@ struct Home: App {
     @StateObject var viewModel = ViewModel()
     @StateObject var deepLinkViewModel = DeepLinkViewModel()
     
-    @State var deepLinkDomColor: UIColor?
+    @State var deepLinkDominantColor: UIColor?
     
     init() {
         UITabBar.appearance().scrollEdgeAppearance = UITabBarAppearance()
@@ -27,27 +27,17 @@ struct Home: App {
                     if !deepLinkViewModel.isDeepLink {
                         BrowseView()
                             .environmentObject(viewModel)
+                            
                     } else {
                         NavigationView {
                             EpisodeDetailView(episode: deepLinkViewModel.deepLinkEpisode,
                                               artwork: deepLinkViewModel.deepLinkEpisode.imageUrl ?? RepText.empty,
                                               feedUrl: deepLinkViewModel.deepLinkEpisode.feedUrl,
                                               isDeepLink: true,
-                                              domColor: deepLinkDomColor ?? .lightGray)
+                                              dominantColor: deepLinkDominantColor ?? .lightGray)
                                 .environmentObject(viewModel)
                         }
                         .navigationViewStyle(.stack)
-                        .onAppear {
-                            if let deepLinkImg = deepLinkViewModel.deepLinkEpisode.imageUrl {
-                                viewModel.getDomColor(deepLinkImg) { clr in
-                                    if clr.isDark() {
-                                        deepLinkDomColor = clr
-                                    } else {
-                                        deepLinkDomColor = .lightGray
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
                 .tabItem {

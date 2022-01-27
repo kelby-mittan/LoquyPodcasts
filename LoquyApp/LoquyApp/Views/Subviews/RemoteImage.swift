@@ -9,7 +9,6 @@
 import SwiftUI
 import Combine
 
-@available(iOS 14.0, *)
 struct RemoteImage: View {
         
     var url: String

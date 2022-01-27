@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 struct PodcastScrollView: View {
     
     private let podcasts = DummyPodcast.podcasts
@@ -30,7 +29,6 @@ struct PodcastScrollView: View {
     }
 }
 
-@available(iOS 14.0, *)
 struct TopPodcastsView: View {
     
     public var podcasts: Array<DummyPodcast>.SubSequence

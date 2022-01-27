@@ -29,10 +29,8 @@ struct DescriptionView: View {
                 Spacer()
             }
             .padding(.top,4)
-            
-            
         }
-        .padding(.horizontal)
+        .padding([.horizontal,.bottom])
     }
     
     func getOnlyDescription(_ str: String) -> String {

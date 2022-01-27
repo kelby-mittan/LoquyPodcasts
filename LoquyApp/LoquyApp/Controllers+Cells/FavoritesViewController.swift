@@ -11,7 +11,6 @@ import Kingfisher
 import SwiftUI
 import DataPersistence
 
-@available(iOS 14.0, *)
 class FavoritesViewController: UIViewController {
     
     enum SectionKind: Int, CaseIterable {
@@ -132,7 +131,6 @@ class FavoritesViewController: UIViewController {
     
 }
 
-@available(iOS 14.0, *)
 extension FavoritesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let episodeArt = dataSource.itemIdentifier(for: indexPath) else {

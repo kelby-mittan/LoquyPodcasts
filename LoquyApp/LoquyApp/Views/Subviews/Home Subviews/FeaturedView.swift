@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 struct FeaturedView: View {
     
     var podcasts = DummyPodcast.podcasts[10...14]

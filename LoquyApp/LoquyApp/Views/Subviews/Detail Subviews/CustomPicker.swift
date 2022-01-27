@@ -15,10 +15,10 @@ struct CustomPicker: UIViewRepresentable {
     
     var currentTime: String
     
-    @Binding var domColor: UIColor?
+    @Binding var dominantColor: UIColor?
     
     func makeCoordinator() -> CustomPicker.Coordinator {
-        return CustomPicker.Coordinator(theParent: self, time: currentTime, domColor: $domColor)
+        return CustomPicker.Coordinator(theParent: self, time: currentTime, dominantColor: $dominantColor)
     }
     
     func makeUIView(context: UIViewRepresentableContext<CustomPicker>) -> UIPickerView {
@@ -38,12 +38,12 @@ struct CustomPicker: UIViewRepresentable {
         
         var parent: CustomPicker
         var currentTime: String
-        @Binding var domColor: UIColor?
+        @Binding var dominantColor: UIColor?
         
-        init(theParent: CustomPicker, time: String, domColor: Binding<UIColor?>) {
+        init(theParent: CustomPicker, time: String, dominantColor: Binding<UIColor?>) {
             parent = theParent
             currentTime = time
-            _domColor = domColor
+            _dominantColor = dominantColor
         }
         
         
@@ -61,7 +61,7 @@ struct CustomPicker: UIViewRepresentable {
         
         func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 200, height: 50))
-            view.backgroundColor = domColor
+            view.backgroundColor = dominantColor
             
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height))
             label.text = TimeText.timeIntervals[row]

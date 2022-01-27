@@ -9,12 +9,11 @@
 import SwiftUI
 import Speech
 
-@available(iOS 14.0, *)
 struct TranscribeView: View {
+        
+    @EnvironmentObject var viewModel: ViewModel
     
     let audioClip: AudioClip
-    
-    @EnvironmentObject var viewModel: ViewModel
     
     @State var remoteImage = RemoteImageDetail(url: RepText.empty)
     @State var showNotification = false
@@ -34,7 +33,7 @@ struct TranscribeView: View {
     
     let player = Player.shared.player
     
-    @State var domColor: UIColor?
+    @State var dominantColor: UIColor?
     
     var body: some View {
         
@@ -54,36 +53,20 @@ struct TranscribeView: View {
                                                            artwork: audioClip.episode.imageUrl ?? RepText.empty,
                                                            feedUrl: audioClip.feedUrl,
                                                            isDeepLink: false,
-                                                           domColor: domColor ?? .lightGray)
+                                                           dominantColor: dominantColor ?? .lightGray)
                                 .environmentObject(viewModel)
 
                         ) {
 
-                            Text(audioClip.episode.title)
-                                .fontWeight(.heavy)
-                                .foregroundColor(Color(domColor ?? .systemBackground))
-                                .font(.headline)
-                                .underline()
+                            goToEpisodeLink
 
                         }
                         .onTapGesture(perform: {
                             playing = false
                         })
                         
-//                        goToEpisodeLink
-                        
-//                        Text(audioClip.startTime + TimeText.dash + audioClip.endTime)
-//                            .fontWeight(.heavy)
-//                            .foregroundColor(Color(.label))
-//                            .font(.subheadline)
-//                            .padding(.top,4)
-//                            .padding(.bottom)
-                        
-                        
-                        
                     }
                     .padding(.leading)
-                    Spacer()
                 }
                 
                 HStack {
@@ -91,49 +74,12 @@ struct TranscribeView: View {
                         .frame(width: 100, height: 100)
                         .cornerRadius(6)
                     Spacer()
-                    Button(action: {
-                        playing.toggle()
-                        handlePlay()
-                        playing ? player.play() : player.pause()
-                    }) {
-                        ZStack {
-                            NeoButtonView(domColor: $domColor)
-                            Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
-                                .foregroundColor(Color(domColor ?? .placeholderText))
-                        }
-                        .frame(width: 64, height: 64)
-                        .clipShape(Capsule())
-                        .padding(.trailing)
-                    }
+                    
+                    playPauseButton
                 }
-                .padding([.leading,.trailing,.bottom])
+                .padding([.horizontal,.bottom])
                 
-                ZStack(alignment: .leading) {
-                    Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
-                    Capsule().fill(Color(domColor ?? .placeholderText)).frame(width: playedWidth, height: 8)
-                        .gesture(DragGesture()
-                                    .onChanged({ (value) in
-                                        player.pause()
-                                        Player.handleWidth(value, &playedWidth, &currentTime)
-                                    }).onEnded({ (value) in
-                                        player.seek(to: Player.capsuleDragged(value.location.x))
-                                        player.play()
-                                        playing = true
-                                    }))
-                }.padding([.leading,.trailing])
-                
-                HStack {
-                    Text(currentTime)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.leading, 4)
-                    Spacer()
-                    Text(timeToDisplay())
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.trailing, 4)
-                }
-                .padding(.horizontal)
+                timeCapsulesAndDisplayText
                 
                 Group {
                     if isTranscribing {
@@ -147,50 +93,44 @@ struct TranscribeView: View {
                                     playing = false
                                 }
                             })
-                        }.padding()
+                        }
+                        .padding()
                     }
                 }
-                Button(action: {
-                    handleIsTranscribing()
-                }) {
-                    Text(isTranscribing
-                            ? RepText.saveLoquy
-                            : RepText.transcribe)
-                        .fontWeight(.heavy)
-                        .padding()
-                        .frame(width: UIScreen.main.bounds.width - 88)
-                        .foregroundColor(Color(domColor ?? .placeholderText))
-                        .background(NeoButtonView(domColor: $domColor))
-                        .clipShape(Capsule())
-                        .padding()
-                }
-                Spacer()
-                if showAlert {
-                    SaveLoquyAlertView(showAlert: $showAlert,
-                                       notificationShown: $showNotification,
-                                       message: $notificationMessage,
-                                       audioClip: audioClip,
-                                       transcription: transcription,
-                                       isPlaying: player.timeControlStatus == .playing)
-                        .offset(x: 0, y: -70)
-                        .environmentObject(viewModel)
-                }
+                
+                transcribeSaveButton
+                
             }
-            .onAppear {
-                remoteImage = RemoteImageDetail(url: audioClip.episode.imageUrl ?? RepText.empty)
-                viewModel.loadLoquys()
-                getDomColor()
+            
+            
+            if showAlert {
+                SaveLoquyAlertView(showAlert: $showAlert,
+                                   notificationShown: $showNotification,
+                                   message: $notificationMessage,
+                                   audioClip: audioClip,
+                                   transcription: transcription,
+                                   isPlaying: player.timeControlStatus == .playing)
+                    .environmentObject(viewModel)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .edgesIgnoringSafeArea(.all)
+                    .background(.ultraThinMaterial)
             }
-            NotificationView(message: $notificationMessage, domColor: $domColor)
+            
+            NotificationView(message: $notificationMessage, dominantColor: $dominantColor)
                 .offset(y: showNotification ? -UIScreen.main.bounds.height/3 : -UIScreen.main.bounds.height)
                 .animation(.interpolatingSpring(mass: 1, stiffness: 100, damping: 12, initialVelocity: 0), value: showNotification)
             
-                
-        }
             
-        
+        }
+        .onAppear {
+            remoteImage = RemoteImageDetail(url: audioClip.episode.imageUrl ?? RepText.empty)
+            viewModel.loadLoquys()
+            getDomColor()
+        }
         
     }
+    
+    // MARK: computed views
     
     @ViewBuilder var goToEpisodeLink: some View {
         HStack {
@@ -200,29 +140,23 @@ struct TranscribeView: View {
                                                artwork: audioClip.episode.imageUrl ?? RepText.empty,
                                                feedUrl: audioClip.feedUrl,
                                                isDeepLink: false,
-                                               domColor: domColor ?? .lightGray)
+                                               dominantColor: dominantColor ?? .lightGray,
+                                               audioClip: audioClip)
                     .environmentObject(viewModel)
             ) {
-//                Text(audioClip.episode.title + "(\(audioClip.startTime + TimeText.dash + audioClip.endTime))")
-//                    .fontWeight(.heavy)
-//                    .foregroundColor(Color(domColor ?? .systemBackground))
-//                    .font(.headline)
-//                    .underline()
                 
-                Text(audioClip.episode.title) +
-                    Text("(\(audioClip.startTime + TimeText.dash + audioClip.endTime))")
-        
-//                Label(
-//                    title: {
-//                        Text(audioClip.episode.title) +
-//                            Text("(\(audioClip.startTime + TimeText.dash + audioClip.endTime))")
-////                            .font(.custom("Poppins-Bold", size: 18, relativeTo: .largeTitle))
-////                            .foregroundColor(Theme.slate)
-//
-//                    },
-//                    icon: { Image(systemName: "42.circle") }
-//
-//                )
+                Text(audioClip.episode.title)
+                    .fontWeight(.heavy)
+                    .foregroundColor(Color(dominantColor ?? .systemBackground))
+                    .font(.headline)
+                    .underline()
+                +
+                    
+                Text(" (\(audioClip.startTime + TimeText.dash + audioClip.endTime))")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundColor(Color(.lightGray))
+                    .underline()
             }
             Spacer()
         }
@@ -231,7 +165,72 @@ struct TranscribeView: View {
         })
     }
     
+    @ViewBuilder var playPauseButton: some View {
+        Button(action: {
+            playing.toggle()
+            handlePlay()
+            playing ? player.play() : player.pause()
+        }) {
+            ZStack {
+                NeoButtonView(dominantColor: $dominantColor)
+                Image(systemName: playing ? Symbol.pause : Symbol.play).font(.largeTitle)
+                    .foregroundColor(Color(dominantColor ?? .placeholderText))
+            }
+            .frame(width: 64, height: 64)
+            .clipShape(Capsule())
+            .padding(.trailing)
+        }
+    }
+    
+    @ViewBuilder var timeCapsulesAndDisplayText: some View {
+        ZStack(alignment: .leading) {
+            Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
+            Capsule().fill(Color(dominantColor ?? .placeholderText)).frame(width: playedWidth, height: 8)
+                .gesture(DragGesture()
+                            .onChanged({ (value) in
+                                player.pause()
+                                Player.handleWidth(value, &playedWidth, &currentTime)
+                            }).onEnded({ (value) in
+                                player.seek(to: Player.capsuleDragged(value.location.x))
+                                player.play()
+                                playing = true
+                            }))
+        }
+        .padding(.horizontal)
+        
+        HStack {
+            Text(currentTime)
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.leading, 4)
+            Spacer()
+            Text(timeToDisplay())
+                .font(.caption)
+                .foregroundColor(.secondary)
+                .padding(.trailing, 4)
+        }
+        .padding(.horizontal)
+    }
+    
+    @ViewBuilder var transcribeSaveButton: some View {
+        Button(action: {
+            handleIsTranscribing()
+        }) {
+            Text(isTranscribing
+                    ? RepText.saveLoquy
+                    : RepText.transcribe)
+                .fontWeight(.heavy)
+                .padding()
+                .frame(width: UIScreen.main.bounds.width - 88)
+                .foregroundColor(Color(dominantColor ?? .placeholderText))
+                .background(NeoButtonView(dominantColor: $dominantColor))
+                .clipShape(Capsule())
+                .padding()
+        }
+    }
 }
+
+// MARK: transcription functions
 
 extension TranscribeView {
     private func handlePlay() {
@@ -273,7 +272,9 @@ extension TranscribeView {
         } else {
             player.pause()
             playing = false
-            showAlert.toggle()
+            withAnimation {
+                showAlert.toggle()
+            }
         }
     }
     
@@ -308,11 +309,11 @@ extension TranscribeView {
     
     private func getDomColor() {
         if let episodeImg = audioClip.episode.imageUrl {
-            viewModel.getDomColor(episodeImg) { clr in
+            viewModel.getDominantColor(episodeImg) { clr in
                 if clr.isDark() {
-                    domColor = clr
+                    dominantColor = clr
                 } else {
-                    domColor = .lightGray
+                    dominantColor = .lightGray
                 }
                 
             }

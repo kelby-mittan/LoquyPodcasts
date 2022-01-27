@@ -13,7 +13,7 @@ struct EpisodeTimesView: View {
     
     let episode: Episode
     @Binding var isPlaying: Bool
-    @Binding var domColor: UIColor?
+    @Binding var dominantColor: UIColor?
     
     let player = Player.shared.player
     @EnvironmentObject var viewModel: ViewModel
@@ -22,14 +22,13 @@ struct EpisodeTimesView: View {
     var body: some View {
         Group {
             if Persistence.episodes.hasItemBeenSaved(episode) {
-//                ScrollView(.horizontal, showsIndicators: false) {
-                    VStack(alignment: .leading) {
-                        Text("Saved time stamps")
-                            .foregroundColor(.secondary)
-                            .font(.subheadline.bold())
-                            .padding(.bottom, 4)
-                            .padding(.horizontal)
-                        ScrollView(.horizontal, showsIndicators: false) {
+                VStack(alignment: .leading) {
+                    Text("Saved time stamps")
+                        .foregroundColor(.secondary)
+                        .font(.subheadline.bold())
+                        .padding(.bottom, 4)
+                        .padding(.horizontal)
+                    ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(viewModel.timeStamps.sorted(), id:\.self) { time in
                                 ZStack {
@@ -50,7 +49,7 @@ struct EpisodeTimesView: View {
                                     deleteTimeStamp(time)
                                 }
                                 .frame(width: 84, height: 40)
-                                .background(Color(domColor ?? .lightGray))
+                                .background(Color(dominantColor ?? .lightGray))
                                 .cornerRadius(10)
                             }
                         }

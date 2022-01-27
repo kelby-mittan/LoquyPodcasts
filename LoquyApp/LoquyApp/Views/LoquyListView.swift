@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 struct LoquyListView: View {
     
     @EnvironmentObject var viewModel: ViewModel
@@ -58,7 +57,7 @@ struct LoquyListView: View {
                                 }
                             }
                         }
-                    }.padding([.leading,.trailing],8)
+                    }.padding(.horizontal,8)
                 }
                 .navigationBarTitle(LoquynClipText.loquyList)
                 .navigationBarItems(trailing:
@@ -95,7 +94,6 @@ struct LoquyListView: View {
     
 }
 
-@available(iOS 14.0, *)
 struct LoquyContentView: View {
     
     let imageUrl: String
@@ -103,7 +101,7 @@ struct LoquyContentView: View {
     @EnvironmentObject var deepLinkViewModel: DeepLinkViewModel
     @State private var toggled = false
     @State private var page = 0
-    @State var domColor: UIColor?
+    @State var dominantColor: UIColor?
     
     var body: some View {
         
@@ -133,57 +131,20 @@ struct LoquyContentView: View {
                         RemoteImage(url: imageUrl)
                             .frame(width: 200, height: 200)
                             .cornerRadius(8)
-                            .onReceive(viewModel.domColorReporter, perform: { clr in
-                                domColor = clr
+                            .onReceive(viewModel.dominantColorReporter, perform: { clr in
+                                dominantColor = clr
                             })
                         
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("\(LoquynClipText.youHave) \(viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) \(LoquynClipText.transripts)")
-                                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                                    .foregroundColor(.white)
-                                    .fontWeight(.heavy)
-                                
-                                Text(LoquynClipText.from)
-                                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                                    .foregroundColor(.white)
-                                    .fontWeight(.heavy)
-                                    .padding(.top, 4)
-                                Text("\(viewModel.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) \(LoquynClipText.savedClips)")
-                                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                                    .foregroundColor(.white)
-                                    .fontWeight(.heavy)
-                                    .padding(.top, 4)
-                            }
-                            .padding([.bottom,.leading])
-                            Spacer()
-                        }
-                        .padding(.leading, 20)
-                        .padding([.trailing,.top])
+                        countTextStack
                         
                         Spacer()
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                withAnimation(.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5)) {
-                                    toggled = true
-                                }
-                            }) {
-                                ZStack {
-                                    NeoButtonView(domColor: $domColor)
-                                    Image(systemName: Symbol.quote).font(.largeTitle)
-                                        .foregroundColor(Color(domColor ?? .white))
-                                }
-                                .frame(width: 60, height: 60)
-                                .clipShape(Capsule())
-                                
-                            }
-                        }
+                        
+                        goToTranscriptsButton
                         
                     }
                     .padding([.horizontal,.bottom])
                     .cornerRadius(12)
-                    .background(Color(domColor ?? .lightGray).cornerRadius(12))
+                    .background(Color(dominantColor ?? .lightGray).cornerRadius(12))
                 }
                 .padding([.horizontal],12)
                 .frame(height: UIScreen.main.bounds.height*2/3)
@@ -197,11 +158,57 @@ struct LoquyContentView: View {
             viewModel.loadLoquys()
         })
         .onAppear {
-            domColor = UIColor.color(withCodedString:
-                                        viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.first?.audioClip.domColor ?? "")
+            dominantColor = UIColor.color(withCodedString:
+                                        viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.first?.audioClip.dominantColor ?? "")
         }
         
         .navigationBarHidden(false)
         .navigationBarTitle(RepText.empty,displayMode: .inline)
+    }
+    
+    @ViewBuilder var countTextStack: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("\(LoquynClipText.youHave) \(viewModel.loquys.filter { $0.audioClip.episode.imageUrl == imageUrl }.count) \(LoquynClipText.transripts)")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .fontWeight(.heavy)
+                
+                Text(LoquynClipText.from)
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .fontWeight(.heavy)
+                    .padding(.top, 4)
+                Text("\(viewModel.audioClips.filter { $0.episode.imageUrl ?? "" == imageUrl }.count) \(LoquynClipText.savedClips)")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .fontWeight(.heavy)
+                    .padding(.top, 4)
+            }
+            .padding([.bottom,.leading])
+            Spacer()
+        }
+        .padding(.leading, 20)
+        .padding([.trailing,.top])
+    }
+    
+    @ViewBuilder var goToTranscriptsButton: some View {
+        HStack {
+            Spacer()
+            Button(action: {
+                withAnimation(.interpolatingSpring(stiffness: 330, damping: 20.0, initialVelocity: 3.5)) {
+                    toggled = true
+                }
+            }) {
+                ZStack {
+                    NeoButtonView(dominantColor: $dominantColor)
+                    Image(systemName: Symbol.quote).font(.largeTitle)
+                        .foregroundColor(Color(dominantColor ?? .white))
+                }
+                .frame(width: 60, height: 60)
+                .clipShape(Capsule())
+                
+            }
+        }
     }
 }

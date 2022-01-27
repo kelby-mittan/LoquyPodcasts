@@ -77,7 +77,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
         if isSaved {
             textField.textColor = .white
             textField.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
-//            textField.resignFirstResponder()
         }
         
         if nil != onDone {
@@ -95,9 +94,9 @@ private struct UITextViewWrapper: UIViewRepresentable {
             uiView.text = self.text
         }
         
-        if uiView.window != nil, !uiView.isFirstResponder {
-            uiView.becomeFirstResponder()
-        }
+//        if uiView.window != nil, !uiView.isFirstResponder {
+//            uiView.becomeFirstResponder()
+//        }
         
         UITextViewWrapper.recalculateHeight(view: uiView, result: $calculatedHeight)
     }

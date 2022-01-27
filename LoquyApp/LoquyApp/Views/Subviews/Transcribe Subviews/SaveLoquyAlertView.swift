@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct SaveLoquyAlertView: View {
     
@@ -22,7 +23,8 @@ struct SaveLoquyAlertView: View {
 
     @State var timeStamps = [TimeStamp]()
     @State var titleText = ""
-    @State var domColor: UIColor?
+    @State var dominantColor: UIColor?
+    @State var keyboardHeight: CGFloat = 0
     
     var body : some View {
         
@@ -47,9 +49,10 @@ struct SaveLoquyAlertView: View {
                 PCastHeaderLabelView(label: LoquynClipText.titleForLoquy)
                         .padding(.bottom, 5)
                    
+                
                 TextField(LoquynClipText.giveTitle, text: $titleText)
                         .font(.headline)
-                        .foregroundColor(Color(domColor ?? .lightGray))
+                        .foregroundColor(Color(dominantColor ?? .lightGray))
                         .background(Color.white)
                         .cornerRadius(8)
                     .padding(.horizontal)
@@ -64,8 +67,8 @@ struct SaveLoquyAlertView: View {
                         Text(LoquynClipText.saveText)
                             .fontWeight(.bold)
                             .frame(width: 120,height: 40)
-                            .foregroundColor(Color(domColor ?? .lightGray))
-                            .background(NeoButtonView(domColor: $domColor))
+                            .foregroundColor(Color(dominantColor ?? .lightGray))
+                            .background(NeoButtonView(dominantColor: $dominantColor))
                             .clipShape(Capsule())
                             .padding()
                     }
@@ -75,13 +78,18 @@ struct SaveLoquyAlertView: View {
             
         }
         .frame(width: 300, height: 200)
-        .background(Color(domColor ?? .clear))
+        .background(Color(dominantColor ?? .clear))
         .cornerRadius(20)
+        .offset(y: -keyboardHeight / 4)
+        .animation(.easeInOut, value: keyboardHeight)
         .onAppear {
             viewModel.loadLoquys()
-            viewModel.getDomColor(audioClip.episode.imageUrl ?? RepText.empty) { clr in
-                domColor = clr
+            viewModel.getDominantColor(audioClip.episode.imageUrl ?? RepText.empty) { clr in
+                dominantColor = clr
             }
+        }
+        .onReceive(Publishers.keyboardHeight) { height in
+            keyboardHeight = height
         }
     }
     

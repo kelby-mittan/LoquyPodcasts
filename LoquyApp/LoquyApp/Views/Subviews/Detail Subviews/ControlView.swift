@@ -9,24 +9,25 @@
 import SwiftUI
 import MediaPlayer
 
-@available(iOS 14.0, *)
 struct ControlView: View {
     
     @EnvironmentObject var viewModel: ViewModel
+    
+    // MARK: injected properties
     
     let episode: Episode
     @Binding var isPlaying: Bool
     @Binding var showModal: Bool
     @Binding var clipTime: String
-    @Binding var domColor: UIColor?
-    
-    @State var width: CGFloat = 20
-    @State var playing = true
-    
+    @Binding var dominantColor: UIColor?
     @Binding var currentTime: String
     @Binding var showAlert: Bool
     @Binding var timestampTime: String
+    var audioClip: AudioClip?
     
+    @State var width: CGFloat = 20
+    @State var playing = true
+            
     let player = Player.shared.player
             
     var body: some View {
@@ -38,10 +39,22 @@ struct ControlView: View {
             clipAndTimestampButtons
         }
         .onAppear {
+            
+            
+            
             handlePlayOnAppear()
             setupRemoteControl()
+            
+            
+        }
+        .onDisappear {
+            
+            
+            
         }
     }
+    
+    // MARK: computed views
     
     @ViewBuilder var durationCapsules: some View {
         ZStack(alignment: .leading) {
@@ -49,7 +62,7 @@ struct ControlView: View {
             Capsule().fill(Color.gray.opacity(0.2)).frame(height: 10)
                 .padding([.top,.horizontal])
             
-            Capsule().fill(Color(domColor ?? .lightGray))
+            Capsule().fill(Color(dominantColor ?? .lightGray))
                 .frame(width: width.isFinite ? width : 30, height: 8)
                 .gesture(DragGesture()
                             .onChanged({ (value) in
@@ -92,9 +105,9 @@ struct ControlView: View {
                 Player.getCapsuleWidth(width: &width, currentTime: currentTime)
             }) {
                 ZStack {
-                    NeoButtonView(domColor: $domColor)
+                    NeoButtonView(dominantColor: $dominantColor)
                     Image(systemName: Symbol.back).font(.largeTitle)
-                        .foregroundColor(Color(domColor ?? .lightGray))
+                        .foregroundColor(Color(dominantColor ?? .lightGray))
                 }
                 .frame(width: 60, height: 60)
                 .clipShape(Capsule())
@@ -106,10 +119,10 @@ struct ControlView: View {
                 handlePlayPausePressed()
             }) {
                 ZStack {
-                    NeoButtonView(domColor: $domColor)
+                    NeoButtonView(dominantColor: $dominantColor)
                     Image(systemName: playing ? Symbol.pause : Symbol.play)
                         .font(.largeTitle)
-                        .foregroundColor(Color(domColor ?? .lightGray))
+                        .foregroundColor(Color(dominantColor ?? .lightGray))
                     
                 }
                 .frame(width: 80, height: 80)
@@ -122,9 +135,9 @@ struct ControlView: View {
                 Player.getCapsuleWidth(width: &width, currentTime: currentTime)
             }) {
                 ZStack {
-                    NeoButtonView(domColor: $domColor)
+                    NeoButtonView(dominantColor: $dominantColor)
                     Image(systemName: Symbol.forward).font(.largeTitle)
-                        .foregroundColor(Color(domColor ?? .lightGray))
+                        .foregroundColor(Color(dominantColor ?? .lightGray))
                 }
                 .frame(width: 60, height: 60)
                 .clipShape(Capsule())
@@ -145,8 +158,8 @@ struct ControlView: View {
                 Text(RepText.recordClip)
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .frame(width: UIScreen.main.bounds.width - 88, height: 44)
-                    .foregroundColor(Color(domColor ?? .lightGray))
-                    .background(NeoButtonView(domColor: $domColor))
+                    .foregroundColor(Color(dominantColor ?? .lightGray))
+                    .background(NeoButtonView(dominantColor: $dominantColor))
                     .clipShape(Capsule())
                     .padding()
             }
@@ -160,8 +173,8 @@ struct ControlView: View {
                 Text(RepText.timeStamp)
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .frame(width: UIScreen.main.bounds.width - 88,height: 44)
-                    .foregroundColor(Color(domColor ?? .lightGray))
-                    .background(NeoButtonView(domColor: $domColor))
+                    .foregroundColor(Color(dominantColor ?? .lightGray))
+                    .background(NeoButtonView(dominantColor: $dominantColor))
                     .clipShape(Capsule())
                     .padding([.horizontal,.bottom])
             }
@@ -180,15 +193,19 @@ extension ControlView {
         isPlaying = viewModel.playing
         
         
-        
         if !viewModel.playing {
             viewModel.episodePlaying = episode.title
             Player.playEpisode(episode: episode)
+            
             if let deepLinkTime = episode.deepLinkTime {
                 player.seek(to: deepLinkTime.getCMTime())
             }
+            if let clip = audioClip {
+                player.seek(to: clip.startTime.getCMTime())
+            }
             playing = true
             isPlaying = true
+            
             
         } else {
             Player.getCapsuleWidth(width: &width, currentTime: currentTime)

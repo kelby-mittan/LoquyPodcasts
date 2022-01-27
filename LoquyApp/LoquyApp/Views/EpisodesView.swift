@@ -8,26 +8,27 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 struct EpisodesView: View {
-    
+        
     @EnvironmentObject var viewModel: ViewModel
+    
+    // MARK: injected properties
+    
     @State public var title: String
     public let podcastFeed: String?
     public let isSaved: Bool
     public let artWork: String
     
     @State var episode: Episode?
-    @State var domColor: UIColor?
-    
-    @State var navigateToDetail = false
-    
+    @State var dominantColor: UIColor?
+        
     var body: some View {
         if viewModel.episodes.isEmpty {
             VStack {
                 ActivityIndicator(style: .large)
                     .padding(.top,40)
                     .onAppear {
+                        viewModel.episodes = []
                         isSaved
                         ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                         : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
@@ -41,18 +42,16 @@ struct EpisodesView: View {
 
                 ZStack {
                     
-                    NavigationLink(isActive: $navigateToDetail) {
-                        EpisodeDetailView(episode: episode,
-                                          artwork: artWork,
-                                          feedUrl: podcastFeed,
-                                          isDeepLink: false,
-                                          domColor: domColor ?? .lightGray)
-                            .environmentObject(viewModel)
-                    } label: {
+                    NavigationLink(destination: EpisodeDetailView(episode: episode,
+                                                                  artwork: artWork,
+                                                                  feedUrl: podcastFeed,
+                                                                  isDeepLink: false,
+                                                                  dominantColor: dominantColor ?? .lightGray)
+                                    .environmentObject(viewModel)) {
                         EmptyView()
                     }
 
-                    EpisodeListItemView(episode: episode, domColor: domColor ?? .lightGray)
+                    EpisodeListItemView(episode: episode, dominantColor: dominantColor ?? .lightGray)
 
                 }
                 .listRowBackground(Color.clear)
@@ -60,55 +59,44 @@ struct EpisodesView: View {
                 
             }
             .listStyle(.grouped)
-            .onChange(of: viewModel.episodes, perform: { _ in
-                if let firstEpisodeImg = viewModel.episodes.first?.imageUrl {
-                    viewModel.getDomColor(firstEpisodeImg) { clr in
-                        if clr.isDark() {
-                            domColor = clr
-                        } else {
-                            domColor = .lightGray
-                        }
-
-                    }
-                }
-            })
-            
+            .navigationBarTitle(title)
             .onAppear {
                 isSaved
                 ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                 : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
                 
-                if let firstEpisodeImg = viewModel.episodes.first?.imageUrl {
-                    viewModel.getDomColor(firstEpisodeImg) { clr in
-                        if clr.isDark() {
-                            domColor = clr
-                        } else {
-                            domColor = .lightGray
-                        }
-                    }
-                }
-                                
-            }
-            .navigationBarTitle(title)
-            .onDisappear {
-                if !navigateToDetail && viewModel.selectedTab == 0 {
-                    viewModel.episodes = []
-                }
+                getDominantColor()
                 
             }
+            .onDisappear {
+                viewModel.episodes = []
+            }
+            
         }
         
+    }
+    
+    func getDominantColor() {
+        if let firstEpisodeImg = viewModel.episodes.first?.imageUrl {
+            viewModel.getDominantColor(firstEpisodeImg) { clr in
+                if clr.isDark() {
+                    dominantColor = clr
+                } else {
+                    dominantColor = .lightGray
+                }
+            }
+        }
     }
     
 }
 
 struct EpisodeListItemView: View {
     @State var episode: Episode
-    @State var domColor: UIColor
+    @State var dominantColor: UIColor
     
     var body: some View {
         ZStack(alignment: .leading) {
-            Color(domColor)
+            Color(dominantColor)
 
             HStack {
 

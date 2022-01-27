@@ -8,13 +8,12 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 struct CardScrollView: View {
     
     @EnvironmentObject var viewModel: ViewModel
     let loquy: Loquy
     @Binding var shareShown: Bool
-    @State var domColor: UIColor?
+    @State var dominantColor: UIColor?
     
     var body: some View {
         ZStack {
@@ -30,7 +29,7 @@ struct CardScrollView: View {
                                                               artwork: loquy.audioClip.episode.imageUrl ?? RepText.empty,
                                                               feedUrl: loquy.audioClip.feedUrl,
                                                               isDeepLink: false,
-                                                              domColor: domColor ?? .lightGray)
+                                                              dominantColor: dominantColor ?? .lightGray)
                                 
                                 .environmentObject(viewModel)
                 ) {
@@ -88,10 +87,10 @@ struct CardScrollView: View {
             }
         }
         .onAppear {
-            domColor = UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty)
+            dominantColor = UIColor.color(withCodedString: loquy.audioClip.dominantColor ?? RepText.empty)
         }
         .background(
-            Color(domColor ?? .clear)
+            Color(dominantColor ?? .clear)
         )
     }
 }

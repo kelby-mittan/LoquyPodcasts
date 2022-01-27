@@ -12,7 +12,14 @@ import Combine
 class ViewModel: ObservableObject {
         
     var didChange = PassthroughSubject<ViewModel, Never>()
-    var domColorReporter = PassthroughSubject<UIColor?, Never>()
+    var dominantColorReporter = PassthroughSubject<UIColor?, Never>()
+    
+    @Published var selectedTab: Int = 0
+    @Published var episodePlaying = String()
+    @Published var playing = false
+    @Published var imageColor: UIColor? = nil
+    @Published var clipDomColor: UIColor? = nil
+    @Published var episodeDomColor: Episode?
     
     @Published var podcasts = [Podcast]() {
         didSet {
@@ -21,12 +28,6 @@ class ViewModel: ObservableObject {
     }
     
     @Published var episodes = [Episode]() {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
-    @Published var selectedTab: Int = 0 {
         didSet {
             didChange.send(self)
         }
@@ -51,38 +52,6 @@ class ViewModel: ObservableObject {
     }
     
     @Published var loquys = [Loquy]() {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
-    @Published var episodePlaying = String() {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
-    @Published var playing = Bool() {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
-    @Published var imageColor: UIColor? = nil {
-        didSet {
-            if imageColor != nil {
-                didChange.send(self)
-            }
-        }
-    }
-    
-    @Published var clipDomColor: UIColor? = nil {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
-    @Published var episodeDomColor: Episode? {
         didSet {
             didChange.send(self)
         }
@@ -174,19 +143,19 @@ class ViewModel: ObservableObject {
         self.playing = Player.shared.player.timeControlStatus == .playing
     }
     
-    public func getEpisodeForDomColor() {
+    public func getEpisodeForDominantColor() {
         guard let episode = episodes.first else {
             return
         }
         
-        getDomColor(episode.imageUrl ?? RepText.empty) { [weak self] clr in
+        getDominantColor(episode.imageUrl ?? RepText.empty) { [weak self] clr in
             DispatchQueue.main.async {
                 self?.imageColor = clr
             }
         }
     }
     
-    public func getDomColor(_ urlStr: String, completion: @escaping (UIColor) -> ()) {
+    public func getDominantColor(_ urlStr: String, completion: @escaping (UIColor) -> ()) {
         guard let url = URL(string: urlStr) else { return }
         if let data = try? Data(contentsOf: url) {
             if let image = UIImage(data: data), let clr = image.averageColor {

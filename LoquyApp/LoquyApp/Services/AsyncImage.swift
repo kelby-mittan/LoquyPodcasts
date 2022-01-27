@@ -9,8 +9,6 @@
 import SwiftUI
 import Combine
 
-@available(iOS 14.0, *)
-
 struct AsyncImage<Placeholder: View>: View {
     @StateObject private var loader: AsyncImageLoader
     private let placeholder: Placeholder

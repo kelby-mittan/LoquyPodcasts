@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
-
 struct AudioClipsView: View {
     
     @EnvironmentObject var viewModel: ViewModel
@@ -46,10 +44,6 @@ struct AudioClipsView: View {
                 
             }
             .navigationViewStyle(.stack)
-            .onAppear {
-                UITableView.appearance().separatorStyle = .none
-                viewModel.loadAudioClips()
-            }
             .accentColor(.secondary)
             
         } else {
@@ -87,6 +81,8 @@ struct AudioClipsView: View {
 
 struct ClipListItem: View {
     
+    // MARK: injected properties
+    
     @EnvironmentObject var viewModel: ViewModel
     @State var clip: AudioClip
     @Binding var showActionSheet: Bool
@@ -95,7 +91,7 @@ struct ClipListItem: View {
     var body: some View {
         ZStack(alignment: .center) {
             ZStack {
-                Color(UIColor.color(withCodedString: clip.domColor ?? "") ?? .lightGray)
+                Color(UIColor.color(withCodedString: clip.dominantColor ?? "") ?? .lightGray)
                 
             }
             .cornerRadius(12)
@@ -111,9 +107,7 @@ struct ClipListItem: View {
                             showActionSheet.toggle()
                         }
                         .padding(.vertical)
-                    
-//                    Spacer()
-                    
+                                        
                     VStack(alignment: .leading) {
                         
                         Text(clip.title)
@@ -149,7 +143,6 @@ struct ClipListItem: View {
     }
 }
 
-@available(iOS 14.0, *)
 struct AudioClipsView_Previews: PreviewProvider {
     static var previews: some View {
         AudioClipsView()

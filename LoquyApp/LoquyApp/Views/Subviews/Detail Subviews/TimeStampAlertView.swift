@@ -20,7 +20,7 @@ struct TimeStampAlertView: View {
     @State var timeStamps = [TimeStamp]()
     @State var favToSave = RepText.empty
     @State var saveText = RepText.empty
-    @State var domColor: UIColor?
+    @State var dominantColor: UIColor?
     
     var body : some View {
         
@@ -76,17 +76,17 @@ struct TimeStampAlertView: View {
                     Text(saveText)
                         .fontWeight(.bold)
                         .frame(width: 120,height: 40)
-                        .foregroundColor(Color(domColor ?? .lightGray))
-                        .background(NeoButtonView(domColor: $domColor))
+                        .foregroundColor(Color(dominantColor ?? .lightGray))
+                        .background(NeoButtonView(dominantColor: $dominantColor))
                         .clipShape(Capsule())
                         .padding()
                 }                
                 Spacer()
             }
             .frame(width: 300, height: Persistence.episodes.hasItemBeenSaved(episode) ? 200 : 260)
-            .background(Color(domColor ?? .lightGray))
+            .background(Color(dominantColor ?? .lightGray))
             .cornerRadius(20)
-            .shadow(color: Color(domColor ?? .lightGray), radius: 16, x: 10, y: 10)
+            .shadow(color: Color(dominantColor ?? .lightGray), radius: 16, x: 10, y: 10)
             .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
             
         }
@@ -100,18 +100,13 @@ struct TimeStampAlertView: View {
                 saveText = TimeStampText.save
             }
             
-            viewModel.getDomColor(episode.imageUrl ?? RepText.empty) { clr in
-                domColor = clr
+            viewModel.getDominantColor(episode.imageUrl ?? RepText.empty) { clr in
+                dominantColor = clr
             }
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .edgesIgnoringSafeArea(.all)
         .background(.ultraThinMaterial)
-//        .frame(width: 300, height: Persistence.episodes.hasItemBeenSaved(episode) ? 200 : 260)
-//        .background(Color(domColor ?? .lightGray))
-//        .cornerRadius(20)
-//        .shadow(color: Color(domColor ?? .lightGray), radius: 16, x: 10, y: 10)
-//        .shadow(color: Color(.white), radius: 16, x: -12, y: -12)
     }
     
     private func loadTimes(episode: Episode) {

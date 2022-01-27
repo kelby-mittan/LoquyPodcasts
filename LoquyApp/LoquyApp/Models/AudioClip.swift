@@ -17,6 +17,6 @@ struct AudioClip: Codable, Identifiable, Hashable {
     let endTime: String
     let savedDate: String
     let feedUrl: String
-    let domColor: String?
+    let dominantColor: String?
 }
 

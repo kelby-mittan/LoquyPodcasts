@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 
 struct PagingCardView: View {
         
@@ -18,7 +17,7 @@ struct PagingCardView: View {
         
     @State private var shareShown = false
     @State var imgToShare: UIImage = UIImage(systemName: "photo")!
-    @State var domColor: UIColor?
+    @State var dominantColor: UIColor?
     
     var body: some View {
         
@@ -35,7 +34,7 @@ struct PagingCardView: View {
                         .cornerRadius(8)
                         .padding()
                         .onAppear {
-                            domColor = UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty)
+                            dominantColor = UIColor.color(withCodedString: loquy.audioClip.dominantColor ?? RepText.empty)
                             deepLinkViewModel.prepareDeepLinkURL(loquy)
                             DispatchQueue.main.async {
                                 imgToShare = LoquyToShareView(loquy: loquy)
@@ -64,10 +63,10 @@ struct PagingCardView: View {
                     shareShown = true
                 }) {
                     ZStack {
-                        NeoButtonView(domColor: $domColor)
+                        NeoButtonView(dominantColor: $dominantColor)
                         Image(systemName: Symbol.share)
                             .font(.title)
-                            .foregroundColor(Color(domColor ?? .white))
+                            .foregroundColor(Color(dominantColor ?? .white))
                     }
                     .frame(width: 50, height: 50)
                     .clipShape(Capsule())
@@ -120,7 +119,7 @@ struct LoquyToShareView: View {
         }
         .padding()
         .frame(width: 400, height: 400)
-        .background(Color(UIColor.color(withCodedString: loquy.audioClip.domColor ?? RepText.empty) ?? .clear))
+        .background(Color(UIColor.color(withCodedString: loquy.audioClip.dominantColor ?? RepText.empty) ?? .clear))
     }
     
     

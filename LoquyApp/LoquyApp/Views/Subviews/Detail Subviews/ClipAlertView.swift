@@ -24,7 +24,7 @@ struct ClipAlertView: View {
     
     @State var selected = ClipText.selected
     @State var titleText = RepText.empty
-    @State var domColor: UIColor?
+    @State var dominantColor: UIColor?
     
     var body: some View {
         
@@ -41,7 +41,7 @@ struct ClipAlertView: View {
                     
                 TextField(ClipText.giveTitle, text: $titleText)
                         .font(.headline)
-                    .foregroundColor(Color(domColor?.darker() ?? .darkGray))
+                    .foregroundColor(Color(dominantColor?.darker() ?? .darkGray))
                         .background(Color.white)
                         .cornerRadius(8)
                         .padding(.horizontal)
@@ -50,21 +50,21 @@ struct ClipAlertView: View {
                 
             }
             .frame(width: UIScreen.main.bounds.width)
-            .background(Color(domColor ?? .lightGray))
+            .background(Color(dominantColor ?? .lightGray))
             .cornerRadius(12)
             
             Text(ClipText.start+clipTime)
                 .font(.headline)
                 .fontWeight(.heavy)
-                .foregroundColor(Color(domColor ?? .lightGray))
+                .foregroundColor(Color(dominantColor ?? .lightGray))
                 .offset(y: 10)
             
-            CustomPicker(selected: $selected, currentTime: clipTime, domColor: $domColor)
+            CustomPicker(selected: $selected, currentTime: clipTime, dominantColor: $dominantColor)
             
             Text(ClipText.end+getEndTime())
                 .font(.headline)
                 .fontWeight(.heavy)
-                .foregroundColor(Color(domColor ?? .lightGray))
+                .foregroundColor(Color(dominantColor ?? .lightGray))
                 .offset(y: -10)
             
             Button(action: {
@@ -75,9 +75,9 @@ struct ClipAlertView: View {
                     notificationShown = false
                 }
                 
-                let clr = domColor?.codedString
+                let clr = dominantColor?.codedString
                 
-                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString(), feedUrl: feedUrl ?? RepText.empty, domColor: clr)
+                let newClip = AudioClip(episode: episode, title: titleText, duration: selected, startTime: clipTime, endTime: getEndTime(), savedDate: Date().dateToString(), feedUrl: feedUrl ?? RepText.empty, dominantColor: clr)
                 
                 do {
                     try Persistence.audioClips.createItem(newClip)
@@ -93,8 +93,8 @@ struct ClipAlertView: View {
                 Text(ClipText.saveClip)
                         .fontWeight(.heavy)
                         .frame(width: 240,height: 60)
-                        .foregroundColor(Color(domColor ?? .lightGray))
-                        .background(NeoButtonView(domColor: $domColor))
+                        .foregroundColor(Color(dominantColor ?? .lightGray))
+                        .background(NeoButtonView(dominantColor: $dominantColor))
                         .clipShape(Capsule())
                         .padding()
                         .offset(y: -10)
@@ -106,8 +106,8 @@ struct ClipAlertView: View {
         
         .background(Color(.secondarySystemBackground))
         .onAppear {
-            viewModel.getDomColor(episode.imageUrl ?? "") { clr in
-                domColor = clr
+            viewModel.getDominantColor(episode.imageUrl ?? "") { clr in
+                dominantColor = clr
             }
         }
         Spacer()
