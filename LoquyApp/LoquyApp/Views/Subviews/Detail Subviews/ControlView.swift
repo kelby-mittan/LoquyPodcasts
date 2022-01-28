@@ -194,6 +194,9 @@ extension ControlView {
         
         
         if !viewModel.playing {
+            
+            
+            
             viewModel.episodePlaying = episode.title
             Player.playEpisode(episode: episode)
             

@@ -21,6 +21,8 @@ struct EpisodesView: View {
     
     @State var episode: Episode?
     @State var dominantColor: UIColor?
+    
+    @State var navToDetail: Bool = false
         
     var body: some View {
         if viewModel.episodes.isEmpty {
@@ -28,7 +30,6 @@ struct EpisodesView: View {
                 ActivityIndicator(style: .large)
                     .padding(.top,40)
                     .onAppear {
-                        viewModel.episodes = []
                         isSaved
                         ? viewModel.episodes = viewModel.loadFavoriteEpisodes(&title)
                         : viewModel.loadEpisodes(feedUrl: podcastFeed ?? RepText.empty)
@@ -42,6 +43,8 @@ struct EpisodesView: View {
 
                 ZStack {
                     
+                    EpisodeListItemView(episode: episode, dominantColor: dominantColor ?? .lightGray)
+                    
                     NavigationLink(destination: EpisodeDetailView(episode: episode,
                                                                   artwork: artWork,
                                                                   feedUrl: podcastFeed,
@@ -50,8 +53,6 @@ struct EpisodesView: View {
                                     .environmentObject(viewModel)) {
                         EmptyView()
                     }
-
-                    EpisodeListItemView(episode: episode, dominantColor: dominantColor ?? .lightGray)
 
                 }
                 .listRowBackground(Color.clear)
